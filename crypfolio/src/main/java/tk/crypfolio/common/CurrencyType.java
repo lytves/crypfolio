@@ -1,4 +1,4 @@
-package tk.crypfolio.util;
+package tk.crypfolio.common;
 
 public enum CurrencyType {
 
