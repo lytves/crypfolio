@@ -13,7 +13,7 @@
         <class>tk.crypfolio.domain.PortfolioEntity</class>
         <class>tk.crypfolio.domain.PositionEntity</class>
         <class>tk.crypfolio.domain.UserEntity</class>
-        <class>tk.crypfolio.domain.UserHasCoinsEntity</class>
+        <class>tk.crypfolio.domain.UserWatchCoinsEntity</class>
 
         <properties>
 
