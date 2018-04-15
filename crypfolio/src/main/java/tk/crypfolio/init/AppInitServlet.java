@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AppInit implements ServletContextListener {
+public class AppInitServlet implements ServletContextListener {
 
-    private static final Logger logger = Logger.getLogger(AppInit.class.getName());
+    private static final Logger logger = Logger.getLogger(AppInitServlet.class.getName());
 
     /*
     * application startup method
