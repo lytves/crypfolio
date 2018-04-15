@@ -17,6 +17,15 @@ public class CoinDAOImpl extends DAOImpl<Long, CoinEntity> implements CoinDAO {
 
     @Override
     public void createCoin(CoinEntity coin) {
-        this.create(coin);
+
+        if (getCoinByApiId(coin.getCoinApiId()) == null){
+            this.create(coin);
+        }
     }
+
+    @Override
+    public CoinEntity getCoinByApiId(String coinApiId) {
+        return this.findByUniqueStringColumn("coinApiId", coinApiId);
+    }
+
 }

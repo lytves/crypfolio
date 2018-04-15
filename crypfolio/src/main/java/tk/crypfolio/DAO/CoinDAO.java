@@ -8,4 +8,5 @@ public interface CoinDAO {
 
 	public void createCoin(CoinEntity coin);
 
+    public CoinEntity getCoinByApiId(String coinApiId);
 }
