@@ -89,8 +89,6 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
         @Override
         public T findByUniqueStringColumn (String column, String value){
 
-            T t = null;
-
             try {
                 CriteriaBuilder cBuilder = em.getCriteriaBuilder();
                 CriteriaQuery criteriaQuery = cBuilder.createQuery();
@@ -100,14 +98,14 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
                 criteriaQuery.where(cBuilder.equal(entity.get(column), value));
 
                 Query query = em.createQuery(criteriaQuery);
-                t = (T) query.getSingleResult();
+                T t = (T) query.getSingleResult();
 
             } catch (NoResultException e) {
 
                 logger.log(Level.WARNING, e.getMessage());
             }
 
-            return t;
+            return null;
         }
 
     }
