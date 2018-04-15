@@ -21,7 +21,7 @@ public class CoinEntity {
     private String coinSymbol;
 
     @Basic
-    @Column(name = "coin_api_id", nullable = false, length = 255)
+    @Column(name = "coin_api_id", nullable = false, length = 255, unique = true)
     private String coinApiId;
 
 /*  it's not necessary to have user in coin

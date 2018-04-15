@@ -18,7 +18,7 @@ public class UserEntity {
     private Long usId;
 
     @Basic
-    @Column(name = "us_email", nullable = false, length = 255)
+    @Column(name = "us_email", nullable = false, length = 255, unique = true)
     private String usEmail;
 
     @Basic
