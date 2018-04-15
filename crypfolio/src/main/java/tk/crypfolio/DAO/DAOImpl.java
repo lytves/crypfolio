@@ -30,12 +30,12 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
         return em.find(entityClass, id);
     }
 
-    //    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Override
     public List<T> findAll() {
 
         Query q = em.createQuery("from " + this.entityClass.getName());
-        return q.getResultList();
+        return (List<T>) q.getResultList();
     }
 
     @Override
@@ -86,6 +86,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
             }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public T findByUniqueStringColumn (String column, String value){
 
