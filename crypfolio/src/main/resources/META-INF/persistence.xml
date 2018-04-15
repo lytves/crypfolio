@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="CrypFolioPersistenceUnit">
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>tk.crypfolio.domain.CoinEntity</class>
+        <class>tk.crypfolio.domain.ItemEntity</class>
+        <class>tk.crypfolio.domain.PortfolioEntity</class>
+        <class>tk.crypfolio.domain.PositionEntity</class>
+        <class>tk.crypfolio.domain.UserEntity</class>
+        <class>tk.crypfolio.domain.UserHasCoinsEntity</class>
+
+        <properties>
+
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/crypfolio?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+            <!-- ========================================== or org.mariadb.jdbc.Driver -->
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <!-- ========================================== put your userName here -->
+            <property name="hibernate.connection.username" value="userName"/>
+            <!-- ========================================== put your userPassword here -->
+            <property name="hibernate.connection.password" value="userPassword"/>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hbm2ddl.auto" value="update"/>
+
+        </properties>
+    </persistence-unit>
+
+</persistence>
