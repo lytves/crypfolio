@@ -1,8 +1,6 @@
 package tk.crypfolio.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +9,7 @@ public class CoinEntity {
 
     @Id
     @Column(name = "coin_id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long coinId;
 
     @Basic
@@ -25,8 +24,18 @@ public class CoinEntity {
     @Column(name = "coin_api_id", nullable = false, length = 255)
     private String coinApiId;
 
+/*  it's not necessary to have user in coin
     @OneToMany(mappedBy = "coinId")
-    private List<UserHasCoinsEntity> userHasCoinsEntity = new ArrayList<>();
+    private List<UserWatchCoinsEntity> userHasCoinsEntity = new ArrayList<>();*/
+
+    public CoinEntity() {
+    }
+
+    public CoinEntity(String coinName, String coinSymbol, String coinApiId) {
+        this.coinName = coinName;
+        this.coinSymbol = coinSymbol;
+        this.coinApiId = coinApiId;
+    }
 
     public Long getCoinId() {
         return coinId;
@@ -68,13 +77,25 @@ public class CoinEntity {
         return Objects.equals(getCoinId(), that.getCoinId()) &&
                 Objects.equals(getCoinName(), that.getCoinName()) &&
                 Objects.equals(getCoinSymbol(), that.getCoinSymbol()) &&
-                Objects.equals(getCoinApiId(), that.getCoinApiId()) &&
-                Objects.equals(userHasCoinsEntity, that.userHasCoinsEntity);
+                Objects.equals(getCoinApiId(), that.getCoinApiId())
+//              &&  Objects.equals(userHasCoinsEntity, that.userHasCoinsEntity)
+                ;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getCoinId(), getCoinName(), getCoinSymbol(), getCoinApiId(), userHasCoinsEntity);
+//        return Objects.hash(getCoinId(), getCoinName(), getCoinSymbol(), getCoinApiId(), userHasCoinsEntity);
+        return Objects.hash(getCoinId(), getCoinName(), getCoinSymbol(), getCoinApiId());
+    }
+
+    @Override
+    public String toString() {
+        return "CoinEntity{" +
+                "coinId=" + coinId +
+                ", coinName='" + coinName + '\'' +
+                ", coinSymbol='" + coinSymbol + '\'' +
+                ", coinApiId='" + coinApiId + '\'' +
+                '}';
     }
 }

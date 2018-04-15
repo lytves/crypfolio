@@ -14,6 +14,7 @@ public class UserEntity {
 
     @Id
     @Column(name = "us_id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long usId;
 
     @Basic
@@ -34,7 +35,7 @@ public class UserEntity {
     private LocalDate usSignupDate;
 
     @OneToMany(mappedBy = "userId")
-    private List<UserHasCoinsEntity> userHasCoinsEntity = new ArrayList<>();
+    private List<UserWatchCoinsEntity> listUserWatchCoins = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "users_has_users",
@@ -92,12 +93,12 @@ public class UserEntity {
                 Objects.equals(getUsPassword(), that.getUsPassword()) &&
                 Objects.equals(getUsIsEmailVerified(), that.getUsIsEmailVerified()) &&
                 Objects.equals(getUsSignupDate(), that.getUsSignupDate()) &&
-                Objects.equals(userHasCoinsEntity, that.userHasCoinsEntity);
+                Objects.equals(listUserWatchCoins, that.listUserWatchCoins);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getUsId(), getUsEmail(), getUsPassword(), getUsIsEmailVerified(), getUsSignupDate(), userHasCoinsEntity);
+        return Objects.hash(getUsId(), getUsEmail(), getUsPassword(), getUsIsEmailVerified(), getUsSignupDate(), listUserWatchCoins);
     }
 }

@@ -13,6 +13,7 @@ public class PositionEntity {
 
     @Id
     @Column(name = "pos_id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long posId;
 
     @Basic

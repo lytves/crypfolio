@@ -1,14 +1,14 @@
 package tk.crypfolio.domain;
 
-import tk.crypfolio.util.CurrencyType;
+import tk.crypfolio.common.CurrencyType;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users_has_coins")
-@IdClass(UserHasCoinsEntityId.class)
-public class UserHasCoinsEntity {
+@Table(name = "users_watch_coins")
+@IdClass(UserWatchCoinsEntityId.class)
+public class UserWatchCoinsEntity {
 
     @Id
     @ManyToOne
@@ -29,7 +29,7 @@ public class UserHasCoinsEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserHasCoinsEntity that = (UserHasCoinsEntity) o;
+        UserWatchCoinsEntity that = (UserWatchCoinsEntity) o;
         return Objects.equals(userId, that.userId) &&
                 Objects.equals(coinId, that.coinId) &&
                 currencyType == that.currencyType;

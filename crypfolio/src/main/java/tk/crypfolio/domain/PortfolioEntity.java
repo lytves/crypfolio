@@ -12,6 +12,7 @@ public class PortfolioEntity {
 
     @Id
     @Column(name = "port_id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long portId;
 
     @Basic

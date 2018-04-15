@@ -12,6 +12,7 @@ public class ItemEntity {
 
     @Id
     @Column(name = "item_id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long itemId;
 
     @Basic

@@ -3,7 +3,7 @@ package tk.crypfolio.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserHasCoinsEntityId implements Serializable {
+public class UserWatchCoinsEntityId implements Serializable {
 
     private Long userId;
 
@@ -13,7 +13,7 @@ public class UserHasCoinsEntityId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserHasCoinsEntityId that = (UserHasCoinsEntityId) o;
+        UserWatchCoinsEntityId that = (UserWatchCoinsEntityId) o;
         return Objects.equals(userId, that.userId) &&
                 Objects.equals(coinId, that.coinId);
     }
