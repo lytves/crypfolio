@@ -13,83 +13,89 @@ public class ItemEntity {
     @Id
     @Column(name = "item_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long itemId;
+    private Long id;
 
     @Basic
     @Column(name = "item_amount", nullable = false, precision = 8)
-    private BigDecimal itemAmount;
+    private BigDecimal amount;
 
     @Basic
     @Column(name = "item_bought_cost_usd", nullable = true, precision = 8)
-    private BigDecimal itemBoughtCostUsd;
+    private BigDecimal boughtCostUsd;
 
     @Basic
     @Column(name = "item_bought_cost_eur", nullable = true, precision = 8)
-    private BigDecimal itemBoughtCostEur;
+    private BigDecimal boughtCostEur;
 
     @Basic
     @Column(name = "item_bought_cost_btc", nullable = true, precision = 8)
-    private BigDecimal itemBoughtCostBtc;
+    private BigDecimal boughtCostBtc;
 
     @Basic
     @Column(name = "item_bought_cost_eth", nullable = true, precision = 8)
-    private BigDecimal itemBoughtCostEth;
+    private BigDecimal boughtCostEth;
 
-    @ManyToOne
-/*    @JoinColumns({
-            @JoinColumn(name = "portfolios_port_id", nullable = true),
-            @JoinColumn(name = "portfolios_users_us_id", nullable = true)
-    })*/
-    private PortfolioEntity portfolio;
+    @OneToMany
+    @JoinColumns({
+            @JoinColumn(name = "items_item_id"),
+            @JoinColumn(name = "items_portfolios_port_id")
+    })
+    private List<PositionEntity> positions = new ArrayList<>();
 
-    @OneToMany(mappedBy="item", fetch=FetchType.EAGER)
-    private List<PositionEntity> listItems = new ArrayList<>();
-    public Long getItemId() {
-        return itemId;
+    public Long getId() {
+        return id;
     }
 
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public BigDecimal getItemAmount() {
-        return itemAmount;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setItemAmount(BigDecimal itemAmount) {
-        this.itemAmount = itemAmount;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public BigDecimal getItemBoughtCostUsd() {
-        return itemBoughtCostUsd;
+    public BigDecimal getBoughtCostUsd() {
+        return boughtCostUsd;
     }
 
-    public void setItemBoughtCostUsd(BigDecimal itemBoughtCostUsd) {
-        this.itemBoughtCostUsd = itemBoughtCostUsd;
+    public void setBoughtCostUsd(BigDecimal boughtCostUsd) {
+        this.boughtCostUsd = boughtCostUsd;
     }
 
-    public BigDecimal getItemBoughtCostEur() {
-        return itemBoughtCostEur;
+    public BigDecimal getBoughtCostEur() {
+        return boughtCostEur;
     }
 
-    public void setItemBoughtCostEur(BigDecimal itemBoughtCostEur) {
-        this.itemBoughtCostEur = itemBoughtCostEur;
+    public void setBoughtCostEur(BigDecimal boughtCostEur) {
+        this.boughtCostEur = boughtCostEur;
     }
 
-    public BigDecimal getItemBoughtCostBtc() {
-        return itemBoughtCostBtc;
+    public BigDecimal getBoughtCostBtc() {
+        return boughtCostBtc;
     }
 
-    public void setItemBoughtCostBtc(BigDecimal itemBoughtCostBtc) {
-        this.itemBoughtCostBtc = itemBoughtCostBtc;
+    public void setBoughtCostBtc(BigDecimal boughtCostBtc) {
+        this.boughtCostBtc = boughtCostBtc;
     }
 
-    public BigDecimal getItemBoughtCostEth() {
-        return itemBoughtCostEth;
+    public BigDecimal getBoughtCostEth() {
+        return boughtCostEth;
     }
 
-    public void setItemBoughtCostEth(BigDecimal itemBoughtCostEth) {
-        this.itemBoughtCostEth = itemBoughtCostEth;
+    public void setBoughtCostEth(BigDecimal boughtCostEth) {
+        this.boughtCostEth = boughtCostEth;
+    }
+
+    public List<PositionEntity> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<PositionEntity> positions) {
+        this.positions = positions;
     }
 
     @Override
@@ -97,19 +103,18 @@ public class ItemEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemEntity that = (ItemEntity) o;
-        return Objects.equals(getItemId(), that.getItemId()) &&
-                Objects.equals(getItemAmount(), that.getItemAmount()) &&
-                Objects.equals(getItemBoughtCostUsd(), that.getItemBoughtCostUsd()) &&
-                Objects.equals(getItemBoughtCostEur(), that.getItemBoughtCostEur()) &&
-                Objects.equals(getItemBoughtCostBtc(), that.getItemBoughtCostBtc()) &&
-                Objects.equals(getItemBoughtCostEth(), that.getItemBoughtCostEth()) &&
-                Objects.equals(portfolio, that.portfolio);
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getAmount(), that.getAmount()) &&
+                Objects.equals(getBoughtCostUsd(), that.getBoughtCostUsd()) &&
+                Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
+                Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
+                Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
+                Objects.equals(getPositions(), that.getPositions());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getItemId(), getItemAmount(), getItemBoughtCostUsd(), getItemBoughtCostEur(), getItemBoughtCostBtc(), getItemBoughtCostEth(), portfolio);
+        return Objects.hash(getId(), getAmount(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getPositions());
     }
-
 }

@@ -15,72 +15,100 @@ public class UserEntity {
     @Id
     @Column(name = "us_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long usId;
+    private Long id;
 
     @Basic
     @Column(name = "us_email", nullable = false, length = 255, unique = true)
-    private String usEmail;
+    private String email;
 
     @Basic
     @Column(name = "us_password", nullable = false, length = 128)
-    private String usPassword;
+    private String password;
 
     @Basic
     @Column(name = "us_is_email_verified", nullable = false)
-    private Boolean usIsEmailVerified;
+    private Boolean isEmailVerified;
 
     @Basic
     @Column(name = "us_signup_date", nullable = false)
     @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate usSignupDate;
+    private LocalDate signupDate;
+
+    @OneToOne
+    @JoinColumn(name = "portfolios_port_id")
+    private PortfolioEntity portfolio;
 
     @OneToMany(mappedBy = "userId")
-    private List<UserWatchCoinsEntity> listUserWatchCoins = new ArrayList<>();
+    private List<UserWatchCoinsEntity> userWatchCoins = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "users_has_users",
     joinColumns = @JoinColumn(name = "users_us_id", referencedColumnName = "us_id"),
     inverseJoinColumns = @JoinColumn(name = "users_us_id1", referencedColumnName = "us_id"))
-    private List<UserEntity> listUsers = new ArrayList<>();
+    private List<UserEntity> users = new ArrayList<>();
 
-    public Long getUsId() {
-        return usId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsId(Long usId) {
-        this.usId = usId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getUsEmail() {
-        return usEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsEmail(String usEmail) {
-        this.usEmail = usEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getUsPassword() {
-        return usPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUsPassword(String usPassword) {
-        this.usPassword = usPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Boolean getUsIsEmailVerified() {
-        return usIsEmailVerified;
+    public Boolean getIsEmailVerified() {
+        return isEmailVerified;
     }
 
-    public void setUsIsEmailVerified(Boolean usIsEmailVerified) {
-        this.usIsEmailVerified = usIsEmailVerified;
+    public void setIsEmailVerified(Boolean isEmailVerified) {
+        this.isEmailVerified = isEmailVerified;
     }
 
-    public LocalDate getUsSignupDate() {
-        return usSignupDate;
+    public LocalDate getSignupDate() {
+        return signupDate;
     }
 
-    public void setUsSignupDate(LocalDate usSignupDate) {
-        this.usSignupDate = usSignupDate;
+    public void setSignupDate(LocalDate signupDate) {
+        this.signupDate = signupDate;
+    }
+
+    public PortfolioEntity getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(PortfolioEntity portfolio) {
+        this.portfolio = portfolio;
+    }
+
+    public List<UserWatchCoinsEntity> getUserWatchCoins() {
+        return userWatchCoins;
+    }
+
+    public void setUserWatchCoins(List<UserWatchCoinsEntity> userWatchCoins) {
+        this.userWatchCoins = userWatchCoins;
+    }
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 
     @Override
@@ -88,17 +116,19 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(getUsId(), that.getUsId()) &&
-                Objects.equals(getUsEmail(), that.getUsEmail()) &&
-                Objects.equals(getUsPassword(), that.getUsPassword()) &&
-                Objects.equals(getUsIsEmailVerified(), that.getUsIsEmailVerified()) &&
-                Objects.equals(getUsSignupDate(), that.getUsSignupDate()) &&
-                Objects.equals(listUserWatchCoins, that.listUserWatchCoins);
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getPassword(), that.getPassword()) &&
+                Objects.equals(getIsEmailVerified(), that.getIsEmailVerified()) &&
+                Objects.equals(getSignupDate(), that.getSignupDate()) &&
+                Objects.equals(getPortfolio(), that.getPortfolio()) &&
+                Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
+                Objects.equals(getUsers(), that.getUsers());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getUsId(), getUsEmail(), getUsPassword(), getUsIsEmailVerified(), getUsSignupDate(), listUserWatchCoins);
+        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getSignupDate(), getPortfolio(), getUserWatchCoins(), getUsers());
     }
 }

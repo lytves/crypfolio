@@ -10,63 +10,59 @@ public class CoinEntity {
     @Id
     @Column(name = "coin_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long coinId;
+    private Long id;
 
     @Basic
     @Column(name = "coin_name", nullable = false, length = 255)
-    private String coinName;
+    private String name;
 
     @Basic
     @Column(name = "coin_symbol", nullable = false, length = 5)
-    private String coinSymbol;
+    private String symbol;
 
     @Basic
     @Column(name = "coin_api_id", nullable = false, length = 255, unique = true)
-    private String coinApiId;
-
-/*  it's not necessary to have user in coin
-    @OneToMany(mappedBy = "coinId")
-    private List<UserWatchCoinsEntity> userHasCoinsEntity = new ArrayList<>();*/
+    private String apiId;
 
     public CoinEntity() {
     }
 
-    public CoinEntity(String coinName, String coinSymbol, String coinApiId) {
-        this.coinName = coinName;
-        this.coinSymbol = coinSymbol;
-        this.coinApiId = coinApiId;
+    public CoinEntity(String name, String symbol, String apiId) {
+        this.name = name;
+        this.symbol = symbol;
+        this.apiId = apiId;
     }
 
-    public Long getCoinId() {
-        return coinId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCoinId(Long coinId) {
-        this.coinId = coinId;
+    public void setId(Long coinId) {
+        this.id = coinId;
     }
 
-    public String getCoinName() {
-        return coinName;
+    public String getName() {
+        return name;
     }
 
-    public void setCoinName(String coinName) {
-        this.coinName = coinName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCoinSymbol() {
-        return coinSymbol;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setCoinSymbol(String coinSymbol) {
-        this.coinSymbol = coinSymbol;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getCoinApiId() {
-        return coinApiId;
+    public String getApiId() {
+        return apiId;
     }
 
-    public void setCoinApiId(String coinApiId) {
-        this.coinApiId = coinApiId;
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 
     @Override
@@ -74,28 +70,25 @@ public class CoinEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoinEntity that = (CoinEntity) o;
-        return Objects.equals(getCoinId(), that.getCoinId()) &&
-                Objects.equals(getCoinName(), that.getCoinName()) &&
-                Objects.equals(getCoinSymbol(), that.getCoinSymbol()) &&
-                Objects.equals(getCoinApiId(), that.getCoinApiId())
-//              &&  Objects.equals(userHasCoinsEntity, that.userHasCoinsEntity)
-                ;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getSymbol(), that.getSymbol()) &&
+                Objects.equals(getApiId(), that.getApiId());
     }
 
     @Override
     public int hashCode() {
 
-//        return Objects.hash(getCoinId(), getCoinName(), getCoinSymbol(), getCoinApiId(), userHasCoinsEntity);
-        return Objects.hash(getCoinId(), getCoinName(), getCoinSymbol(), getCoinApiId());
+        return Objects.hash(getId(), getName(), getSymbol(), getApiId());
     }
 
     @Override
     public String toString() {
         return "CoinEntity{" +
-                "coinId=" + coinId +
-                ", coinName='" + coinName + '\'' +
-                ", coinSymbol='" + coinSymbol + '\'' +
-                ", coinApiId='" + coinApiId + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", apiId='" + apiId + '\'' +
                 '}';
     }
 }
