@@ -36,10 +36,7 @@ public class ItemEntity {
     private BigDecimal boughtCostEth;
 
     @OneToMany
-    @JoinColumns({
-            @JoinColumn(name = "items_item_id"),
-            @JoinColumn(name = "items_portfolios_port_id")
-    })
+    @JoinColumn(name = "items_item_id", referencedColumnName = "item_id")
     private List<PositionEntity> positions = new ArrayList<>();
 
     public Long getId() {

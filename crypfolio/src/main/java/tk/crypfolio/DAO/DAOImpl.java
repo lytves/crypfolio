@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO create some general DAO Exception finctions, may be should use my own exception class
+
 public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
     private static final Logger logger = Logger.getLogger(DAOImpl.class.getName());

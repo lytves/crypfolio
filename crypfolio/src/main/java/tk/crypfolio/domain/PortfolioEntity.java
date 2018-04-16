@@ -44,8 +44,7 @@ public class PortfolioEntity {
     private BigDecimal boughtCostEth;
 
     @OneToMany
-    @JoinColumn(name="portfolios_port_id")
-//    ????????? ,referencedColumnName="?????")
+    @JoinColumn(name="portfolios_port_id", referencedColumnName = "port_id")
     private List<ItemEntity> items = new ArrayList<>();
 
     public Long getId() {

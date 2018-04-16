@@ -15,4 +15,8 @@ public class UserDAOImpl extends DAOImpl<Long, UserEntity> implements UserDAO {
 		return this.getById(id);
 	}
 
+	@Override
+	public UserEntity getUserByUsEmail(String usEmail) {
+        return this.findByUniqueStringColumn("email", usEmail);
+	}
 }
