@@ -26,19 +26,18 @@ public class UserEntity {
     private String password;
 
     @Basic
-    @Column(name = "us_is_email_verified", nullable = false)
-    private Boolean isEmailVerified;
+    @Column(name = "us_is_email_verified")
+    private Boolean isEmailVerified = false;
 
     @Basic
     @Column(name = "us_signup_date", nullable = false)
     @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate signupDate;
 
-    @OneToOne
-    @JoinColumn(name = "portfolios_port_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private PortfolioEntity portfolio;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", orphanRemoval = true)
     private List<UserWatchCoinsEntity> userWatchCoins = new ArrayList<>();
 
     @ManyToMany
@@ -46,6 +45,15 @@ public class UserEntity {
     joinColumns = @JoinColumn(name = "users_us_id", referencedColumnName = "us_id"),
     inverseJoinColumns = @JoinColumn(name = "users_us_id1", referencedColumnName = "us_id"))
     private List<UserEntity> users = new ArrayList<>();
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String email, String password, LocalDate signupDate) {
+        this.email = email;
+        this.password = password;
+        this.signupDate = signupDate;
+    }
 
     public Long getId() {
         return id;
@@ -93,6 +101,8 @@ public class UserEntity {
 
     public void setPortfolio(PortfolioEntity portfolio) {
         this.portfolio = portfolio;
+        // setting to portfolio this User too
+        portfolio.setUser(this);
     }
 
     public List<UserWatchCoinsEntity> getUserWatchCoins() {

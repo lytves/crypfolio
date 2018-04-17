@@ -35,7 +35,7 @@ public class ItemEntity {
     @Column(name = "item_bought_cost_eth", nullable = true, precision = 8)
     private BigDecimal boughtCostEth;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "items_item_id", referencedColumnName = "item_id")
     private List<PositionEntity> positions = new ArrayList<>();
 

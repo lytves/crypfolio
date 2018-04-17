@@ -29,15 +29,31 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
     @Override
     public T getById(K id) {
 
-        return em.find(entityClass, id);
+        try {
+
+            return em.find(entityClass, id);
+
+        } catch (Exception e) {
+
+            logger.log(Level.WARNING, e.getMessage());
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<T> findAll() {
 
-        Query q = em.createQuery("from " + this.entityClass.getName());
-        return (List<T>) q.getResultList();
+        try {
+
+            Query q = em.createQuery("from " + this.entityClass.getName());
+            return (List<T>) q.getResultList();
+
+        } catch (Exception e) {
+
+            logger.log(Level.WARNING, e.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -59,56 +75,58 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
             em.getTransaction().rollback();
             logger.log(Level.WARNING, e.getMessage());
         }
-    }
-        @Override
-        public void update (T entity){
-
-            if (entity != null) {
-                em.merge(entity);
-                em.getTransaction().commit();
-            }
-        }
-
-        @Override
-        public void delete (T entity){
-
-            if (entity != null) {
-                em.remove(entity);
-                em.getTransaction().commit();
-            }
-        }
-
-        @Override
-        public void deleteById (K entityId){
-
-            T entity = em.find(entityClass, entityId);
-            if (entity != null) {
-                em.remove(entity);
-                em.getTransaction().commit();
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public T findByUniqueStringColumn (String column, String value){
-
-            try {
-                CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-                CriteriaQuery criteriaQuery = cBuilder.createQuery();
-
-                Root entity = criteriaQuery.from(entityClass);
-                criteriaQuery.select(entity);
-                criteriaQuery.where(cBuilder.equal(entity.get(column), value));
-
-                Query query = em.createQuery(criteriaQuery);
-                T t = (T) query.getSingleResult();
-
-            } catch (NoResultException e) {
-
-                logger.log(Level.WARNING, e.getMessage());
-            }
-
-            return null;
-        }
 
     }
+
+    @Override
+    public void update(T entity) {
+
+        if (entity != null) {
+            em.merge(entity);
+            em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void delete(T entity) {
+
+        if (entity != null) {
+            em.remove(entity);
+            em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deleteById(K entityId) {
+
+        T entity = em.find(entityClass, entityId);
+        if (entity != null) {
+            em.remove(entity);
+            em.getTransaction().commit();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T findByUniqueStringColumn(String column, String value) {
+
+        try {
+            CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = cBuilder.createQuery();
+
+            Root entity = criteriaQuery.from(entityClass);
+            criteriaQuery.select(entity);
+            criteriaQuery.where(cBuilder.equal(entity.get(column), value));
+
+            Query query = em.createQuery(criteriaQuery);
+            T t = (T) query.getSingleResult();
+
+        } catch (NoResultException e) {
+
+            logger.log(Level.WARNING, e.getMessage());
+        }
+
+        return null;
+    }
+
+}

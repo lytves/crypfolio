@@ -6,6 +6,9 @@ public interface UserDAO {
 
 	public UserEntity getUserById(Long id);
 
-	public UserEntity getUserByUsEmail(String usEmail);
+	public UserEntity getUserByEmail(String usEmail);
 
+	public void createUser(UserEntity u);
+
+    public void updateUser(UserEntity u);
 }

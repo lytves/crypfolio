@@ -15,4 +15,13 @@ public class PortfolioDAOImpl extends DAOImpl<Long, PortfolioEntity> implements 
 		return this.getById(id);
 	}
 
+	@Override
+	public void createPortfolio(PortfolioEntity portfolio) {
+        this.create(portfolio);
+	}
+
+    @Override
+    public void deletePortfolio(PortfolioEntity portfolio) {
+        this.delete(portfolio);
+    }
 }
