@@ -1,48 +1,67 @@
 package tk.crypfolio.domain;
 
-import tk.crypfolio.util.LocalDateAttributeConverter;
+import tk.crypfolio.common.CurrencyType;
+import tk.crypfolio.util.LocalDateTimeAttributeConverter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "positions")
-public class PositionEntity {
+public class PositionEntity implements Serializable {
 
     @Id
     @Column(name = "pos_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Basic
     @Column(name = "pos_amount", nullable = false, precision = 8)
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO;
 
-    @Basic
     @Column(name = "pos_bought_date", nullable = false)
-    @Convert(converter = LocalDateAttributeConverter.class)    private LocalDate posBoughtDate;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime posBoughtDate = LocalDateTime.now();
 
-    @Basic
-    @Column(name = "pos_bought_price_usd", nullable = true, precision = 8)
-    private BigDecimal boughtPriceUsd;
+    @Enumerated(EnumType.STRING)
+    @Column(name="pos_bought_currency", nullable = false)
+    private CurrencyType boughtCurrency = CurrencyType.USD;
 
-    @Basic
-    @Column(name = "pos_bought_price_eur", nullable = true, precision = 8)
-    private BigDecimal boughtPriceEur;
+    @Column(name = "pos_bought_price_usd", precision = 8)
+    private BigDecimal boughtPriceUsd = BigDecimal.ZERO;
 
-    @Basic
-    @Column(name = "pos_bought_price_btc", nullable = true, precision = 8)
-    private BigDecimal boughtPriceBtc;
+    @Column(name = "pos_bought_price_eur", precision = 8)
+    private BigDecimal boughtPriceEur = BigDecimal.ZERO;
 
-    @Basic
-    @Column(name = "pos_bought_price_eth", nullable = true, precision = 8)
-    private BigDecimal boughtPriceEth;
+    @Column(name = "pos_bought_price_btc", precision = 8)
+    private BigDecimal boughtPriceBtc = BigDecimal.ZERO;
 
-    @OneToOne
-    @JoinColumn(name="coins_coin_id")
-    private CoinEntity coin;
+    @Column(name = "pos_bought_price_eth", precision = 8)
+    private BigDecimal boughtPriceEth = BigDecimal.ZERO;
+
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false),
+            @JoinColumn(name = "items_portfolios_users_us_id", referencedColumnName = "portfolios_users_us_id", nullable = false),
+            @JoinColumn(name = "items_coins_coin_id", referencedColumnName = "coins_coin_id", nullable = false)
+    })
+    private ItemEntity item;
+
+    public PositionEntity() { }
+
+    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDate) {
+        this.amount = amount;
+        this.posBoughtDate = posBoughtDate;
+    }
+
+    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDate, CurrencyType boughtCurrency) {
+        this.amount = amount;
+        this.posBoughtDate = posBoughtDate;
+        this.boughtCurrency = boughtCurrency;
+    }
 
     public Long getId() {
         return id;
@@ -60,12 +79,20 @@ public class PositionEntity {
         this.amount = amount;
     }
 
-    public LocalDate getPosBoughtDate() {
+    public LocalDateTime getPosBoughtDate() {
         return posBoughtDate;
     }
 
-    public void setPosBoughtDate(LocalDate boughtDate) {
+    public void setPosBoughtDate(LocalDateTime boughtDate) {
         this.posBoughtDate = boughtDate;
+    }
+
+    public CurrencyType getBoughtCurrency() {
+        return boughtCurrency;
+    }
+
+    public void setBoughtCurrency(CurrencyType boughtCurrency) {
+        this.boughtCurrency = boughtCurrency;
     }
 
     public BigDecimal getBoughtPriceUsd() {
@@ -100,12 +127,12 @@ public class PositionEntity {
         this.boughtPriceEth = boughtPriceEth;
     }
 
-    public CoinEntity getCoin() {
-        return coin;
+    public ItemEntity getItem() {
+        return item;
     }
 
-    public void setCoin(CoinEntity coin) {
-        this.coin = coin;
+    public void setItem(ItemEntity item) {
+        this.item = item;
     }
 
     @Override
@@ -116,16 +143,32 @@ public class PositionEntity {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getAmount(), that.getAmount()) &&
                 Objects.equals(getPosBoughtDate(), that.getPosBoughtDate()) &&
+                getBoughtCurrency() == that.getBoughtCurrency() &&
                 Objects.equals(getBoughtPriceUsd(), that.getBoughtPriceUsd()) &&
                 Objects.equals(getBoughtPriceEur(), that.getBoughtPriceEur()) &&
                 Objects.equals(getBoughtPriceBtc(), that.getBoughtPriceBtc()) &&
                 Objects.equals(getBoughtPriceEth(), that.getBoughtPriceEth()) &&
-                Objects.equals(getCoin(), that.getCoin());
+                Objects.equals(getItem(), that.getItem());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getPosBoughtDate(), getBoughtPriceUsd(), getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getCoin());
+        return Objects.hash(getId(), getAmount(), getPosBoughtDate(), getBoughtCurrency(), getBoughtPriceUsd(), getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getItem());
+    }
+
+    @Override
+    public String toString() {
+        return "PositionEntity{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", posBoughtDate=" + posBoughtDate +
+                ", boughtCurrency=" + boughtCurrency +
+                ", boughtPriceUsd=" + boughtPriceUsd +
+                ", boughtPriceEur=" + boughtPriceEur +
+                ", boughtPriceBtc=" + boughtPriceBtc +
+                ", boughtPriceEth=" + boughtPriceEth +
+                ", item.id=" + item.getId() +
+                '}';
     }
 }

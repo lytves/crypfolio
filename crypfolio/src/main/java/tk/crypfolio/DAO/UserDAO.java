@@ -10,5 +10,5 @@ public interface UserDAO {
 
 	public void createUser(UserEntity u);
 
-    public void updateUser(UserEntity u);
+    public UserEntity updateUser(UserEntity u);
 }

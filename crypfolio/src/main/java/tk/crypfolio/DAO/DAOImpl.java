@@ -72,19 +72,37 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (Exception e) {
 
-            em.getTransaction().rollback();
+            if(em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             logger.log(Level.WARNING, e.getMessage());
         }
 
     }
 
     @Override
-    public void update(T entity) {
+    public T update(T entity) {
 
-        if (entity != null) {
-            em.merge(entity);
-            em.getTransaction().commit();
+        try {
+
+            if (!em.getTransaction().isActive()) {
+                em.getTransaction().begin();
+            }
+
+            if (entity != null) {
+                entity = em.merge(entity);
+                em.getTransaction().commit();
+
+                return entity;
+            }
+        } catch (Exception e) {
+
+            if(em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            logger.log(Level.WARNING, e.getMessage());
         }
+        return null;
     }
 
     @Override
@@ -128,5 +146,4 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         return null;
     }
-
 }

@@ -1,8 +1,10 @@
 package tk.crypfolio.domain;
 
+import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.StringGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,37 +12,34 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "portfolios")
-public class PortfolioEntity {
+public class PortfolioEntity implements Serializable {
 
     @Id
     private Long id;
 
-    @Basic
     @Column(name = "port_is_share", nullable = false)
     private Boolean isShare = false;
 
-    @Basic
     @Column(name = "port_share_link", length = 8, nullable = false)
     private String shareLink;
 
-    @Basic
     @Column(name = "port_is_show_amounts", nullable = false)
     private Boolean isShowAmounts = false;
 
-    @Basic
-    @Column(name = "port_bought_cost_usd", nullable = true, precision = 8)
+    @Enumerated(EnumType.STRING)
+    @Column(name="port_showed_currency", nullable = false)
+    private CurrencyType showedCurrency = CurrencyType.USD;
+
+    @Column(name = "port_bought_cost_usd", precision = 8)
     private BigDecimal boughtCostUsd;
 
-    @Basic
-    @Column(name = "port_bought_cost_eur", nullable = true, precision = 8)
+    @Column(name = "port_bought_cost_eur", precision = 8)
     private BigDecimal boughtCostEur;
 
-    @Basic
-    @Column(name = "port_bought_cost_btc", nullable = true, precision = 8)
+    @Column(name = "port_bought_cost_btc", precision = 8)
     private BigDecimal boughtCostBtc;
 
-    @Basic
-    @Column(name = "port_bought_cost_eth", nullable = true, precision = 8)
+    @Column(name = "port_bought_cost_eth", precision = 8)
     private BigDecimal boughtCostEth;
 
     @OneToOne
@@ -48,8 +47,7 @@ public class PortfolioEntity {
     @MapsId
     private UserEntity user;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="portfolios_users_us_id", referencedColumnName = "users_us_id")
+    @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemEntity> items = new ArrayList<>();
 
     public PortfolioEntity() {
@@ -86,6 +84,14 @@ public class PortfolioEntity {
 
     public void setIsShowAmounts(Boolean isShowAmounts) {
         this.isShowAmounts = isShowAmounts;
+    }
+
+    public CurrencyType getShowedCurrency() {
+        return showedCurrency;
+    }
+
+    public void setShowedCurrency(CurrencyType showedCurrency) {
+        this.showedCurrency = showedCurrency;
     }
 
     public BigDecimal getBoughtCostUsd() {
@@ -128,6 +134,12 @@ public class PortfolioEntity {
         this.items = items;
     }
 
+    public void addItem(ItemEntity item){
+        this.items.add(item);
+        // setting also for new item this portfolio-parent
+        item.setPortfolio(this);
+    }
+
     public UserEntity getUser() {
         return user;
     }
@@ -143,6 +155,7 @@ public class PortfolioEntity {
         PortfolioEntity that = (PortfolioEntity) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getIsShare(), that.getIsShare()) &&
+                getShowedCurrency() == that.getShowedCurrency() &&
                 Objects.equals(getShareLink(), that.getShareLink()) &&
                 Objects.equals(getIsShowAmounts(), that.getIsShowAmounts()) &&
                 Objects.equals(getBoughtCostUsd(), that.getBoughtCostUsd()) &&
@@ -156,6 +169,23 @@ public class PortfolioEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getIsShare(), getShareLink(), getIsShowAmounts(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getUser(), getItems());
+        return Objects.hash(getId(), getIsShare(), getShowedCurrency(), getShareLink(), getIsShowAmounts(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getUser(), getItems());
+    }
+
+    @Override
+    public String toString() {
+        return "PortfolioEntity{" +
+                "id=" + id +
+                ", isShare=" + isShare +
+                ", shareLink='" + shareLink + '\'' +
+                ", isShowAmounts=" + isShowAmounts +
+                ", showedCurrency=" + showedCurrency +
+                ", boughtCostUsd=" + boughtCostUsd +
+                ", boughtCostEur=" + boughtCostEur +
+                ", boughtCostBtc=" + boughtCostBtc +
+                ", boughtCostEth=" + boughtCostEth +
+                ", items=" + items +
+                ", user.id=" + user.getId() +
+                '}';
     }
 }

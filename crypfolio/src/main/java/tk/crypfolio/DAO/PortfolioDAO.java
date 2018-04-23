@@ -9,4 +9,6 @@ public interface PortfolioDAO {
 	public void createPortfolio(PortfolioEntity p);
 
 	public void deletePortfolio(PortfolioEntity p);
+
+	public PortfolioEntity updatePortfolio(PortfolioEntity p);
 }

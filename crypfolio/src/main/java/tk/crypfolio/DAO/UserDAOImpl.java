@@ -29,7 +29,7 @@ public class UserDAOImpl extends DAOImpl<Long, UserEntity> implements UserDAO {
     }
 
     @Override
-    public void updateUser(UserEntity user) {
-        this.update(user);
+    public UserEntity updateUser(UserEntity user) {
+        return this.update(user);
     }
 }

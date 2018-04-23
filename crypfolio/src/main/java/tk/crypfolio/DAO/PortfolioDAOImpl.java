@@ -24,4 +24,9 @@ public class PortfolioDAOImpl extends DAOImpl<Long, PortfolioEntity> implements 
     public void deletePortfolio(PortfolioEntity portfolio) {
         this.delete(portfolio);
     }
+
+    @Override
+    public PortfolioEntity updatePortfolio(PortfolioEntity portfolio) {
+        return this.update(portfolio);
+    }
 }

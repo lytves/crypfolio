@@ -1,26 +1,24 @@
 package tk.crypfolio.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "coins")
-public class CoinEntity {
+public class CoinEntity implements Serializable {
 
     @Id
     @Column(name = "coin_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Basic
     @Column(name = "coin_name", nullable = false, length = 255)
     private String name;
 
-    @Basic
-    @Column(name = "coin_symbol", nullable = false, length = 5)
+    @Column(name = "coin_symbol", nullable = false, length = 127)
     private String symbol;
 
-    @Basic
     @Column(name = "coin_api_id", nullable = false, length = 255, unique = true)
     private String apiId;
 

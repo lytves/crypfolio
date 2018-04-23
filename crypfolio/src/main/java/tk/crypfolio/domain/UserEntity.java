@@ -1,58 +1,83 @@
 package tk.crypfolio.domain;
 
-import tk.crypfolio.util.LocalDateAttributeConverter;
+import tk.crypfolio.common.CurrencyType;
+import tk.crypfolio.util.LocalDateTimeAttributeConverter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @Column(name = "us_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Basic
     @Column(name = "us_email", nullable = false, length = 255, unique = true)
     private String email;
 
-    @Basic
     @Column(name = "us_password", nullable = false, length = 128)
     private String password;
 
-    @Basic
-    @Column(name = "us_is_email_verified")
+    @Column(name = "us_is_email_verified", nullable = false)
     private Boolean isEmailVerified = false;
 
-    @Basic
     @Column(name = "us_signup_date", nullable = false)
-    @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate signupDate;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime signUpDate = LocalDateTime.now();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
-    @OneToMany(mappedBy = "userId", orphanRemoval = true)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<UserWatchCoinsEntity> userWatchCoins = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "users_has_users",
     joinColumns = @JoinColumn(name = "users_us_id", referencedColumnName = "us_id"),
-    inverseJoinColumns = @JoinColumn(name = "users_us_id1", referencedColumnName = "us_id"))
-    private List<UserEntity> users = new ArrayList<>();
+    inverseJoinColumns = @JoinColumn(name = "users_us_followee_id", referencedColumnName = "us_id"))
+    private List<UserEntity> usersFollowees = new ArrayList<>();
 
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password, LocalDate signupDate) {
+    public UserEntity(String email, String password) {
         this.email = email;
         this.password = password;
-        this.signupDate = signupDate;
+    }
+
+    public void addWatchCoin(CoinEntity coin){
+
+        UserWatchCoinsEntity userWatchCoin = new UserWatchCoinsEntity();
+
+        userWatchCoin.setCoinId(coin);
+        userWatchCoin.setUserId(this);
+
+        this.userWatchCoins.add(userWatchCoin);
+    }
+
+    public void addWatchCoin(CoinEntity coin, CurrencyType currencyType){
+
+        UserWatchCoinsEntity userWatchCoin = new UserWatchCoinsEntity();
+
+        userWatchCoin.setCoinId(coin);
+        userWatchCoin.setUserId(this);
+        userWatchCoin.setShowedCurrency(currencyType);
+
+        this.userWatchCoins.add(userWatchCoin);
+    }
+
+    public void addUserFollowee(UserEntity user){
+
+        if (user.getId() != this.getId()){
+            this.usersFollowees.add(user);
+        }
     }
 
     public Long getId() {
@@ -87,12 +112,12 @@ public class UserEntity {
         this.isEmailVerified = isEmailVerified;
     }
 
-    public LocalDate getSignupDate() {
-        return signupDate;
+    public LocalDateTime getSignUpDate() {
+        return signUpDate;
     }
 
-    public void setSignupDate(LocalDate signupDate) {
-        this.signupDate = signupDate;
+    public void setSignUpDate(LocalDateTime signUpDate) {
+        this.signUpDate = signUpDate;
     }
 
     public PortfolioEntity getPortfolio() {
@@ -101,7 +126,7 @@ public class UserEntity {
 
     public void setPortfolio(PortfolioEntity portfolio) {
         this.portfolio = portfolio;
-        // setting to portfolio this User too
+        // setting almost for portfolio this User
         portfolio.setUser(this);
     }
 
@@ -113,12 +138,12 @@ public class UserEntity {
         this.userWatchCoins = userWatchCoins;
     }
 
-    public List<UserEntity> getUsers() {
-        return users;
+    public List<UserEntity> getUsersFollowees() {
+        return usersFollowees;
     }
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
+    public void setUsersFollowees(List<UserEntity> users) {
+        this.usersFollowees = users;
     }
 
     @Override
@@ -130,15 +155,29 @@ public class UserEntity {
                 Objects.equals(getEmail(), that.getEmail()) &&
                 Objects.equals(getPassword(), that.getPassword()) &&
                 Objects.equals(getIsEmailVerified(), that.getIsEmailVerified()) &&
-                Objects.equals(getSignupDate(), that.getSignupDate()) &&
+                Objects.equals(getSignUpDate(), that.getSignUpDate()) &&
                 Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
-                Objects.equals(getUsers(), that.getUsers());
+                Objects.equals(getUsersFollowees(), that.getUsersFollowees());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getSignupDate(), getPortfolio(), getUserWatchCoins(), getUsers());
+        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getSignUpDate(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", isEmailVerified=" + isEmailVerified +
+                ", signupDate=" + signUpDate +
+                ", portfolio=" + portfolio +
+//                ", userWatchCoins=" + userWatchCoins +
+//                ", users=" + users +
+                '}';
     }
 }

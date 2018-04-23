@@ -15,4 +15,8 @@ public class PositionDAOImpl extends DAOImpl<Long, PositionEntity> implements Po
 		return this.getById(id);
 	}
 
+	@Override
+	public void createPosition(PositionEntity position) {
+		this.create(position);
+	}
 }

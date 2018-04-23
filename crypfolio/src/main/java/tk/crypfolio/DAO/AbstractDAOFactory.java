@@ -17,8 +17,6 @@ public abstract class AbstractDAOFactory {
 
     public abstract UserDAO getUserDAO();
 
-    public abstract UserWatchCoinsDAO getUserWatchCoinsDAO();
-
     @SuppressWarnings("incomplete-switch")
     public static AbstractDAOFactory getDAOFactory(SettingsDB.Type t){
 
