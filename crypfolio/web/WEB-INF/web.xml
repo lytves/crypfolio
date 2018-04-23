@@ -17,7 +17,7 @@
 
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
     <session-config>
@@ -35,7 +35,7 @@
 
     <!-- app initializing servlet -->
     <listener>
-        <listener-class>tk.crypfolio.init.AppInit</listener-class>
+        <listener-class>tk.crypfolio.init.AppInitServlet</listener-class>
     </listener>
 
 </web-app>
