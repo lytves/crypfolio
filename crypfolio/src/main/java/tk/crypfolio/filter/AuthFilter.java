@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
             if (pageOrigin.startsWith("/management")
                     && session != null
                     && session.getAttribute("isAdmin") != null
-                    && session.getAttribute("userEmail") != null){
+                    && session.getAttribute("userEmailSession") != null){
 
                 filterChain.doFilter(servletRequest, servletResponse);
                 logger.info("\nsuccessfully passed by 'admin' AuthFilter.doFilter\n");
@@ -43,7 +43,7 @@ public class AuthFilter implements Filter {
 
             // authorizing user handler
             else if (session != null
-                    && session.getAttribute("userEmail") != null){
+                    && session.getAttribute("userEmailSession") != null){
 
                 if (pageOrigin.startsWith("/signup")
                         || pageOrigin.startsWith("/reset_pass")
@@ -80,5 +80,4 @@ public class AuthFilter implements Filter {
     public void destroy() {
 
     }
-
 }
