@@ -3,19 +3,41 @@ package tk.crypfolio.DAO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JPADAOFactory extends AbstractDAOFactory {
 
-    private EntityManager getEntityManager() {
+    private static final Logger logger = Logger.getLogger(JPADAOFactory.class.getName());
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnit");
-        return emf.createEntityManager();
+    private volatile static EntityManagerFactory emf;
+
+    private static EntityManagerFactory getInstanceEntityManagerFactory() {
+
+        if (emf == null) {
+            synchronized (EntityManagerFactory.class) {
+                if (emf == null) {
+                    emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnit");
+                }
+            }
+        }
+
+        return emf;
+    }
+
+    private static EntityManager getEntityManager() {
+
+        try {
+            return getInstanceEntityManagerFactory().createEntityManager();
+        } catch (Exception e){
+            logger.log(Level.WARNING, e.getMessage());
+        }
+
+        return null;
     }
 
     @Override
-    public CoinDAO getCoinDAO() {
-        return new CoinDAOImpl(getEntityManager());
-    }
+    public CoinDAO getCoinDAO() {return new CoinDAOImpl(getEntityManager());}
 
     @Override
     public ItemDAO getItemDAO() {
@@ -35,10 +57,5 @@ public class JPADAOFactory extends AbstractDAOFactory {
     @Override
     public UserDAO getUserDAO() {
         return new UserDAOImpl(getEntityManager());
-    }
-
-    @Override
-    public UserWatchCoinsDAO getUserWatchCoinsDAO() {
-        return new UserWatchCoinsDAOImpl(getEntityManager());
     }
 }
