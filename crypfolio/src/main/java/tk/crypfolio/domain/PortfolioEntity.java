@@ -17,6 +17,9 @@ public class PortfolioEntity implements Serializable {
     @Id
     private Long id;
 
+    @Column(name = "port_name", nullable = false, length = 128)
+    private String name;
+
     @Column(name = "port_is_share", nullable = false)
     private Boolean isShare = false;
 
@@ -60,6 +63,14 @@ public class PortfolioEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getShareLink() {
@@ -154,10 +165,11 @@ public class PortfolioEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         PortfolioEntity that = (PortfolioEntity) o;
         return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getIsShare(), that.getIsShare()) &&
-                getShowedCurrency() == that.getShowedCurrency() &&
                 Objects.equals(getShareLink(), that.getShareLink()) &&
                 Objects.equals(getIsShowAmounts(), that.getIsShowAmounts()) &&
+                getShowedCurrency() == that.getShowedCurrency() &&
                 Objects.equals(getBoughtCostUsd(), that.getBoughtCostUsd()) &&
                 Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
                 Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
@@ -169,13 +181,14 @@ public class PortfolioEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getIsShare(), getShowedCurrency(), getShareLink(), getIsShowAmounts(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getUser(), getItems());
+        return Objects.hash(getId(), getName(), getIsShare(), getShareLink(), getIsShowAmounts(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getUser(), getItems());
     }
 
     @Override
     public String toString() {
         return "PortfolioEntity{" +
                 "id=" + id +
+                ", name=" + name +
                 ", isShare=" + isShare +
                 ", shareLink='" + shareLink + '\'' +
                 ", isShowAmounts=" + isShowAmounts +
