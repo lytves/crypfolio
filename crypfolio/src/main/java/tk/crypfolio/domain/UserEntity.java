@@ -75,7 +75,7 @@ public class UserEntity implements Serializable {
 
     public void addUserFollowee(UserEntity user){
 
-        if (user.getId() != this.getId()){
+        if (!user.getId().equals(this.getId()) ){
             this.usersFollowees.add(user);
         }
     }
