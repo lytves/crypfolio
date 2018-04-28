@@ -21,6 +21,11 @@ public class UserDAOImpl extends DAOImpl<Long, UserEntity> implements UserDAO {
     }
 
     @Override
+    public UserEntity getUserByEmailVerifCode(String usEmailVerifCode) {
+        return this.findByUniqueStringColumn("emailVerifCode", usEmailVerifCode);
+    }
+
+    @Override
     public void createUser(UserEntity user) {
 
         if (getUserByEmail(user.getEmail()) == null){
