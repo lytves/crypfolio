@@ -28,6 +28,9 @@ public class UserEntity implements Serializable {
     @Column(name = "us_is_email_verified", nullable = false)
     private Boolean isEmailVerified = false;
 
+    @Column(name = "us_email_verif_code", length = 36)
+    private String emailVerifCode;
+
     @Column(name = "us_signup_date", nullable = false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime signUpDate = LocalDateTime.now();
@@ -112,6 +115,14 @@ public class UserEntity implements Serializable {
         this.isEmailVerified = isEmailVerified;
     }
 
+    public String getEmailVerifCode() {
+        return emailVerifCode;
+    }
+
+    public void setEmailVerifCode(String emailVerifCode) {
+        this.emailVerifCode = emailVerifCode;
+    }
+
     public LocalDateTime getSignUpDate() {
         return signUpDate;
     }
@@ -155,6 +166,7 @@ public class UserEntity implements Serializable {
                 Objects.equals(getEmail(), that.getEmail()) &&
                 Objects.equals(getPassword(), that.getPassword()) &&
                 Objects.equals(getIsEmailVerified(), that.getIsEmailVerified()) &&
+                Objects.equals(getEmailVerifCode(), that.getEmailVerifCode()) &&
                 Objects.equals(getSignUpDate(), that.getSignUpDate()) &&
                 Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
@@ -164,7 +176,7 @@ public class UserEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getSignUpDate(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
+        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getEmailVerifCode(), getSignUpDate(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
     }
 
     @Override
@@ -174,6 +186,7 @@ public class UserEntity implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", isEmailVerified=" + isEmailVerified +
+                ", emailVerifCode=" + emailVerifCode +
                 ", signupDate=" + signUpDate +
                 ", portfolio=" + portfolio +
 //                ", userWatchCoins=" + userWatchCoins +
