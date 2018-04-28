@@ -22,7 +22,7 @@ public class UserEntity implements Serializable {
     @Column(name = "us_email", nullable = false, length = 255, unique = true)
     private String email;
 
-    @Column(name = "us_password", nullable = false, length = 128)
+    @Column(name = "us_password", nullable = false, length = 64)
     private String password;
 
     @Column(name = "us_is_email_verified", nullable = false)
