@@ -1,6 +1,6 @@
 package tk.crypfolio.util;
 
-public class StringGenerator {
+public abstract class StringGenerator {
 
     private static final String NUMBERS = "0123456789";
     private static final String UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
