@@ -33,9 +33,9 @@ public abstract class EmailSender {
 
                 "<p>Follow the link to verify your email:</p>" +
 
-                "<p><a href=\"https://crypfolio.tk/verify-email?code=" + verificationCode + "\">" +
+                "<p><a href=\"https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "\">" +
 
-                "https://crypfolio.tk/verify-email?code=" + verificationCode + "</a></p>";
+                "https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>";
 
         logger.log(Level.INFO, "Start sending sendConfirmedEmail()..");
 
