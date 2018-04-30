@@ -16,7 +16,7 @@ public abstract class EmailSender {
 
     private final static String FROM_EMAIL = "PUT_YOUR_GMAIL_ID_HERE";
 
-    private final static String PASSWORD = "PUT_YOUR_GMAIL_PASSWORD HERE_HERE";
+    private final static String PASSWORD = "PUT_YOUR_GMAIL_PASSWORD_HERE";
 
     /*
      * Outgoing Mail (SMTP) Server
