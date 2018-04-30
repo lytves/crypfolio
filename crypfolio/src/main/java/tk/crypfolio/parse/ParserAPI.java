@@ -1,6 +1,5 @@
 package tk.crypfolio.parse;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,8 +20,8 @@ public class ParserAPI {
     private final Logger logger = Logger.getLogger(ParserAPI.class.getName());
 
     /*
-    *  Universal method to launch API request
-    * */
+     *  Universal method to launch API request
+     * */
     private String parseAPIByURL(String stringURL, String stringMethod) {
 
         //inlineString will store the JSON data streamed in string format
@@ -59,8 +58,8 @@ public class ParserAPI {
 
 
     /*
-    * Method to receive ALL COINS list from CoinMarketCap API
-    * */
+     * Method to receive ALL COINS list from CoinMarketCap API
+     * */
     public List<CoinEntity> parseAllCoin() {
 
         ArrayList<CoinEntity> listCoins = new ArrayList<>();
@@ -76,14 +75,14 @@ public class ParserAPI {
 
                 JSONArray jsonArray = (JSONArray) parserJSON.parse(inlineString);
 
-                for (int i = 0; i < jsonArray.size(); i++) {
+                for (Object jsonObject : jsonArray) {
 
                     //Get the index of the JSON objects and print the values as per the index
-                    JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+                    JSONObject jsonObj = (JSONObject) jsonObject;
 
-                    String coinName = StringEscapeUtils.escapeSql((String) jsonObj.get("name"));
-                    String coinSymbol = StringEscapeUtils.escapeSql((String) jsonObj.get("symbol"));
-                    String coinApiId = StringEscapeUtils.escapeSql((String) jsonObj.get("id"));
+                    String coinName = (String) jsonObj.get("name");
+                    String coinSymbol = (String) jsonObj.get("symbol");
+                    String coinApiId = (String) jsonObj.get("id");
 
                     CoinEntity coin = new CoinEntity(coinName, coinSymbol, coinApiId);
 
