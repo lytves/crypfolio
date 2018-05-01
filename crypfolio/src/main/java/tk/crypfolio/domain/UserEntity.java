@@ -35,6 +35,9 @@ public class UserEntity implements Serializable {
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime signUpDate = LocalDateTime.now();
 
+    @Column(name = "us_password_reset_code", length = 36)
+    private String passwordResetCode;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
@@ -131,6 +134,14 @@ public class UserEntity implements Serializable {
         this.signUpDate = signUpDate;
     }
 
+    public String getPasswordResetCode() {
+        return passwordResetCode;
+    }
+
+    public void setPasswordResetCode(String passwordResetCode) {
+        this.passwordResetCode = passwordResetCode;
+    }
+
     public PortfolioEntity getPortfolio() {
         return portfolio;
     }
@@ -168,6 +179,7 @@ public class UserEntity implements Serializable {
                 Objects.equals(getIsEmailVerified(), that.getIsEmailVerified()) &&
                 Objects.equals(getEmailVerifCode(), that.getEmailVerifCode()) &&
                 Objects.equals(getSignUpDate(), that.getSignUpDate()) &&
+                Objects.equals(getPasswordResetCode(), that.getPasswordResetCode()) &&
                 Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
                 Objects.equals(getUsersFollowees(), that.getUsersFollowees());
@@ -176,7 +188,7 @@ public class UserEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getEmailVerifCode(), getSignUpDate(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
+        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getEmailVerifCode(), getSignUpDate(), getPasswordResetCode(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
     }
 
     @Override
@@ -188,7 +200,8 @@ public class UserEntity implements Serializable {
                 ", isEmailVerified=" + isEmailVerified +
                 ", emailVerifCode=" + emailVerifCode +
                 ", signupDate=" + signUpDate +
-                ", portfolio=" + portfolio +
+                ", signupDate=" + signUpDate +
+                ", passwordResetCode=" + passwordResetCode +
 //                ", userWatchCoins=" + userWatchCoins +
 //                ", users=" + users +
                 '}';
