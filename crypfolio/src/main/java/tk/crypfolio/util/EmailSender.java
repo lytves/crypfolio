@@ -23,7 +23,7 @@ public abstract class EmailSender {
      * requires TLS or SSL: smtp.gmail.com (use authentication)
      * */
 
-    public static void sendConfirmedEmail(String emailRecipient, String verificationCode) {
+    public static void sendConfirmationEmail(String emailRecipient, String verificationCode) {
 
         String subject = "CrypFolio: confirm your email";
 
@@ -37,7 +37,7 @@ public abstract class EmailSender {
 
                 "https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>";
 
-        logger.log(Level.INFO, "Start sending sendConfirmedEmail()..");
+        logger.log(Level.INFO, "Start sending sendConfirmationEmail()..");
 
         sendEmail(emailRecipient, subject, text);
     }
