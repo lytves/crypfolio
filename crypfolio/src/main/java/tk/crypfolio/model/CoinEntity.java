@@ -1,4 +1,4 @@
-package tk.crypfolio.domain;
+package tk.crypfolio.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package tk.crypfolio.domain;
+package tk.crypfolio.model;
 
 import java.io.Serializable;
 import java.util.Objects;

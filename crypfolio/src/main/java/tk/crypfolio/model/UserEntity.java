@@ -1,4 +1,4 @@
-package tk.crypfolio.domain;
+package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.LocalDateTimeAttributeConverter;
