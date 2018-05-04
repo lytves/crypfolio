@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import tk.crypfolio.common.SettingsParseAPI;
-import tk.crypfolio.domain.CoinEntity;
+import tk.crypfolio.model.CoinEntity;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
