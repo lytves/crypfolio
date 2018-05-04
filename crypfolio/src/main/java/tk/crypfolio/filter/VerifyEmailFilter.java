@@ -1,7 +1,7 @@
 package tk.crypfolio.filter;
 
 import tk.crypfolio.controller.ActiveUser;
-import tk.crypfolio.domain.UserEntity;
+import tk.crypfolio.model.UserEntity;
 import tk.crypfolio.ejb.UserService;
 
 import javax.inject.Inject;
@@ -18,9 +18,11 @@ public class VerifyEmailFilter implements Filter {
 
     private static final Logger logger = Logger.getLogger(VerifyEmailFilter.class.getName());
 
+    private FilterConfig filterConfig;
+
     // stateless ejb
     @Inject
-    protected UserService userService;
+    private UserService userService;
 
     // session managed bean
     @Inject
@@ -28,7 +30,7 @@ public class VerifyEmailFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        this.filterConfig = filterConfig;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class VerifyEmailFilter implements Filter {
 
             if (emailVerifCode != null) {
 
-                UserEntity user = userService.doConfirmEmail(emailVerifCode);
+                UserEntity user = userService.doConfirmEmailDB(emailVerifCode);
 
                 if (user != null) {
 
@@ -53,15 +55,21 @@ public class VerifyEmailFilter implements Filter {
                      * */
                     activeUser.setUser(user);
 
+                    // TODO make some variable in activeUser with text to show a modal popup
+                    // TODO on /user page to inform when email verification is done
+
                     resp.sendRedirect(req.getContextPath() + "/user");
 
                 } else {
 
                     /*
-                     * some error, like the email has already been confirmed
+                     * some error, like the email has already been confirmed or code is incorrect
                      * */
-                    resp.sendRedirect(req.getContextPath() + "/error");
+                    req.setAttribute("error", "Email address verification error. " +
+                            "The code is invalid or the link is expired. " +
+                            "Try to request new email address confirmation link by email again.");
 
+                    filterConfig.getServletContext().getRequestDispatcher("/error").forward(req, resp);
                 }
 
             } else {
@@ -73,7 +81,6 @@ public class VerifyEmailFilter implements Filter {
 
             logger.log(Level.WARNING, e.getMessage());
         }
-
     }
 
     @Override
