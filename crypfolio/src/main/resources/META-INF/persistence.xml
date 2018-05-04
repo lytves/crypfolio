@@ -8,12 +8,12 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>tk.crypfolio.domain.CoinEntity</class>
-        <class>tk.crypfolio.domain.ItemEntity</class>
-        <class>tk.crypfolio.domain.PortfolioEntity</class>
-        <class>tk.crypfolio.domain.PositionEntity</class>
-        <class>tk.crypfolio.domain.UserEntity</class>
-        <class>tk.crypfolio.domain.UserWatchCoinsEntity</class>
+        <class>tk.crypfolio.model.CoinEntity</class>
+        <class>tk.crypfolio.model.ItemEntity</class>
+        <class>tk.crypfolio.model.PortfolioEntity</class>
+        <class>tk.crypfolio.model.PositionEntity</class>
+        <class>tk.crypfolio.model.UserEntity</class>
+        <class>tk.crypfolio.model.UserWatchCoinsEntity</class>
 
         <properties>
 
@@ -21,9 +21,9 @@
             <!-- ========================================== or org.mariadb.jdbc.Driver -->
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <!-- ========================================== put your userName here -->
-            <property name="hibernate.connection.username" value="userDB"/>
+            <property name="hibernate.connection.username" value="userName"/>
             <!-- ========================================== put your userPassword here -->
-            <property name="hibernate.connection.password" value="SSDuserDB09"/>
+            <property name="hibernate.connection.password" value="userPassword"/>
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
