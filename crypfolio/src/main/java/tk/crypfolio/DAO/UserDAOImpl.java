@@ -1,6 +1,6 @@
 package tk.crypfolio.DAO;
 
-import tk.crypfolio.domain.UserEntity;
+import tk.crypfolio.model.UserEntity;
 
 import javax.persistence.EntityManager;
 
@@ -20,9 +20,14 @@ public class UserDAOImpl extends DAOImpl<Long, UserEntity> implements UserDAO {
         return this.findByUniqueStringColumn("email", usEmail);
     }
 
-    @Override
+     @Override
     public UserEntity getUserByEmailVerifCode(String usEmailVerifCode) {
         return this.findByUniqueStringColumn("emailVerifCode", usEmailVerifCode);
+    }
+
+    @Override
+    public UserEntity getUserByResetPasswordCode(String usResetPasswordCode) {
+        return this.findByUniqueStringColumn("passwordResetCode", usResetPasswordCode);
     }
 
     @Override

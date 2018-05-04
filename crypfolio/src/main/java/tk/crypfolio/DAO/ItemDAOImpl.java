@@ -1,6 +1,6 @@
 package tk.crypfolio.DAO;
 
-import tk.crypfolio.domain.ItemEntity;
+import tk.crypfolio.model.ItemEntity;
 
 import javax.persistence.EntityManager;
 

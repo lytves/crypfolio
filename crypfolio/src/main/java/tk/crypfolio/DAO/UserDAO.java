@@ -1,6 +1,6 @@
 package tk.crypfolio.DAO;
 
-import tk.crypfolio.domain.UserEntity;
+import tk.crypfolio.model.UserEntity;
 
 public interface UserDAO {
 
@@ -9,6 +9,8 @@ public interface UserDAO {
 	public UserEntity getUserByEmail(String usEmail);
 
 	public UserEntity getUserByEmailVerifCode (String usEmailVerifCode);
+
+	public UserEntity getUserByResetPasswordCode (String usResetPasswordCode);
 
 	public void createUser(UserEntity u);
 
