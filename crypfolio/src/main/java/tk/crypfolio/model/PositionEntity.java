@@ -15,18 +15,18 @@ public class PositionEntity implements Serializable {
 
     @Id
     @Column(name = "pos_id", nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "pos_amount", nullable = false, precision = 8)
     private BigDecimal amount = BigDecimal.ZERO;
 
-    @Column(name = "pos_bought_date", nullable = false)
+    @Column(name = "pos_bought_datetime", nullable = false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime posBoughtDate = LocalDateTime.now();
+    private LocalDateTime posBoughtDateTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(name="pos_bought_currency", nullable = false)
+    @Column(name = "pos_bought_currency", nullable = false)
     private CurrencyType boughtCurrency = CurrencyType.USD;
 
     @Column(name = "pos_bought_price_usd", precision = 8)
@@ -41,25 +41,22 @@ public class PositionEntity implements Serializable {
     @Column(name = "pos_bought_price_eth", precision = 8)
     private BigDecimal boughtPriceEth = BigDecimal.ZERO;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false),
-            @JoinColumn(name = "items_portfolios_users_us_id", referencedColumnName = "portfolios_users_us_id", nullable = false),
-            @JoinColumn(name = "items_coins_coin_id", referencedColumnName = "coins_coin_id", nullable = false)
-    })
+    //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false)
     private ItemEntity item;
 
-    public PositionEntity() { }
-
-    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDate) {
-        this.amount = amount;
-        this.posBoughtDate = posBoughtDate;
+    public PositionEntity() {
     }
 
-    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDate, CurrencyType boughtCurrency) {
+    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDateTime) {
         this.amount = amount;
-        this.posBoughtDate = posBoughtDate;
+        this.posBoughtDateTime = posBoughtDateTime;
+    }
+
+    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDateTime, CurrencyType boughtCurrency) {
+        this.amount = amount;
+        this.posBoughtDateTime = posBoughtDateTime;
         this.boughtCurrency = boughtCurrency;
     }
 
@@ -79,12 +76,12 @@ public class PositionEntity implements Serializable {
         this.amount = amount;
     }
 
-    public LocalDateTime getPosBoughtDate() {
-        return posBoughtDate;
+    public LocalDateTime getPosBoughtDateTime() {
+        return posBoughtDateTime;
     }
 
-    public void setPosBoughtDate(LocalDateTime boughtDate) {
-        this.posBoughtDate = boughtDate;
+    public void setPosBoughtDateTime(LocalDateTime boughtDate) {
+        this.posBoughtDateTime = boughtDate;
     }
 
     public CurrencyType getBoughtCurrency() {
@@ -142,7 +139,7 @@ public class PositionEntity implements Serializable {
         PositionEntity that = (PositionEntity) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getAmount(), that.getAmount()) &&
-                Objects.equals(getPosBoughtDate(), that.getPosBoughtDate()) &&
+                Objects.equals(getPosBoughtDateTime(), that.getPosBoughtDateTime()) &&
                 getBoughtCurrency() == that.getBoughtCurrency() &&
                 Objects.equals(getBoughtPriceUsd(), that.getBoughtPriceUsd()) &&
                 Objects.equals(getBoughtPriceEur(), that.getBoughtPriceEur()) &&
@@ -154,7 +151,7 @@ public class PositionEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getPosBoughtDate(), getBoughtCurrency(), getBoughtPriceUsd(), getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getItem());
+        return Objects.hash(getId(), getAmount(), getPosBoughtDateTime(), getBoughtCurrency(), getBoughtPriceUsd(), getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getItem());
     }
 
     @Override
@@ -162,7 +159,7 @@ public class PositionEntity implements Serializable {
         return "PositionEntity{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", posBoughtDate=" + posBoughtDate +
+                ", posBoughtDateTime=" + posBoughtDateTime +
                 ", boughtCurrency=" + boughtCurrency +
                 ", boughtPriceUsd=" + boughtPriceUsd +
                 ", boughtPriceEur=" + boughtPriceEur +

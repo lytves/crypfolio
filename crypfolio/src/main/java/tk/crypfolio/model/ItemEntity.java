@@ -40,15 +40,16 @@ public class ItemEntity implements Serializable {
 
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ManyToOne
-    @JoinColumn(name="portfolios_users_us_id", nullable = false)
+    @JoinColumn(name="portfolios_users_us_id", referencedColumnName="users_us_id", nullable = false)
     private PortfolioEntity portfolio;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
-    @JoinColumn(name = "coins_coin_id", nullable = false)
+    @JoinColumn(name = "coins_coin_id", referencedColumnName="coin_id", nullable = false)
     private CoinEntity coin;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "item")
     private List<PositionEntity> positions = new ArrayList<>();
 
     public void addPosition(PositionEntity position){

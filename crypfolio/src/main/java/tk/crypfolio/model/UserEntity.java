@@ -25,18 +25,26 @@ public class UserEntity implements Serializable {
     @Column(name = "us_password", nullable = false, length = 64)
     private String password;
 
+    @Column(name = "us_signup_datetime", nullable = false)
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime signupDateTime = LocalDateTime.now();
+
     @Column(name = "us_is_email_verified", nullable = false)
     private Boolean isEmailVerified = false;
 
     @Column(name = "us_email_verif_code", length = 36)
     private String emailVerifCode;
 
-    @Column(name = "us_signup_date", nullable = false)
+    @Column(name = "us_email_verif_code_request_datetime")
     @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime signUpDate = LocalDateTime.now();
+    private LocalDateTime emailVerifCodeRequestDateTime = LocalDateTime.now();
 
     @Column(name = "us_password_reset_code", length = 36)
     private String passwordResetCode;
+
+    @Column(name = "us_password_reset_code_datetime")
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime passwordResetCodeRequestDateTime;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
@@ -110,6 +118,14 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
+    public LocalDateTime getSignupDateTime() {
+        return signupDateTime;
+    }
+
+    public void setSignupDateTime(LocalDateTime signUpDate) {
+        this.signupDateTime = signUpDate;
+    }
+
     public Boolean getIsEmailVerified() {
         return isEmailVerified;
     }
@@ -126,20 +142,28 @@ public class UserEntity implements Serializable {
         this.emailVerifCode = emailVerifCode;
     }
 
-    public LocalDateTime getSignUpDate() {
-        return signUpDate;
-    }
-
-    public void setSignUpDate(LocalDateTime signUpDate) {
-        this.signUpDate = signUpDate;
-    }
-
     public String getPasswordResetCode() {
         return passwordResetCode;
     }
 
     public void setPasswordResetCode(String passwordResetCode) {
         this.passwordResetCode = passwordResetCode;
+    }
+
+    public LocalDateTime getEmailVerifCodeRequestDateTime() {
+        return emailVerifCodeRequestDateTime;
+    }
+
+    public void setEmailVerifCodeRequestDateTime(LocalDateTime emailVerifCodeRequestDateTime) {
+        this.emailVerifCodeRequestDateTime = emailVerifCodeRequestDateTime;
+    }
+
+    public LocalDateTime getPasswordResetCodeRequestDateTime() {
+        return passwordResetCodeRequestDateTime;
+    }
+
+    public void setPasswordResetCodeRequestDateTime(LocalDateTime passwordResetCodeRequestDateTime) {
+        this.passwordResetCodeRequestDateTime = passwordResetCodeRequestDateTime;
     }
 
     public PortfolioEntity getPortfolio() {
@@ -176,10 +200,12 @@ public class UserEntity implements Serializable {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getEmail(), that.getEmail()) &&
                 Objects.equals(getPassword(), that.getPassword()) &&
+                Objects.equals(getSignupDateTime(), that.getSignupDateTime()) &&
                 Objects.equals(getIsEmailVerified(), that.getIsEmailVerified()) &&
                 Objects.equals(getEmailVerifCode(), that.getEmailVerifCode()) &&
-                Objects.equals(getSignUpDate(), that.getSignUpDate()) &&
+                Objects.equals(getEmailVerifCodeRequestDateTime(), that.getEmailVerifCodeRequestDateTime()) &&
                 Objects.equals(getPasswordResetCode(), that.getPasswordResetCode()) &&
+                Objects.equals(getPasswordResetCodeRequestDateTime(), that.getPasswordResetCodeRequestDateTime()) &&
                 Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
                 Objects.equals(getUsersFollowees(), that.getUsersFollowees());
@@ -188,7 +214,7 @@ public class UserEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getPassword(), getIsEmailVerified(), getEmailVerifCode(), getSignUpDate(), getPasswordResetCode(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
+        return Objects.hash(getId(), getEmail(), getPassword(), getSignupDateTime(), getIsEmailVerified(), getEmailVerifCode(), getEmailVerifCodeRequestDateTime(), getPasswordResetCode(), getPasswordResetCodeRequestDateTime(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
     }
 
     @Override
@@ -197,13 +223,15 @@ public class UserEntity implements Serializable {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", signupDateTime=" + signupDateTime +
                 ", isEmailVerified=" + isEmailVerified +
-                ", emailVerifCode=" + emailVerifCode +
-                ", signupDate=" + signUpDate +
-                ", signupDate=" + signUpDate +
-                ", passwordResetCode=" + passwordResetCode +
+                ", emailVerifCode='" + emailVerifCode + '\'' +
+                ", emailVerifCodeRequestDateTime=" + emailVerifCodeRequestDateTime +
+                ", passwordResetCode='" + passwordResetCode + '\'' +
+                ", passwordResetCodeRequestDateTime=" + passwordResetCodeRequestDateTime +
+//                ", portfolio=" + portfolio +
 //                ", userWatchCoins=" + userWatchCoins +
-//                ", users=" + users +
+//                ", usersFollowees=" + usersFollowees +
                 '}';
     }
 }
