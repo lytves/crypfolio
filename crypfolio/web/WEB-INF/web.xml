@@ -20,22 +20,50 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
+    <!-- Application initializing servlet -->
+
+    <listener>
+        <listener-class>tk.crypfolio.init.AppInitServlet</listener-class>
+    </listener>
+
+    <!-- Welcome file and error pages -->
 
     <welcome-file-list>
         <welcome-file>/faces/login.xhtml</welcome-file>
     </welcome-file-list>
 
     <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/templates/error-page.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/templates/error-page.xhtml</location> <!-- We don't want to leak restricted pages, so 404 instead of 403. -->
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/templates/error-page.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/templates/error-page.xhtml</location>
+    </error-page>
+    <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/faces/errorPage.xhtml</location>
+        <location>/WEB-INF/templates/error-page.xhtml</location>
     </error-page>
 
-    <!-- app initializing servlet -->
-    <listener>
-        <listener-class>tk.crypfolio.init.AppInitServlet</listener-class>
-    </listener>
+    <!-- Session configuration -->
+
+    <session-config>
+
+        <session-timeout>30</session-timeout>
+
+        <cookie-config>
+            <http-only>true</http-only> <!-- Prevent client side scripting from accessing/manipulating session cookie. -->
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode> <!-- This disables URL rewriting. -->
+
+    </session-config>
 
 </web-app>
