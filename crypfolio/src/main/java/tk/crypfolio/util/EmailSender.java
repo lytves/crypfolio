@@ -35,9 +35,48 @@ public abstract class EmailSender {
 
                 "<p><a href=\"https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "\">" +
 
-                "https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>";
+                "https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>" +
+
+                "<p></p><p>-----------------</p>" +
+
+                "<p>If you have been already confirmed your email, just ignore this email.</p>" +
+
+                "<p>No one is able to hack your CrypFolio account, </p>" +
+
+                "<p>unless they have also compromised your email address.</p>" +
+
+                "<p></p><p></p>" +
+
+                "<p>For security reasons, this link will expire in 30 minutes.</p>";
 
         logger.log(Level.INFO, "Start sending sendConfirmationEmail()..");
+
+        sendEmail(emailRecipient, subject, text);
+    }
+
+    public static void sendResetPasswordEmail(String emailRecipient, String resetCode) {
+
+        String subject = "CrypFolio: reset password";
+
+        String text = "<p>Follow this link and set your new CrypFolio account password:</p>" +
+
+                "<p><a href=\"https://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "\">" +
+
+                "https://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "</a></p>" +
+
+                "<p></p><p>-----------------</p>" +
+
+                "<p>If you did not request to reset your password, just ignore this email.</p>" +
+
+                "<p>No one is able to reset your CrypFolio password without your permission, </p>" +
+
+                "<p>unless they have also compromised your email address.</p>" +
+
+                "<p></p><p></p>" +
+
+                "<p>For security reasons, this link will expire in 30 minutes.</p>";
+
+        logger.log(Level.INFO, "Start sending sendResetPasswordEmail()..");
 
         sendEmail(emailRecipient, subject, text);
     }
