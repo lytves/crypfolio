@@ -1,8 +1,8 @@
 package tk.crypfolio.filter;
 
-import tk.crypfolio.controller.ActiveUser;
+import tk.crypfolio.view.ActiveUser;
 import tk.crypfolio.model.UserEntity;
-import tk.crypfolio.ejb.UserService;
+import tk.crypfolio.business.UserService;
 
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -20,7 +20,7 @@ public class VerifyEmailFilter implements Filter {
 
     private FilterConfig filterConfig;
 
-    // stateless ejb
+    // stateless business
     @Inject
     private UserService userService;
 

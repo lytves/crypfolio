@@ -1,6 +1,6 @@
 package tk.crypfolio.filter;
 
-import tk.crypfolio.ejb.UserService;
+import tk.crypfolio.business.UserService;
 import tk.crypfolio.model.UserEntity;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ public class ResetPasswordFilter implements Filter {
 
     private FilterConfig filterConfig;
 
-    // stateless ejb
+    // stateless business
     @Inject
     private UserService userService;
 
