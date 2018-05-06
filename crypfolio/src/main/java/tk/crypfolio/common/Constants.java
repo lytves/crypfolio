@@ -1,5 +1,5 @@
 package tk.crypfolio.common;
 
-public class Constants {
+public abstract class Constants {
 
 }
