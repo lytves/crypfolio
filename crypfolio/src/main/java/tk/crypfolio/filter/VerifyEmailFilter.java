@@ -63,10 +63,11 @@ public class VerifyEmailFilter implements Filter {
                 } else {
 
                     /*
-                     * some error, like the email has already been confirmed or code is incorrect
+                     * some error, like the email has been already confirmed, or code is incorrect
+                     * or expired
                      * */
-                    req.setAttribute("error", "Email address verification error. " +
-                            "The code is invalid or the link is expired. " +
+                    req.setAttribute("errorText", "Email address verification error. " +
+                            "The code is invalid or has been already confirmed or the link is expired. " +
                             "Try to request new email address confirmation link by email again.");
 
                     filterConfig.getServletContext().getRequestDispatcher("/error").forward(req, resp);
