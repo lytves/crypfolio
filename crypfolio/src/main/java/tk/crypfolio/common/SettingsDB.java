@@ -1,6 +1,6 @@
 package tk.crypfolio.common;
 
-public class SettingsDB {
+public abstract class SettingsDB {
 
     public enum Type {JPA,XML}
 
