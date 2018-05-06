@@ -1,0 +1,91 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <f:metadata>
+        <f:viewAction action="#{controller.allowLoadLoginPage}"/>
+    </f:metadata>
+
+    <ui:define name="title">CrypFolio - Login page</ui:define>
+
+    <ui:define name="content">
+
+        <h3>
+            login.xhtml - General Login Page:
+        </h3>
+
+        <p:growl id="growl" showDetail="false" life="15000" errorClass="error-messages" infoClass="info-messages"/>
+
+        <h:form id="loginForm">
+
+            <p:panel id="loginPanel" header="Login to portfolio" style="">
+
+                <h:panelGrid styleClass="order-table reservainfo">
+
+                    <p:outputLabel for="usEmail" value="Email:"/>
+                    <p:inputText id="usEmail" value="#{loginBacking.user.email}" required="true"
+                                 type="email" size="20"
+                                 requiredMessage="Error: enter your email"/>
+
+                    <p:outputLabel for="password" value="Password:"/>
+                    <p:password id="password" value="#{loginBacking.password}"
+                                required="true"
+                                requiredMessage="Error: enter your password"/>
+
+                    <p:commandButton action="#{loginBacking.login}"
+                                     styleClass="login-submit navi padding-margin"
+                                     value="Login"
+                                     update="loginPanel growl"
+                                     ajax="false">
+
+                        <p:resetInput target="loginPanel"/>
+
+                    </p:commandButton>
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:form>
+
+            <h:panelGroup id="resendPanel">
+
+                <!--<h:outputText value="Your email address hasn't been confirmed yet."/>-->
+<!--                <div class="messagecolor">
+                    <h:messages showSummary="true" showDetail="false"
+                                errorClass="error-messages" infoClass="info-messages" />
+                </div>-->
+                <p:commandLink rendered="#{loginBacking.showEmailResendLink}"
+                               styleClass="login-submit userlink inline padding-margin right"
+                               value="Resend email"
+                               update="resendPanel"
+                               onclick="myCommand();"/>
+
+                <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
+                                 style="display: none;" update="growl"/>
+
+            </h:panelGroup>
+
+        </h:form>
+
+        <p>
+            <h:link
+                    styleClass="login-submit userlink inline padding-margin"
+                    outcome="signup"
+                    value="Create an account"/>
+        </p>
+
+        <p>
+            <h:link
+                    styleClass="login-submit navi padding-margin"
+                    outcome="forgot-password"
+                    value="Reset password"/>
+
+        </p>
+
+    </ui:define>
+
+</ui:composition>

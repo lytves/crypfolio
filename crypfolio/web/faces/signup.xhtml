@@ -1,0 +1,77 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <f:metadata>
+        <f:viewAction action="#{controller.allowLoadLoginPage}"/>
+    </f:metadata>
+
+    <ui:define name="title">CrypFolio - Sign Up page</ui:define>
+
+    <ui:define name="content">
+
+        <h3>
+            signup.xhtml - Sign Up page:
+        </h3>
+
+        <p:growl id="growl" showDetail="false" life="15000" errorClass="error-messages" infoClass="info-messages"/>
+
+        <h:form id="signupForm">
+
+            <p:panel id="signupPanel" header="Create an account" style="">
+
+                <h:panelGrid styleClass="order-table reservainfo">
+
+                    <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
+                    <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
+                                 required="true" type="text" size="20"
+                                 requiredMessage="Error: enter portfolio name"/>
+
+                    <p:outputLabel for="usEmail" value="Email:"/>
+                    <p:inputText id="usEmail" value="#{signupBacking.user.email}"
+                                 required="true" type="email" size="20"
+                                 requiredMessage="Error: enter your email"/>
+
+                    <p:outputLabel for="usPassword" value="Password:"/>
+                    <p:password id="usPassword" value="#{signupBacking.password}"
+                                 required="true"
+                                 requiredMessage="Error: enter your password"
+                                 match="usPasswordConfirm" feedback="true">
+                        <f:validateLength minimum="6"/>
+                    </p:password>
+
+                    <p:outputLabel for="usPasswordConfirm" value="Confirm Password:"/>
+                    <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
+                                 required="true"
+                                 requiredMessage="Error: confirm your password">
+                        <f:validateLength minimum="6"/>
+                    </p:password>
+
+                    <p:commandButton action="#{signupBacking.signup}"
+                                     styleClass="login-submit navi padding-margin"
+                                     value="Sign Up"
+                                     update="signupPanel growl">
+
+                        <p:resetInput target="signupPanel"/>
+
+                    </p:commandButton>
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:outputText value="Already have an account?"/>
+
+        <p>
+            <p:link
+                    styleClass="login-submit userlink inline padding-margin right"
+                    outcome="login"
+                    value="Login"/>
+        </p>
+
+    </ui:define>
+
+</ui:composition>
