@@ -138,7 +138,19 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
             Query query = em.createQuery(criteriaQuery);
 
-            return (T) query.getSingleResult();
+//            return (T) query.getSingleResult();
+
+            // below is a realisation of getResultList to avoid use of insecure method getSingleResult()
+            List results = query.getResultList();
+
+            T t = null;
+
+            if(!results.isEmpty()){
+                // ignores multiple results
+                t = (T) results.get(0);
+            }
+
+            return t;
 
         } catch (NoResultException e) {
 
