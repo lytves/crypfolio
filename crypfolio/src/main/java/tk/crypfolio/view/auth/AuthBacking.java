@@ -1,6 +1,6 @@
 package tk.crypfolio.view.auth;
 
-import tk.crypfolio.ejb.UserService;
+import tk.crypfolio.business.UserService;
 import tk.crypfolio.model.PortfolioEntity;
 import tk.crypfolio.model.UserEntity;
 import tk.crypfolio.view.ActiveUser;
@@ -24,7 +24,7 @@ public abstract class AuthBacking {
     @Inject
     private ActiveUser activeUser;
 
-    // stateless ejb
+    // stateless business
     @Inject
     protected UserService userService;
 
