@@ -20,7 +20,7 @@ public abstract class AuthBacking {
 
     private Boolean showEmailResendLink;
 
-    // session scope
+    // session scoped
     @Inject
     private ActiveUser activeUser;
 
@@ -28,14 +28,10 @@ public abstract class AuthBacking {
     @Inject
     protected UserService userService;
 
-    private FacesContext context;
-
     @PostConstruct
     public void init() {
 
         System.out.println("AuthBacking init");
-
-        context = FacesContext.getCurrentInstance();
 
         this.user = new UserEntity();
         this.portfolio = new PortfolioEntity();
@@ -57,7 +53,7 @@ public abstract class AuthBacking {
 
             } else {
 
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Your email address hasn't been confirmed yet.",
                         ""));
                 setShowEmailResendLink(true);
@@ -66,7 +62,7 @@ public abstract class AuthBacking {
 
         } else {
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Invalid login credentials! Please Try Again.",
                     ""));
         }
@@ -85,12 +81,13 @@ public abstract class AuthBacking {
 
             activeUser.setUser(user);
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Please check your email and confirm your registration!",
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "In order to complete your registration, please click the confirmation link" +
+                            " in the email that we have sent to you.",
                     ""));
         } else {
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Invalid operation! May be you are already registered",
                     ""));
         }
@@ -110,11 +107,12 @@ public abstract class AuthBacking {
 
             setShowEmailResendLink(false);
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Please check your email and confirm registration!",
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Please check your email and click the confirmation link.",
                     ""));
 
             // this is to refresh jsf messages (h:messages) in the same view page
+            // I've used it earlier for h:messages, not "growl"
 /*            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds()
                     .add("globalMessage");*/
         }
@@ -126,12 +124,12 @@ public abstract class AuthBacking {
 
         if (wasSentResetPasswordEmail) {
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Please check the email we have just sent you and follow the link to reset your password!",
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Please check the email we have just sent to you and follow the link to reset your password.",
                     ""));
         } else {
 
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Cannot reset password! Maybe you are not registered yet.",
                     ""));
         }
@@ -154,7 +152,7 @@ public abstract class AuthBacking {
             }
         }
 
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Cannot save new password!",
                 ""));
 
