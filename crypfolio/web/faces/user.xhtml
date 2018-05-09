@@ -1,4 +1,4 @@
-<ui:composition template="/WEB-INF/templates/layout.xhtml"
+<ui:composition template="/WEB-INF/templates/general-layout.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -15,42 +15,114 @@
 
     <ui:define name="content">
 
-        <h3 class="recepcion">User page new:</h3>
+        <p:growl id="growl" showDetail="false" life="10000" errorClass="error-messages" infoClass="info-messages"/>
 
-        <h:form>
+        <p:spacer height="10"/>
+        <p:separator/>
 
-            <h:panelGroup id="logout">
+        <p:panel id="porfolioPanel" header="Portfolio" style="">
 
-                <h:commandButton action="#{logoutBacking.logout}" value="Logout"
-                                 styleClass="login-submit userlink inline padding-margin right"/>
+            <h:form>
+                <p:commandButton id="logout"
+                                 action="#{logoutBacking.logout}"
+                                 value="Logout"
+                                 styleClass=""/>
+            </h:form>
 
-            </h:panelGroup>
+            <h:panelGrid>
 
-        </h:form>
+                <p:outputLabel value="#{userBacking.user.email}"/>
 
-        <h:panelGrid columns="1" styleClass="order-table reservainfo"
-                     headerClass="order-table-header"
-                     rowClasses="order-table-odd-row,order-table-even-row">
+                <p:outputLabel value="#{userBacking.user.portfolio.name}"/>
 
-            <h:outputLabel value="#{activeUser.user.email}"/>
 
-            <h:panelGroup/>
+                <p:outputLabel value="#{userBacking.user.isEmailVerified}"/>
 
-            <h:outputLabel value="#{activeUser.user.password}"/>
+                <p:outputLabel value="#{userBacking.user.id}"/>
 
-            <h:panelGroup/>
+                <p:outputLabel value="#{userBacking.user.signupDateTime}"/>
 
-            <h:outputLabel value="#{activeUser.user.isEmailVerified}"/>
+                <h:form class="add-item-coin-form">
 
-            <h:panelGroup/>
+                    <p:commandButton update="growl" actionListener="#{portfolio.addItem}"
+                                     class="upp-case add-item-coin"
+                                     value="Add New Item">
+                    </p:commandButton>
 
-            <h:outputLabel value="#{activeUser.user.id}"/>
+                </h:form>
 
-            <h:panelGroup/>
+            </h:panelGrid>
 
-            <h:outputLabel value="#{activeUser.user.signupDateTime}"/>
+        </p:panel>
 
-        </h:panelGrid>
+        <p:spacer height="10"/>
+
+        <p:panel id="watchlistPanel" header="Watchlist" style="">
+
+            <p:dataList value="#{userBacking.user.userWatchCoins}" var="userWatchCoinEntity" type="ordered">
+                <f:facet name="header">
+                    Basic
+                </f:facet>
+                #{userWatchCoinEntity.coinId}
+            </p:dataList>
+
+            <!-- button ADD WATCH COIN -->
+            <h:form class="add-item-coin-form">
+
+                <p:commandButton onclick="PF('dlgAddCoin').show();"
+                                 class="upp-case add-item-coin-button"
+                                 value="Add New Coin">
+                </p:commandButton>
+
+            </h:form>
+
+        </p:panel>
+
+        <!-- modal window ADD WATCH COIN -->
+        <p:dialog header="Modal Dialog" id="dlgAddCoin" widgetVar="dlgAddCoin" modal="true"
+                  resizable="false" draggable="false" position="center top"
+                  showEffect="bounce" appendToBody="true" style="margin-top: 100px">
+
+            <h:form id="form" class="add-item-coin-form">
+
+                <h:panelGrid>
+
+                    <p:outputLabel value="Coin Name" for="add-coin-name"/>
+                    <p:autoComplete id="add-coin-name" value="#{watchlistBacking.coin}"
+                                    completeMethod="#{watchlistBacking.completeCoin}"
+                                    var="coin" itemLabel="#{coin.name}" itemValue="#{coin}"
+                                    converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                    maxResults="5">
+
+                        <p:ajax event="itemSelect" update="add-coin-done"/>
+
+                    </p:autoComplete>
+
+                    <p:outputLabel value="Coin Name" for="add-coin-currency"/>
+                    <p:selectOneMenu id="add-coin-currency" value="#{watchlistBacking.currency}"
+                                     required="true">
+
+                        <f:selectItems value="#{watchlistBacking.currencies}"/>
+
+                    </p:selectOneMenu>
+
+                    <p:commandButton id="add-coin-done" actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
+                                     class="upp-case add-item-coin-button"
+                                     value="Done"
+                                     disabled="#{watchlistBacking.coin eq null}"
+                                     oncomplete="PF('dlgAddCoin').hide();"
+                                     update="watchlistPanel growl @form"
+                                     resetValues="true">
+                    </p:commandButton>
+
+
+
+                </h:panelGrid>
+
+            </h:form>
+            <p:ajax event="close" listener="#{watchlistBacking.destroy}" update="form"/>
+
+        </p:dialog>
 
     </ui:define>
 
