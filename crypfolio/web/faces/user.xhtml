@@ -81,7 +81,7 @@
         <!-- modal window ADD WATCH COIN -->
         <p:dialog header="Modal Dialog" id="dlgAddCoin" widgetVar="dlgAddCoin" modal="true"
                   resizable="false" draggable="false" position="center top"
-                  showEffect="bounce" appendToBody="true" style="margin-top: 100px">
+                  showEffect="bounce" style="margin-top: 100px">
 
             <h:form id="form" class="add-item-coin-form">
 
@@ -90,15 +90,25 @@
                     <p:outputLabel value="Coin Name" for="add-coin-name"/>
                     <p:autoComplete id="add-coin-name" value="#{watchlistBacking.coin}"
                                     completeMethod="#{watchlistBacking.completeCoin}"
-                                    var="coin" itemLabel="#{coin.name}" itemValue="#{coin}"
+                                    var="coin" itemLabel="#{coin.autocompleteName}" itemValue="#{coin}"
                                     converter="#{autocompleteCoinConverter}" forceSelection="true"
                                     maxResults="5">
 
                         <p:ajax event="itemSelect" update="add-coin-done"/>
+                        <p:ajax event="itemSelect"
+                                oncomplete="document.getElementById('form:add-coin-currency_input').focus()"/>
+
+
+
+
+                        <p:ajax event="itemSelect"
+                                oncomplete="document.getElementById('form:add-coin-name_input').placeholder = document.getElementById('form:add-coin-name_input').value"/>
+                        <p:ajax event="itemSelect"
+                                oncomplete="document.getElementById('form:add-coin-name_input').value = ''"/>
 
                     </p:autoComplete>
 
-                    <p:outputLabel value="Coin Name" for="add-coin-currency"/>
+                    <p:outputLabel value="Currency" for="add-coin-currency"/>
                     <p:selectOneMenu id="add-coin-currency" value="#{watchlistBacking.currency}"
                                      required="true">
 
@@ -115,11 +125,10 @@
                                      resetValues="true">
                     </p:commandButton>
 
-
-
                 </h:panelGrid>
 
             </h:form>
+
             <p:ajax event="close" listener="#{watchlistBacking.destroy}" update="form"/>
 
         </p:dialog>
