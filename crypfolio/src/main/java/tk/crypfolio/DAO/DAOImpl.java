@@ -72,7 +72,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (Exception e) {
 
-            if(em.getTransaction().isActive()) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
             logger.log(Level.WARNING, e.getMessage());
@@ -97,7 +97,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
             }
         } catch (Exception e) {
 
-            if(em.getTransaction().isActive()) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
             logger.log(Level.WARNING, e.getMessage());
@@ -145,7 +145,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
             T t = null;
 
-            if(!results.isEmpty()){
+            if (!results.isEmpty()) {
                 // ignores multiple results
                 t = (T) results.get(0);
             }

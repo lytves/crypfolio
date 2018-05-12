@@ -73,18 +73,20 @@ public class ParserAPI {
 
             try {
 
-                JSONArray jsonArray = (JSONArray) parserJSON.parse(inlineString);
+                JSONObject jsonDataObj = (JSONObject) parserJSON.parse(inlineString);
+                JSONArray jsonArray = (JSONArray) jsonDataObj.get("data");
 
                 for (Object jsonObject : jsonArray) {
 
                     //Get the index of the JSON objects and print the values as per the index
                     JSONObject jsonObj = (JSONObject) jsonObject;
 
+                    Long coinId = (Long) jsonObj.get("id");
                     String coinName = (String) jsonObj.get("name");
                     String coinSymbol = (String) jsonObj.get("symbol");
-                    String coinApiId = (String) jsonObj.get("id");
+                    String coinSlug = (String) jsonObj.get("website_slug");
 
-                    CoinEntity coin = new CoinEntity(coinName, coinSymbol, coinApiId);
+                    CoinEntity coin = new CoinEntity(coinId, coinName, coinSymbol, coinSlug);
 
                     listCoins.add(coin);
                 }

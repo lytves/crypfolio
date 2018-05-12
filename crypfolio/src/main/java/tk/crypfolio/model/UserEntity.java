@@ -84,7 +84,9 @@ public class UserEntity implements Serializable {
         userWatchCoin.setUserId(this);
         userWatchCoin.setShowedCurrency(currencyType);
 
-        this.userWatchCoins.add(userWatchCoin);
+        if (!this.userWatchCoins.contains(userWatchCoin)) {
+            this.userWatchCoins.add(userWatchCoin);
+        }
     }
 
     public void addUserFollowee(UserEntity user){
@@ -230,7 +232,7 @@ public class UserEntity implements Serializable {
                 ", passwordResetCode='" + passwordResetCode + '\'' +
                 ", passwordResetCodeRequestDateTime=" + passwordResetCodeRequestDateTime +
 //                ", portfolio=" + portfolio +
-//                ", userWatchCoins=" + userWatchCoins +
+                ", userWatchCoins=" + userWatchCoins +
 //                ", usersFollowees=" + usersFollowees +
                 '}';
     }

@@ -10,7 +10,7 @@ public class CoinEntity implements Serializable {
 
     @Id
     @Column(name = "coin_id", nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "coin_name", nullable = false, length = 255)
@@ -19,16 +19,25 @@ public class CoinEntity implements Serializable {
     @Column(name = "coin_symbol", nullable = false, length = 127)
     private String symbol;
 
-    @Column(name = "coin_api_id", nullable = false, length = 255, unique = true)
-    private String apiId;
+    @Column(name = "coin_slug", nullable = false, length = 255, unique = true)
+//    private String apiId;
+    private String slug;
+
+    @Transient
+    private String autocompleteName;
+
+    public String getAutocompleteName() {
+        return this.name + " (" + this.symbol + ")";
+    }
 
     public CoinEntity() {
     }
 
-    public CoinEntity(String name, String symbol, String apiId) {
+    public CoinEntity(Long id, String name, String symbol, String slug) {
+        this.id = id;
         this.name = name;
         this.symbol = symbol;
-        this.apiId = apiId;
+        this.slug = slug;
     }
 
     public Long getId() {
@@ -55,12 +64,12 @@ public class CoinEntity implements Serializable {
         this.symbol = symbol;
     }
 
-    public String getApiId() {
-        return apiId;
+    public String getSlug() {
+        return slug;
     }
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     @Override
@@ -71,13 +80,13 @@ public class CoinEntity implements Serializable {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getSymbol(), that.getSymbol()) &&
-                Objects.equals(getApiId(), that.getApiId());
+                Objects.equals(getSlug(), that.getSlug());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getName(), getSymbol(), getApiId());
+        return Objects.hash(getId(), getName(), getSymbol(), getSlug());
     }
 
     @Override
@@ -86,7 +95,7 @@ public class CoinEntity implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", symbol='" + symbol + '\'' +
-                ", apiId='" + apiId + '\'' +
+                ", slug='" + slug + '\'' +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package tk.crypfolio.DAO;
 import tk.crypfolio.model.CoinEntity;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class CoinDAOImpl extends DAOImpl<Long, CoinEntity> implements CoinDAO {
 
@@ -18,14 +19,18 @@ public class CoinDAOImpl extends DAOImpl<Long, CoinEntity> implements CoinDAO {
     @Override
     public void createCoin(CoinEntity coin) {
 
-        if (getCoinByApiId(coin.getApiId()) == null){
+        if (getCoinBySlug(coin.getSlug()) == null){
             this.create(coin);
         }
     }
 
     @Override
-    public CoinEntity getCoinByApiId(String coinApiId) {
-        return this.findByUniqueStringColumn("apiId", coinApiId);
+    public CoinEntity getCoinBySlug(String coinSlug) {
+        return this.findByUniqueStringColumn("slug", coinSlug);
     }
 
+    @Override
+    public List<CoinEntity> getAllCoins() {
+        return this.findAll();
+    }
 }
