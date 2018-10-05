@@ -1,5 +1,8 @@
 package tk.crypfolio.util;
 
+import tk.crypfolio.common.Settings;
+
+import javax.ejb.Asynchronous;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -13,10 +16,6 @@ import java.util.logging.Logger;
 public abstract class EmailSender {
 
     private static final Logger logger = Logger.getLogger(EmailSender.class.getName());
-
-    private final static String FROM_EMAIL = "PUT_YOUR_GMAIL_ID_HERE";
-
-    private final static String PASSWORD = "PUT_YOUR_GMAIL_PASSWORD_HERE";
 
     /*
      * Outgoing Mail (SMTP) Server
@@ -81,6 +80,7 @@ public abstract class EmailSender {
         sendEmail(emailRecipient, subject, text);
     }
 
+    @Asynchronous
     private static void sendEmail(String emailRecipient, String subject, String text) {
 
         /*
@@ -125,7 +125,7 @@ public abstract class EmailSender {
             transport = getMailSession.getTransport("smtp");
             // Enter your correct gmail UserID and Password
             // if you have 2FA enabled then provide App Specific Password
-            transport.connect("smtp.gmail.com", FROM_EMAIL, PASSWORD);
+            transport.connect("smtp.gmail.com", Settings.ADMIN_EMAIL, Settings.ADMIN_EMAIL_PASSWORD);
             transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 
             logger.log(Level.INFO, "Email was sent successfully!!");
