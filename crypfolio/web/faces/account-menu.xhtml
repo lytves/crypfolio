@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div class="menu-account right">
+
+        <h:form>
+
+            <p:growl id="messages" showDetail="true"/>
+
+            <i class="material-icons blue menu-account-img">
+                account_circle
+            </i>
+
+            <p:menuButton value="#{userBacking.user.email}" iconPos="right">
+                <p:menuitem value="Settings" actionListener="#{menuView.save}" icon="ui-icon-gear"/>
+                <p:menuitem value="Logout" action="#{logoutBacking.logout}" icon="ui-icon-power"/>
+            </p:menuButton>
+
+        </h:form>
+
+    </div>
+
+</ui:composition>
