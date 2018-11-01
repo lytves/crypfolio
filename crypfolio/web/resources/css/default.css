@@ -2,7 +2,7 @@
 
 html {
     background-color: #ffffff;
-    font-size: 12px;
+    font-size: 13px;
     font-family: 'Roboto Mono', monospace;
     color: #000000;
     margin: 0 auto;
@@ -11,288 +11,180 @@ html {
 }
 
 body {
-    margin: auto;
-    width: 400px;
 }
 
 header, section, article, aside, footer {
     /*display: block;*/
 }
 
-a:link, a:visited {
-    font-size: 12px;
-    font-family: 'Jua', sans-serif;
-    color: #000000;
-    text-decoration: none;
+.login-logo {
+    padding: 30px 0 30px 0;
+    margin: auto;
+    width: 384px;
 }
 
-h1 {
-    font-family: 'Lobster', cursive;
-    border-bottom: 1px solid #AFAFAF;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0px;
-    padding: 0px;
-    color: #D20005;
-}
-
-h3 {
-    font-family: 'Lobster', cursive;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px;
-    padding: 10px;
-}
-
-.order-table {
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.order-table-header {
-    text-align: center;
-    background: none repeat scroll 0 0 #E5E5E5;
-    border-bottom: 1px solid #BBBBBB;
-    padding: 16px;
-}
-
-.order-table-odd-row {
-    text-align: center;
-    background: none repeat scroll 0 0 #FFFFFF;
-    border-top: 1px solid #BBBBBB;
-}
-
-.order-table-even-row {
-    text-align: center;
-    background: none repeat scroll 0 0 #F9F9F9;
-    border-top: 1px solid #BBBBBB;
-}
-
-div.line {
-    transform-origin: 0 100%;
-    height: 2px;
-    background: #080808;
-    margin: 5px 0;
-}
-
-.red {
-    color: #f87d44;
-}
-
-.green {
-    color: #92f658;
-}
-
-.green, .red {
-    font-weight: bold;
-}
-/* Header */
-#header {
-    background-color: #222;
-    border-color: #080808;
-    height: 50px;
-    color: #9d9d9d;
-    min-width: 1300px;
-}
-
-.nav-login-block {
-
-}
-
-.nav-main {
-    margin-left: 20px;
+.left {
     float: left;
-    padding: 15px 15px;
 }
 
-.nav-main.recepcion a {
-    color: #c1dce9;
+.right {
+    float: right;
 }
 
-.nav-main.recepcion a:hover {
-    color: #4985ff;
+.clear {
+    clear: both;
 }
 
-.nav-main a {
-    color: #9d9d9d;
-    text-decoration: none;
-    font-size: 18px;
-    line-height: 20px;
-    font-weight: bold;
+.menu-account {
+    padding: 5px 5px 0 0;
 }
 
-.nav-main a:hover {
-    color: #ecff9f;
-    text-decoration: none;
-}
-
-.nav-login-form {
-    float: right !important;
-    margin-top: 8px;
-    margin-right: 25px;
-    margin-bottom: 8px;
-    margin-left: -15px;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.nav-login-form input {
-    margin-right: 15px;
-}
-
-.login-submit {
-    display: inline-block;
-    padding: 5px;
-    white-space: nowrap;
+.menu-account-img {
+    margin-right: 5px;
     vertical-align: top;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background-color: #ecff9f;
-    border-color: #ecff9f;
-    font-weight: bold;
 }
 
-.login-submit:hover {
-    background-color: #c9ec3b;
-    border-color: #c9ec3b;
+.forms-wrapper {
+    margin: auto;
+    width: 400px;
+    line-height: 2.5;
 }
 
-.login-submit.logout {
-    background-color: #fbbf72;
-    border-color: #fbbf72;
+.upp-case {
+    text-transform: uppercase;
 }
 
-.login-submit.logout:hover {
-    background-color: #f87d44;
-    border-color: #f87d44;
+.add-item-coin-button {
+    width: 100%;
+    height: 100%;
 }
 
-.login-submit.userlink {
-    background-color: #c1dce9;
-    border-color: #c1dce9;
+.ui-selectonemenu {
+    width: 84% !important;
 }
 
-.login-submit.userlink:hover {
-    background-color: #4985ff;
-    border-color: #4985ff;
+.ui-selectonemenu-label {
+    width: 100% !important;
 }
 
-.login-submit.navi {
-    background-color: #ccffae;
-    border-color: #ccffae;
-}
-
-.login-submit.navi:hover {
-    background-color: #92f658;
-    border-color: #92f658;
-}
-
-.login-submit.padding-margin {
-    padding: 5px 15px;
-    margin: 10px;
-}
-
-.login-submit.dni {
-    background-color: #ffffff;
-    border-color: #ffffff;
-    margin-right: 15px;
-    font-size: 16px;
-    line-height: 18px;
-    cursor: unset;
-}
-
-.login-submit.recepcion {
-    padding: 0px;
-    margin-right: 15px;
-}
-
-.login-submit.block {
-    display: block;
-    margin: 10px 10px 10px 30px;
-}
-
-.login-submit.inline{
-    display:inline;
-}
-
-.login-submit.right{
-    margin: 0 0 0 10px;
-}
-
-/* Content */
-#content {
-    padding: 20px;
-}
-
-.button-back {
-    width: 300px;
-    text-align: center;
-}
-
-.reservainfo {
-    min-width: 400px;
-}
-
-.recepcion-info {
-    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida,
-    "Helvetica CE", sans-serif;
-    font-size: 16px;
-    margin: 5px;
-    padding: 5px;
-    color: #9d9d9d;
-}
-
-.recepcion-info .usuario {
-    display: block;
-    margin: 5px;
-    padding: 5px;
-}
-
-.recepcion-info span {
-    color: #000000;
-    font-weight: bold;
-}
-
-.recepcion-operaciones-form {
-    margin: 20px 0;
-}
-
-.recepcion {
-    color: #9d9d9d;
-}
-
-.recepcion.blue {
-    color: #4985ff;
-}
-
-#startDate.ui-datepicker-calendar {
+.hidden {
     display: none;
 }
 
-/* Footer */
-#footer {
-    padding: 10px 10px 10px 15px;
-    clear: both !important;
-    width: 940px;
-    margin: auto;
+.red {
+    color: red !important;
 }
 
-footer {
+.green {
+    color: green !important;
+}
+
+.material-icons.blue {
+    color: #008abd;
+}
+
+.panelGridCenter td, .panelGridCenter tr {
     text-align: center;
 }
-/* face messages */
-.info-messages {
-    color: blue;
+
+.panelGridTransparent td, .panelGridTransparent tr {
+    background-color: transparent;
+    border: 0 !important;
 }
 
-.error-messages {
-    color: #d20005;
+.symbol-image-32px {
+    width: 32px;
+    height: 32px;
+    float: left;
+}
+
+.row-expansion-currency {
+    display: block;
+    height: 30px;
+    padding: 10px 0;
+    background-color: #f2f5f9;
+}
+
+/* Primefaces UI Styles*/
+.ui-widget {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.panelGridCenter tr {
+    border-bottom-width: 2px !important;
+    border-bottom-color: #f2f5f9;
+}
+
+.ui-datatable * {
+    border-width: 0 !important;
+}
+
+.ui-widget-content {
+    background: white;
+    margin-top: 10px;
+}
+
+/*.ui-datatable tbody tr {*/
+/*border-bottom: 10px;*/
+/*}*/
+
+/*
+.ui-datatable-header {
+    background-color: unset;
+    text-align: left !important;
+    font-family: 'Jua', monospace;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 30px;
+}
+*/
+
+.ui-state-default {
+    background: #f5f7f8;
+    color: #333;
+}
+
+.ui-state-active, .ui-sortable-column:hover {
+    background: #ffda62;
+}
+
+body .ui-buttonset .ui-button {
+    margin-left: 10px;
+}
+
+.ui-separator {
+    height: 4px;
+}
+
+.ui-panelgrid .ui-widget {
+    width: 100%;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    text-align: center !important;
+}
+
+.ui-selectonebutton {
+    display: inline-flex !important;
+}
+
+.ui-expanded-row-content td {
+    padding: 0 !important;
+}
+
+/* to fix dataTable - stickyHeader="true" problem */
+.myTabview.ui-tabs {
+    position: static;
+}
+
+.ui-growl {
+    z-index: 9999 !important;
+}
+
+.ui-button {
+    background: #ffda62 !important;
+}
+
+.ui-button:hover {
+    background: darkorange !important;
 }
