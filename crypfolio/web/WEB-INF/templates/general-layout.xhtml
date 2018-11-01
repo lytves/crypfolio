@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/favicon.ico']}"/>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"/>
+
+    <h:outputStylesheet name="default.css" library="css"/>
+    <h:outputScript name="js/default.js"/>
+
+    <title>
+
+        <ui:insert name="title">commonLayoutTemplate</ui:insert>
+
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</h:head>
+
+<h:body>
+
+    <div class="main-wrapper">
+
+        <header class="">
+
+            <ui:insert name="header">
+
+                <ui:include src="/WEB-INF/templates/common-header.xhtml"/>
+
+            </ui:insert>
+
+        </header>
+
+        <main>
+
+            <div id="content">
+
+                <ui:insert name="content">
+
+                </ui:insert>
+
+            </div>
+
+        </main>
+
+        <footer>
+
+            <ui:insert name="footer">
+
+                <ui:include src="/WEB-INF/templates/common-footer.xhtml"/>
+
+            </ui:insert>
+
+        </footer>
+
+    </div>
+
+    <!--don't use it now-->
+    <!--<h:outputScript name="js/jquery.js"/>-->
+
+</h:body>
+
+</html>
