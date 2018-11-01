@@ -53,6 +53,12 @@
         <location>/WEB-INF/templates/error-page.xhtml</location>
     </error-page>
 
+    <!--for ViewExpiredException (source https://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored)-->
+    <context-param>
+        <param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
     <!-- Session configuration -->
 
     <session-config>
