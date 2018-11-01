@@ -1,8 +1,8 @@
-/* it's a redicule use case:
- when rendered bean method execute link action not works,
-  cause I am using JavaScript to click it*/
-/*
-function invokeCommandLink() {
-    var jsfCommandLink = document.getElementById("resendPanel");
-    jsfCommandLink.click();
-}*/
+function addWatchCoin() {
+    document.getElementById('divAddCoin').focus();
+
+    coinInput = document.getElementById('mainTabView:formAddCoin:add-coin-name_input');
+    document.getElementById('mainTabView:formAddCoin:add-coin-name_input').setAttribute("placeholder", coinInput.value);
+
+    coinInput.value = '';
+}
