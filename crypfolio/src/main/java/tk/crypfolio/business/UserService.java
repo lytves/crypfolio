@@ -2,20 +2,25 @@ package tk.crypfolio.business;
 
 import tk.crypfolio.DAO.AbstractDAOFactory;
 import tk.crypfolio.DAO.UserDAO;
+import tk.crypfolio.DAO.UserWatchCoinDAO;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.SettingsDB;
 import tk.crypfolio.model.UserEntity;
+import tk.crypfolio.model.UserWatchCoinEntity;
 import tk.crypfolio.util.CodeGenerator;
 import tk.crypfolio.util.EmailSender;
 import tk.crypfolio.util.StringEncoder;
 
 import javax.ejb.Stateless;
+import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Logger;
 
+@Transactional
 @Stateless
-public class UserService {
+public class UserService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -165,6 +170,24 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public UserEntity updateUserDB(UserEntity user){
+
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        UserDAO uDAO = myFactory.getUserDAO();
+        UserEntity userDB = uDAO.updateUser(user);
+
+        return userDB;
+    }
+
+    public UserWatchCoinEntity updateUserWatchCoinDB(UserWatchCoinEntity userWatchCoin){
+
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        UserWatchCoinDAO uwcDAO = myFactory.getUserWatchCoinDAO();
+        UserWatchCoinEntity userWatchCoinDB = uwcDAO.updateUserWatchCoinEntity(userWatchCoin);
+
+        return userWatchCoinDB;
     }
 }
 
