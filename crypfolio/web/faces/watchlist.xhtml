@@ -4,19 +4,12 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <p:outputPanel id="watchlistPanel" style="">
+    <p:outputPanel id="watchlistPanel">
 
         <p:dataTable value="#{watchlistBacking.activeUser.user.userWatchCoins}"
                      var="userWatchCoinEntity" styleClass="panelGridCenter"
-                     stickyHeader="true"
+                     stickyHeader="true" rowExpandMode="single"
                      id="dataTableWV" widgetVar="dataTableWV">
-
-<!--            <f:facet name="header">
-                <p:row>
-                    <p:column colspan="5">Coins Watchlist</p:column>
-                </p:row>
-
-            </f:facet>-->
 
             <p:column style="width:16px" styleClass="togglerClass">
                 <p:rowToggler/>
@@ -104,8 +97,6 @@
                         <h:outputText value="Currency:"/>
 
 
-
-
                         <!--            =====================               buttons SELECT Currensy of the WATCH COIN -->
                         <p:selectOneButton value="#{userWatchCoinEntity.showedCurrency}"
                                            unselectable="false">
@@ -122,30 +113,40 @@
                     </h:form>
 
 
+                    <div class="right">
+
+                        <h:form style="float:left; padding-right: 30px;">
+                            <p:commandButton
+                                    actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
+                                    update=":mainTabView:watchlistPanel growl"
+                                    class="upp-case add-item-coin-button"
+                                    value="MOVE TO ARCHIVE" icon="ui-icon-arrowreturnthick-1-s">
+                            </p:commandButton>
+
+                        </h:form>
 
 
+                        <!--            =====================               button DEL WATCH COIN -->
+                        <h:form style="float:right; padding-right: 30px;">
+                            <p:commandButton
+                                    actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
+                                    update=":mainTabView:watchlistPanel growl"
+                                    class="upp-case add-item-coin-button"
+                                    value="Delete" icon="ui-icon ui-icon-trash">
+                                <p:confirm header="DELETE COIN"
+                                           message="Are you sure you want to delete this coin?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
 
-                    <!--            =====================               button DEL WATCH COIN -->
-                    <h:form style="float:right; padding-right: 30px;">
-                        <p:commandButton
-                                actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
-                                update=":mainTabView:watchlistPanel growl"
-                                class="upp-case add-item-coin-button"
-                                value="Delete" icon="ui-icon ui-icon-closethick">
-                            <p:confirm header="DELETE COIN"
-                                       message="Are you sure you want to delete this coin?"
-                                       icon="ui-icon-alert"/>
-                        </p:commandButton>
+                        </h:form>
 
-                    </h:form>
+                    </div>
 
                 </h:panelGroup>
 
             </p:rowExpansion>
 
         </p:dataTable>
-
-
 
 
         <!--            =====================              button ADD WATCH COIN -->
@@ -161,9 +162,6 @@
     </p:outputPanel>
 
 
-
-
-
     <!--            =====================               Global ConfirmDialog window to DEL WATCH COIN -->
     <h:form>
         <p:confirmDialog global="true" showEffect="bounce" hideEffect="fade">
@@ -173,8 +171,6 @@
                              icon="ui-icon-check"/>
         </p:confirmDialog>
     </h:form>
-
-
 
 
     <!--            =====================               modal window ADD WATCH COIN -->
@@ -228,9 +224,6 @@
 
         </p:dialog>
     </div>
-
-
-
 
 
 </ui:composition>
