@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO create some general DAO Exception finctions, may be should use my own exception class
+// TODO create some general DAO Exception functions, may be should use my own exception class
 
 public abstract class DAOImpl<K, T> implements DAO<K, T> {
 

@@ -58,4 +58,10 @@ public class JPADAOFactory extends AbstractDAOFactory {
     public UserDAO getUserDAO() {
         return new UserDAOImpl(getEntityManager());
     }
+
+    @Override
+    public UserWatchCoinDAO getUserWatchCoinDAO() {
+        return new UserWatchCoinDAOImpl(getEntityManager()) {
+        };
+    }
 }
