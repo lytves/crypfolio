@@ -16,7 +16,7 @@ public class UserEntity implements Serializable {
 
     @Id
     @Column(name = "us_id", nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "us_email", nullable = false, length = 255, unique = true)
@@ -49,13 +49,13 @@ public class UserEntity implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
-    private List<UserWatchCoinsEntity> userWatchCoins = new ArrayList<>();
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserWatchCoinEntity> userWatchCoins = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "users_has_users",
-    joinColumns = @JoinColumn(name = "users_us_id", referencedColumnName = "us_id"),
-    inverseJoinColumns = @JoinColumn(name = "users_us_followee_id", referencedColumnName = "us_id"))
+            joinColumns = @JoinColumn(name = "users_us_id", referencedColumnName = "us_id"),
+            inverseJoinColumns = @JoinColumn(name = "users_us_followee_id", referencedColumnName = "us_id"))
     private List<UserEntity> usersFollowees = new ArrayList<>();
 
     public UserEntity() {
@@ -66,9 +66,9 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public void addWatchCoin(CoinEntity coin){
+    public void addWatchCoin(CoinEntity coin) {
 
-        UserWatchCoinsEntity userWatchCoin = new UserWatchCoinsEntity();
+        UserWatchCoinEntity userWatchCoin = new UserWatchCoinEntity();
 
         userWatchCoin.setCoinId(coin);
         userWatchCoin.setUserId(this);
@@ -76,9 +76,9 @@ public class UserEntity implements Serializable {
         this.userWatchCoins.add(userWatchCoin);
     }
 
-    public void addWatchCoin(CoinEntity coin, CurrencyType currencyType){
+    public void addWatchCoin(CoinEntity coin, CurrencyType currencyType) {
 
-        UserWatchCoinsEntity userWatchCoin = new UserWatchCoinsEntity();
+        UserWatchCoinEntity userWatchCoin = new UserWatchCoinEntity();
 
         userWatchCoin.setCoinId(coin);
         userWatchCoin.setUserId(this);
@@ -89,9 +89,15 @@ public class UserEntity implements Serializable {
         }
     }
 
-    public void addUserFollowee(UserEntity user){
+    public void removeWatchCoin(UserWatchCoinEntity userWatchCoin) {
 
-        if (!user.getId().equals(this.getId()) ){
+        this.userWatchCoins.remove(userWatchCoin);
+
+    }
+
+    public void addUserFollowee(UserEntity user) {
+
+        if (!user.getId().equals(this.getId())) {
             this.usersFollowees.add(user);
         }
     }
@@ -178,11 +184,11 @@ public class UserEntity implements Serializable {
         portfolio.setUser(this);
     }
 
-    public List<UserWatchCoinsEntity> getUserWatchCoins() {
+    public List<UserWatchCoinEntity> getUserWatchCoins() {
         return userWatchCoins;
     }
 
-    public void setUserWatchCoins(List<UserWatchCoinsEntity> userWatchCoins) {
+    public void setUserWatchCoins(List<UserWatchCoinEntity> userWatchCoins) {
         this.userWatchCoins = userWatchCoins;
     }
 
@@ -209,7 +215,7 @@ public class UserEntity implements Serializable {
                 Objects.equals(getPasswordResetCode(), that.getPasswordResetCode()) &&
                 Objects.equals(getPasswordResetCodeRequestDateTime(), that.getPasswordResetCodeRequestDateTime()) &&
                 Objects.equals(getPortfolio(), that.getPortfolio()) &&
-                Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
+//                Objects.equals(getUserWatchCoins(), that.getUserWatchCoins()) &&
                 Objects.equals(getUsersFollowees(), that.getUsersFollowees());
     }
 
@@ -231,7 +237,7 @@ public class UserEntity implements Serializable {
                 ", emailVerifCodeRequestDateTime=" + emailVerifCodeRequestDateTime +
                 ", passwordResetCode='" + passwordResetCode + '\'' +
                 ", passwordResetCodeRequestDateTime=" + passwordResetCodeRequestDateTime +
-//                ", portfolio=" + portfolio +
+                ", portfolio.id=" + portfolio.getId() +
                 ", userWatchCoins=" + userWatchCoins +
 //                ", usersFollowees=" + usersFollowees +
                 '}';

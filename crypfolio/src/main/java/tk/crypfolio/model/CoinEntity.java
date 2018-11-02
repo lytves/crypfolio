@@ -23,13 +23,6 @@ public class CoinEntity implements Serializable {
 //    private String apiId;
     private String slug;
 
-    @Transient
-    private String autocompleteName;
-
-    public String getAutocompleteName() {
-        return this.name + " (" + this.symbol + ")";
-    }
-
     public CoinEntity() {
     }
 

@@ -156,7 +156,7 @@ public class ItemEntity implements Serializable {
                 Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
                 Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
                 Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
-                Objects.equals(getPortfolio(), that.getPortfolio()) &&
+//                Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getCoin(), that.getCoin()) &&
                 Objects.equals(getPositions(), that.getPositions());
     }

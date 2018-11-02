@@ -144,8 +144,8 @@ public class PositionEntity implements Serializable {
                 Objects.equals(getBoughtPriceUsd(), that.getBoughtPriceUsd()) &&
                 Objects.equals(getBoughtPriceEur(), that.getBoughtPriceEur()) &&
                 Objects.equals(getBoughtPriceBtc(), that.getBoughtPriceBtc()) &&
-                Objects.equals(getBoughtPriceEth(), that.getBoughtPriceEth()) &&
-                Objects.equals(getItem(), that.getItem());
+//                Objects.equals(getItem(), that.getItem()) &&
+                Objects.equals(getBoughtPriceEth(), that.getBoughtPriceEth());
     }
 
     @Override

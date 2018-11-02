@@ -174,7 +174,7 @@ public class PortfolioEntity implements Serializable {
                 Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
                 Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
                 Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
-                Objects.equals(getUser(), that.getUser()) &&
+//                Objects.equals(getUser(), that.getUser()) &&
                 Objects.equals(getItems(), that.getItems());
     }
 
