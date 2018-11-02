@@ -8,8 +8,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users_watch_coins")
-@IdClass(UserWatchCoinsEntityId.class)
-public class UserWatchCoinsEntity implements Serializable {
+@IdClass(UserWatchCoinEntityId.class)
+public class UserWatchCoinEntity implements Serializable {
 
     @Id
     @ManyToOne
@@ -53,7 +53,7 @@ public class UserWatchCoinsEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserWatchCoinsEntity that = (UserWatchCoinsEntity) o;
+        UserWatchCoinEntity that = (UserWatchCoinEntity) o;
         return Objects.equals(getUserId(), that.getUserId()) &&
                 Objects.equals(getCoinId(), that.getCoinId()) &&
                 getShowedCurrency() == that.getShowedCurrency();
@@ -63,5 +63,14 @@ public class UserWatchCoinsEntity implements Serializable {
     public int hashCode() {
 
         return Objects.hash(getUserId(), getCoinId(), getShowedCurrency());
+    }
+
+    @Override
+    public String toString() {
+        return "UserWatchCoinEntity{" +
+              "user.id=" + userId.getId() +
+                ", coinId=" + coinId +
+                ", showedCurrency=" + showedCurrency +
+                '}';
     }
 }
