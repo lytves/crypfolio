@@ -79,7 +79,7 @@ public class WatchlistBacking implements Serializable {
 
     public void doSubmitAddWatchCoin() {
 
-        System.out.println("***coin: " + coin);
+        System.out.println("+++++++++++ coin: " + coin);
         Boolean isCoinInWatchList = false;
 
         if (coin != null) {
@@ -163,42 +163,86 @@ public class WatchlistBacking implements Serializable {
         return activeUser;
     }
 
+    /**
+     * Function which return String value of percentage of coin price change by "price"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
     public String getWatchCoinPrice(Long id, CurrencyType showedCurrency) {
 
-        Double price = coinCurrentData("price", id, showedCurrency);
+        // this conditional is using to catch "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
 
-        if (price != null) {
-            return String.valueOf(price);
+            Double price = coinCurrentData("price", id, showedCurrency);
+
+            if (price != null) {
+                return String.valueOf(price);
+            }
         }
 
         return "0";
     }
 
+    /**
+     * Function which return String value of percentage of coin price change by "24hour"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
     public String getWatchCoinChange24H(Long id, CurrencyType showedCurrency) {
 
-        Double change24h = coinCurrentData("percent_change_24h", id, showedCurrency);
+        // this conditional is using to catch "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
 
-        if (change24h != null) {
-            return String.valueOf(change24h);
+            Double change24h = coinCurrentData("percent_change_24h", id, showedCurrency);
+
+            if (change24h != null) {
+
+                return String.valueOf(change24h);
+            }
         }
 
         return "0";
 
     }
 
+    /**
+     * Function which return String value of percentage of coin price change by "percent_change_7d"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
     public String getWatchCoinChange7D(Long id, CurrencyType showedCurrency) {
 
-        Double change7d = coinCurrentData("percent_change_7d", id, showedCurrency);
+        // this conditional is using to catch "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
 
-        if (change7d != null) {
+            Double change7d = coinCurrentData("percent_change_7d", id, showedCurrency);
 
-            return String.valueOf(change7d);
+            if (change7d != null) {
+
+                return String.valueOf(change7d);
+            }
         }
 
         return "0";
 
     }
 
+    /**
+     * Function which return String value of percentage of coin price change by "market_cap"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
     public String getWatchCoinMarketCap(Long id, CurrencyType showedCurrency) {
 
         Double marketCap = coinCurrentData("market_cap", id, showedCurrency);
@@ -234,7 +278,7 @@ public class WatchlistBacking implements Serializable {
 
         if (activeUser.getUser().getUserWatchCoins().contains(userWatchCoin)) {
 
-            System.out.println("new userWatchCoin: " + userWatchCoin.toString());
+            System.out.println("================= userWatchCoin: " + userWatchCoin.toString());
 
             int index = activeUser.getUser().getUserWatchCoins().indexOf(userWatchCoin);
 
@@ -243,7 +287,7 @@ public class WatchlistBacking implements Serializable {
 
             userService.updateUserWatchCoinDB(userWatchCoin);
 
-            System.out.println("after DB userWatchCoin: " +  activeUser.getUser().getUserWatchCoins().get(index));
+            System.out.println("after DB userWatchCoin: " + activeUser.getUser().getUserWatchCoins().get(index));
 
 
 //            PrimeFaces pf = PrimeFaces.current();
