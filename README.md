@@ -20,14 +20,14 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 **Some Working Screenshorts:**
 
-![Login Page](images/Captura de pantalla 2018-11-02 a las 16.52.19.png)
+![Login Page](images/login-page.png)
 
-![Sign up Page](images/Captura de pantalla 2018-11-02 a las 16.52.24.png)
+![Sign up Page](images/sing-up-page.png)
 
-![Reset Password Page](images/Captura de pantalla 2018-11-02 a las 16.52.32.png)
+![Reset Password Page](images/password-reset-page.png)
 
-![WatchList Page](images/Captura-de-pantalla-2018-11-02-a-las-16.52.08.png)
+![WatchList Page](images/whatchlist-page.png)
 
-![WatchList Page-2](images/Captura-de-pantalla-2018-11-02-a-las-17.00.13.png)
+![WatchList Page-2](images/whatchlist-2-page.png)
 
-![WatchList coin adding Page](images/Captura-de-pantalla-2018-11-02-a-las-16.59.32.png)
+![WatchList coin adding Page](images/whatchlist-add-coin-page.png)
