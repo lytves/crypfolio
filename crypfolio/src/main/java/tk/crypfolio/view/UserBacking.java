@@ -38,4 +38,8 @@ public class UserBacking implements Serializable {
     public UserEntity getUser() {
         return user;
     }
+
+    public ApplicationContainer getApplicationContainer() {
+        return applicationContainer;
+    }
 }
