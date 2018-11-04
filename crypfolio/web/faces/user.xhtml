@@ -59,6 +59,16 @@
 
         </p:tabView>
 
+        <!--   =====================               Global ConfirmDialog window -->
+        <h:form>
+            <p:confirmDialog global="true" showEffect="bounce" hideEffect="fade" closeOnEscape="true">
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                 icon="ui-icon-close"/>
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                 icon="ui-icon-check"/>
+            </p:confirmDialog>
+        </h:form>
+
     </ui:define>
 
 </ui:composition>

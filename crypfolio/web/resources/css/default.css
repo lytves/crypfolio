@@ -17,6 +17,10 @@ header, section, article, aside, footer {
     /*display: block;*/
 }
 
+.main-wrapper {
+    margin: 10px;
+}
+
 .login-logo {
     padding: 30px 0 30px 0;
     margin: auto;
@@ -41,7 +45,7 @@ header, section, article, aside, footer {
 
 .menu-account-img {
     margin-right: 5px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .forms-wrapper {
@@ -52,19 +56,6 @@ header, section, article, aside, footer {
 
 .upp-case {
     text-transform: uppercase;
-}
-
-.add-item-coin-button {
-    width: 100%;
-    height: 100%;
-}
-
-.ui-selectonemenu {
-    width: 84% !important;
-}
-
-.ui-selectonemenu-label {
-    width: 100% !important;
 }
 
 .hidden {
@@ -105,9 +96,22 @@ header, section, article, aside, footer {
     background-color: #f2f5f9;
 }
 
-/* Primefaces UI Styles*/
-.ui-widget {
-    font-family: 'Roboto Mono', monospace;
+#portfMainData {
+    line-height: 0.3em;
+    width: 80%;
+}
+
+/******************     Primefaces UI Styles      **********************/
+/*.ui-widget {*/
+/*font-family: 'Roboto Mono', monospace;*/
+/*}*/
+
+.ui-selectonemenu {
+    width: 84% !important;
+}
+
+.ui-selectonemenu-label {
+    width: 100% !important;
 }
 
 .panelGridCenter tr {
@@ -121,7 +125,11 @@ header, section, article, aside, footer {
 
 .ui-widget-content {
     background: white;
-    margin-top: 10px;
+}
+
+.ui-datatable-even, .ui-datatable-odd {
+    background: white;
+
 }
 
 /*.ui-datatable tbody tr {*/
@@ -148,24 +156,12 @@ header, section, article, aside, footer {
     background: #ffda62;
 }
 
-body .ui-buttonset .ui-button {
-    margin-left: 10px;
-}
-
 .ui-separator {
     height: 4px;
 }
 
 .ui-panelgrid .ui-widget {
     width: 100%;
-}
-
-.ui-dialog .ui-dialog-buttonpane {
-    text-align: center !important;
-}
-
-.ui-selectonebutton {
-    display: inline-flex !important;
 }
 
 .ui-expanded-row-content td {
@@ -177,14 +173,93 @@ body .ui-buttonset .ui-button {
     position: static;
 }
 
-.ui-growl {
-    z-index: 9999 !important;
+body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
+    border-top: 4px solid #3c8dbc;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 0.5em 0.5em !important;
+}
+
+.ui-g-2.p5-20px {
+    width: 20% !important;
+    padding: 5px;
+}
+
+/*******************/
+/*      buttons    */
+/*******************/
+
+.ui-button,
+.ui-button span,
+button.ui-button.ui-state-default span,
+.ui-button.ui-state-default span {
+    font-weight: 500;
 }
 
 .ui-button {
-    background: #ffda62 !important;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.74857143;
+    text-align: center;
+    /* white-space: nowrap;*/
+    white-space: normal;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    text-shadow: none !important;
+    color: #444444;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+    overflow: hidden;
+
+    border: 2px solid #357edd !important;
+    background: #ffffff !important;
 }
 
 .ui-button:hover {
-    background: darkorange !important;
+    background: #357EDD !important;
+    color: #ffffff;
+}
+
+body .ui-buttonset .ui-state-active {
+    background: #357EDD !important;
+    color: #ffffff;
+
+}
+
+body .ui-buttonset .ui-button {
+    margin-left: 10px;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    text-align: center !important;
+}
+
+.ui-selectonebutton {
+    display: inline-flex !important;
+}
+
+/*.ui-button-text-only .ui-button-text{*/
+    /*padding: 0 !important;*/
+/*}*/
+/*******************/
+/*      growl    */
+/*******************/
+.ui-growl {
+    z-index: 9999 !important;
 }

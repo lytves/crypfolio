@@ -4,11 +4,107 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <p:outputPanel id="watchlistPanel">
+    <p:outputPanel id="portfPanel">
 
+        <div class="left" id="portfMainData">
+
+            <div class="ui-g" style="background-color: #ffda62">
+
+                <div class="ui-g-8 ui-g-nopad">
+                    <div class="ui-g-2 p5-20px">Market value</div>
+                    <div class="ui-g-2 p5-20px">Net cost</div>
+                    <div class="ui-g-2 p5-20px">Profit</div>
+                    <div class="ui-g-2 p5-20px">Profit %</div>
+                    <div class="ui-g-2 p5-20px">Change 24h</div>
+
+                    <div class="ui-g-2 p5-20px">210 ETH</div>
+                    <div class="ui-g-2 p5-20px">20 ETH</div>
+                    <div class="ui-g-2 p5-20px">190 ETH</div>
+                    <div class="ui-g-2 p5-20px">100%</div>
+                    <div class="ui-g-2 p5-20px">20%</div>
+                </div>
+
+                <div class="ui-g-4" style="background-color: crimson">
+
+                    <div class="ui-g">
+                        <div class="ui-g-3">BTC</div>
+                        <div class="ui-g-3">ETH</div>
+                        <div class="ui-g-3">USD</div>
+                        <div class="ui-g-3">EUR</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="right" style="padding-bottom: 0.5em">
+            <!--            =====================              button ADD WATCH COIN -->
+            <h:form class="add-item-coin-form">
+
+                <p:commandButton onclick="PF('dlgPortfAddItem').show();"
+                                 class="upp-case"
+                                 value="Add New Item">
+                </p:commandButton>
+
+            </h:form>
+        </div>
+
+        <div class="clear"/>
 
 
     </p:outputPanel>
 
+    <!--            =====================               modal window ADD PORTFOLIO COIN -->
+    <div id="divPortfAddItem" tabindex="-1">
+        <p:dialog header="Add item to Portfolio" id="dlgPortfAddItem" widgetVar="dlgPortfAddItem" modal="true"
+                  resizable="false" draggable="false" position="center top" closeOnEscape="true"
+                  showEffect="bounce" hideEffect="fade" style="margin-top: 100px">
+
+            <h:form id="formPortfAddItem" class="">
+
+                <h:panelGrid>
+
+                    <p:outputLabel value="Coin Name" for="add-coin-name"/>
+                    <p:autoComplete id="add-coin-name" value="#{watchlistBacking.coinTemp}"
+                                    completeMethod="#{watchlistBacking.completeCoinTemp}"
+                                    var="coinTemp"
+                                    itemLabel="#{watchlistBacking.getAutocompleteCoinName(coinTemp)}"
+                                    itemValue="#{coinTemp}"
+                                    converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                    maxResults="5">
+
+                        <p:ajax event="itemSelect" update="add-coin-done"/>
+                        <p:ajax event="itemSelect" oncomplete="addWatchCoin();"/>
+                        <p:ajax event="itemSelect" listener="#{watchlistBacking.setCoinToSubmit}"/>
+
+                    </p:autoComplete>
+
+                    <p:outputLabel value="Currency" for="add-coin-currency"/>
+                    <p:selectOneMenu id="add-coin-currency" value="#{watchlistBacking.currency}"
+                                     required="true">
+
+                        <f:selectItems value="#{watchlistBacking.currencies}"/>
+
+                    </p:selectOneMenu>
+
+                    <p:commandButton id="add-coin-done"
+                                     actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
+                                     class="upp-case add-item-coin-button"
+                                     value="Done"
+                                     disabled="#{watchlistBacking.coin eq null}"
+                                     oncomplete="PF('dlgPortfAddItem').hide();"
+                                     update=":mainTabView:watchlistPanel growl"
+                                     resetValues="true">
+                    </p:commandButton>
+
+                </h:panelGrid>
+
+            </h:form>
+
+            <p:ajax event="close" listener="#{watchlistBacking.destroy}" update=":mainTabView:formPortfAddItem"/>
+
+        </p:dialog>
+    </div>
 
 </ui:composition>

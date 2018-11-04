@@ -72,4 +72,10 @@
 
     </session-config>
 
+
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
+
 </web-app>

@@ -6,6 +6,20 @@
 
     <p:outputPanel id="watchlistPanel">
 
+        <div class="right" style="padding-bottom: 0.5em">
+            <!--            =====================              button ADD WATCH COIN -->
+            <h:form class="add-item-coin-form">
+
+                <p:commandButton onclick="PF('dlgWatchAddCoin').show();"
+                                 class="upp-case"
+                                 value="Add New Coin">
+                </p:commandButton>
+
+            </h:form>
+        </div>
+
+        <div class="clear"/>
+
         <p:dataTable value="#{watchlistBacking.activeUser.user.userWatchCoins}"
                      var="userWatchCoinEntity" styleClass="panelGridCenter"
                      stickyHeader="true" rowExpandMode="single"
@@ -115,11 +129,13 @@
 
                     <div class="right">
 
+                        <!--            =====================               button MOVE TO ARCHIVE -->
+
                         <h:form style="float:left; padding-right: 30px;">
                             <p:commandButton
-                                    actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
+                                    actionListener="#{watchlistBacking.doSubmitMoveToArchiveCoin()}"
                                     update=":mainTabView:watchlistPanel growl"
-                                    class="upp-case add-item-coin-button"
+                                    class="upp-case"
                                     value="MOVE TO ARCHIVE" icon="ui-icon-arrowreturnthick-1-s">
                             </p:commandButton>
 
@@ -131,7 +147,7 @@
                             <p:commandButton
                                     actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
                                     update=":mainTabView:watchlistPanel growl"
-                                    class="upp-case add-item-coin-button"
+                                    class="upp-case"
                                     value="Delete" icon="ui-icon ui-icon-trash">
                                 <p:confirm header="DELETE COIN"
                                            message="Are you sure you want to delete this coin?"
@@ -148,38 +164,19 @@
 
         </p:dataTable>
 
-
-        <!--            =====================              button ADD WATCH COIN -->
-        <h:form class="add-item-coin-form">
-
-            <p:commandButton onclick="PF('dlgAddCoin').show();"
-                             class="upp-case add-item-coin-button"
-                             value="Add New Coin">
-            </p:commandButton>
-
-        </h:form>
-
     </p:outputPanel>
 
 
-    <!--            =====================               Global ConfirmDialog window to DEL WATCH COIN -->
-    <h:form>
-        <p:confirmDialog global="true" showEffect="bounce" hideEffect="fade">
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
-                             icon="ui-icon-close"/>
-            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
-                             icon="ui-icon-check"/>
-        </p:confirmDialog>
-    </h:form>
+
 
 
     <!--            =====================               modal window ADD WATCH COIN -->
-    <div id="divAddCoin" tabindex="-1">
-        <p:dialog header="Add coin to your Watchlist" id="dlgAddCoin" widgetVar="dlgAddCoin" modal="true"
-                  resizable="false" draggable="false" position="center top"
+    <div id="divWatchAddCoin" tabindex="-1">
+        <p:dialog header="Add coin to Watchlist" id="dlgWatchAddCoin" widgetVar="dlgWatchAddCoin" modal="true"
+                  resizable="false" draggable="false" position="center top" closeOnEscape="true"
                   showEffect="bounce" hideEffect="fade" style="margin-top: 100px">
 
-            <h:form id="formAddCoin" class="add-item-coin-form">
+            <h:form id="formWatchAddCoin" class="add-item-coin-form">
 
                 <h:panelGrid>
 
@@ -208,10 +205,10 @@
 
                     <p:commandButton id="add-coin-done"
                                      actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
-                                     class="upp-case add-item-coin-button"
+                                     class="upp-case"
                                      value="Done"
                                      disabled="#{watchlistBacking.coin eq null}"
-                                     oncomplete="PF('dlgAddCoin').hide();"
+                                     oncomplete="PF('dlgWatchAddCoin').hide();"
                                      update=":mainTabView:watchlistPanel growl"
                                      resetValues="true">
                     </p:commandButton>
@@ -220,7 +217,7 @@
 
             </h:form>
 
-            <p:ajax event="close" listener="#{watchlistBacking.destroy}" update=":mainTabView:formAddCoin"/>
+            <p:ajax event="close" listener="#{watchlistBacking.destroy}" update=":mainTabView:formWatchAddCoin"/>
 
         </p:dialog>
     </div>
