@@ -21,35 +21,65 @@
 
                 <p:panel id="signupPanel" header="Create an account" style="">
 
-                    <h:panelGrid styleClass="order-table reservainfo">
+                    <h:panelGrid styleClass="order-table">
 
                         <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
-                        <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
-                                     required="true" type="text" size="20"
-                                     requiredMessage="Error: enter portfolio name"/>
+
+                        <p:outputPanel class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-tachometer"></i></span>
+
+                            <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
+                                         required="true" type="text" size="20"
+                                         requiredMessage="Error: enter portfolio name"
+                                         styleClass="form-control noshadow"/>
+
+                        </p:outputPanel>
+
 
                         <p:outputLabel for="usEmail" value="Email:"/>
-                        <p:inputText id="usEmail" value="#{signupBacking.user.email}"
-                                     required="true" type="email" size="20"
-                                     requiredMessage="Error: enter your email"/>
+
+                        <p:outputPanel class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                            <p:inputText id="usEmail" value="#{signupBacking.user.email}"
+                                         required="true" type="email" size="20"
+                                         requiredMessage="Error: enter your email"
+                                         styleClass="form-control noshadow"/>
+
+                        </p:outputPanel>
 
                         <p:outputLabel for="usPassword" value="Password:"/>
-                        <p:password id="usPassword" value="#{signupBacking.password}"
-                                    required="true"
-                                    requiredMessage="Error: enter your password"
-                                    match="usPasswordConfirm" feedback="true">
-                            <f:validateLength minimum="6"/>
-                        </p:password>
+
+                        <p:outputPanel class="input-group">
+
+                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                            <p:password id="usPassword" value="#{signupBacking.password}"
+                                        required="true"
+                                        requiredMessage="Error: enter your password"
+                                        match="usPasswordConfirm" feedback="true"
+                                        styleClass="form-control noshadow">
+                                <f:validateLength minimum="6"/>
+                            </p:password>
+
+                        </p:outputPanel>
 
                         <p:outputLabel for="usPasswordConfirm" value="Confirm Password:"/>
-                        <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
-                                    required="true"
-                                    requiredMessage="Error: confirm your password">
-                            <f:validateLength minimum="6"/>
-                        </p:password>
+
+                        <p:outputPanel class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                            <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
+                                        required="true"
+                                        requiredMessage="Error: confirm your password"
+                                        styleClass="form-control noshadow">
+                                <f:validateLength minimum="6"/>
+                            </p:password>
+
+                        </p:outputPanel>
+
+
+                        <p:outputLabel style="height: 10px; display: block;"/>
 
                         <p:commandButton action="#{signupBacking.signup}"
-                                         styleClass="login-submit navi padding-margin"
                                          value="Sign Up"
                                          update="signupPanel growl">
 
