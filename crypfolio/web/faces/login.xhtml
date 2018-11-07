@@ -21,20 +21,33 @@
 
                 <p:panel id="loginPanel" header="Login to portfolio" style="">
 
-                    <h:panelGrid styleClass="order-table reservainfo">
+                    <h:panelGrid styleClass="order-table">
 
                         <p:outputLabel for="usEmail" value="Email:"/>
-                        <p:inputText id="usEmail" value="#{loginBacking.user.email}"
-                                     required="true" type="email"
-                                     requiredMessage="Error: enter your email"/>
+
+                        <p:outputPanel class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                            <p:inputText id="usEmail" value="#{loginBacking.user.email}"
+                                         styleClass="form-control noshadow"
+                                         required="true" type="email" placeholder="Email"
+                                         requiredMessage="Error: enter your email"/>
+                        </p:outputPanel>
 
                         <p:outputLabel for="password" value="Password:"/>
-                        <p:password id="password" value="#{loginBacking.password}"
-                                    required="true"
-                                    requiredMessage="Error: enter your password"/>
+
+                        <p:outputPanel class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                            <p:inputText id="password" value="#{loginBacking.password}"
+                                         styleClass="form-control noshadow"
+                                         required="true" type="password" placeholder="Password"
+                                         requiredMessage="Error: enter your password"/>
+
+                        </p:outputPanel>
 
                         <p:commandButton action="#{loginBacking.login}"
-                                         styleClass="login-submit navi padding-margin"
+                                         style="margin-top: 10px;"
                                          value="Login"
                                          update="loginPanel growl"
                                          ajax="false">
@@ -49,23 +62,21 @@
 
             <h:form>
 
-                <h:panelGroup id="resendPanel">
+                <h:panelGroup id="resendPanel" rendered="#{loginBacking.showEmailResendLink}">
 
-                    <!--<h:outputText value="Your email address hasn't been confirmed yet."/>-->
-                    <!--                <div class="messagecolor">
-                                        <h:messages showSummary="true" showDetail="false"
-                                                    errorClass="error-messages" infoClass="info-messages" />
-                                    </div>-->
-                    <p:commandLink rendered="#{loginBacking.showEmailResendLink}"
-                                   styleClass="login-submit userlink inline padding-margin right"
-                                   value="Resend email"
-                                   update="resendPanel"
-                                   onclick="myCommand();"/>
+                    <h:outputText value="Your email address hasn't been confirmed yet."
+                                  style="text-align: center; display: block;"/>
 
-                    <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
-                                     style="display: none;" update="growl"/>
+                    <p:commandButton value="Resend email"
+                                     update="resendPanel"
+                                     onclick="myCommand();">
+
+                    </p:commandButton>
 
                 </h:panelGroup>
+
+                <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
+                                 style="display: none;" update="growl"/>
 
             </h:form>
 
