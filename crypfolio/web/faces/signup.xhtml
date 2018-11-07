@@ -29,7 +29,7 @@
                             <span class="input-group-addon"><i class="fa fa-tachometer"></i></span>
 
                             <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
-                                         required="true" type="text" size="20"
+                                         required="true" type="text" size="20"  placeholder="Portfolio Name"
                                          requiredMessage="Error: enter portfolio name"
                                          styleClass="form-control noshadow"/>
 
@@ -42,7 +42,7 @@
                             <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 
                             <p:inputText id="usEmail" value="#{signupBacking.user.email}"
-                                         required="true" type="email" size="20"
+                                         required="true" type="email" size="20" placeholder="Email"
                                          requiredMessage="Error: enter your email"
                                          styleClass="form-control noshadow"/>
 
@@ -54,7 +54,7 @@
 
                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
                             <p:password id="usPassword" value="#{signupBacking.password}"
-                                        required="true"
+                                        required="true" placeholder="Password"
                                         requiredMessage="Error: enter your password"
                                         match="usPasswordConfirm" feedback="true"
                                         styleClass="form-control noshadow">
@@ -63,13 +63,13 @@
 
                         </p:outputPanel>
 
-                        <p:outputLabel for="usPasswordConfirm" value="Confirm Password:"/>
+                        <p:outputLabel for="usPasswordConfirm" value="Repeat Password:"/>
 
                         <p:outputPanel class="input-group">
                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
                             <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
-                                        required="true"
-                                        requiredMessage="Error: confirm your password"
+                                        required="true" placeholder="Repeat Password"
+                                        requiredMessage="Error: repeat your password"
                                         styleClass="form-control noshadow">
                                 <f:validateLength minimum="6"/>
                             </p:password>

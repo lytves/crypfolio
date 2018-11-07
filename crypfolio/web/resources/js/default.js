@@ -1,8 +1,8 @@
 function addWatchCoin() {
     document.getElementById('divWatchAddCoin').focus();
 
-    coinInput = document.getElementById('mainTabView:formWatchAddCoin:add-coin-name_input');
-    document.getElementById('mainTabView:formWatchAddCoin:add-coin-name_input').setAttribute("placeholder", coinInput.value);
+    coinInput = document.getElementById('mainTabView:formWatchAddCoin:watch-add-coin-name_input');
+    document.getElementById('mainTabView:formWatchAddCoin:watch-add-coin-name_input').setAttribute("placeholder", coinInput.value);
 
     coinInput.value = '';
 }

@@ -1,16 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Jua|Lobster|Roboto+Mono');
 
-html {
+html{
     background-color: #ffffff;
+    font-family: 'Roboto Mono', monospace !important;
     font-size: 13px;
-    font-family: 'Roboto Mono', monospace;
     color: #000000;
     margin: 0 auto;
     min-width: 800px;
     width: 100%;
-}
-
-body {
 }
 
 header, section, article, aside, footer {
@@ -70,8 +67,8 @@ header, section, article, aside, footer {
     color: green !important;
 }
 
-.material-icons.blue {
-    color: #008abd;
+.material-icons.blue, .blue {
+    color: #0093e4;
 }
 
 .panelGridCenter td, .panelGridCenter tr {
@@ -86,7 +83,7 @@ header, section, article, aside, footer {
 .symbol-image-32px {
     width: 32px;
     height: 32px;
-    float: left;
+    display: block;
 }
 
 .row-expansion-currency {
@@ -101,10 +98,23 @@ header, section, article, aside, footer {
     width: 80%;
 }
 
+#mainTabView\:formWatchAddCoin\:watch-add-coin-form-image {
+    margin: auto;
+    display: block;
+}
+
+.order-table {
+    width: 100%;
+}
+
 /******************     Primefaces UI Styles      **********************/
 /*.ui-widget {*/
 /*font-family: 'Roboto Mono', monospace;*/
 /*}*/
+
+.ui-widget {
+    font-family: 'Roboto Mono', monospace !important;
+}
 
 .ui-selectonemenu {
     width: 84% !important;
@@ -174,7 +184,11 @@ header, section, article, aside, footer {
 }
 
 body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
-    border-top: 4px solid #3c8dbc;
+    border-top: 4px solid #0093e4;
+}
+
+.ui-widget-header {
+    background: #eee !important;
 }
 
 .ui-tabs .ui-tabs-panel {
@@ -184,6 +198,22 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
 .ui-g-2.p5-20px {
     width: 20% !important;
     padding: 5px;
+}
+
+.ui-dialog {
+    width: 300px !important;
+}
+
+.ui-dialog-content {
+    width: 90% !important;
+}
+
+.ui-state-highlight {
+    background-color: #f2f5f9 !important;
+}
+
+.ui-outputlabel-rfi {
+    color: #0093e4;
 }
 
 /*******************/
@@ -198,8 +228,9 @@ button.ui-button.ui-state-default span,
 }
 
 .ui-button {
-    padding: 4px 12px;
-    display: inline-block;
+    /*padding: 4px 12px;*/
+    display: block !important;
+    margin: auto !important;
     margin-bottom: 0;
     font-size: 14px;
     font-weight: normal;
@@ -227,17 +258,17 @@ button.ui-button.ui-state-default span,
     transition: background-color 0.2s;
     overflow: hidden;
 
-    border: 2px solid #357edd !important;
+    border: 2px solid #0093e4 !important;
     background: #ffffff !important;
 }
 
 .ui-button:hover {
-    background: #357EDD !important;
+    background: #0093e4 !important;
     color: #ffffff;
 }
 
 body .ui-buttonset .ui-state-active {
-    background: #357EDD !important;
+    background: #0093e4 !important;
     color: #ffffff;
 
 }
@@ -254,12 +285,103 @@ body .ui-buttonset .ui-button {
     display: inline-flex !important;
 }
 
+.button-done {
+    display: block !important;
+    margin: auto !important;
+}
+
 /*.ui-button-text-only .ui-button-text{*/
-    /*padding: 0 !important;*/
+/*padding: 0 !important;*/
 /*}*/
 /*******************/
 /*      growl    */
 /*******************/
 .ui-growl {
     z-index: 9999 !important;
+}
+
+/*******************/
+/*      input    */
+/*******************/
+.ui-inputfield {
+    display: block !important;
+    padding: .3em 1em !important;
+    width: 90%;
+}
+
+.ui-inputfield.noshadow {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.input-group {
+    position: relative;
+    display: table;
+    border-spacing: 0;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-envelope:before {
+    content: "\f0e0";
+}
+
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.input-group-addon, .input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.input-group .form-control, .input-group-addon, .input-group-btn {
+    display: table-cell;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee ;
+    border: 1px solid #ccc;
+    border-right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.input-group .input-group-addon {
+    border-color: #d2d6de;
+}
+
+.form-control {
+    display: block !important;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background: #fff none;
+    border: 1px solid #ccc;
+    border-radius: 0 3px 3px 0;
+    box-shadow: none;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    box-sizing: border-box;
 }
