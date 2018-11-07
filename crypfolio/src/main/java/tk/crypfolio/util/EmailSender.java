@@ -3,6 +3,7 @@ package tk.crypfolio.util;
 import tk.crypfolio.common.Settings;
 
 import javax.ejb.Asynchronous;
+import javax.ejb.Singleton;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -13,6 +14,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Singleton
 public abstract class EmailSender {
 
     private static final Logger logger = Logger.getLogger(EmailSender.class.getName());

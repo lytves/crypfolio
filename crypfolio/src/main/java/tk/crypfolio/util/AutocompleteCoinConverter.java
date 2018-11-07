@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * A utility class-converter to convert coin object to normal form to show it in the modal choose windows (and vice versa)
+ * A utility class-converter, is using to convert coin object to normal form to show it in the modal choose windows (and vice versa)
  */
 @Named
 public class AutocompleteCoinConverter implements Converter {
