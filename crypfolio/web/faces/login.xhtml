@@ -17,69 +17,72 @@
 
             <p:growl id="growl" showDetail="false" life="15000" errorClass="error-messages" infoClass="info-messages"/>
 
-            <h:form id="loginForm">
+            <p:outputPanel id="loginOutputPanel">
 
-                <p:panel id="loginPanel" header="Login to portfolio" style="">
+                <p:panel header="Login to portfolio">
 
-                    <h:panelGrid styleClass="order-table">
+                    <h:form id="loginForm">
 
-                        <p:outputLabel for="usEmail" value="Email:"/>
+                        <h:panelGrid styleClass="order-table">
 
-                        <p:outputPanel class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <p:outputLabel for="usEmail" value="Email:"/>
 
-                            <p:inputText id="usEmail" value="#{loginBacking.user.email}"
-                                         styleClass="form-control noshadow"
-                                         required="true" type="email" placeholder="Email"
-                                         requiredMessage="Error: enter your email"/>
-                        </p:outputPanel>
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 
-                        <p:outputLabel for="password" value="Password:"/>
+                                <p:inputText id="usEmail" value="#{loginBacking.user.email}"
+                                             styleClass="form-control noshadow"
+                                             required="true" type="email" placeholder="Email"
+                                             requiredMessage="Error: enter your email"/>
+                            </p:outputPanel>
 
-                        <p:outputPanel class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                            <p:outputLabel for="password" value="Password:"/>
 
-                            <p:inputText id="password" value="#{loginBacking.password}"
-                                         styleClass="form-control noshadow"
-                                         required="true" type="password" placeholder="Password"
-                                         requiredMessage="Error: enter your password"/>
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                        </p:outputPanel>
+                                <p:inputText id="password" value="#{loginBacking.password}"
+                                             styleClass="form-control noshadow"
+                                             required="true" type="password" placeholder="Password"
+                                             requiredMessage="Error: enter your password"/>
+                            </p:outputPanel>
 
-                        <p:outputLabel style="height: 10px; display: block;"/>
+                            <p:outputLabel style="height: 10px; display: block;"/>
 
-                        <p:commandButton action="#{loginBacking.login}"
-                                         value="Login"
-                                         update="loginPanel growl"
-                                         ajax="false">
+                            <p:commandButton action="#{loginBacking.login}"
+                                             value="Login"
+                                             update="loginOutputPanel growl">
 
-                            <p:resetInput target="loginPanel"/>
+                                <p:resetInput target="loginForm"/>
 
-                        </p:commandButton>
+                            </p:commandButton>
 
-                    </h:panelGrid>
+                        </h:panelGrid>
+
+                    </h:form>
+
+                    <!-- information message showed ONLY if user haven't confirmed his email yet-->
+                    <h:form rendered="#{loginBacking.showEmailResendLink}">
+
+                            <hr/>
+
+                            <h:outputText value="Your email address hasn't been confirmed yet."
+                                          style="text-align: center; display: block; font-size: 0.9em;"/>
+
+                            <p:commandButton value="Resend email"
+                                             update="loginOutputPanel"
+                                             onclick="myCommand();">
+
+                            </p:commandButton>
+
+                        <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
+                                         style="display: none;" update="growl"/>
+
+                    </h:form>
+
                 </p:panel>
-            </h:form>
 
-            <h:form>
-
-                <h:panelGroup id="resendPanel" rendered="#{loginBacking.showEmailResendLink}">
-
-                    <h:outputText value="Your email address hasn't been confirmed yet."
-                                  style="text-align: center; display: block;"/>
-
-                    <p:commandButton value="Resend email"
-                                     update="resendPanel"
-                                     onclick="myCommand();">
-
-                    </p:commandButton>
-
-                </h:panelGroup>
-
-                <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
-                                 style="display: none;" update="growl"/>
-
-            </h:form>
+            </p:outputPanel>
 
             <p>
                 <h:link outcome="signup" value="Create an account"/>
