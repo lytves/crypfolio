@@ -20,6 +20,8 @@ public abstract class AuthBacking {
 
     private Boolean showEmailResendLink;
 
+    private Boolean showSignUpForm;
+
     // session scoped
     @Inject
     private ActiveUser activeUser;
@@ -35,6 +37,7 @@ public abstract class AuthBacking {
 
         this.user = new UserEntity();
         this.portfolio = new PortfolioEntity();
+        setShowSignUpForm(true);
     }
 
     protected String authenticate() {
@@ -83,7 +86,7 @@ public abstract class AuthBacking {
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "In order to complete your registration, please click the confirmation link" +
-                            " in the email that we have sent to you.",
+                            " in the email that we just have sent to you.",
                     ""));
         } else {
 
@@ -92,9 +95,8 @@ public abstract class AuthBacking {
                     ""));
         }
 
-        //user doesn't leave from this page, so we need to clear old variables values
-//        portfolio.setName(null);
-//        setPassword(null);
+        // to remove signup form && show email-activate message
+        setShowSignUpForm(false);
 
         return null;
     }
@@ -110,11 +112,6 @@ public abstract class AuthBacking {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Please check your email and click the confirmation link.",
                     ""));
-
-            // this is to refresh jsf messages (h:messages) in the same view page
-            // I've used it earlier for h:messages, not "growl"
-/*            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds()
-                    .add("globalMessage");*/
         }
     }
 
@@ -182,5 +179,13 @@ public abstract class AuthBacking {
 
     public void setShowEmailResendLink(Boolean showEmailResendLink) {
         this.showEmailResendLink = showEmailResendLink;
+    }
+
+    public Boolean getShowSignUpForm() {
+        return showSignUpForm;
+    }
+
+    public void setShowSignUpForm(Boolean showSignUpForm) {
+        this.showSignUpForm = showSignUpForm;
     }
 }

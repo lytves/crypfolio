@@ -17,79 +17,87 @@
 
             <p:growl id="growl" showDetail="false" life="15000" errorClass="error-messages" infoClass="info-messages"/>
 
-            <h:form id="signupForm">
+            <p:outputPanel id="signUpOutputPanel">
 
-                <p:panel id="signupPanel" header="Create an account" style="">
+                <p:panel header="Create an account" style="">
 
-                    <h:panelGrid styleClass="order-table">
+                    <h:form id="signupForm" rendered="#{signupBacking.showSignUpForm}">
 
-                        <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
+                        <h:panelGrid styleClass="order-table">
 
-                        <p:outputPanel class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-tachometer"></i></span>
+                            <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
 
-                            <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
-                                         required="true" type="text" size="20"  placeholder="Portfolio Name"
-                                         requiredMessage="Error: enter portfolio name"
-                                         styleClass="form-control noshadow"/>
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-tachometer"></i></span>
 
-                        </p:outputPanel>
+                                <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
+                                             required="true" type="text" size="20" placeholder="Portfolio Name"
+                                             requiredMessage="Error: enter portfolio name"
+                                             styleClass="form-control noshadow"/>
+
+                            </p:outputPanel>
+
+                            <p:outputLabel for="usEmail" value="Email:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                <p:inputText id="usEmail" value="#{signupBacking.user.email}"
+                                             required="true" type="email" size="20" placeholder="Email"
+                                             requiredMessage="Error: enter your email"
+                                             styleClass="form-control noshadow"/>
+
+                            </p:outputPanel>
+
+                            <p:outputLabel for="usPassword" value="Password:"/>
+
+                            <p:outputPanel class="input-group">
+
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                <p:password id="usPassword" value="#{signupBacking.password}"
+                                            required="true" placeholder="Password"
+                                            requiredMessage="Error: enter your password"
+                                            match="usPasswordConfirm" feedback="true"
+                                            styleClass="form-control noshadow">
+                                    <f:validateLength minimum="6"/>
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <p:outputLabel for="usPasswordConfirm" value="Repeat Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
+                                            required="true" placeholder="Repeat Password"
+                                            requiredMessage="Error: repeat your password"
+                                            styleClass="form-control noshadow">
+                                    <f:validateLength minimum="6"/>
+                                </p:password>
+
+                            </p:outputPanel>
 
 
-                        <p:outputLabel for="usEmail" value="Email:"/>
+                            <p:outputLabel style="height: 10px; display: block;"/>
 
-                        <p:outputPanel class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <p:commandButton action="#{signupBacking.signup}"
+                                             value="Sign Up"
+                                             update="signUpOutputPanel growl">
 
-                            <p:inputText id="usEmail" value="#{signupBacking.user.email}"
-                                         required="true" type="email" size="20" placeholder="Email"
-                                         requiredMessage="Error: enter your email"
-                                         styleClass="form-control noshadow"/>
+                                <p:resetInput target="signupForm"/>
 
-                        </p:outputPanel>
+                            </p:commandButton>
 
-                        <p:outputLabel for="usPassword" value="Password:"/>
+                        </h:panelGrid>
 
-                        <p:outputPanel class="input-group">
+                    </h:form>
 
-                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                            <p:password id="usPassword" value="#{signupBacking.password}"
-                                        required="true" placeholder="Password"
-                                        requiredMessage="Error: enter your password"
-                                        match="usPasswordConfirm" feedback="true"
-                                        styleClass="form-control noshadow">
-                                <f:validateLength minimum="6"/>
-                            </p:password>
-
-                        </p:outputPanel>
-
-                        <p:outputLabel for="usPasswordConfirm" value="Repeat Password:"/>
-
-                        <p:outputPanel class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                            <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
-                                        required="true" placeholder="Repeat Password"
-                                        requiredMessage="Error: repeat your password"
-                                        styleClass="form-control noshadow">
-                                <f:validateLength minimum="6"/>
-                            </p:password>
-
-                        </p:outputPanel>
-
-
-                        <p:outputLabel style="height: 10px; display: block;"/>
-
-                        <p:commandButton action="#{signupBacking.signup}"
-                                         value="Sign Up"
-                                         update="signupPanel growl">
-
-                            <p:resetInput target="signupPanel"/>
-
-                        </p:commandButton>
-
-                    </h:panelGrid>
+                    <h:outputText rendered="#{!signupBacking.showSignUpForm}"
+                                  value="In order to complete your registration, please click the confirmation link
+                                  in the email that we just have sent to you."/>
                 </p:panel>
-            </h:form>
+
+            </p:outputPanel>
 
             <h:outputText value="Already have an account?"/>
 
