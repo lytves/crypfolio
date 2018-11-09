@@ -1,5 +1,6 @@
 package tk.crypfolio.view;
 
+import org.primefaces.PrimeFaces;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
@@ -50,6 +51,7 @@ public class WatchlistBacking implements Serializable {
     public void init() {
 
         System.out.println("WatchlistBacking init");
+        this.currency = CurrencyType.USD;
     }
 
     @PreDestroy
@@ -59,7 +61,7 @@ public class WatchlistBacking implements Serializable {
 
         setCoin(null);
         setCoinTemp(null);
-        setCurrency(null);
+//        setCurrency(null);
     }
 
     public List<CoinEntity> completeCoinTemp(String query) {
@@ -119,6 +121,11 @@ public class WatchlistBacking implements Serializable {
 
     public void setCoinToSubmit() {
         this.coin = this.coinTemp;
+
+//        to change coin image in the add watch coin dialog modal window
+        PrimeFaces.current().executeScript("document.getElementById('watch-add-coin-img')" +
+                ".innerHTML = '<img src=\"https://s2.coinmarketcap.com/static/img/coins/32x32/" + coinTemp.getId() + ".png\"/>'");
+        PrimeFaces.current().executeScript("document.getElementById('watch-add-coin-img').className += ' coin-image';");
     }
 
     public String getAutocompleteCoinName(CoinEntity coinTemp) {

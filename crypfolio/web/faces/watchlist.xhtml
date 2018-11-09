@@ -113,7 +113,7 @@
 
                         <!--            =====================               buttons SELECT Currensy of the WATCH COIN -->
                         <p:selectOneButton value="#{userWatchCoinEntity.showedCurrency}"
-                                           unselectable="false">
+                                           unselectable="false" styleClass="select-currency-button">
                             <f:selectItems value="#{watchlistBacking.currencies}"/>
 
                             <p:ajax event="change" process="@this"
@@ -129,17 +129,6 @@
 
                     <div class="right">
 
-                        <!--            =====================               button MOVE TO ARCHIVE -->
-
-                        <h:form style="float:left; padding-right: 30px;">
-                            <p:commandButton
-                                    actionListener="#{watchlistBacking.doSubmitMoveToArchiveCoin()}"
-                                    update=":mainTabView:watchlistPanel growl"
-                                    class="upp-case"
-                                    value="MOVE TO ARCHIVE" icon="ui-icon-arrowreturnthick-1-s">
-                            </p:commandButton>
-
-                        </h:form>
 
 
                         <!--            =====================               button DEL WATCH COIN -->
@@ -167,9 +156,6 @@
     </p:outputPanel>
 
 
-
-
-
     <!--            =====================               modal window ADD WATCH COIN -->
     <div id="divWatchAddCoin" tabindex="-1">
         <p:dialog header="Add coin to Watchlist" id="dlgWatchAddCoin" widgetVar="dlgWatchAddCoin" modal="true"
@@ -180,32 +166,63 @@
 
                 <h:panelGrid>
 
-                    <p:outputLabel value="Coin Name" for="add-coin-name"/>
-                    <p:autoComplete id="add-coin-name" value="#{watchlistBacking.coinTemp}"
-                                    completeMethod="#{watchlistBacking.completeCoinTemp}"
-                                    var="coinTemp"
-                                    itemLabel="#{watchlistBacking.getAutocompleteCoinName(coinTemp)}"
-                                    itemValue="#{coinTemp}"
-                                    converter="#{autocompleteCoinConverter}" forceSelection="true"
-                                    maxResults="5">
+                    <!--<h:graphicImage id="watch-add-coin-form-image" styleClass="symbol-image-32px"-->
+                    <!--value=""/>-->
 
-                        <p:ajax event="itemSelect" update="add-coin-done"/>
-                        <p:ajax event="itemSelect" oncomplete="addWatchCoin();"/>
-                        <p:ajax event="itemSelect" listener="#{watchlistBacking.setCoinToSubmit}"/>
+                    <p:outputLabel value="Coin Name" for="watch-add-coin-name"/>
 
-                    </p:autoComplete>
+                    <p:outputPanel class="input-group" id="watch-add-coin-input-group">
+
+
+                        <span class="input-group-addon" id="watch-add-coin-img">
+                            <i class="fa fa-btc" aria-hidden="true"></i>
+                        </span>
+
+                        <p:autoComplete id="watch-add-coin-name" value="#{watchlistBacking.coinTemp}"
+                                        completeMethod="#{watchlistBacking.completeCoinTemp}"
+                                        var="coinTemp"
+                                        itemLabel="#{watchlistBacking.getAutocompleteCoinName(coinTemp)}"
+                                        itemValue="#{coinTemp}"
+                                        converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                        maxResults="5" required="true"
+                                        styleClass="form-control2 noshadow "
+                                        placeholder="Coin Name or Ticker">
+
+                            <p:column style="width:32px; text-align:center;">
+                                <p:graphicImage
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{coinTemp.id}.png"
+                                        width="32" height="32"/>
+                            </p:column>
+
+                            <p:column>
+                                <strong>#{coinTemp.name}</strong> - #{coinTemp.symbol}
+                            </p:column>
+
+                            <p:ajax event="itemSelect" update="watch-add-coin-done add-coin-currency"/>
+                            <p:ajax event="itemSelect" oncomplete="addWatchCoin();"/>
+                            <p:ajax event="itemSelect" listener="#{watchlistBacking.setCoinToSubmit}"/>
+
+                        </p:autoComplete>
+
+                    </p:outputPanel>
 
                     <p:outputLabel value="Currency" for="add-coin-currency"/>
-                    <p:selectOneMenu id="add-coin-currency" value="#{watchlistBacking.currency}"
-                                     required="true">
+
+                    <p:selectOneButton id="add-coin-currency" value="#{watchlistBacking.currency}"
+                                       unselectable="false"
+                                       styleClass="select-currency-button"
+                                       required="true"
+                                       disabled="#{watchlistBacking.coinTemp eq null}">
 
                         <f:selectItems value="#{watchlistBacking.currencies}"/>
 
-                    </p:selectOneMenu>
+                    </p:selectOneButton>
 
-                    <p:commandButton id="add-coin-done"
+                    <p:outputLabel style="height: 10px; display: block;"/>
+
+                    <p:commandButton id="watch-add-coin-done"
                                      actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
-                                     class="upp-case"
+                                     class="upp-case button-done"
                                      value="Done"
                                      disabled="#{watchlistBacking.coin eq null}"
                                      oncomplete="PF('dlgWatchAddCoin').hide();"

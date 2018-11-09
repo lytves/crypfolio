@@ -1,144 +1,135 @@
 @import url('https://fonts.googleapis.com/css?family=Jua|Lobster|Roboto+Mono');
 
-html{
-    background-color: #ffffff;
-    font-family: 'Roboto Mono', monospace !important;
-    font-size: 13px;
-    color: #000000;
-    margin: 0 auto;
-    min-width: 800px;
-    width: 100%;
+html {
+  background-color: #ffffff;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 13px;
+  color: #000000;
+  margin: 0 auto;
+  min-width: 800px;
+  width: 100%;
 }
 
 header, section, article, aside, footer {
-    /*display: block;*/
+  /*display: block;*/
 }
 
 .main-wrapper {
-    margin: 10px;
+  margin: 10px;
 }
 
 .login-logo {
-    padding: 30px 0 30px 0;
-    margin: auto;
-    width: 384px;
+  padding: 30px 0 30px 0;
+  margin: auto;
+  width: 384px;
 }
 
 .left {
-    float: left;
+  float: left;
 }
 
 .right {
-    float: right;
+  float: right;
 }
 
 .clear {
-    clear: both;
+  clear: both;
 }
 
 .menu-account {
-    padding: 5px 5px 0 0;
+  padding: 5px 5px 0 0;
 }
 
 .menu-account-img {
-    margin-right: 5px;
-    vertical-align: middle;
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 .forms-wrapper {
-    margin: auto;
-    width: 400px;
-    line-height: 2.5;
+  margin: auto;
+  width: 400px;
+  line-height: 2.5;
 }
 
 .upp-case {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .red {
-    color: red !important;
+  color: red !important;
 }
 
 .green {
-    color: green !important;
+  color: green !important;
 }
 
 .material-icons.blue, .blue {
-    color: #0093e4;
+  color: #0093e4;
 }
 
 .panelGridCenter td, .panelGridCenter tr {
-    text-align: center;
+  text-align: center;
 }
 
 .panelGridTransparent td, .panelGridTransparent tr {
-    background-color: transparent;
-    border: 0 !important;
+  background-color: transparent;
+  border: 0 !important;
 }
 
 .symbol-image-32px {
-    width: 32px;
-    height: 32px;
-    display: block;
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 .row-expansion-currency {
-    display: block;
-    height: 30px;
-    padding: 10px 0;
-    background-color: #f2f5f9;
+  display: block;
+  height: 30px;
+  padding: 10px 0;
+  background-color: #f2f5f9;
 }
 
 #portfMainData {
-    line-height: 0.3em;
-    width: 80%;
-}
-
-#mainTabView\:formWatchAddCoin\:watch-add-coin-form-image {
-    margin: auto;
-    display: block;
+  line-height: 0.3em;
+  width: 80%;
 }
 
 .order-table {
-    width: 100%;
+  width: 100%;
 }
 
 /******************     Primefaces UI Styles      **********************/
-/*.ui-widget {*/
-/*font-family: 'Roboto Mono', monospace;*/
-/*}*/
-
 .ui-widget {
-    font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', monospace !important;
 }
 
 .ui-selectonemenu {
-    width: 84% !important;
+  width: 84% !important;
 }
 
 .ui-selectonemenu-label {
-    width: 100% !important;
+  width: 100% !important;
 }
 
 .panelGridCenter tr {
-    border-bottom-width: 2px !important;
-    border-bottom-color: #f2f5f9;
+  border-bottom-width: 2px !important;
+  border-bottom-color: #f2f5f9;
 }
 
 .ui-datatable * {
-    border-width: 0 !important;
+  border-width: 0 !important;
 }
 
 .ui-widget-content {
-    background: white;
+  background: white;
 }
 
 .ui-datatable-even, .ui-datatable-odd {
-    background: white;
+  background: white;
 
 }
 
@@ -158,62 +149,62 @@ header, section, article, aside, footer {
 */
 
 .ui-state-default {
-    background: #f5f7f8;
-    color: #333;
+  background: #f5f7f8;
+  color: #333;
 }
 
 .ui-state-active, .ui-sortable-column:hover {
-    background: #ffda62;
+  background: #ffda62;
 }
 
 .ui-separator {
-    height: 4px;
+  height: 4px;
 }
 
 .ui-panelgrid .ui-widget {
-    width: 100%;
+  width: 100%;
 }
 
 .ui-expanded-row-content td {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 /* to fix dataTable - stickyHeader="true" problem */
 .myTabview.ui-tabs {
-    position: static;
+  position: static;
 }
 
 body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
-    border-top: 4px solid #0093e4;
+  border-top: 4px solid #0093e4;
 }
 
 .ui-widget-header {
-    background: #eee !important;
+  background: #eee !important;
 }
 
 .ui-tabs .ui-tabs-panel {
-    padding: 0.5em 0.5em !important;
+  padding: 0.5em 0.5em !important;
 }
 
 .ui-g-2.p5-20px {
-    width: 20% !important;
-    padding: 5px;
+  width: 20% !important;
+  padding: 5px;
 }
 
-.ui-dialog {
-    width: 300px !important;
-}
+//.ui-dialog {
+//  width: 300px !important;
+//}
 
 .ui-dialog-content {
-    width: 90% !important;
+  width: 90% !important;
 }
 
 .ui-state-highlight {
-    background-color: #f2f5f9 !important;
+  background-color: #f2f5f9 !important;
 }
 
 .ui-outputlabel-rfi {
-    color: #0093e4;
+  color: #0093e4;
 }
 
 /*******************/
@@ -224,70 +215,74 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
 .ui-button span,
 button.ui-button.ui-state-default span,
 .ui-button.ui-state-default span {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .ui-button {
-    /*padding: 4px 12px;*/
-    display: block !important;
-    margin: auto !important;
-    margin-bottom: 0;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.74857143;
-    text-align: center;
-    /* white-space: nowrap;*/
-    white-space: normal;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border-radius: 3px;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    text-shadow: none !important;
-    color: #444444;
-    -webkit-transition: background-color 0.2s;
-    -moz-transition: background-color 0.2s;
-    -o-transition: background-color 0.2s;
-    transition: background-color 0.2s;
-    overflow: hidden;
+  /*padding: 4px 12px;*/
+  display: block !important;
+  margin: auto !important;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.74857143;
+  text-align: center;
+  /* white-space: nowrap;*/
+  white-space: normal;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-radius: 3px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none !important;
+  color: #444444;
+  -webkit-transition: background-color 0.2s;
+  -moz-transition: background-color 0.2s;
+  -o-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+  overflow: hidden;
 
-    border: 2px solid #0093e4 !important;
-    background: #ffffff !important;
+  border: 2px solid #0093e4 !important;
+  background: #ffffff !important;
 }
 
 .ui-button:hover {
-    background: #0093e4 !important;
-    color: #ffffff;
+  background: #0093e4 !important;
+  color: #ffffff;
 }
 
 body .ui-buttonset .ui-state-active {
-    background: #0093e4 !important;
-    color: #ffffff;
+  background: #0093e4 !important;
+  color: #ffffff;
 
 }
 
 body .ui-buttonset .ui-button {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .ui-selectonebutton {
-    display: inline-flex !important;
+  display: inline-flex !important;
 }
 
 .button-done {
-    display: block !important;
-    margin: auto !important;
+  display: block !important;
+  margin: auto !important;
+}
+
+.select-currency-button .ui-button-text-only {
+  margin-right: 10px !important;
 }
 
 /*.ui-button-text-only .ui-button-text{*/
@@ -297,91 +292,118 @@ body .ui-buttonset .ui-button {
 /*      growl    */
 /*******************/
 .ui-growl {
-    z-index: 9999 !important;
+  z-index: 9999 !important;
 }
 
 /*******************/
 /*      input    */
 /*******************/
 .ui-inputfield {
-    display: block !important;
-    padding: .3em 1em !important;
-    width: 90%;
+  display: block !important;
+  padding: .3em 1em !important;
+  width: 90%;
 }
 
 .ui-inputfield.noshadow {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .input-group {
-    position: relative;
-    display: table;
-    border-spacing: 0;
+  position: relative;
+  display: table;
+  border-spacing: 0;
+  width: 100%;
 }
 
 .fa {
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .fa-envelope:before {
-    content: "\f0e0";
+  content: "\f0e0";
 }
 
-.input-group .form-control {
-    position: relative;
-    z-index: 2;
-    float: left;
-    width: 100%;
-    margin-bottom: 0;
-}
-
-.input-group-addon, .input-group-btn {
-    width: 1%;
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-.input-group .form-control, .input-group-addon, .input-group-btn {
-    display: table-cell;
+.input-group .form-control, .input-group .form-control2, #mainTabView\:formWatchAddCoin\:watch-add-coin-name_input {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0;
+  display: table-cell
 }
 
 .input-group-addon {
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    color: #555;
-    text-align: center;
-    background-color: #eee ;
-    border: 1px solid #ccc;
-    border-right: 0;
-    border-radius: 3px 0 0 3px;
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+  display: table-cell
+}
+
+.input-group-addon {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-right: 0;
+  border-radius: 3px 0 0 3px;
 }
 
 .input-group .input-group-addon {
-    border-color: #d2d6de;
+  border-color: #d2d6de;
 }
 
 .form-control {
-    display: block !important;
-    width: 100%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background: #fff none;
-    border: 1px solid #ccc;
-    border-radius: 0 3px 3px 0;
-    box-shadow: none;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    box-sizing: border-box;
+  display: block !important;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background: #fff none;
+  border: 1px solid #ccc;
+  border-radius: 0 3px 3px 0;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  box-sizing: border-box;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.input-group-addon.coin-image {
+  padding: 0 3px 0 0;
+  background: none;
+  border: none;
+}
+
+.form-control2, #mainTabView\:formWatchAddCoin\:watch-add-coin-name_input {
+  width: 100%;
+  height: 34px;
+  border-radius: 0 3px 3px 0;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  box-sizing: border-box;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.ui-autocomplete-panel td {
+  padding: 4px !important;
+  border-style: none !important;
+}
+
+.ui-autocomplete-moretext {
+  display: none;
 }

@@ -1,3 +1,6 @@
+/**
+ * Add watch coin: to set the coin name+token like an input placeholder
+ */
 function addWatchCoin() {
     document.getElementById('divWatchAddCoin').focus();
 
