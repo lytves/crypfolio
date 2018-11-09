@@ -8,13 +8,12 @@
 
         <h:form>
 
-            <i class="material-icons blue menu-account-img">
-                account_circle
-            </i>
+            <i class="fas fa-user-circle menu-account-img blue"></i>
 
-            <p:menuButton value="#{userBacking.user.email}" iconPos="right">
-                <p:menuitem value="Settings" actionListener="#{menuView.save}" icon="ui-icon-gear"/>
-                <p:menuitem value="Logout" action="#{logoutBacking.logout}" icon="ui-icon-power"/>
+            <p:menuButton value="#{userBacking.user.email}" iconPos="right" menuStyleClass="fuck">
+                <p:menuitem value="Settings" actionListener="#{logoutBacking.logout}" icon="menubutton1"/>
+                <p:menuitem value="Friends" actionListener="#{logoutBacking.logout}" icon="menubutton2"/>
+                <p:menuitem value="Logout" action="#{logoutBacking.logout}" icon="menubutton3"/>
             </p:menuButton>
 
         </h:form>

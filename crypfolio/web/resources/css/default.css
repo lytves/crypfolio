@@ -48,6 +48,7 @@ a, a:visited {
 .menu-account-img {
   margin-right: 5px;
   vertical-align: middle;
+  font-size: 2em;
 }
 
 .forms-wrapper {
@@ -72,7 +73,7 @@ a, a:visited {
   color: green !important;
 }
 
-.material-icons.blue, .blue {
+.blue {
   color: #0093e4;
 }
 
@@ -120,11 +121,29 @@ a, a:visited {
   text-align: center;
 }
 
-.isaw{
+.isaw {
   font-family: Jua, monospace !important;
   font-size: 1.2em;
   text-align: center;
 }
+
+.menubutton1, .menubutton2, .menubutton3 {
+  background-image: url("#{resource['images/id-card-regular.svg']}") !important;
+  height: 16px;
+  width: 16px;
+  margin-right: 10px;
+}
+
+.menubutton2 {
+  background-image: url("#{resource['images/star-solid.svg']}") !important;
+
+}
+
+.menubutton3 {
+  background-image: url("#{resource['images/sign-out-alt-solid.svg']}") !important;
+
+}
+
 /******************     Primefaces UI Styles      **********************/
 .ui-widget {
   font-family: 'Roboto Mono', monospace !important;
@@ -209,9 +228,7 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   padding: 5px;
 }
 
-//.ui-dialog {
-//  width: 300px !important;
-//}
+//.ui-dialog { //  width: 300px !important; //}
 
 .ui-dialog-content {
   width: 90% !important;
@@ -238,9 +255,7 @@ button.ui-button.ui-state-default span,
 
 .ui-button {
   /*padding: 4px 12px;*/
-//display: block !important; //margin: auto !important; margin-bottom: 0; font-size: 14px; font-weight: normal;
-  line-height: 1.74857143;
-  text-align: center;
+//display: block !important; //margin: auto !important; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.74857143; text-align: center;
   /* white-space: nowrap;*/
   white-space: normal;
   vertical-align: middle;
