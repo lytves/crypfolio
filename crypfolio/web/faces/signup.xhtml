@@ -102,11 +102,10 @@
 
             </p:outputPanel>
 
-            <h:outputText value="Already have an account?"/>
-
-            <p>
-                <h:link outcome="login" value="Login"/>
-            </p>
+            <h:panelGrid styleClass="added-links">
+                <h:outputText value="Already have an account?"/>
+                <h:link outcome="login" styleClass="upp-case" value="Login"/>
+            </h:panelGrid>
 
         </div>
 

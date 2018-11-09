@@ -2,7 +2,7 @@
 
 html {
   background-color: #ffffff;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', monospace;
   font-size: 13px;
   color: #000000;
   margin: 0 auto;
@@ -12,6 +12,11 @@ html {
 
 header, section, article, aside, footer {
   /*display: block;*/
+}
+
+a, a:visited {
+  color: #0093e4;
+  text-decoration: none;
 }
 
 .main-wrapper {
@@ -107,6 +112,19 @@ header, section, article, aside, footer {
   width: 100%;
 }
 
+.added-links {
+  margin: auto;
+  line-height: 1.5;
+  margin-top: 10px;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.isaw{
+  font-family: Jua, monospace !important;
+  font-size: 1.2em;
+  text-align: center;
+}
 /******************     Primefaces UI Styles      **********************/
 .ui-widget {
   font-family: 'Roboto Mono', monospace !important;
@@ -220,9 +238,7 @@ button.ui-button.ui-state-default span,
 
 .ui-button {
   /*padding: 4px 12px;*/
-//display: block !important; //margin: auto !important; margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
+//display: block !important; //margin: auto !important; margin-bottom: 0; font-size: 14px; font-weight: normal;
   line-height: 1.74857143;
   text-align: center;
   /* white-space: nowrap;*/

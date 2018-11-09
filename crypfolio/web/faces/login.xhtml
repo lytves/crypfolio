@@ -47,6 +47,8 @@
                                              requiredMessage="Error: enter your password"/>
                             </p:outputPanel>
 
+                            <h:link outcome="forgot-password" styleClass="upp-case" value="Reset password"/>
+
                             <p:outputLabel style="height: 10px; display: block;"/>
 
                             <p:commandButton action="#{loginBacking.login}"
@@ -85,14 +87,9 @@
 
             </p:outputPanel>
 
-            <p>
-                <h:link outcome="signup" value="Create an account"/>
-            </p>
-
-            <p>
-                <h:link outcome="forgot-password" value="Reset password"/>
-
-            </p>
+            <h:panelGrid styleClass="added-links">
+                <h:link outcome="signup" styleClass="upp-case" value="Create an account"/>
+            </h:panelGrid>
 
         </div>
 
