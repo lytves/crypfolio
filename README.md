@@ -31,3 +31,5 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 ![WatchList Page-2](images/whatchlist-2-page.png)
 
 ![WatchList coin adding Page](images/whatchlist-add-coin-page.png)
+
+![WatchList coin adding Page](images/whatchlist-add-coin-page-2.png)
