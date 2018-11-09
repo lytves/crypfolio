@@ -23,7 +23,7 @@
         <p:dataTable value="#{watchlistBacking.activeUser.user.userWatchCoins}"
                      var="userWatchCoinEntity" styleClass="panelGridCenter"
                      stickyHeader="true" rowExpandMode="single"
-                     id="dataTableWV" widgetVar="dataTableWV">
+                     id="watchlistDataTableWV" widgetVar="watchlistDataTableWV">
 
             <p:column style="width:16px" styleClass="togglerClass">
                 <p:rowToggler/>
@@ -117,8 +117,8 @@
                             <f:selectItems value="#{watchlistBacking.currencies}"/>
 
                             <p:ajax event="change" process="@this"
-                                    update=":mainTabView:dataTableWV:watchCoinPrice :mainTabView:dataTableWV:watchCoinChange24H
-                                         :mainTabView:dataTableWV:watchCoinChange7D :mainTabView:dataTableWV:watchCoinMarketCap"
+                                    update=":mainTabView:watchlistDataTableWV:watchCoinPrice :mainTabView:watchlistDataTableWV:watchCoinChange24H
+                                         :mainTabView:watchlistDataTableWV:watchCoinChange7D :mainTabView:watchlistDataTableWV:watchCoinMarketCap"
 
                                     listener="#{watchlistBacking.changeWatchCoinCurrency(userWatchCoinEntity)}"/>
 
@@ -165,9 +165,6 @@
             <h:form id="formWatchAddCoin" class="add-item-coin-form">
 
                 <h:panelGrid>
-
-                    <!--<h:graphicImage id="watch-add-coin-form-image" styleClass="symbol-image-32px"-->
-                    <!--value=""/>-->
 
                     <p:outputLabel value="Coin Name" for="watch-add-coin-name"/>
 
