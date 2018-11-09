@@ -22,7 +22,7 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 ![Login Page](images/login-page.png)
 
-![Sign up Page](images/sing-up-page.png)
+![Sign up Page](images/singup.png)
 
 ![Reset Password Page](images/password-reset-page.png)
 
