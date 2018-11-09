@@ -22,14 +22,14 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 ![Login Page](images/login-page.png)
 
-![Sign up Page](images/singup.png)
+![Sign up Page](images/signup.png)
 
 ![Reset Password Page](images/password-reset-page.png)
 
-![WatchList Page](images/whatchlist-page.png)
+![WatchList Page](images/watchlist-page.png)
 
-![WatchList Page-2](images/whatchlist-2-page.png)
+![WatchList Page-2](images/watchlist-2-page.png)
 
-![WatchList coin adding Page](images/whatchlist-add-coin-page.png)
+![WatchList coin adding Page](images/watchlist-add-coin-page.png)
 
-![WatchList coin adding Page](images/whatchlist-add-coin-page-2.png)
+![WatchList coin adding Page](images/watchlist-add-coin-page-2.png)
