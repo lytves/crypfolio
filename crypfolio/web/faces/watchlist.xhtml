@@ -162,7 +162,7 @@
                   resizable="false" draggable="false" position="center top" closeOnEscape="true"
                   showEffect="bounce" hideEffect="fade" style="margin-top: 100px">
 
-            <h:form id="formWatchAddCoin" class="add-item-coin-form">
+            <h:form id="formWatchAddCoin">
 
                 <h:panelGrid>
 
@@ -195,7 +195,7 @@
                                 <strong>#{coinTemp.name}</strong> - #{coinTemp.symbol}
                             </p:column>
 
-                            <p:ajax event="itemSelect" update="watch-add-coin-done add-coin-currency"/>
+                            <p:ajax event="itemSelect" update="watch-add-coin-done watch-add-coin-currency"/>
                             <p:ajax event="itemSelect" oncomplete="addWatchCoin();"/>
                             <p:ajax event="itemSelect" listener="#{watchlistBacking.setCoinToSubmit}"/>
 
@@ -203,9 +203,9 @@
 
                     </p:outputPanel>
 
-                    <p:outputLabel value="Currency" for="add-coin-currency"/>
+                    <p:outputLabel value="Currency" for="watch-add-coin-currency"/>
 
-                    <p:selectOneButton id="add-coin-currency" value="#{watchlistBacking.currency}"
+                    <p:selectOneButton id="watch-add-coin-currency" value="#{watchlistBacking.currency}"
                                        unselectable="false"
                                        styleClass="select-currency-button"
                                        required="true"
