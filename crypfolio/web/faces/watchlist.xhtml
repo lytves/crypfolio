@@ -170,7 +170,6 @@
 
                     <p:outputPanel class="input-group" id="watch-add-coin-input-group">
 
-
                         <span class="input-group-addon" id="watch-add-coin-img">
                             <i class="fa fa-btc" aria-hidden="true"></i>
                         </span>
@@ -219,7 +218,7 @@
 
                     <p:commandButton id="watch-add-coin-done"
                                      actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
-                                     class="upp-case button-done"
+                                     class="button-center"
                                      value="Done"
                                      disabled="#{watchlistBacking.coin eq null}"
                                      oncomplete="PF('dlgWatchAddCoin').hide();"
