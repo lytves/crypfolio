@@ -234,8 +234,11 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   width: 90% !important;
 }
 
-.ui-state-highlight {
-  background-color: #f2f5f9 !important;
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {
+  background: none !important;
+  background-color: #0093e4 !important;
+
+//background-color: #f2f5f9 !important;
 }
 
 .ui-outputlabel-rfi {
@@ -433,6 +436,12 @@ body .ui-buttonset .ui-button {
 .ui-autocomplete-panel td {
   padding: 4px !important;
   border-style: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+
+  font-weight: bold;
 }
 
 .ui-autocomplete-moretext {
