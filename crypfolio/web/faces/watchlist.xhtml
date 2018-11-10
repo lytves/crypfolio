@@ -153,7 +153,8 @@
     <div id="divWatchAddCoin" tabindex="-1">
         <p:dialog header="Add coin to Watchlist" id="dlgWatchAddCoin" widgetVar="dlgWatchAddCoin" modal="true"
                   resizable="false" draggable="false" position="center top" closeOnEscape="true"
-                  showEffect="bounce" hideEffect="fade">
+                  showEffect="bounce" hideEffect="fade" class="modal-window">
+
             <h:form id="formWatchAddCoin">
 
                 <h:panelGrid>
@@ -172,7 +173,7 @@
                                         var="coinTemp"
                                         itemValue="#{coinTemp}"
                                         converter="#{autocompleteCoinConverter}" forceSelection="true"
-                                        maxResults="5" required="true"
+                                        maxResults="5" required="true" cache="true"
                                         styleClass="form-control2 noshadow "
                                         placeholder="Coin Name or Ticker">
 
@@ -182,9 +183,8 @@
                                         width="32" height="32"/>
                             </p:column>
 
-                            <p:column>
-                                #{coinTemp.name} <span
-                                    style="margin-right: 10px; float: right">#{coinTemp.symbol}</span>
+                            <p:column style="display: flex; justify-content: space-between;">
+                                #{coinTemp.name} <span style="margin: 0 10px">#{coinTemp.symbol}</span>
                             </p:column>
 
                             <p:ajax event="itemSelect"
@@ -194,16 +194,16 @@
 
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="#{watchlistBacking.coinTemp != null}"
-                                   style="display: flex;">
+                    <p:outputPanel style="display: flex;"
+                                   rendered="#{watchlistBacking.coinTemp != null}">
 
                         <h:graphicImage
                                 value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{watchlistBacking.coinTemp.id}.png"
-                                style="float: left; display: inline-block; height: 32px;"/>
+                                style="height: 32px;"/>
 
-                            <h:outputText
-                                    value="#{watchlistBacking.coinTemp.name} (#{watchlistBacking.coinTemp.symbol})"
-                                    styleClass="coin-item-name-autocompleted"/>
+                        <h:outputText
+                                value="#{watchlistBacking.coinTemp.name} (#{watchlistBacking.coinTemp.symbol})"
+                                styleClass="coin-item-name-autocompleted"/>
 
                     </p:outputPanel>
 
@@ -222,7 +222,7 @@
                     <h:outputText styleClass="span-10px-height"/>
 
                     <p:outputPanel>
-                        <h:panelGrid style="margin: auto" styleClass="test">
+                        <h:panelGrid style="margin: auto">
                             <p:outputPanel>
 
                                 <p:commandButton id="watch-add-coin-reset"

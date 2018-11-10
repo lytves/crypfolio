@@ -148,13 +148,12 @@ a, a:visited {
 }
 
 .coin-item-name-autocompleted {
-  display: inline-block;
-  margin: 5px 10px;
+  margin: 3px 10px;
   font-size: 1.2em;
   font-weight: bold;
 }
 
-#mainTabView\:dlgWatchAddCoin {
+.modal-window {
   width: 350px !important;
   margin-top: 100px;
 }
