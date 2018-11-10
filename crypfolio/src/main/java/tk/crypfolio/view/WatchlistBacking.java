@@ -1,6 +1,5 @@
 package tk.crypfolio.view;
 
-import org.primefaces.PrimeFaces;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
@@ -27,115 +26,37 @@ public class WatchlistBacking implements Serializable {
 
     private static final Logger logger = Logger.getLogger(WatchlistBacking.class.getName());
 
-    private CoinEntity coinTemp;
-
-    private CoinEntity coin;
-
-    private CurrencyType currency;
-
-    private CurrencyType[] currencies;
+    // application scoped
+    @Inject
+    private ApplicationContainer applicationContainer;
 
     // session scoped
     @Inject
     private ActiveUser activeUser;
 
-    // application scoped
-    @Inject
-    private ApplicationContainer applicationContainer;
-
     // stateless business
     @Inject
     private UserService userService;
 
+    // temp CoinEntity is used to temporary save autocompleted chosen coin
+    private CoinEntity coinTemp;
+
+    private CurrencyType currency;
+
+    private CurrencyType[] currencies;
+
     @PostConstruct
     public void init() {
-
         System.out.println("WatchlistBacking init");
+        // to set in watch-add-coin modal window value "by default"
         this.currency = CurrencyType.USD;
     }
 
     @PreDestroy
     public void destroy() {
-
         System.out.println("WatchlistBacking destroy");
-
-        setCoin(null);
+        // executed every time when watch-add-coin modal window is closed
         setCoinTemp(null);
-//        setCurrency(null);
-    }
-
-    public List<CoinEntity> completeCoinTemp(String query) {
-
-        List<CoinEntity> filteredCoins = new ArrayList<>();
-
-        for (CoinEntity coin : applicationContainer.getAllCoinsListing()) {
-
-            if (coin.getName().toLowerCase().startsWith(query.toLowerCase())
-                    || coin.getSymbol().toLowerCase().startsWith(query.toLowerCase())) {
-                filteredCoins.add(coin);
-//                filteredCoins.add(coin.getId().intValue(), coin);
-            }
-        }
-        return filteredCoins;
-    }
-
-    public void doSubmitAddWatchCoin() {
-
-        System.out.println("+++++++++++ coin: " + coin);
-        Boolean isCoinInWatchList = false;
-
-        if (coin != null) {
-
-            for (UserWatchCoinEntity userWatchCoinEntity : activeUser.getUser().getUserWatchCoins())
-
-                if (userWatchCoinEntity.getCoinId().equals(coin)) {
-
-                    isCoinInWatchList = true;
-                    break;
-                }
-
-            if (!isCoinInWatchList) {
-
-                activeUser.getUser().addWatchCoin(coin, currency);
-
-                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
-
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                        "The coin has been added successully to your watchlist.",
-                        ""));
-
-            } else {
-
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                        "The coin already is in your watchlist.",
-                        ""));
-            }
-
-        } else {
-
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Error adding the coin to watchlist!",
-                    ""));
-        }
-    }
-
-    public void setCoinToSubmit() {
-        this.coin = this.coinTemp;
-
-//        to change coin image in the add watch coin dialog modal window
-        PrimeFaces.current().executeScript("document.getElementById('watch-add-coin-img')" +
-                ".innerHTML = '<img src=\"https://s2.coinmarketcap.com/static/img/coins/32x32/" + coinTemp.getId() + ".png\"/>'");
-        PrimeFaces.current().executeScript("document.getElementById('watch-add-coin-img').className += ' coin-image';");
-    }
-
-    public String getAutocompleteCoinName(CoinEntity coinTemp) {
-
-        if (coinTemp != null) {
-
-            return coinTemp.getName() + " (" + coinTemp.getSymbol() + ")";
-        }
-
-        return null;
     }
 
     public CoinEntity getCoinTemp() {
@@ -144,14 +65,6 @@ public class WatchlistBacking implements Serializable {
 
     public void setCoinTemp(CoinEntity coinTemp) {
         this.coinTemp = coinTemp;
-    }
-
-    public CoinEntity getCoin() {
-        return coin;
-    }
-
-    public void setCoin(CoinEntity coin) {
-        this.coin = coin;
     }
 
     public CurrencyType getCurrency() {
@@ -170,96 +83,60 @@ public class WatchlistBacking implements Serializable {
         return activeUser;
     }
 
-    /**
-     * Function which return String value of percentage of coin price change by "price"
-     *
-     * @param id             - coin ID
-     * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
-     */
-    public String getWatchCoinPrice(Long id, CurrencyType showedCurrency) {
+    // autocomplete search method
+    public List<CoinEntity> completeCoinTemp(String query) {
 
-        // this conditional is using to catch "null" values on the add/delete coins,
-        // because it provokes an error
-        if (id != null && showedCurrency != null) {
+        List<CoinEntity> filteredCoins = new ArrayList<>();
 
-            Double price = coinCurrentData("price", id, showedCurrency);
+        for (CoinEntity coin : applicationContainer.getAllCoinsListing()) {
 
-            if (price != null) {
-                return String.valueOf(price);
+            if (coin.getName().toLowerCase().startsWith(query.toLowerCase())
+                    || coin.getSymbol().toLowerCase().startsWith(query.toLowerCase())) {
+                filteredCoins.add(coin);
             }
         }
-
-        return "0";
+        return filteredCoins;
     }
 
-    /**
-     * Function which return String value of percentage of coin price change by "24hour"
-     *
-     * @param id             - coin ID
-     * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
-     */
-    public String getWatchCoinChange24H(Long id, CurrencyType showedCurrency) {
+    public void doSubmitAddWatchCoin() {
 
-        // this conditional is using to catch "null" values on the add/delete coins,
-        // because it provokes an error
-        if (id != null && showedCurrency != null) {
+        Boolean isCoinAlreadyInWatchList = false;
 
-            Double change24h = coinCurrentData("percent_change_24h", id, showedCurrency);
+        if (coinTemp != null) {
 
-            if (change24h != null) {
+            for (UserWatchCoinEntity userWatchCoinEntity : activeUser.getUser().getUserWatchCoins())
 
-                return String.valueOf(change24h);
+                if (userWatchCoinEntity.getCoinId().equals(coinTemp)) {
+
+                    isCoinAlreadyInWatchList = true;
+                    break;
+                }
+
+            if (!isCoinAlreadyInWatchList) {
+
+                activeUser.getUser().addWatchCoin(coinTemp, currency);
+
+                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "The coin has been successfully added to your watchlist.",
+                        ""));
+
+            } else {
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "The coin is already in your watchlist.",
+                        ""));
             }
+
+        } else {
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "Error adding the coin to watchlist!",
+                    ""));
+            logger.log(Level.WARNING, "Error adding the coin to watchlist!");
+
         }
-
-        return "0";
-
-    }
-
-    /**
-     * Function which return String value of percentage of coin price change by "percent_change_7d"
-     *
-     * @param id             - coin ID
-     * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
-     */
-    public String getWatchCoinChange7D(Long id, CurrencyType showedCurrency) {
-
-        // this conditional is using to catch "null" values on the add/delete coins,
-        // because it provokes an error
-        if (id != null && showedCurrency != null) {
-
-            Double change7d = coinCurrentData("percent_change_7d", id, showedCurrency);
-
-            if (change7d != null) {
-
-                return String.valueOf(change7d);
-            }
-        }
-
-        return "0";
-
-    }
-
-    /**
-     * Function which return String value of percentage of coin price change by "market_cap"
-     *
-     * @param id             - coin ID
-     * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
-     */
-    public String getWatchCoinMarketCap(Long id, CurrencyType showedCurrency) {
-
-        Double marketCap = coinCurrentData("market_cap", id, showedCurrency);
-
-        if (marketCap != null) {
-            return String.valueOf(marketCap);
-        }
-
-        return "0";
-
     }
 
     public void doSubmitDeleteWatchCoin(UserWatchCoinEntity userWatchCoinEntity) {
@@ -278,6 +155,8 @@ public class WatchlistBacking implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Error deleting coin from watchlist",
                     ""));
+            logger.log(Level.WARNING, "Error deleting coin from watchlist!");
+
         }
     }
 
@@ -285,30 +164,115 @@ public class WatchlistBacking implements Serializable {
 
         if (activeUser.getUser().getUserWatchCoins().contains(userWatchCoin)) {
 
-            System.out.println("================= userWatchCoin: " + userWatchCoin.toString());
-
-            int index = activeUser.getUser().getUserWatchCoins().indexOf(userWatchCoin);
-
-
-            System.out.println("before DB userWatchCoin: " + activeUser.getUser().getUserWatchCoins().get(index));
-
             userService.updateUserWatchCoinDB(userWatchCoin);
-
-            System.out.println("after DB userWatchCoin: " + activeUser.getUser().getUserWatchCoins().get(index));
-
-
-//            PrimeFaces pf = PrimeFaces.current();
-//            if (pf.isAjaxRequest()) {
-//                pf.ajax().update(":dataTableWV:@row(0)");
-//            }
 
         } else {
 
-            logger.log(Level.INFO, "no");
+            logger.log(Level.WARNING, "Error on change of watch coin currency");
 
         }
     }
 
+    /**
+     * Method which returns String value of percentage of coin price change by "price"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
+    public String getWatchCoinPrice(Long id, CurrencyType showedCurrency) {
+
+        // this conditional is using to avoid "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
+
+            Double price = coinCurrentData("price", id, showedCurrency);
+
+            if (price != null) {
+                return String.valueOf(price);
+            }
+        }
+
+        return "0";
+    }
+
+    /**
+     * Method which returns String value of percentage of coin price change by "24hour"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
+    public String getWatchCoinChange24H(Long id, CurrencyType showedCurrency) {
+
+        // this conditional is using to avoid "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
+
+            Double change24h = coinCurrentData("percent_change_24h", id, showedCurrency);
+
+            if (change24h != null) {
+
+                return String.valueOf(change24h);
+            }
+        }
+
+        return "0";
+
+    }
+
+    /**
+     * Method which returns String value of percentage of coin price change by "percent_change_7d"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
+    public String getWatchCoinChange7D(Long id, CurrencyType showedCurrency) {
+
+        // this conditional is using to avoid "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
+
+            Double change7d = coinCurrentData("percent_change_7d", id, showedCurrency);
+
+            if (change7d != null) {
+
+                return String.valueOf(change7d);
+            }
+        }
+
+        return "0";
+
+    }
+
+    /**
+     * Method which returns String value of percentage of coin price change by "market_cap"
+     *
+     * @param id             - coin ID
+     * @param showedCurrency - coin current watch Currency, enum
+     * @return String value to show in the column: percentage or 0
+     */
+    public String getWatchCoinMarketCap(Long id, CurrencyType showedCurrency) {
+
+        // this conditional is using to avoid "null" values on the add/delete coins,
+        // because it provokes an error
+        if (id != null && showedCurrency != null) {
+
+            Double marketCap = coinCurrentData("market_cap", id, showedCurrency);
+
+            if (marketCap != null) {
+                return String.valueOf(marketCap);
+            }
+        }
+
+        return "0";
+
+    }
+
+    /**
+     * Universal method which returns actual coin value by type(data) from @ApplicationScoped bean
+     */
     private Double coinCurrentData(String data, Long id, CurrencyType showedCurrency) {
 
         switch (showedCurrency.getCurrency()) {

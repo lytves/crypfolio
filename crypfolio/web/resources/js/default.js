@@ -1,16 +1,4 @@
 /**
- * Add watch coin: to set the coin name+token like an input placeholder
- */
-function addWatchCoin() {
-    document.getElementById('divWatchAddCoin').focus();
-
-    coinInput = document.getElementById('mainTabView:formWatchAddCoin:watch-add-coin-name_input');
-    document.getElementById('mainTabView:formWatchAddCoin:watch-add-coin-name_input').setAttribute("placeholder", coinInput.value);
-
-    coinInput.value = '';
-}
-
-/**
  * Listener to trigger modal close, when clicked on dialog mask
  * got it from https://stackoverflow.com/questions/14595835/primefaces-dialog-close-on-click-outside-of-the-dialog
  */

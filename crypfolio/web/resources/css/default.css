@@ -77,8 +77,8 @@ a, a:visited {
   color: #0093e4;
 }
 
-.panelGridCenter td, .panelGridCenter tr {
-  text-align: center;
+.align-right {
+  text-align: right;
 }
 
 .panelGridCenter tr {
@@ -136,12 +136,27 @@ a, a:visited {
 
 .menubutton2 {
   background-image: url("#{resource['images/star-solid.svg']}") !important;
-
 }
 
 .menubutton3 {
   background-image: url("#{resource['images/sign-out-alt-solid.svg']}") !important;
+}
 
+.span-10px-height {
+  height: 10px;
+  display: block;
+}
+
+.coin-item-name-autocompleted {
+  display: inline-block;
+  margin: 5px 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#mainTabView\:dlgWatchAddCoin {
+  width: 350px !important;
+  margin-top: 100px;
 }
 
 /******************     Primefaces UI Styles      **********************/
@@ -169,21 +184,6 @@ a, a:visited {
   background: white;
 
 }
-
-/*.ui-datatable tbody tr {*/
-/*border-bottom: 10px;*/
-/*}*/
-
-/*
-.ui-datatable-header {
-    background-color: unset;
-    text-align: left !important;
-    font-family: 'Jua', monospace;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 30px;
-}
-*/
 
 .ui-state-default {
   background: #f5f7f8;
@@ -228,8 +228,6 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   padding: 5px;
 }
 
-//.ui-dialog { //  width: 300px !important; //}
-
 .ui-dialog-content {
   width: 90% !important;
 }
@@ -237,18 +235,29 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
 .ui-state-highlight, .ui-widget-content .ui-state-highlight {
   background: none !important;
   background-color: #0093e4 !important;
-
-//background-color: #f2f5f9 !important;
 }
 
 .ui-outputlabel-rfi {
   color: #0093e4;
 }
 
+.ui-autocomplete-panel td {
+  padding: 4px !important;
+  border-style: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  font-weight: bold;
+}
+
+.ui-autocomplete-moretext {
+  display: none;
+}
+
 /*******************/
 /*      buttons    */
 /*******************/
-
 .ui-button,
 .ui-button span,
 button.ui-button.ui-state-default span,
@@ -298,11 +307,14 @@ button.ui-button.ui-state-default span,
 body .ui-buttonset .ui-state-active {
   background: #0093e4 !important;
   color: #ffffff;
-
 }
 
 body .ui-buttonset .ui-button {
   margin-left: 10px;
+}
+
+.ui-buttonset {
+  margin-right: 0 !important;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
@@ -431,19 +443,4 @@ body .ui-buttonset .ui-button {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   text-shadow: none !important;
-}
-
-.ui-autocomplete-panel td {
-  padding: 4px !important;
-  border-style: none !important;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  text-shadow: none !important;
-
-  font-weight: bold;
-}
-
-.ui-autocomplete-moretext {
-  display: none;
 }
