@@ -90,8 +90,8 @@ public class WatchlistBacking implements Serializable {
 
         for (CoinEntity coin : applicationContainer.getAllCoinsListing()) {
 
-            if (coin.getName().toLowerCase().startsWith(query.toLowerCase())
-                    || coin.getSymbol().toLowerCase().startsWith(query.toLowerCase())) {
+            if (coin.getName().toLowerCase().startsWith(query.toLowerCase().trim())
+                    || coin.getSymbol().toLowerCase().startsWith(query.toLowerCase().trim())) {
                 filteredCoins.add(coin);
             }
         }
