@@ -254,6 +254,10 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   display: none;
 }
 
+.ui-accordion .ui-accordion-content {
+  padding: 0 !important;
+}
+
 /*******************/
 /*      buttons    */
 /*******************/
@@ -426,5 +430,57 @@ body .ui-buttonset .ui-button {
 .ui-inputtextarea.form-control {
   resize: none !important;
   height: auto !important;
-  border-radius: 3px;
+  border-radius: 0 0 3px 3px;
+}
+
+.selectonemenu-right {
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  padding-right: 1.7em !important;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  border-left: 0 !important;
+  border-radius: 0 3px 3px 0 !important;
+}
+
+.selectonemenu-right .ui-selectonemenu-label {
+  border-radius: 0 !important;
+}
+
+.selectonemenu-right .ui-inputfield {
+  padding: 6px 7px 7px !important;
+  background-color: #eee !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.selectonemenu-right .ui-selectonemenu-trigger {
+  background: none;
+  background-color: #eee !important;
+}
+
+#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items {
+  padding: .2em 0 !important;
+  font-weight: bold;
+}
+
+#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
+  border-radius: 0 !important;
+  background: none;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-state-highlight {
+  color: #4f4f4f;
+  background: url("#{resource['images/check-solid.svg']}") 35px 0 no-repeat !important;
+}
+
+#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
+  background-color: #0093e4 !important;
+  color: #ffffff;
 }

@@ -2,6 +2,7 @@ package tk.crypfolio.view;
 
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
+import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.PositionEntity;
 
@@ -34,6 +35,8 @@ public class PortfolioBacking implements Serializable {
     @Inject
     private UserService userService;
 
+    private CurrencyType[] currencies;
+
     private CoinEntity coinTemp;
 
     private PositionEntity positionTemp;
@@ -44,16 +47,24 @@ public class PortfolioBacking implements Serializable {
 
     private String positionComment;
 
+    public void test(){
+        System.out.println("coinTemp " + getCoinTemp().toString());
+    }
+
     @PostConstruct
     public void init(){
         System.out.println("PortfolioBaking init");
+        this.positionTemp = new PositionEntity();
+        System.out.println("positionTemp " + getPositionTemp().getBoughtCurrency());
+
     }
 
     @PreDestroy
     public void destroy(){
         System.out.println("PortfolioBaking destroy");
-        // executed every time when add-item modal window is closed
+        // executing every time when add-item modal window is closed
         setCoinTemp(null);
+        setPositionTemp(null);
     }
 
     public ActiveUser getActiveUser() {
@@ -62,6 +73,10 @@ public class PortfolioBacking implements Serializable {
 
     public void setActiveUser(ActiveUser activeUser) {
         this.activeUser = activeUser;
+    }
+
+    public CurrencyType[] getCurrencies() {
+        return CurrencyType.values();
     }
 
     public CoinEntity getCoinTemp() {

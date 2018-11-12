@@ -71,7 +71,7 @@
                 <!--            =====================                                      -->
                 <!--            =====================               button MOVE TO ARCHIVE -->
 
-                <h:form style="float:left; padding-right: 30px;">
+                <h:form>
                     <p:commandButton
                             actionListener="#{portfolioBacking.doSubmitMoveCoinToArchive()}"
                             update=":mainTabView:portfolioPanel growl"
@@ -179,7 +179,7 @@
                                                styleClass="form-control form-control-right noshadow"
                                                minValue="0" placeholder="0"
                                                decimalSeparator="." thousandSeparator=","
-                                               decimalPlaces="8"
+                                               decimalPlaces="8" padControl="false"
                                                value="#{portfolioBacking.positionTemp.amount}"/>
 
                                 <span class="input-group-addon input-group-addon-right">#{portfolioBacking.coinTemp.symbol}</span>
@@ -188,26 +188,54 @@
 
                             <p:outputLabel value="Price" for="add-position-price"/>
 
-                            <p:inputNumber id="add-position-price"
-                                           required="true"
-                                           styleClass="form-control form-control-right noshadow"
-                                           minValue="0" placeholder="0"
-                                           decimalSeparator="." thousandSeparator=","
-                                           decimalPlaces="8"
-                                           value="#{portfolioBacking.positionPriceTemp}"/>
+                            <p:outputPanel style="display: flex;">
+
+                                <p:inputNumber id="add-position-price"
+                                               required="true"
+                                               styleClass="form-control form-control-right noshadow"
+                                               minValue="0" placeholder="0"
+                                               decimalSeparator="." thousandSeparator=","
+                                               decimalPlaces="8" padControl="false"
+                                               value="#{portfolioBacking.positionPriceTemp}"/>
+
+                                <p:selectOneMenu id="add-position-price-currency"
+                                                 required="true" type="input"
+                                                 converter="#{selectOneMenuCurrencyConverter}"
+                                                 value="#{portfolioBacking.positionTemp.boughtCurrency}"
+                                                 effect="none" class="selectonemenu-right noshadow">
+
+                                    <f:selectItems value="#{portfolioBacking.currencies}"/>
+                                    <p:ajax event="itemSelect"
+                                            listener="#{portfolioBacking.test}"/>
+                                    <p:ajax event="itemSelect"
+                                            update="test"/>
+
+                                </p:selectOneMenu>
+
+                            </p:outputPanel>
 
                             <p:outputLabel value="Total" for="add-position-total"/>
 
-                            <p:inputNumber id="add-position-total"
-                                           required="true"
-                                           styleClass="form-control form-control-right noshadow"
-                                           minValue="0" placeholder="0"
-                                           decimalSeparator="." thousandSeparator=","
-                                           decimalPlaces="8"
-                                           value="#{portfolioBacking.positionTotalTemp}"/>
+                            <p:outputPanel class="input-group" id="test">
+
+                                <p:inputNumber id="add-position-total"
+                                               required="true"
+                                               styleClass="form-control form-control-right noshadow"
+                                               minValue="0" placeholder="0"
+                                               decimalSeparator="." thousandSeparator=","
+                                               decimalPlaces="8" padControl="false"
+                                               value="#{portfolioBacking.positionTotalTemp}"/>
+
+                                <span class="input-group-addon input-group-addon-right">
+                                    #{portfolioBacking.positionTemp.boughtCurrency}
+                                </span>
+
+                            </p:outputPanel>
+
+                            <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
 
                             <p:accordionPanel activeIndex="null">
-                                <p:tab title="Comment" >
+                                <p:tab title="Comment">
 
                                     <p:inputTextarea id="add-position-comment"
                                                      styleClass="form-control noshadow"
@@ -222,15 +250,45 @@
 
                         </h:panelGrid>
 
+                        <h:outputText styleClass="span-10px-height"/>
+
+                        <p:outputPanel>
+                            <h:panelGrid style="margin: auto;">
+                                <p:outputPanel>
+
+                                    <p:commandButton id="add-position-reset"
+                                                     icon="ui-icon-arrowreturnthick-1-w"
+                                                     value="Reset"
+                                                     disabled="#{portfolioBacking.coinTemp eq null}"
+                                                     resetValues="true"
+                                                     type="reset"
+                                                     style="margin-right: 20px;">
+                                        <p:ajax listener="#{portfolioBacking.setCoinTemp(null)}"
+                                                update=":mainTabView:formPortfolioAddItem-position :mainTabView:formPortfolioAddItem-coin"/>
+                                    </p:commandButton>
+
+                                    <p:commandButton id="add-position-done"
+                                                     actionListener="#{portfolioBacking.test}"
+                                                     value="Done"
+                                                     icon="ui-icon-check"
+                                                     disabled="#{portfolioBacking.positionTemp eq null}"
+                                                     oncomplete="PF('dlgPortfolioAddItem').hide();"
+                                                     update=":mainTabView:portfolioPanel growl"
+                                                     resetValues="true">
+                                    </p:commandButton>
+
+                                </p:outputPanel>
+                            </h:panelGrid>
+                        </p:outputPanel>
+
                     </p:outputPanel>
                 </h:panelGrid>
             </h:form>
 
             <p:ajax event="close" listener="#{portfolioBacking.destroy}"
-                    update="formPortfolioAddItem-coin formPortfolioAddItem-position"/>
+                    update=":mainTabView:dlgPortfolioAddItem"/>
 
         </p:dialog>
     </div>
-
 
 </ui:composition>
