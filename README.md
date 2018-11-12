@@ -17,6 +17,9 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 ![Conceptual Data Model](database/CrypFolio-Conceptual_Model_UML.png "Conceptual Data Model")
 
+**Logical Data Model:**
+
+![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
 
 **Some Working Screenshorts:**
 
