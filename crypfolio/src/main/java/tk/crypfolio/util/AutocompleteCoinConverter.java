@@ -3,19 +3,21 @@ package tk.crypfolio.util;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.business.ApplicationContainer;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * A utility class-converter, is using to convert coin object to normal form to show it in the modal choose windows (and vice versa)
+ * A utility class-converter, is using to convert CoinEntity object to String to show it in the dialog window
  */
 @Named
 public class AutocompleteCoinConverter implements Converter {
+
+    private static final Logger logger = Logger.getLogger(AutocompleteCoinConverter.class.getName());
 
     @Inject
     private ApplicationContainer applicationContainer;
@@ -26,13 +28,13 @@ public class AutocompleteCoinConverter implements Converter {
         if (value != null && value.trim().length() > 0) {
 
             try {
-                for (CoinEntity coin: applicationContainer.getAllCoinsListing()){
-                    if (coin.getId().equals(Long.valueOf(value))){
+                for (CoinEntity coin : applicationContainer.getAllCoinsListing()) {
+                    if (coin.getId().equals(Long.valueOf(value))) {
                         return coin;
                     }
                 }
             } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid coin."));
+                logger.log(Level.WARNING, "Error AutocompleteCoinConverter getAsObject!");
             }
 
         }
