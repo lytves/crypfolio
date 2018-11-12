@@ -360,35 +360,35 @@ body .ui-buttonset .ui-button {
   width: 100%;
 }
 
-.fa {
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+//.fa {
+//  display: inline-block;
+//  font: normal normal normal 14px/1 FontAwesome;
+//  font-size: inherit;
+//  text-rendering: auto;
+//  -webkit-font-smoothing: antialiased;
+//  -moz-osx-font-smoothing: grayscale;
+//}
+//
+//.fa-envelope:before {
+//  content: "\f0e0";
+//}
 
-.fa-envelope:before {
-  content: "\f0e0";
-}
+//.input-group .form-control .ui-inputfield {
+//  position: relative;
+//  width: 100%;
+//  margin-bottom: 0;
+//  display: table-cell
+//}
 
-.input-group .form-control, .input-group .form-control2, #mainTabView\:formWatchAddCoin\:watch-add-coin-name_input,
-#mainTabView\:formPortfolioAddItem\:portfolio-add-coin-name_input {
-  position: relative;
-  width: 100%;
-  margin-bottom: 0;
-  display: table-cell
+.input-group .input-group-addon {
+  border-color: #d2d6de;
 }
 
 .input-group-addon {
   width: 1%;
   white-space: nowrap;
   vertical-align: middle;
-  display: table-cell
-}
-
-.input-group-addon {
+  display: table-cell;
   padding: 6px 12px;
   font-size: 14px;
   font-weight: 400;
@@ -401,39 +401,14 @@ body .ui-buttonset .ui-button {
   border-radius: 3px 0 0 3px;
 }
 
-.input-group .input-group-addon {
-  border-color: #d2d6de;
-}
-
-.form-control {
-  display: block !important;
-  width: 100%;
-  height: 34px;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  color: #555;
-  background: #fff none;
+.input-group-addon.input-group-addon-right {
   border: 1px solid #ccc;
+  border-left: 0;
   border-radius: 0 3px 3px 0;
-  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  box-sizing: border-box;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  text-shadow: none !important;
 }
 
-.input-group-addon.coin-image {
-  padding: 0 3px 0 0;
-  background: none;
-  border: none;
-}
-
-.form-control2, #mainTabView\:formWatchAddCoin\:watch-add-coin-name_input,
-#mainTabView\:formPortfolioAddItem\:portfolio-add-coin-name_input {
-  width: 100%;
+.form-control, .form-control.ui-inputfield, .form-control .ui-inputfield {
+  width: 100% !important;
   height: 34px;
   border-radius: 0 3px 3px 0;
   -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
@@ -442,4 +417,14 @@ body .ui-buttonset .ui-button {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   text-shadow: none !important;
+}
+
+.form-control.form-control-right .ui-inputfield {
+  border-radius: 3px 0 0 3px;
+}
+
+.ui-inputtextarea.form-control {
+  resize: none !important;
+  height: auto !important;
+  border-radius: 3px;
 }

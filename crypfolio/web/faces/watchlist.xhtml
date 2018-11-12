@@ -157,7 +157,7 @@
 
             <h:form id="formWatchAddCoin">
 
-                <h:panelGrid>
+                <h:panelGrid style="width: 100%">
 
                     <p:outputLabel value="Coin Name" for="watch-add-coin-name"/>
 
@@ -174,7 +174,7 @@
                                         itemValue="#{coinTemp}"
                                         converter="#{autocompleteCoinConverter}" forceSelection="true"
                                         maxResults="5" required="true" cache="true"
-                                        styleClass="form-control2 noshadow "
+                                        styleClass="form-control noshadow "
                                         placeholder="Coin Name or Ticker">
 
                             <p:column style="width:32px; text-align:center;">
@@ -183,7 +183,7 @@
                                         width="32" height="32"/>
                             </p:column>
 
-                            <p:column style="display: flex; justify-content: space-between;">
+                            <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
                                 #{coinTemp.name} <span style="margin: 0 10px">#{coinTemp.symbol}</span>
                             </p:column>
 

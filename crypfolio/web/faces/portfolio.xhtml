@@ -4,9 +4,9 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <p:outputPanel id="portfPanel">
+    <p:outputPanel id="portfolioPanel">
 
-        <div class="left" id="portfMainData">
+        <div class="left" id="portfolioMainData">
 
             <div class="ui-g" style="background-color: #ffda62">
 
@@ -42,7 +42,7 @@
             <!--            =====================              button ADD WATCH COIN -->
             <h:form class="add-item-coin-form">
 
-                <p:commandButton onclick="PF('dlgPortfAddItem').show();"
+                <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
                                  class="upp-case"
                                  value="Add New Item">
                 </p:commandButton>
@@ -52,59 +52,185 @@
 
         <div class="clear"/>
 
+        <!-- The main items table -->
+        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio}"
+                     var="portfolioItemEntity" styleClass="panelGridCenter"
+                     stickyHeader="true" rowExpandMode="single"
+                     id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
+
+
+            <p:outputPanel>
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================               move it to portfolio  -->
+                <!--            =====================                                     -->
+                <!--            =====================                                     -->
+                <!--            =====================                                      -->
+                <!--            =====================               button MOVE TO ARCHIVE -->
+
+                <h:form style="float:left; padding-right: 30px;">
+                    <p:commandButton
+                            actionListener="#{portfolioBacking.doSubmitMoveCoinToArchive()}"
+                            update=":mainTabView:portfolioPanel growl"
+                            class="upp-case"
+                            value="MOVE TO ARCHIVE" icon="ui-icon-arrowreturnthick-1-s">
+                    </p:commandButton>
+
+                </h:form>
+
+            </p:outputPanel>
+
+        </p:dataTable>
+
 
     </p:outputPanel>
 
     <!--            =====================               modal window ADD PORTFOLIO COIN -->
-    <div id="divPortfAddItem" tabindex="-1">
-        <p:dialog header="Add item to Portfolio" id="dlgPortfAddItem" widgetVar="dlgPortfAddItem" modal="true"
+    <div id="divPortfolioAddItem" tabindex="-1">
+        <p:dialog header="Add item to Portfolio" id="dlgPortfolioAddItem" widgetVar="dlgPortfolioAddItem" modal="true"
                   resizable="false" draggable="false" position="center top" closeOnEscape="true"
-                  showEffect="bounce" hideEffect="fade" style="margin-top: 100px">
+                  showEffect="bounce" hideEffect="fade" class="modal-window">
 
-            <h:form id="formPortfAddItem" class="">
+            <h:form id="formPortfolioAddItem-coin">
 
-                <h:panelGrid>
+                <h:panelGrid style="width: 100%">
 
-                    <p:outputLabel value="Coin Name" for="add-coin-name"/>
-                    <p:autoComplete id="add-coin-name" value="#{watchlistBacking.coinTemp}"
-                                    completeMethod="#{watchlistBacking.completeCoinTemp}"
-                                    var="coinTemp"
-                                    itemLabel="#{watchlistBacking.getAutocompleteCoinName(coinTemp)}"
-                                    itemValue="#{coinTemp}"
-                                    converter="#{autocompleteCoinConverter}" forceSelection="true"
-                                    maxResults="5">
+                    <p:outputLabel value="Coin Name" for="portfolio-add-coin-name"/>
 
-                        <p:ajax event="itemSelect" update="add-coin-done"/>
-                        <p:ajax event="itemSelect" oncomplete="addWatchCoin();"/>
-                        <p:ajax event="itemSelect" listener="#{watchlistBacking.setCoinToSubmit}"/>
+                    <p:outputPanel class="input-group" id="portfolio-add-coin-input-group"
+                                   rendered="#{portfolioBacking.coinTemp eq null}">
 
-                    </p:autoComplete>
+                        <span class="input-group-addon" id="portfolio-add-coin-img">
+                            <i class="fab fa-btc" aria-hidden="true"></i>
+                        </span>
 
-                    <p:outputLabel value="Currency" for="add-coin-currency"/>
-                    <p:selectOneMenu id="add-coin-currency" value="#{watchlistBacking.currency}"
-                                     required="true">
+                        <p:autoComplete id="portfolio-add-coin-name" value="#{portfolioBacking.coinTemp}"
+                                        completeMethod="#{portfolioBacking.completeCoinTemp}"
+                                        var="coinTemp"
+                                        itemValue="#{coinTemp}"
+                                        converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                        maxResults="5" required="true" cache="true"
+                                        styleClass="form-control noshadow "
+                                        placeholder="Coin Name or Ticker">
 
-                        <f:selectItems value="#{watchlistBacking.currencies}"/>
+                            <p:column style="width:32px; text-align:center;">
+                                <p:graphicImage
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{coinTemp.id}.png"
+                                        width="32" height="32"/>
+                            </p:column>
 
-                    </p:selectOneMenu>
+                            <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
+                                #{coinTemp.name} <span style="margin: 0 10px">#{coinTemp.symbol}</span>
+                            </p:column>
 
-                    <p:commandButton id="add-coin-done"
-                                     actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
-                                     class="upp-case add-item-coin-button"
-                                     value="Done"
-                                     disabled="#{watchlistBacking.coin eq null}"
-                                     oncomplete="PF('dlgPortfAddItem').hide();"
-                                     update=":mainTabView:watchlistPanel growl"
-                                     resetValues="true">
-                    </p:commandButton>
+                            <p:ajax event="itemSelect"
+                                    update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-position"/>
+
+                        </p:autoComplete>
+
+                    </p:outputPanel>
+
+                    <p:outputPanel rendered="#{portfolioBacking.coinTemp eq null}">
+
+                        <h:outputText styleClass="span-10px-height"/>
+
+                        <p:outputLabel value="Coins in your portfolio:" for="portfolio-list-currents-items"/>
+
+                        <p:dataTable id="portfolio-list-currents-items">
+                            Una lista
+                        </p:dataTable>
+
+                    </p:outputPanel>
 
                 </h:panelGrid>
 
             </h:form>
 
-            <p:ajax event="close" listener="#{watchlistBacking.destroy}" update=":mainTabView:formPortfAddItem"/>
+            <!--   I'm trying to use different h:forms to choose Item-Coin and then to create new Item-Position-->
+            <h:form id="formPortfolioAddItem-position">
+                <h:panelGrid style="width: 100%">
+                    <p:outputPanel rendered="#{portfolioBacking.coinTemp != null}">
+
+                        <p:outputPanel style="display: flex;">
+
+                            <h:graphicImage
+                                    value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{portfolioBacking.coinTemp.id}.png"
+                                    style="height: 32px;"/>
+
+                            <h:outputText
+                                    value="#{portfolioBacking.coinTemp.name} (#{portfolioBacking.coinTemp.symbol})"
+                                    styleClass="coin-item-name-autocompleted"/>
+
+                        </p:outputPanel>
+
+                        <h:outputText styleClass="span-10px-height"/>
+
+                        <h:panelGrid style="width: 100%">
+
+                            <p:outputLabel value="Amount" for="add-position-amount"/>
+
+                            <p:outputPanel class="input-group">
+
+                                <p:inputNumber id="add-position-amount"
+                                               required="true"
+                                               styleClass="form-control form-control-right noshadow"
+                                               minValue="0" placeholder="0"
+                                               decimalSeparator="." thousandSeparator=","
+                                               decimalPlaces="8"
+                                               value="#{portfolioBacking.positionTemp.amount}"/>
+
+                                <span class="input-group-addon input-group-addon-right">#{portfolioBacking.coinTemp.symbol}</span>
+
+                            </p:outputPanel>
+
+                            <p:outputLabel value="Price" for="add-position-price"/>
+
+                            <p:inputNumber id="add-position-price"
+                                           required="true"
+                                           styleClass="form-control form-control-right noshadow"
+                                           minValue="0" placeholder="0"
+                                           decimalSeparator="." thousandSeparator=","
+                                           decimalPlaces="8"
+                                           value="#{portfolioBacking.positionPriceTemp}"/>
+
+                            <p:outputLabel value="Total" for="add-position-total"/>
+
+                            <p:inputNumber id="add-position-total"
+                                           required="true"
+                                           styleClass="form-control form-control-right noshadow"
+                                           minValue="0" placeholder="0"
+                                           decimalSeparator="." thousandSeparator=","
+                                           decimalPlaces="8"
+                                           value="#{portfolioBacking.positionTotalTemp}"/>
+
+                            <p:accordionPanel activeIndex="null">
+                                <p:tab title="Comment" >
+
+                                    <p:inputTextarea id="add-position-comment"
+                                                     styleClass="form-control noshadow"
+                                                     rows="5" autoResize="false"
+                                                     counter="add-position-comment-counter" maxlength="200"
+                                                     counterTemplate="{0} characters remaining."
+                                                     value="#{portfolioBacking.positionComment}"/>
+                                    <h:outputText id="add-position-comment-counter"/>
+
+                                </p:tab>
+                            </p:accordionPanel>
+
+                        </h:panelGrid>
+
+                    </p:outputPanel>
+                </h:panelGrid>
+            </h:form>
+
+            <p:ajax event="close" listener="#{portfolioBacking.destroy}"
+                    update="formPortfolioAddItem-coin formPortfolioAddItem-position"/>
 
         </p:dialog>
     </div>
+
 
 </ui:composition>
