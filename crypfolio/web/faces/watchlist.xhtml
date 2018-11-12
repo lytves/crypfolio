@@ -25,7 +25,7 @@
                      stickyHeader="true" rowExpandMode="single"
                      id="watchlistDataTableWV" widgetVar="watchlistDataTableWV">
 
-            <p:column style="width:16px" styleClass="togglerClass">
+            <p:column style="width:16px;" styleClass="togglerClass">
                 <p:rowToggler/>
             </p:column>
 
@@ -34,21 +34,21 @@
                 <p:panelGrid styleClass="panelGridTransparent">
 
                     <p:row>
-                        <p:column rowspan="2" style="width: 36px">
+                        <p:column rowspan="2" style="width: 36px;">
                             <h:graphicImage styleClass="symbol-image-32px"
                                             value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{userWatchCoinEntity.coinId.id}.png"/>
                         </p:column>
 
                         <p:column>
                             <h:outputText value="#{userWatchCoinEntity.coinId.name}"
-                                          style="font-weight:bold; float: left"/>
+                                          style="font-weight:bold;" styleClass="left"/>
                         </p:column>
                     </p:row>
 
                     <p:row>
                         <p:column>
                             <h:outputText value="#{userWatchCoinEntity.coinId.symbol}"
-                                          style="float: left"/>
+                                          styleClass="left"/>
                         </p:column>
                     </p:row>
 
@@ -105,9 +105,9 @@
 
             <p:rowExpansion>
 
-                <h:panelGroup styleClass="row-expansion-currency">
+                <h:panelGroup styleClass="row-expansion-currency" style="display: flex; justify-content: space-between;">
 
-                    <h:form style="float:left; padding-left: 30px;">
+                    <h:form style="padding-left: 30px;">
                         <h:outputText value="Currency:"/>
 
                         <!--            =====================               buttons SELECT Currency of the WATCH COIN -->
@@ -123,23 +123,19 @@
 
                     </h:form>
 
-                    <div class="right">
+                    <!--            =====================               button DEL WATCH COIN -->
+                    <h:form style="padding-right: 30px;">
+                        <p:commandButton
+                                actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
+                                update=":mainTabView:watchlistPanel growl"
+                                class="upp-case"
+                                value="Delete" icon="ui-icon ui-icon-trash">
+                            <p:confirm header="DELETE COIN"
+                                       message="Are you sure you want to delete this coin?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandButton>
 
-                        <!--            =====================               button DEL WATCH COIN -->
-                        <h:form style="float:right; padding-right: 30px;">
-                            <p:commandButton
-                                    actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
-                                    update=":mainTabView:watchlistPanel growl"
-                                    class="upp-case"
-                                    value="Delete" icon="ui-icon ui-icon-trash">
-                                <p:confirm header="DELETE COIN"
-                                           message="Are you sure you want to delete this coin?"
-                                           icon="ui-icon-alert"/>
-                            </p:commandButton>
-
-                        </h:form>
-
-                    </div>
+                    </h:form>
 
                 </h:panelGroup>
 
@@ -157,7 +153,7 @@
 
             <h:form id="formWatchAddCoin">
 
-                <h:panelGrid style="width: 100%">
+                <h:panelGrid style="width: 100%;">
 
                     <p:outputLabel value="Coin Name" for="watch-add-coin-name"/>
 
@@ -184,7 +180,7 @@
                             </p:column>
 
                             <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                #{coinTemp.name} <span style="margin: 0 10px">#{coinTemp.symbol}</span>
+                                #{coinTemp.name} <span style="margin: 0 10px;">#{coinTemp.symbol}</span>
                             </p:column>
 
                             <p:ajax event="itemSelect"
@@ -222,7 +218,7 @@
                     <h:outputText styleClass="span-10px-height"/>
 
                     <p:outputPanel>
-                        <h:panelGrid style="margin: auto">
+                        <h:panelGrid style="margin: auto;">
                             <p:outputPanel>
 
                                 <p:commandButton id="watch-add-coin-reset"

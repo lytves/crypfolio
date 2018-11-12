@@ -38,7 +38,7 @@ public class WatchlistBacking implements Serializable {
     @Inject
     private UserService userService;
 
-    // temp CoinEntity is used to temporary save autocompleted chosen coin
+    // is used to temporary save autocompleted chosen coin
     private CoinEntity coinTemp;
 
     private CurrencyType currency;
@@ -55,7 +55,7 @@ public class WatchlistBacking implements Serializable {
     @PreDestroy
     public void destroy() {
         System.out.println("WatchlistBacking destroy");
-        // executed every time when watch-add-coin modal window is closed
+        // executing every time when watch-add-coin modal window is closed
         setCoinTemp(null);
     }
 
