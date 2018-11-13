@@ -127,7 +127,7 @@
                     <h:form style="padding-right: 30px;">
                         <p:commandButton
                                 actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
-                                update=":mainTabView:watchlistPanel growl"
+                                update=":mainTabView:watchlistDataTableWV"
                                 class="upp-case"
                                 value="Delete" icon="ui-icon ui-icon-trash">
                             <p:confirm header="DELETE COIN"
@@ -183,8 +183,7 @@
                                 #{coinTemp.name} <span style="margin: 0 10px;">#{coinTemp.symbol}</span>
                             </p:column>
 
-                            <p:ajax event="itemSelect"
-                                    update="formWatchAddCoin"/>
+                            <p:ajax event="itemSelect" update="formWatchAddCoin"/>
 
                         </p:autoComplete>
 
