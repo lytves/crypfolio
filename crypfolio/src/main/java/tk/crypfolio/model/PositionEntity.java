@@ -1,6 +1,7 @@
 package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
+import tk.crypfolio.common.PositionType;
 import tk.crypfolio.util.LocalDateTimeAttributeConverter;
 
 import javax.persistence.*;
@@ -19,11 +20,16 @@ public class PositionEntity implements Serializable {
     private Long id;
 
     @Column(name = "pos_amount", nullable = false, precision = 8)
-    private BigDecimal amount = BigDecimal.ZERO;
+//    private BigDecimal amount = BigDecimal.ZERO;
+    private BigDecimal amount;
 
     @Column(name = "pos_bought_datetime", nullable = false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime posBoughtDateTime = LocalDateTime.now();
+    private LocalDateTime boughtDateTime = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pos_type", nullable = false)
+    private PositionType type = PositionType.BUY;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pos_bought_currency", nullable = false)
@@ -41,6 +47,9 @@ public class PositionEntity implements Serializable {
     @Column(name = "pos_bought_price_eth", precision = 8)
     private BigDecimal boughtPriceEth = BigDecimal.ZERO;
 
+    @Column(name = "pos_comment")
+    private String comment;
+
     //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false)
@@ -49,14 +58,18 @@ public class PositionEntity implements Serializable {
     public PositionEntity() {
     }
 
-    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDateTime) {
-        this.amount = amount;
-        this.posBoughtDateTime = posBoughtDateTime;
+    public PositionEntity(ItemEntity item) {
+        this.item = item;
     }
 
-    public PositionEntity(BigDecimal amount, LocalDateTime posBoughtDateTime, CurrencyType boughtCurrency) {
+    public PositionEntity(BigDecimal amount, LocalDateTime boughtDateTime) {
         this.amount = amount;
-        this.posBoughtDateTime = posBoughtDateTime;
+        this.boughtDateTime = boughtDateTime;
+    }
+
+    public PositionEntity(BigDecimal amount, LocalDateTime boughtDateTime, CurrencyType boughtCurrency) {
+        this.amount = amount;
+        this.boughtDateTime = boughtDateTime;
         this.boughtCurrency = boughtCurrency;
     }
 
@@ -76,12 +89,20 @@ public class PositionEntity implements Serializable {
         this.amount = amount;
     }
 
-    public LocalDateTime getPosBoughtDateTime() {
-        return posBoughtDateTime;
+    public LocalDateTime getBoughtDateTime() {
+        return boughtDateTime;
     }
 
-    public void setPosBoughtDateTime(LocalDateTime boughtDate) {
-        this.posBoughtDateTime = boughtDate;
+    public void setBoughtDateTime(LocalDateTime boughtDate) {
+        this.boughtDateTime = boughtDate;
+    }
+
+    public PositionType getType() {
+        return type;
+    }
+
+    public void setType(PositionType type) {
+        this.type = type;
     }
 
     public CurrencyType getBoughtCurrency() {
@@ -124,6 +145,14 @@ public class PositionEntity implements Serializable {
         this.boughtPriceEth = boughtPriceEth;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public ItemEntity getItem() {
         return item;
     }
@@ -137,21 +166,24 @@ public class PositionEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PositionEntity that = (PositionEntity) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getAmount(), that.getAmount()) &&
-                Objects.equals(getPosBoughtDateTime(), that.getPosBoughtDateTime()) &&
-                getBoughtCurrency() == that.getBoughtCurrency() &&
-                Objects.equals(getBoughtPriceUsd(), that.getBoughtPriceUsd()) &&
-                Objects.equals(getBoughtPriceEur(), that.getBoughtPriceEur()) &&
-                Objects.equals(getBoughtPriceBtc(), that.getBoughtPriceBtc()) &&
-//                Objects.equals(getItem(), that.getItem()) &&
-                Objects.equals(getBoughtPriceEth(), that.getBoughtPriceEth());
+        return Objects.equals(id, that.id) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(boughtDateTime, that.boughtDateTime) &&
+                type == that.type &&
+                boughtCurrency == that.boughtCurrency &&
+                Objects.equals(boughtPriceUsd, that.boughtPriceUsd) &&
+                Objects.equals(boughtPriceEur, that.boughtPriceEur) &&
+                Objects.equals(boughtPriceBtc, that.boughtPriceBtc) &&
+                Objects.equals(boughtPriceEth, that.boughtPriceEth) &&
+                Objects.equals(comment, that.comment) &&
+                Objects.equals(item, that.item);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getPosBoughtDateTime(), getBoughtCurrency(), getBoughtPriceUsd(), getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getItem());
+        return Objects.hash(getId(), getAmount(), getBoughtDateTime(), getBoughtCurrency(), getBoughtPriceUsd(),
+                getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment(), getItem());
     }
 
     @Override
@@ -159,12 +191,14 @@ public class PositionEntity implements Serializable {
         return "PositionEntity{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", posBoughtDateTime=" + posBoughtDateTime +
-                ", boughtCurrency=" + boughtCurrency +
-                ", boughtPriceUsd=" + boughtPriceUsd +
-                ", boughtPriceEur=" + boughtPriceEur +
-                ", boughtPriceBtc=" + boughtPriceBtc +
-                ", boughtPriceEth=" + boughtPriceEth +
+                ", boughtDateTime='" + boughtDateTime + '\'' +
+                ", type='" + type + '\'' +
+                ", boughtCurrency='" + boughtCurrency + '\'' +
+                ", boughtPriceUsd=" + boughtPriceUsd + '\'' +
+                ", boughtPriceEur=" + boughtPriceEur + '\'' +
+                ", boughtPriceBtc=" + boughtPriceBtc + '\'' +
+                ", boughtPriceEth=" + boughtPriceEth + '\'' +
+                ", comment='" + comment +
                 ", item.id=" + item.getId() +
                 '}';
     }
