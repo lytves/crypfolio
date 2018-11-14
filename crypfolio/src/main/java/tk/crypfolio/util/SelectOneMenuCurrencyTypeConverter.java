@@ -13,9 +13,9 @@ import java.util.logging.Logger;
  * A utility class-converter, is using to convert CurrencyType object to String to show it in the dialog window
  */
 @Named
-public class selectOneMenuCurrencyConverter implements Converter {
+public class SelectOneMenuCurrencyTypeConverter implements Converter {
 
-    private static final Logger logger = Logger.getLogger(selectOneMenuCurrencyConverter.class.getName());
+    private static final Logger logger = Logger.getLogger(SelectOneMenuCurrencyTypeConverter.class.getName());
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
