@@ -52,6 +52,13 @@ public class ItemEntity implements Serializable {
 //    @OneToMany(mappedBy = "item")
     private List<PositionEntity> positions = new ArrayList<>();
 
+    public ItemEntity() {
+    }
+
+    public ItemEntity(CoinEntity coin) {
+        this.coin = coin;
+    }
+
     public void addPosition(PositionEntity position){
         this.positions.add(position);
         // setting also for new position this item-parent
