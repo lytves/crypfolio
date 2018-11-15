@@ -43,8 +43,7 @@ public class SelectOneMenuCurrencyTypeConverter implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object object) {
         if (object != null) {
             return String.valueOf(((CurrencyType) object).getCurrency());
-        } else {
-            return null;
         }
+        return null;
     }
 }
