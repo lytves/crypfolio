@@ -50,7 +50,7 @@ public class ItemEntity implements Serializable {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
 //    @OneToMany(mappedBy = "item")
-    private List<PositionEntity> positions = new ArrayList<>();
+    private List<TransactionEntity> transactions = new ArrayList<>();
 
     public ItemEntity() {
     }
@@ -59,16 +59,16 @@ public class ItemEntity implements Serializable {
         this.coin = coin;
     }
 
-    public void addPosition(PositionEntity position){
-        this.positions.add(position);
-        // setting also for new position this item-parent
-        position.setItem(this);
+    public void addTransaction(TransactionEntity transaction){
+        this.transactions.add(transaction);
+        // setting also for new transaction this item-parent
+        transaction.setItem(this);
 
-        this.amount = this.amount.add(position.getAmount());
-        this.boughtCostUsd = this.boughtCostUsd.add(position.getBoughtPriceUsd());
-        this.boughtCostEur = this.boughtCostEur.add(position.getBoughtPriceEur());
-        this.boughtCostBtc = this.boughtCostBtc.add(position.getBoughtPriceBtc());
-        this.boughtCostEth = this.boughtCostEth.add(position.getBoughtPriceEth());
+        this.amount = this.amount.add(transaction.getAmount());
+        this.boughtCostUsd = this.boughtCostUsd.add(transaction.getBoughtPriceUsd());
+        this.boughtCostEur = this.boughtCostEur.add(transaction.getBoughtPriceEur());
+        this.boughtCostBtc = this.boughtCostBtc.add(transaction.getBoughtPriceBtc());
+        this.boughtCostEth = this.boughtCostEth.add(transaction.getBoughtPriceEth());
     }
 
     public Long getId() {
@@ -143,12 +143,12 @@ public class ItemEntity implements Serializable {
         this.coin = coin;
     }
 
-    public List<PositionEntity> getPositions() {
-        return positions;
+    public List<TransactionEntity> getTransactions() {
+        return transactions;
     }
 
-    public void setPositions(List<PositionEntity> positions) {
-        this.positions = positions;
+    public void setTransactions(List<TransactionEntity> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
@@ -165,13 +165,13 @@ public class ItemEntity implements Serializable {
                 Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
 //                Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getCoin(), that.getCoin()) &&
-                Objects.equals(getPositions(), that.getPositions());
+                Objects.equals(getTransactions(), that.getTransactions());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getPortfolio(), getCoin(), getPositions());
+        return Objects.hash(getId(), getAmount(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getPortfolio(), getCoin(), getTransactions());
     }
 
     @Override
@@ -185,7 +185,7 @@ public class ItemEntity implements Serializable {
                 ", boughtCostBtc=" + boughtCostBtc +
                 ", boughtCostEth=" + boughtCostEth +
                 ", coin=" + coin +
-                ", positions=" + positions +
+                ", transactions=" + transactions +
                 '}';
     }
 }

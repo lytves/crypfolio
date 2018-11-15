@@ -41,14 +41,15 @@ public class AppInitServlet implements ServletContextListener {
                 "░░██░░░░░░░░░░░░██░░░░██░░░░░░░░\n" +
                 "░░██░░░░██████░░██░░░░░░░░██████\n" +
                 "░░████░░██░░██░░██░░░░██░░██░░██\n" +
-                "░░██░░░░██░░██░░██░░░░██░░██░░██\n" +
                 "░░██░░░░██████░░████░░██░░██████\n");
 
-//        initTableCoins();
+//        ParserAPI.parseCoinByCoinTickerId(Long.valueOf(1));
+
+//      initTableCoins();
 
 //        insertUser();
 
-//        createPosition();
+//        createTransaction();
 
 //        addWatchCoin();
 
@@ -57,7 +58,7 @@ public class AppInitServlet implements ServletContextListener {
 
 
 
-    private void createPosition(){
+    private void createTransaction(){
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.Type.JPA);
 
@@ -74,17 +75,17 @@ public class AppInitServlet implements ServletContextListener {
         System.out.println("______________________________________________");
 
         //here create a new item or use one from DB
-        ItemEntity item = new ItemEntity();
-        item.setCoin(coin);
+        ItemEntity item = new ItemEntity(coin);
+//        item.setCoin(coin);
 //        ItemEntity item = p.getItems().get(p.getItems().size() - 1);
 
 //        p.addItem(item);
 //        item.setCoin(coin);
         LocalDateTime date = LocalDateTime.now();
 
-        PositionEntity pos = new PositionEntity(BigDecimal.valueOf(1 + (int)(Math.random() * 1000)),
+        TransactionEntity trans = new TransactionEntity(BigDecimal.valueOf(1 + (int)(Math.random() * 1000)),
                 date, CurrencyType.ETH);
-        item.addPosition(pos);
+        item.addTransaction(trans);
         p.addItem(item);
 
         System.out.println("░____________________portfolio before_______________________░");
@@ -129,8 +130,8 @@ public class AppInitServlet implements ServletContextListener {
      * */
     private void initTableCoins() {
 
-        ParserAPI parserAPI = new ParserAPI();
-        ArrayList<CoinEntity> listCoins = (ArrayList<CoinEntity>) parserAPI.parseAllCoin();
+//        ParserAPI parserAPI = new ParserAPI();
+        ArrayList<CoinEntity> listCoins = (ArrayList<CoinEntity>) ParserAPI.parseAllCoin();
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
 

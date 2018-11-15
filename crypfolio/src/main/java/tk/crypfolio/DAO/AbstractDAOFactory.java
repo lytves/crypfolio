@@ -13,7 +13,7 @@ public abstract class AbstractDAOFactory {
 
     public abstract PortfolioDAO getPortfolioDAO();
 
-    public abstract PositionDAO getPositionDAO();
+    public abstract TransactionDAO getTransactionDAO();
 
     public abstract UserDAO getUserDAO();
 

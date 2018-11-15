@@ -23,3 +23,17 @@ function getWidgetVarById(id) {
         }
     }
 }
+
+
+function showPrice(){
+
+    var inputValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount_hinput").value;
+    var buttonDone = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-done");
+
+    console.log(inputValue);
+
+    if (inputValue === null || inputValue === '' || inputValue === '0' )
+        buttonDone.classList.add('ui-state-disabled');
+    else
+        buttonDone.classList.remove('ui-state-disabled');
+}

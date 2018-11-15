@@ -364,26 +364,6 @@ body .ui-buttonset .ui-button {
   width: 100%;
 }
 
-//.fa {
-//  display: inline-block;
-//  font: normal normal normal 14px/1 FontAwesome;
-//  font-size: inherit;
-//  text-rendering: auto;
-//  -webkit-font-smoothing: antialiased;
-//  -moz-osx-font-smoothing: grayscale;
-//}
-//
-//.fa-envelope:before {
-//  content: "\f0e0";
-//}
-
-//.input-group .form-control .ui-inputfield {
-//  position: relative;
-//  width: 100%;
-//  margin-bottom: 0;
-//  display: table-cell
-//}
-
 .input-group .input-group-addon {
   border-color: #d2d6de;
 }
@@ -461,12 +441,12 @@ body .ui-buttonset .ui-button {
   background-color: #eee !important;
 }
 
-#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items {
   padding: .2em 0 !important;
   font-weight: bold;
 }
 
-#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
   border-radius: 0 !important;
   background: none;
   box-shadow: none !important;
@@ -475,12 +455,36 @@ body .ui-buttonset .ui-button {
   text-shadow: none !important;
 }
 
-#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-state-highlight {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-state-highlight {
   color: #4f4f4f;
   background: url("#{resource['images/check-solid.svg']}") 35px 0 no-repeat !important;
 }
 
-#mainTabView\:formPortfolioAddItem-position\:add-position-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
   background-color: #0093e4 !important;
   color: #ffffff;
 }
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type .ui-button-text.ui-c {
+  color: #555;
+  padding: 0 0.5em;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(1) {
+  background: #77b55a !important;
+  border-color: #77b55a !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(2) {
+  background: #e4685d !important;
+  border-color: #e4685d !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(2) .ui-button-text.ui-c {
+  padding: 0 0.2em;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:not(.ui-state-active) {
+  opacity: 0.3;
+}
+

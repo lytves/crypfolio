@@ -1,7 +1,7 @@
 package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
-import tk.crypfolio.common.PositionType;
+import tk.crypfolio.common.TransactionType;
 import tk.crypfolio.util.LocalDateTimeAttributeConverter;
 
 import javax.persistence.*;
@@ -11,43 +11,43 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "positions")
-public class PositionEntity implements Serializable {
+@Table(name = "transaction")
+public class TransactionEntity implements Serializable {
 
     @Id
-    @Column(name = "pos_id", nullable = false)
+    @Column(name = "trans_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "pos_amount", nullable = false, precision = 8)
+    @Column(name = "trans_amount", nullable = false, precision = 8)
 //    private BigDecimal amount = BigDecimal.ZERO;
     private BigDecimal amount;
 
-    @Column(name = "pos_bought_datetime", nullable = false)
+    @Column(name = "trans_bought_datetime", nullable = false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime boughtDateTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "pos_type", nullable = false)
-    private PositionType type = PositionType.BUY;
+    @Column(name = "trans_type", nullable = false)
+    private TransactionType type = TransactionType.BUY;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "pos_bought_currency", nullable = false)
+    @Column(name = "trans_bought_currency", nullable = false)
     private CurrencyType boughtCurrency = CurrencyType.USD;
 
-    @Column(name = "pos_bought_price_usd", precision = 8)
+    @Column(name = "trans_bought_price_usd", precision = 8)
     private BigDecimal boughtPriceUsd = BigDecimal.ZERO;
 
-    @Column(name = "pos_bought_price_eur", precision = 8)
+    @Column(name = "trans_bought_price_eur", precision = 8)
     private BigDecimal boughtPriceEur = BigDecimal.ZERO;
 
-    @Column(name = "pos_bought_price_btc", precision = 8)
+    @Column(name = "trans_bought_price_btc", precision = 8)
     private BigDecimal boughtPriceBtc = BigDecimal.ZERO;
 
-    @Column(name = "pos_bought_price_eth", precision = 8)
+    @Column(name = "trans_bought_price_eth", precision = 8)
     private BigDecimal boughtPriceEth = BigDecimal.ZERO;
 
-    @Column(name = "pos_comment")
+    @Column(name = "trans_comment")
     private String comment;
 
     //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -55,19 +55,19 @@ public class PositionEntity implements Serializable {
     @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false)
     private ItemEntity item;
 
-    public PositionEntity() {
+    public TransactionEntity() {
     }
 
-    public PositionEntity(ItemEntity item) {
+    public TransactionEntity(ItemEntity item) {
         this.item = item;
     }
 
-    public PositionEntity(BigDecimal amount, LocalDateTime boughtDateTime) {
+    public TransactionEntity(BigDecimal amount, LocalDateTime boughtDateTime) {
         this.amount = amount;
         this.boughtDateTime = boughtDateTime;
     }
 
-    public PositionEntity(BigDecimal amount, LocalDateTime boughtDateTime, CurrencyType boughtCurrency) {
+    public TransactionEntity(BigDecimal amount, LocalDateTime boughtDateTime, CurrencyType boughtCurrency) {
         this.amount = amount;
         this.boughtDateTime = boughtDateTime;
         this.boughtCurrency = boughtCurrency;
@@ -97,11 +97,11 @@ public class PositionEntity implements Serializable {
         this.boughtDateTime = boughtDate;
     }
 
-    public PositionType getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(PositionType type) {
+    public void setType(TransactionType type) {
         this.type = type;
     }
 
@@ -165,7 +165,7 @@ public class PositionEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PositionEntity that = (PositionEntity) o;
+        TransactionEntity that = (TransactionEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(amount, that.amount) &&
                 Objects.equals(boughtDateTime, that.boughtDateTime) &&
@@ -188,7 +188,7 @@ public class PositionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "PositionEntity{" +
+        return "TransactionEntity{" +
                 "id=" + id +
                 ", amount=" + amount +
                 ", boughtDateTime='" + boughtDateTime + '\'' +

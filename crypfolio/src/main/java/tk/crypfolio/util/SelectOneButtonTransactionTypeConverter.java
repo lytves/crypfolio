@@ -1,6 +1,6 @@
 package tk.crypfolio.util;
 
-import tk.crypfolio.common.PositionType;
+import tk.crypfolio.common.TransactionType;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -10,12 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A utility class-converter, is using to convert PositionType object to String to show it in the dialog window
+ * A utility class-converter, is using to convert TransactionType object to String to show it in the dialog window
  */
 @Named
-public class SelectOneButtonPositionTypeConverter implements Converter {
+public class SelectOneButtonTransactionTypeConverter implements Converter {
 
-    private static final Logger logger = Logger.getLogger(SelectOneButtonPositionTypeConverter.class.getName());
+    private static final Logger logger = Logger.getLogger(SelectOneButtonTransactionTypeConverter.class.getName());
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
@@ -24,7 +24,7 @@ public class SelectOneButtonPositionTypeConverter implements Converter {
 
             try {
 
-                for (PositionType type : PositionType.values()) {
+                for (TransactionType type : TransactionType.values()) {
 
                     if (type.getType().equals(String.valueOf(value))) {
                         return type;
@@ -32,7 +32,7 @@ public class SelectOneButtonPositionTypeConverter implements Converter {
                 }
 
             } catch (NumberFormatException e) {
-                logger.log(Level.WARNING, "Error SelectOneButtonPositionTypeConverter getAsObject!");
+                logger.log(Level.WARNING, "Error SelectOneButtonTransactionTypeConverter getAsObject!");
             }
 
         }

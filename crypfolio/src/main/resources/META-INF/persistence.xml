@@ -11,7 +11,7 @@
         <class>tk.crypfolio.model.CoinEntity</class>
         <class>tk.crypfolio.model.ItemEntity</class>
         <class>tk.crypfolio.model.PortfolioEntity</class>
-        <class>tk.crypfolio.model.PositionEntity</class>
+        <class>tk.crypfolio.model.TransactionEntity</class>
         <class>tk.crypfolio.model.UserEntity</class>
         <class>tk.crypfolio.model.UserWatchCoinEntity</class>
 

@@ -1,18 +1,17 @@
 package tk.crypfolio.common;
 
-public enum PositionType {
+public enum TransactionType {
 
     BUY("BUY"),
     SELL("SELL");
 
     private String type;
 
-    PositionType(String type) {
+    TransactionType(String type) {
         this.type = type;
     }
 
     public String getType(){
         return type;
     }
-
 }

@@ -50,8 +50,8 @@ public class JPADAOFactory extends AbstractDAOFactory {
     }
 
     @Override
-    public PositionDAO getPositionDAO() {
-        return new PositionDAOImpl(getEntityManager());
+    public TransactionDAO getTransactionDAO() {
+        return new TransactionDAOImpl(getEntityManager());
     }
 
     @Override
