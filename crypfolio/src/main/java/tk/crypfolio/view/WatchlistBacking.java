@@ -88,7 +88,7 @@ public class WatchlistBacking implements Serializable {
         setCoinTemp(null);
     }
 
-    // autocomplete search method
+    // autocomplete search method  (identical to PortfolioBacking)
     public List<CoinEntity> completeCoinTemp(String query) {
 
         List<CoinEntity> filteredCoins = new ArrayList<>();

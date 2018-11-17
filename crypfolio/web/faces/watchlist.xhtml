@@ -103,9 +103,16 @@
                     #{userWatchCoinEntity.showedCurrency}"/>
             </p:column>
 
+            <p:column headerText="Price Graph" style="width: 300px;" class="align-right" priority="6">
+
+                <h:graphicImage style="padding: 0 20px;" value="#{resource['images/price-graph.png']}"/>
+
+            </p:column>
+
             <p:rowExpansion>
 
-                <h:panelGroup styleClass="row-expansion-currency" style="display: flex; justify-content: space-between;">
+                <h:panelGroup styleClass="row-expansion-currency"
+                              style="display: flex; justify-content: space-between;">
 
                     <h:form style="padding-left: 30px;">
                         <h:outputText value="Currency:"/>
@@ -227,7 +234,8 @@
                                                  resetValues="true"
                                                  type="reset"
                                                  style="margin-right: 20px;">
-                                    <p:ajax listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin"/>
+                                    <p:ajax listener="#{watchlistBacking.watchCoinAddFormReset}"
+                                            update="formWatchAddCoin"/>
                                 </p:commandButton>
 
                                 <p:commandButton id="watch-add-coin-done"
@@ -248,7 +256,8 @@
 
             </h:form>
 
-            <p:ajax event="close" listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin" resetValues="true"/>
+            <p:ajax event="close" listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin"
+                    resetValues="true"/>
 
         </p:dialog>
     </div>
