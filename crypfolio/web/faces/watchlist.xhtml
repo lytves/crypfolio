@@ -227,7 +227,7 @@
                                                  resetValues="true"
                                                  type="reset"
                                                  style="margin-right: 20px;">
-                                    <p:ajax listener="#{watchlistBacking.addWatchCoinFormReset}" update="formWatchAddCoin"/>
+                                    <p:ajax listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin"/>
                                 </p:commandButton>
 
                                 <p:commandButton id="watch-add-coin-done"
@@ -248,7 +248,7 @@
 
             </h:form>
 
-            <p:ajax event="close" listener="#{watchlistBacking.addWatchCoinFormReset}" update="formWatchAddCoin" resetValues="true"/>
+            <p:ajax event="close" listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin" resetValues="true"/>
 
         </p:dialog>
     </div>

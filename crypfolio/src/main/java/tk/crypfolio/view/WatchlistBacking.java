@@ -81,8 +81,8 @@ public class WatchlistBacking implements Serializable {
         return activeUser;
     }
 
-    public void addWatchCoinFormReset(){
-        logger.log(Level.WARNING, "WatchlistBacking.addWatchCoinFormReset");
+    public void watchCoinAddFormReset(){
+        logger.log(Level.WARNING, "WatchlistBacking.watchCoinAddFormReset");
         // executing every time when watch-add-coin modal window is closed
         // or Reset button pushed
         setCoinTemp(null);
