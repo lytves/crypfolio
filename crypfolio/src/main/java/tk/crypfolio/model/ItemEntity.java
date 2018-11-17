@@ -163,7 +163,7 @@ public class ItemEntity implements Serializable {
                 Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
                 Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
                 Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
-//                Objects.equals(getPortfolio(), that.getPortfolio()) &&
+                Objects.equals(getPortfolio(), that.getPortfolio()) &&
                 Objects.equals(getCoin(), that.getCoin()) &&
                 Objects.equals(getTransactions(), that.getTransactions());
     }
@@ -171,7 +171,8 @@ public class ItemEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getPortfolio(), getCoin(), getTransactions());
+        return Objects.hash(getId(), getAmount(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(),
+                getBoughtCostBtc(), getBoughtCostEth(), getPortfolio(), getCoin(), getTransactions());
     }
 
     @Override
