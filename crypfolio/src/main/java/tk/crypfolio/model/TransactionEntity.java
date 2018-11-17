@@ -2,12 +2,12 @@ package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
-import tk.crypfolio.util.LocalDateTimeAttributeConverter;
+import tk.crypfolio.util.LocalDateAttributeConverter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -24,8 +24,8 @@ public class TransactionEntity implements Serializable {
     private BigDecimal amount;
 
     @Column(name = "trans_bought_datetime", nullable = false)
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime boughtDateTime = LocalDateTime.now();
+    @Convert(converter = LocalDateAttributeConverter.class)
+    private LocalDate boughtDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trans_type", nullable = false)
@@ -62,14 +62,14 @@ public class TransactionEntity implements Serializable {
         this.item = item;
     }
 
-    public TransactionEntity(BigDecimal amount, LocalDateTime boughtDateTime) {
+    public TransactionEntity(BigDecimal amount, LocalDate boughtDate) {
         this.amount = amount;
-        this.boughtDateTime = boughtDateTime;
+        this.boughtDate = boughtDate;
     }
 
-    public TransactionEntity(BigDecimal amount, LocalDateTime boughtDateTime, CurrencyType boughtCurrency) {
+    public TransactionEntity(BigDecimal amount, LocalDate boughtDate, CurrencyType boughtCurrency) {
         this.amount = amount;
-        this.boughtDateTime = boughtDateTime;
+        this.boughtDate = boughtDate;
         this.boughtCurrency = boughtCurrency;
     }
 
@@ -89,12 +89,12 @@ public class TransactionEntity implements Serializable {
         this.amount = amount;
     }
 
-    public LocalDateTime getBoughtDateTime() {
-        return boughtDateTime;
+    public LocalDate getBoughtDate() {
+        return boughtDate;
     }
 
-    public void setBoughtDateTime(LocalDateTime boughtDate) {
-        this.boughtDateTime = boughtDate;
+    public void setBoughtDate(LocalDate boughtDate) {
+        this.boughtDate = boughtDate;
     }
 
     public TransactionType getType() {
@@ -168,7 +168,7 @@ public class TransactionEntity implements Serializable {
         TransactionEntity that = (TransactionEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(boughtDateTime, that.boughtDateTime) &&
+                Objects.equals(boughtDate, that.boughtDate) &&
                 type == that.type &&
                 boughtCurrency == that.boughtCurrency &&
                 Objects.equals(boughtPriceUsd, that.boughtPriceUsd) &&
@@ -182,7 +182,7 @@ public class TransactionEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getAmount(), getBoughtDateTime(), getBoughtCurrency(), getBoughtPriceUsd(),
+        return Objects.hash(getId(), getAmount(), getBoughtDate(), getBoughtCurrency(), getBoughtPriceUsd(),
                 getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment(), getItem());
     }
 
@@ -191,7 +191,7 @@ public class TransactionEntity implements Serializable {
         return "TransactionEntity{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", boughtDateTime='" + boughtDateTime + '\'' +
+                ", boughtDate='" + boughtDate + '\'' +
                 ", type='" + type + '\'' +
                 ", boughtCurrency='" + boughtCurrency + '\'' +
                 ", boughtPriceUsd=" + boughtPriceUsd + '\'' +
@@ -199,7 +199,7 @@ public class TransactionEntity implements Serializable {
                 ", boughtPriceBtc=" + boughtPriceBtc + '\'' +
                 ", boughtPriceEth=" + boughtPriceEth + '\'' +
                 ", comment='" + comment +
-                ", item.id=" + item.getId() +
+//                ", item.id=" + item.getId() +
                 '}';
     }
 }
