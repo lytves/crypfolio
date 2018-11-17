@@ -238,7 +238,7 @@ public class UserEntity implements Serializable {
                 ", passwordResetCode='" + passwordResetCode + '\'' +
                 ", passwordResetCodeRequestDateTime=" + passwordResetCodeRequestDateTime +
                 ", portfolio.id=" + portfolio.getId() +
-                ", userWatchCoins=" + userWatchCoins +
+//                ", userWatchCoins=" + userWatchCoins +
 //                ", usersFollowees=" + usersFollowees +
                 '}';
     }

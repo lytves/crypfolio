@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class TransactionEntity implements Serializable {
 
     @Id
