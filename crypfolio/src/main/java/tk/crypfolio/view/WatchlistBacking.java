@@ -57,13 +57,6 @@ public class WatchlistBacking implements Serializable {
         logger.log(Level.WARNING, "WatchlistBacking @PreDestroy");
     }
 
-    public void addWatchCoinFormReset(){
-        logger.log(Level.WARNING, "WatchlistBacking.addWatchCoinFormReset");
-        // executing every time when watch-add-coin modal window is closed
-        // or Reset button pushed
-        setCoinTemp(null);
-    }
-
     public CoinEntity getCoinTemp() {
         return this.coinTemp;
     }
@@ -86,6 +79,13 @@ public class WatchlistBacking implements Serializable {
 
     public ActiveUser getActiveUser() {
         return activeUser;
+    }
+
+    public void addWatchCoinFormReset(){
+        logger.log(Level.WARNING, "WatchlistBacking.addWatchCoinFormReset");
+        // executing every time when watch-add-coin modal window is closed
+        // or Reset button pushed
+        setCoinTemp(null);
     }
 
     // autocomplete search method
