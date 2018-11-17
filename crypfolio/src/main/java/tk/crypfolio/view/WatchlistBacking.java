@@ -47,15 +47,20 @@ public class WatchlistBacking implements Serializable {
 
     @PostConstruct
     public void init() {
-        System.out.println("WatchlistBacking init");
+        logger.log(Level.WARNING, "WatchlistBacking @PostConstruct");
         // to set in watch-add-coin modal window value "by default"
         this.currency = CurrencyType.USD;
     }
 
     @PreDestroy
     public void destroy() {
-        System.out.println("WatchlistBacking destroy");
+        logger.log(Level.WARNING, "WatchlistBacking @PreDestroy");
+    }
+
+    public void addWatchCoinFormReset(){
+        logger.log(Level.WARNING, "WatchlistBacking.addWatchCoinFormReset");
         // executing every time when watch-add-coin modal window is closed
+        // or Reset button pushed
         setCoinTemp(null);
     }
 
