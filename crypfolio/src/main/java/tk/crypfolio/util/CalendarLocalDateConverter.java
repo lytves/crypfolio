@@ -1,5 +1,7 @@
 package tk.crypfolio.util;
 
+import tk.crypfolio.common.Constants;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -9,7 +11,6 @@ import javax.faces.convert.FacesConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,8 +22,6 @@ public class CalendarLocalDateConverter implements Converter {
 
     private static final Logger logger = Logger.getLogger(CalendarLocalDateConverter.class.getName());
 
-    private static final String currentPattern = "dd MMMM, yyyy";
-
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String submittedString) {
 
@@ -32,7 +31,7 @@ public class CalendarLocalDateConverter implements Converter {
 
         try {
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(currentPattern, Locale.ENGLISH);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.datePattern, Constants.mainLocale);
             return LocalDate.parse(submittedString, formatter);
 
         } catch (DateTimeParseException e) {
@@ -58,7 +57,7 @@ public class CalendarLocalDateConverter implements Converter {
                 localDate = (LocalDate) object;
             }
 
-            return localDate.format(DateTimeFormatter.ofPattern(currentPattern, Locale.ENGLISH));
+            return localDate.format(DateTimeFormatter.ofPattern(Constants.datePattern, Constants.mainLocale));
 
         } catch (ConverterException e) {
 
