@@ -21,7 +21,7 @@ a, a:visited {
 }
 
 .main-wrapper {
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .login-logo {
@@ -85,6 +85,10 @@ a, a:visited {
 .panelGridCenter tr {
   border-bottom-width: 2px !important;
   border-bottom-color: #f2f5f9;
+}
+
+.panelGridCenter .td-border-right {
+  border-right: 2px solid #f2f5f9 !important;
 }
 
 .panelGridTransparent td, .panelGridTransparent tr {
@@ -259,6 +263,15 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   padding: 0 !important;
 }
 
+.ui-datatable .ui-row-toggler {
+  background-image: url("#{resource['images/arrow-right-solid.svg']}") !important;
+  background-position: 0 0;
+}
+
+.ui-datatable .ui-row-toggler.ui-icon-circle-triangle-s {
+  background-image: url("#{resource['images/arrow-down-solid.svg']}") !important;
+  background-position: 0 0;
+}
 /*******************/
 /*      buttons    */
 /*******************/
