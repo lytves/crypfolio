@@ -272,6 +272,7 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
   background-image: url("#{resource['images/arrow-down-solid.svg']}") !important;
   background-position: 0 0;
 }
+
 /*******************/
 /*      buttons    */
 /*******************/
@@ -346,6 +347,19 @@ body .ui-buttonset .ui-button {
   margin-right: 10px !important;
 }
 
+#ajaxStatus{
+  background: transparent;
+  border: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+#ajaxStatus .ui-dialog-content {
+  width: 100%;
+}
+#ajaxStatus .ui-dialog .ui-dialog-content{
+  padding: 1em;
+}
 /*.ui-button-text-only .ui-button-text{*/
 /*padding: 0 !important;*/
 /*}*/
@@ -483,7 +497,8 @@ body .ui-buttonset .ui-button {
   color: #ffffff;
 }
 
-#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type .ui-button-text.ui-c {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type .ui-button-text.ui-c,
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-market-price .ui-button-text.ui-c {
   color: #555;
   padding: 0 0.5em;
 }
