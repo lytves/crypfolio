@@ -61,10 +61,16 @@
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
                       sortFunction="#{watchlistBacking.sortByModel}">
 
-                <h:outputText id="watchCoinPrice"
-                              value="#{watchlistBacking.getWatchCoinPrice(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}
-                    #{userWatchCoinEntity.showedCurrency}"/>
+                <!--now is using new type of values showing as number and f:convertNumber used-->
+                <p:outputPanel id="watchCoinPrice">
+                    <h:outputText
+                            value="#{watchlistBacking.getWatchCoinPrice(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+
+                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
+                </p:outputPanel>
 
             </p:column>
 
@@ -97,10 +103,17 @@
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
                       sortFunction="#{watchlistBacking.sortByModel}">
 
-                <h:outputText id="watchCoinMarketCap"
-                              value="#{watchlistBacking.getWatchCoinMarketCap(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}
-                    #{userWatchCoinEntity.showedCurrency}"/>
+                <!--now is using new type of values showing as number and f:convertNumber used-->
+                <p:outputPanel id="watchCoinMarketCap">
+                    <h:outputText
+                            value="#{watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+
+                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
+                </p:outputPanel>
+
             </p:column>
 
             <p:column headerText="Price Graph" style="width: 300px;" class="align-right" priority="6">
