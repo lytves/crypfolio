@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 @ViewScoped
 public class WatchlistBacking implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(WatchlistBacking.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(WatchlistBacking.class.getName());
 
     // application scoped
     @Inject
@@ -47,14 +47,14 @@ public class WatchlistBacking implements Serializable {
 
     @PostConstruct
     public void init() {
-        logger.log(Level.WARNING, "WatchlistBacking @PostConstruct");
+        LOGGER.log(Level.WARNING, "WatchlistBacking @PostConstruct");
         // to set in watch-add-coin modal window value "by default"
         this.currency = CurrencyType.USD;
     }
 
     @PreDestroy
     public void destroy() {
-        logger.log(Level.WARNING, "WatchlistBacking @PreDestroy");
+        LOGGER.log(Level.WARNING, "WatchlistBacking @PreDestroy");
     }
 
     public CoinEntity getCoinTemp() {
@@ -82,13 +82,13 @@ public class WatchlistBacking implements Serializable {
     }
 
     public void watchCoinAddFormReset(){
-        logger.log(Level.WARNING, "WatchlistBacking.watchCoinAddFormReset");
+        LOGGER.log(Level.WARNING, "WatchlistBacking.watchCoinAddFormReset");
         // executing every time when watch-add-coin modal window is closed
         // or Reset button pushed
         setCoinTemp(null);
     }
 
-    // autocomplete search method  (identical to PortfolioBacking)
+    // autocomplete search method (identical to PortfolioBacking)
     public List<CoinEntity> completeCoinTemp(String query) {
 
         List<CoinEntity> filteredCoins = new ArrayList<>();
@@ -139,7 +139,7 @@ public class WatchlistBacking implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Error adding the coin to watchlist!",
                     ""));
-            logger.log(Level.WARNING, "Error adding the coin to watchlist!");
+            LOGGER.log(Level.WARNING, "Error adding the coin to watchlist!");
 
         }
     }
@@ -160,7 +160,7 @@ public class WatchlistBacking implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Error deleting coin from watchlist",
                     ""));
-            logger.log(Level.WARNING, "Error deleting coin from watchlist!");
+            LOGGER.log(Level.WARNING, "Error deleting coin from watchlist!");
 
         }
     }
@@ -173,25 +173,25 @@ public class WatchlistBacking implements Serializable {
 
         } else {
 
-            logger.log(Level.WARNING, "Error on change of watch coin currency");
+            LOGGER.log(Level.WARNING, "Error on change of watch coin currency");
 
         }
     }
 
     /**
-     * Method which returns String value of percentage of coin price change by "price"
+     * Method which returns String value of coin price
      *
      * @param id             - coin ID
      * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
+     * @return String value to show in the column: price or 0
      */
     public String getWatchCoinPrice(Long id, CurrencyType showedCurrency) {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
-        // because it provokes an error
+        // because it provokes NullPointerException
         if (id != null && showedCurrency != null) {
 
-            Double price = coinCurrentData("price", id, showedCurrency);
+            Double price = getCoinCurrentData("price", id, showedCurrency);
 
             if (price != null) {
                 return String.valueOf(price);
@@ -202,7 +202,7 @@ public class WatchlistBacking implements Serializable {
     }
 
     /**
-     * Method which returns String value of percentage of coin price change by "24hour"
+     * Method which returns String value of percentage of coin price changed by "percent_change_24hour"
      *
      * @param id             - coin ID
      * @param showedCurrency - coin current watch Currency, enum
@@ -211,10 +211,10 @@ public class WatchlistBacking implements Serializable {
     public String getWatchCoinChange24H(Long id, CurrencyType showedCurrency) {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
-        // because it provokes an error
+        // because it provokes NullPointerException
         if (id != null && showedCurrency != null) {
 
-            Double change24h = coinCurrentData("percent_change_24h", id, showedCurrency);
+            Double change24h = getCoinCurrentData("percent_change_24h", id, showedCurrency);
 
             if (change24h != null) {
 
@@ -227,7 +227,7 @@ public class WatchlistBacking implements Serializable {
     }
 
     /**
-     * Method which returns String value of percentage of coin price change by "percent_change_7d"
+     * Method which returns String value of percentage of coin price changed by "percent_change_7d"
      *
      * @param id             - coin ID
      * @param showedCurrency - coin current watch Currency, enum
@@ -236,10 +236,10 @@ public class WatchlistBacking implements Serializable {
     public String getWatchCoinChange7D(Long id, CurrencyType showedCurrency) {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
-        // because it provokes an error
+        // because it provokes NullPointerException
         if (id != null && showedCurrency != null) {
 
-            Double change7d = coinCurrentData("percent_change_7d", id, showedCurrency);
+            Double change7d = getCoinCurrentData("percent_change_7d", id, showedCurrency);
 
             if (change7d != null) {
 
@@ -252,24 +252,24 @@ public class WatchlistBacking implements Serializable {
     }
 
     /**
-     * Method which returns String value of percentage of coin price change by "market_cap"
+     * Method which returns String value of coin market_cap
      *
      * @param id             - coin ID
      * @param showedCurrency - coin current watch Currency, enum
-     * @return String value to show in the column: percentage or 0
+     * @return String value to show in the column: value or 0
      */
     public String getWatchCoinMarketCap(Long id, CurrencyType showedCurrency) {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
-        // because it provokes an error
-        if (id != null && showedCurrency != null) {
+        // because it provokes NullPointerException
+//        if (id != null && showedCurrency != null) {
 
-            Double marketCap = coinCurrentData("market_cap", id, showedCurrency);
+            Double marketCap = getCoinCurrentData("market_cap", id, showedCurrency);
 
             if (marketCap != null) {
                 return String.valueOf(marketCap);
             }
-        }
+//        }
 
         return "0";
 
@@ -277,8 +277,9 @@ public class WatchlistBacking implements Serializable {
 
     /**
      * Universal method which returns actual coin value by type(data) from @ApplicationScoped bean
+     * (identical to PortfolioBacking)
      */
-    private Double coinCurrentData(String data, Long id, CurrencyType showedCurrency) {
+    private Double getCoinCurrentData(String data, Long id, CurrencyType showedCurrency) {
 
         switch (showedCurrency.getCurrency()) {
 
@@ -338,22 +339,29 @@ public class WatchlistBacking implements Serializable {
                 }
                 break;
         }
-        return null;
+        return 0.0;
     }
 
     // to sort dataTable columns elements correct in order to numbers
     public int sortByModel(Object obj1, Object obj2) {
 
-        Double id1 = Double.parseDouble((String) obj1);
-        Double id2 = Double.parseDouble((String) obj2);
+        try {
 
-        if (id1 < id2) {
-            return -1;
-        } else if (id1.equals(id2)) {
-            return 0;
-        } else {
-            return 1;
+            Double id1 = Double.parseDouble((String) obj1);
+            Double id2 = Double.parseDouble((String) obj2);
+
+            if (id1 < id2) {
+                return -1;
+            } else if (id1.equals(id2)) {
+                return 0;
+            } else {
+                return 1;
+            }
+
+        } catch (NumberFormatException ex){
+            LOGGER.log(Level.WARNING, ex.toString());
         }
+        return 0;
     }
 }
 
