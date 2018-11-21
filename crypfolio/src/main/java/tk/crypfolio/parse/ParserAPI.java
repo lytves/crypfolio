@@ -10,6 +10,8 @@ import tk.crypfolio.model.CoinEntity;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
 
 public abstract class ParserAPI {
 
-    private static final Logger logger = Logger.getLogger(ParserAPI.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ParserAPI.class.getName());
 
     /*
      *  Universal method to launch API request
@@ -46,11 +48,11 @@ public abstract class ParserAPI {
                 sc.close();
 
             } else {
-                logger.log(Level.WARNING, "Error in parseAPIByURL: {0}", responseCode);
+                LOGGER.log(Level.WARNING, "Error in parseAPIByURL: {0}", responseCode);
             }
 
         } catch (java.io.IOException e) {
-            logger.log(Level.WARNING, "IOException in parseAPIByURL: {0}", e.getMessage());
+            LOGGER.log(Level.WARNING, "IOException in parseAPIByURL: {0}", e.getMessage());
         }
 
         return inlineString.toString();
@@ -92,7 +94,7 @@ public abstract class ParserAPI {
                 }
 
             } catch (ParseException e) {
-                logger.log(Level.WARNING, "Error in parseAllCoin: {0}", e.getMessage());
+                LOGGER.log(Level.WARNING, "Error in parseAllCoin: {0}", e.getMessage());
 
             } catch (ClassCastException e) {
                 try {
@@ -100,10 +102,10 @@ public abstract class ParserAPI {
                     JSONObject jsonObject = (JSONObject) parserJSON.parse(inlineString);
                     String error = (String) jsonObject.get("error");
 
-                    logger.log(Level.WARNING, "Error in parseAllCoin: {0}", error);
+                    LOGGER.log(Level.WARNING, "Error in parseAllCoin: {0}", error);
 
                 } catch (ParseException ex) {
-                    logger.log(Level.WARNING, "Error in parseAllCoin: {0}", ex.getMessage());
+                    LOGGER.log(Level.WARNING, "Error in parseAllCoin: {0}", ex.getMessage());
                 }
             }
         }
@@ -111,215 +113,8 @@ public abstract class ParserAPI {
     }
 
     /*
-     * Method to receive allCoinsByCoinTickerId from CoinMarketCap API v2
+     * Method to parse actual Coin data from CoinMarketCap API v2
      * */
-/*    @SuppressWarnings("unchecked")
-    public static Map parseCoinByCoinsTickerIdUsdPlusEur() throws InterruptedException {
-
-        Map<CurrencyType, Map<Long, Map<String, Double>>> coinParsedInfoMap = new HashMap<>();
-
-        StringBuilder urlRequest = new StringBuilder();
-
-        Boolean nextParse = true;
-        int i = 1;
-
-        while (nextParse) {
-
-//          https://api.coinmarketcap.com/v2/ticker/?start=1&limit=100&convert=EUR
-            urlRequest.append(SettingsParseAPI.CMC_COIN_BY_TICKER_ID)
-                    .append("?start=")
-                    .append(i)
-                    .append("&limit=100&convert=EUR");
-
-            System.out.println("urlRequest: " + urlRequest);
-
-            String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
-
-            if (!inlineString.trim().isEmpty()) {
-
-                //JSONParser reads the data from string object and break each data into key-value pairs
-                JSONParser parserJSON = new JSONParser();
-
-                try {
-
-                    JSONObject jsonMainDataObj = (JSONObject) parserJSON.parse(inlineString);
-                    JSONObject jsonCoinsObject = (JSONObject) jsonMainDataObj.get("data");
-
-                    if (jsonCoinsObject != null) {
-
-                        for (Object coinKey : jsonCoinsObject.keySet()) {
-
-                            String coinKeyString = (String) coinKey;
-                            Long coinKeyLong = Long.valueOf((String) coinKey);
-
-                            // loop to get the dynamic key
-                            JSONObject coinObject = (JSONObject) jsonCoinsObject.get(coinKeyString);
-
-                            Long coinIdLong = (Long) coinObject.get("id");
-                            System.out.println("id" + (Long) coinObject.get("id"));
-
-                            JSONObject coinQuotes = (JSONObject) coinObject.get("quotes");
-
-                            JSONObject coinQuoteCurrency = (JSONObject) coinQuotes.get(currency.toString());
-
-                            if (currency.equals(CurrencyType.EUR.getCurrency())) {
-
-                                Map<CurrencyType, Map<Long, Map<String, Double>>> coinParsedInfoMap = new HashMap<>();
-
-                                //CurrencyType.EUR parsing
-                                Map<String, Double> coinEurInfoMap = new HashMap<>();
-
-                                coinsMap.put(coinKeyLong, coinInfoMap);
-
-                                coinEurInfoMap.put("price", (Double) coinQuoteCurrency.get("price"));
-                                coinEurInfoMap.put("percent_change_24h", (Double) coinQuoteCurrency.get("percent_change_24h"));
-                                coinEurInfoMap.put("percent_change_7d", (Double) coinQuoteCurrency.get("percent_change_7d"));
-                                coinEurInfoMap.put("market_cap", (Double) coinQuoteCurrency.get("market_cap"));
-
-                                coinParsedInfoMap.put(CurrencyType.EUR, coinEurInfoMap);
-
-                                //CurrencyType.USD parsing
-                                Map<String, Double> coinUsdInfoMap = new HashMap<>();
-
-                                coinQuoteCurrency = (JSONObject) coinQuotes.get(CurrencyType.USD.getCurrency());
-
-                                coinUsdInfoMap.put("price", (Double) coinQuoteCurrency.get("price"));
-                                coinUsdInfoMap.put("percent_change_24h", (Double) coinQuoteCurrency.get("percent_change_24h"));
-                                coinUsdInfoMap.put("percent_change_7d", (Double) coinQuoteCurrency.get("percent_change_7d"));
-                                coinUsdInfoMap.put("market_cap", (Double) coinQuoteCurrency.get("market_cap"));
-
-
-                            } else {
-
-                                Map<Long, Map<String, Double>> mapCoinParsedInfo = new HashMap<>();
-
-                            }
-
-
-                            coinInfoMap.put("price", (Double) coinQuoteCurrency.get("price"));
-                            coinInfoMap.put("percent_change_24h", (Double) coinQuoteCurrency.get("percent_change_24h"));
-                            coinInfoMap.put("percent_change_7d", (Double) coinQuoteCurrency.get("percent_change_7d"));
-                            coinInfoMap.put("market_cap", (Double) coinQuoteCurrency.get("market_cap"));
-
-//                            System.out.println("price" + (Double) coinQuoteCurrency.get("price"));
-//                            System.out.println("percent_change_24h" + (Double) coinQuoteCurrency.get("percent_change_24h"));
-//                            System.out.println("percent_change_7d" + (Double) coinQuoteCurrency.get("percent_change_7d"));
-//                            System.out.println("market_cap" + (Double) coinQuoteCurrency.get("market_cap"));
-
-
-                            mapCoinParsedInfo.put(coinKeyLong, coinInfoMap);
-
-                        }
-
-                        i += 100;
-                        System.out.println("i += 100: " + i);
-                    }
-
-                } catch (ClassCastException | ParseException ex) {
-
-                    logger.log(Level.WARNING, "Error in parseCoinByCoinsTickerId: {0}", ex);
-
-                }
-
-                urlRequest.setLength(0);
-
-
-            } else {
-
-                nextParse = false;
-            }
-
-            TimeUnit.SECONDS.sleep(5);
-
-        }
-
-        return mapCoinParsedInfo;
-    }*/
-
-
-/*    public static Map<Long, Map<String, Double>> parseCoinByCoinsTickerId(String currency) throws InterruptedException {
-
-        Map<Long, Map<String, Double>> mapCoinParsedInfo = new HashMap<>();
-
-        StringBuilder urlRequest = new StringBuilder();
-
-        Boolean nextParse = true;
-        int i = 1;
-
-        while (nextParse) {
-
-//          https://api.coinmarketcap.com/v2/ticker/?start=1&limit=100&convert=EUR
-            urlRequest.append(SettingsParseAPI.CMC_COIN_BY_TICKER_ID)
-                    .append("?start=")
-                    .append(i)
-                    .append("&limit=100&convert=")
-                    .append(currency);
-
-            System.out.println("urlRequest: " + urlRequest);
-
-            String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
-
-            if (!inlineString.trim().isEmpty()) {
-
-                //JSONParser reads the data from string object and break each data into key-value pairs
-                JSONParser parserJSON = new JSONParser();
-
-                try {
-
-                    JSONObject jsonMainDataObj = (JSONObject) parserJSON.parse(inlineString);
-                    JSONObject jsonCoinsObject = (JSONObject) jsonMainDataObj.get("data");
-
-                    if (jsonCoinsObject != null) {
-
-                        for (Object coinKey : jsonCoinsObject.keySet()) {
-
-                            String coinKeyString = (String) coiна ЧернnKey;
-                            Long coinKeyLong = Long.valueOf((String) coinKey);
-
-                            // loop to get the dynamic key
-                            JSONObject coinObject = (JSONObject) jsonCoinsObject.get(coinKeyString);
-
-                            System.out.println("id " + coinObject.get("id"));
-
-                            JSONObject coinQuotes = (JSONObject) coinObject.get("quotes");
-
-                            JSONObject coinQuoteCurrency = (JSONObject) coinQuotes.get(currency);
-
-                            Map<String, Double> coinInfoMap = new HashMap<>();
-
-                            coinInfoMap.put("price", (Double) coinQuoteCurrency.get("price"));
-                            coinInfoMap.put("percent_change_24h", (Double) coinQuoteCurrency.get("percent_change_24h"));
-                            coinInfoMap.put("percent_change_7d", (Double) coinQuoteCurrency.get("percent_change_7d"));
-                            coinInfoMap.put("market_cap", (Double) coinQuoteCurrency.get("market_cap"));
-
-                            mapCoinParsedInfo.put(coinKeyLong, coinInfoMap);
-                        }
-
-                        i += 100;
-                        System.out.println("i += 100: " + i);
-                    }
-
-                } catch (ClassCastException | ParseException ex) {
-
-                    logger.log(Level.WARNING, "Error in parseCoinByCoinsTickerId", ex);
-
-                }
-
-                urlRequest.setLength(0);
-
-
-            } else {
-
-                nextParse = false;
-            }
-
-            TimeUnit.SECONDS.sleep(5);
-
-        }
-
-        return mapCoinParsedInfo;
-    }*/
-
     public static Map<Long, Map<String, Double>> parseAllCoinsInfoByCoinTickerIdForOneCurrency(String currency)
             throws InterruptedException {
 
@@ -383,13 +178,15 @@ public abstract class ParserAPI {
             }
 
         } catch (ParseException | ClassCastException e) {
-            logger.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency", e);
+            LOGGER.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency", e);
         }
 
         return coinsMap;
     }
 
-
+    /*
+     * Method to parse actual Coin data from CoinMarketCap API v2
+     * */
     public static Map<String, Map<Long, Map<String, Double>>> parseAllCoinsInfoByCoinTickerIdForTwoCurrencies(String currency)
             throws InterruptedException {
 
@@ -429,7 +226,7 @@ public abstract class ParserAPI {
             }
 
         } catch (ParseException | ClassCastException e) {
-            logger.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency", e);
+            LOGGER.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency", e);
         }
 
 
@@ -496,7 +293,7 @@ public abstract class ParserAPI {
                     .append("&limit=100&convert=")
                     .append(currency);
 
-            System.out.println("urlRequest: " + urlRequest);
+            LOGGER.log(Level.WARNING, "parseCoinByCoinsTickerId urlRequest " + urlRequest);
 
             String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
 
@@ -529,7 +326,7 @@ public abstract class ParserAPI {
                     }
                 } catch (ClassCastException | ParseException ex) {
 
-                    logger.log(Level.WARNING, "Error in parseCoinByCoinsTickerId", ex);
+                    LOGGER.log(Level.WARNING, "Error in parseCoinByCoinsTickerId", ex);
 
                 }
 
@@ -543,9 +340,66 @@ public abstract class ParserAPI {
             }
 
             i += 100;
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(3);
         }
 
         return stringCoinsObject.toString();
+    }
+
+
+    /*
+     * Method to parse BITCOIN historical data from Cryptocompare API
+     * is used to recount bought prices in transactions
+     * */
+    public static Map<String, Double> parseBitcoiHistoricalPrice(LocalDate localDate) {
+
+        Map<String, Double> bitcoinHistoricalPrice = new HashMap<>();
+        bitcoinHistoricalPrice.put("BTC", 1.0);
+
+        StringBuilder urlRequest = new StringBuilder();
+
+        // https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR,ETH&ts=1529020800
+        urlRequest.append(SettingsParseAPI.CC_COIN_HISTORICAL_DATA)
+                .append("BTC")
+                .append("&tsyms=USD,EUR,ETH")
+                .append("&ts=")
+                // look to the end of the day by UTC timezone, it's final value by the day in the Cryptocompare
+                // if value is more than .now() is showed today actual price value
+                .append(localDate.atTime(23, 59, 59).atZone(ZoneId.of("Europe/Oslo")).toEpochSecond());
+
+        String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
+
+        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
+
+        if (!inlineString.trim().isEmpty()) {
+
+            //JSONParser reads the data from string object and break each data into key-value pairs
+            JSONParser parserJSON = new JSONParser();
+
+            try {
+
+                JSONObject jsonMainDataObj = (JSONObject) parserJSON.parse(inlineString);
+
+                JSONObject jsonBTCObject = (JSONObject) jsonMainDataObj.get("BTC");
+
+                if (jsonBTCObject != null) {
+
+                    for (Object pricePair: jsonBTCObject.keySet() ){
+
+                        String priceCurrency = (String) pricePair;
+                        Double priceValue = (Double) jsonBTCObject.get(priceCurrency);
+
+                        bitcoinHistoricalPrice.put(priceCurrency, priceValue);
+                    }
+
+                }
+            } catch (ClassCastException | ParseException ex) {
+
+                LOGGER.log(Level.WARNING, "Exception in parseCoinByCoinsTickerId" + ex);
+
+            }
+        }
+
+        return bitcoinHistoricalPrice;
     }
 }
