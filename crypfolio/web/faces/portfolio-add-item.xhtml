@@ -1,0 +1,278 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <!--            =====================               modal window ADD PORTFOLIO ITEM -->
+    <div id="divPortfolioAddItem" tabindex="-1">
+
+        <p:dialog header="Add item to Portfolio" id="dlgPortfolioAddItem" widgetVar="dlgPortfolioAddItem" modal="true"
+                  resizable="false" draggable="false" position="center top" closeOnEscape="true"
+                  showEffect="bounce" hideEffect="fade" class="modal-window">
+
+            <h:form id="formPortfolioAddItem-coin">
+
+                <h:panelGrid style="width: 100%;">
+
+                    <p:outputLabel value="Coin Name" for="portfolio-add-coin-name"/>
+
+                    <p:outputPanel class="input-group" id="portfolio-add-coin-input-group"
+                                   rendered="#{portfolioBacking.coinTemp eq null}">
+
+                        <span class="input-group-addon" id="portfolio-add-coin-img">
+                            <i class="fab fa-btc" aria-hidden="true"></i>
+                        </span>
+
+                        <p:autoComplete id="portfolio-add-coin-name" value="#{portfolioBacking.coinTemp}"
+                                        completeMethod="#{portfolioBacking.completeCoinTemp}"
+                                        var="coinTemp"
+                                        itemValue="#{coinTemp}"
+                                        converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                        maxResults="5" required="true" cache="true"
+                                        styleClass="form-control noshadow"
+                                        placeholder="Coin Name or Ticker">
+
+                            <p:column style="width:32px; text-align:center;">
+                                <p:graphicImage
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{coinTemp.id}.png"
+                                        width="32" height="32"/>
+                            </p:column>
+
+                            <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
+                                #{coinTemp.name} <h:outputText style="margin: 0 10px;" value="#{coinTemp.symbol}"/>
+                            </p:column>
+
+                            <p:ajax event="itemSelect"
+                                    update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-transaction"/>
+                            <p:ajax event="itemSelect" listener="#{portfolioBacking.createItemTemp}"/>
+
+                        </p:autoComplete>
+
+                    </p:outputPanel>
+
+                    <p:outputPanel rendered="#{portfolioBacking.coinTemp eq null}">
+
+                        <h:outputText styleClass="span-10px-height"/>
+
+                        <p:outputLabel value="Coins in your portfolio:" for="portfolio-list-currents-items"/>
+
+                        <p:dataTable id="portfolio-list-currents-items">
+                            Una lista
+                        </p:dataTable>
+
+                    </p:outputPanel>
+
+                </h:panelGrid>
+
+            </h:form>
+
+            <!--   I'm trying to use different h:forms to choose Item-Coin and then to create new Item-Transaction-->
+            <p:outputPanel id="portfolioAddItem-transaction-panel">
+
+                <h:form id="formPortfolioAddItem-transaction">
+                    <h:panelGrid style="width: 100%;">
+                        <p:outputPanel rendered="#{portfolioBacking.itemTemp.coin != null}">
+
+                            <p:outputPanel style="display: flex;">
+
+                                <h:graphicImage
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{portfolioBacking.itemTemp.coin.id}.png"
+                                        style="height: 32px;"/>
+
+                                <h:outputText
+                                        value="#{portfolioBacking.itemTemp.coin.name} (#{portfolioBacking.itemTemp.coin.symbol})"
+                                        styleClass="coin-item-name-autocompleted"/>
+
+                            </p:outputPanel>
+
+                            <h:outputText styleClass="span-10px-height"/>
+
+                            <h:panelGrid style="width: 100%; border-spacing: 0;">
+
+                                <p:outputPanel style="display: flex;">
+
+                                    <p:outputLabel value="Amount" for="add-transaction-amount"/>
+
+                                    <p:selectOneButton id="add-transaction-type"
+                                                       required="true" unselectable="false"
+                                                       converter="#{selectOneButtonTransactionTypeConverter}"
+                                                       value="#{portfolioBacking.transactionTemp.type}">
+
+                                        <p:ajax update="@this"/>
+
+                                        <f:selectItem itemLabel="BUY" itemValue="BUY"/>
+                                        <f:selectItem itemLabel="SELL" itemValue="SELL"/>
+
+                                    </p:selectOneButton>
+
+                                </p:outputPanel>
+
+                                <p:outputPanel class="input-group">
+
+                                    <p:inputNumber id="add-transaction-amount"
+                                                   required="true"
+                                                   styleClass="form-control form-control-right noshadow"
+                                                   minValue="0" maxValue="999999999999.99999999" placeholder="0"
+                                                   decimalSeparator="." thousandSeparator=","
+                                                   decimalPlaces="8" padControl="false"
+                                                   value="#{portfolioBacking.transactionTemp.amount}">
+
+                                        <p:ajax event="keyup" onstart="showPrice();" process="@this"/>
+
+                                    </p:inputNumber>
+
+                                    <h:outputText styleClass="input-group-addon input-group-addon-right"
+                                                  value="#{portfolioBacking.itemTemp.coin.symbol}"/>
+
+                                </p:outputPanel>
+
+                                <p:outputPanel style="display: flex;">
+
+                                    <p:outputLabel value="Price" for="add-transaction-price"/>
+
+                                    <p:commandButton id="add-transaction-market-price"
+                                                     value="Market Price"
+                                                     update="add-transaction-price" process="@this"
+                                                     style="margin-left: 10px;"
+                                                     action="#{portfolioBacking.setTransactionPriceTemp(portfolioBacking.getCoinPrice(
+                                                portfolioBacking.itemTemp.coin, portfolioBacking.transactionTemp.boughtCurrency))}"/>
+                                    <!-- used this setter and calling other bean's method with objective of
+                                    no create other simple bean's method -->
+                                </p:outputPanel>
+
+
+                                <p:outputPanel style="display: flex;">
+
+                                    <p:inputNumber id="add-transaction-price"
+                                                   required="true"
+                                                   styleClass="form-control form-control-right noshadow"
+                                                   minValue="0" maxValue="999999999999.99999999" placeholder="0"
+                                                   decimalSeparator="." thousandSeparator=","
+                                                   decimalPlaces="8" padControl="false"
+                                                   value="#{portfolioBacking.transactionPriceTemp}">
+
+                                    </p:inputNumber>
+
+                                    <p:selectOneMenu id="add-transaction-price-currency"
+                                                     required="true" type="input"
+                                                     converter="#{selectOneMenuCurrencyTypeConverter}"
+                                                     value="#{portfolioBacking.transactionTemp.boughtCurrency}"
+                                                     effect="none" class="selectonemenu-right noshadow">
+
+                                        <f:selectItems value="#{portfolioBacking.currencies}"/>
+
+                                        <p:ajax event="itemSelect"
+                                                update="add-transaction-price add-transaction-total-currency"
+                                                listener="#{portfolioBacking.setTransactionPriceTemp(portfolioBacking.getCoinPrice(
+                                                portfolioBacking.itemTemp.coin, portfolioBacking.transactionTemp.boughtCurrency))}"/>
+                                        <!-- used this setter and calling other bean's method with objective of
+                                        no create other simple bean's method -->
+                                    </p:selectOneMenu>
+
+                                </p:outputPanel>
+
+                                <p:outputLabel value="Total" for="add-transaction-total-input"/>
+
+                                <p:outputPanel class="input-group">
+
+                                    <p:inputNumber id="add-transaction-total-input"
+                                                   styleClass="form-control form-control-right noshadow"
+                                                   minValue="0" maxValue="999999999999.99999999" placeholder="0"
+                                                   decimalSeparator="." thousandSeparator=","
+                                                   decimalPlaces="8" padControl="false"/>
+
+                                    <h:outputText id="add-transaction-total-currency"
+                                                  class="input-group-addon input-group-addon-right"
+                                                  value="#{portfolioBacking.transactionTemp.boughtCurrency}"/>
+
+                                </p:outputPanel>
+
+                                <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
+
+                                <p:outputPanel class="input-group" style="display: flex; justify-content: flex-start;">
+
+                                    <p:outputLabel for="add-transaction-date" value="Date:" style="margin-top: 5px;"/>
+
+                                    <p:calendar id="add-transaction-date"
+                                                readonlyInput="true"
+                                                value="#{portfolioBacking.transactionTemp.boughtDate}"
+                                                pattern="dd MMMM, yyyy" mask="false" locale="en_US"
+                                                navigator="true" maxdate="today"
+                                                styleClass="form-control form-control-center noshadow"
+                                                style="padding-left: 20px;"
+                                                placeholder="#{portfolioBacking.datePlaceholder}"
+                                                converter="calendarLocalDateConverter">
+
+                                    </p:calendar>
+
+                                </p:outputPanel>
+
+                                <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
+
+                                <p:accordionPanel activeIndex="null">
+                                    <p:tab title="Comment">
+
+                                        <p:inputTextarea id="add-transaction-comment"
+                                                         styleClass="form-control noshadow"
+                                                         rows="5" autoResize="false"
+                                                         counter="add-transaction-comment-counter" maxlength="200"
+                                                         counterTemplate="{0} characters remaining."
+                                                         value="#{portfolioBacking.transactionTemp.comment}"/>
+                                        <h:outputText id="add-transaction-comment-counter"/>
+
+                                    </p:tab>
+                                </p:accordionPanel>
+
+                            </h:panelGrid>
+
+                            <h:outputText styleClass="span-10px-height"/>
+
+                            <p:outputPanel>
+                                <h:panelGrid style="margin: auto;">
+                                    <p:outputPanel>
+
+                                        <p:commandButton id="add-transaction-reset"
+                                                         icon="ui-icon-arrowreturnthick-1-w"
+                                                         value="Reset"
+                                                         resetValues="true"
+                                                         type="reset"
+                                                         style="margin-right: 20px;">
+
+                                            <p:ajax listener="#{portfolioBacking.transactionAddFormReset}"
+                                                    update="formPortfolioAddItem-transaction
+                                                     :mainTabView:formPortfolioAddItem-coin"/>
+
+                                        </p:commandButton>
+
+                                        <p:commandButton id="add-transaction-done"
+                                                         actionListener="#{portfolioBacking.doSubmitAddTransaction}"
+                                                         value="Done"
+                                                         icon="ui-icon-check"
+                                                         styleClass="ui-state-disabled"
+                                                         oncomplete="PF('dlgPortfolioAddItem').hide();"
+                                                         update=":mainTabView:portfolioPanel @form growl"
+                                                         resetValues="true">
+                                        </p:commandButton>
+
+                                    </p:outputPanel>
+                                </h:panelGrid>
+                            </p:outputPanel>
+
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </h:form>
+
+            </p:outputPanel>
+
+            <!-- ¿¿¿formPortfolioAddItem-transaction:add-transaction-amount doesn't reset input error css class???-->
+            <p:ajax event="close" listener="#{portfolioBacking.transactionAddFormReset}"
+                    update="formPortfolioAddItem-coin formPortfolioAddItem-transaction
+                     formPortfolioAddItem-transaction:add-transaction-amount"
+                    resetValues="true"/>
+
+        </p:dialog>
+
+    </div>
+
+</ui:composition>

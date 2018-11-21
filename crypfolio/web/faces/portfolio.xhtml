@@ -6,9 +6,9 @@
 
     <p:outputPanel id="portfolioPanel">
 
-        <div class="left" id="portfolioMainData">
+        <div class="left" id="portfolioMainData" style="opacity: 0.1;">
 
-            <div class="ui-g" style="background-color: #ffda62">
+            <div class="ui-g" style="background-color: #ffda62;">
 
                 <div class="ui-g-8 ui-g-nopad">
                     <div class="ui-g-2 p5-20px">Market value</div>
@@ -24,7 +24,7 @@
                     <div class="ui-g-2 p5-20px">20%</div>
                 </div>
 
-                <div class="ui-g-4" style="background-color: crimson">
+                <div class="ui-g-4" style="background-color: crimson;">
 
                     <div class="ui-g">
                         <div class="ui-g-3">BTC</div>
@@ -38,7 +38,7 @@
 
         </div>
 
-        <div class="right" style="padding-bottom: 0.5em">
+        <div class="right" style="padding-bottom: 0.5em;">
             <!--            =====================              button ADD WATCH COIN -->
             <h:form class="add-item-coin-form">
 
@@ -52,243 +52,112 @@
 
         <div class="clear"/>
 
+        <h:outputText styleClass="span-10px-height"/>
+
         <!-- The main items table -->
-        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio}"
-                     var="portfolioItemEntity" styleClass="panelGridCenter"
-                     stickyHeader="true" rowExpandMode="single"
+        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.items}"
+                     var="itemEntity" styleClass="panelGridCenter"
+                     stickyHeader="true"
                      id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
 
 
-            <p:outputPanel>
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================               move it to portfolio  -->
-                <!--            =====================                                     -->
-                <!--            =====================                                     -->
-                <!--            =====================                                      -->
-                <!--            =====================               button MOVE TO ARCHIVE -->
+            <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}">
 
-                <h:form>
-                    <p:commandButton
-                            actionListener="#{portfolioBacking.doSubmitMoveCoinToArchive()}"
-                            update=":mainTabView:portfolioPanel growl"
-                            class="upp-case"
-                            value="MOVE TO ARCHIVE" icon="ui-icon-arrowreturnthick-1-s">
-                    </p:commandButton>
+                <p:panelGrid styleClass="panelGridTransparent">
+                    <p:row>
+                        <p:column rowspan="2" style="width: 36px;">
+                            <h:graphicImage styleClass="symbol-image-32px"
+                                            value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"/>
+                        </p:column>
 
-                </h:form>
+                        <p:column>
+                            <h:outputText value="#{itemEntity.coin.name}"
+                                          style="font-weight:bold;" styleClass="left"/>
+                        </p:column>
+                    </p:row>
 
-            </p:outputPanel>
+                </p:panelGrid>
+
+            </p:column>
+
+            <p:column headerText="Amount" class="align-right" priority="2"
+                      sortBy="#{itemEntity.amount}">
+
+                <h:outputText id="portfolioItemAmount"
+                              value="#{itemEntity.amount}">
+                    <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                </h:outputText>
+                <h:outputText value=" #{itemEntity.coin.symbol}"/>
+
+            </p:column>
+
+            <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
+                      sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
+
+                <p:outputPanel id="portfolioItemMarketValue">
+
+                    <h:outputText
+                            value="#{portfolioBacking.geItemMarketValue(itemEntity)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+                    <h:outputText value=" #{itemEntity.showedCurrency}"/>
+
+                </p:outputPanel>
+
+            </p:column>
+
+            <p:column headerText="Market Price" class="align-right td-border-right" priority="2"
+                      sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
+
+                <p:outputPanel id="portfolioItemCoinPrice">
+
+                    <h:outputText
+                            value="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+                    <h:outputText value=" #{itemEntity.showedCurrency}"/>
+
+                </p:outputPanel>
+
+            </p:column>
+
+            <p:column headerText="24hour Change" class="align-right" priority="2"
+                      sortBy="#{itemEntity.coin.name}">
+
+                <h:outputText id="watchCoinPrice5"
+                              value="fuck"/>
+
+            </p:column>
+
+            <p:column headerText="Profit" class="align-right" priority="2"
+                      sortBy="#{itemEntity.coin.name}">
+
+                <h:outputText id="watchCoinPrice6"
+                              value="fuck"/>
+
+            </p:column>
+
+            <p:column headerText="Profit %" class="align-right" priority="2"
+                      sortBy="#{itemEntity.coin.name}">
+
+                <h:outputText id="watchCoinPrice7"
+                              value="fuck"/>
+
+            </p:column>
+
+            <p:column headerText="Share" class="align-right" priority="2"
+                      sortBy="#{itemEntity.coin.name}">
+
+                <h:outputText id="watchCoinPrice8"
+                              value="fuck"/>
+
+            </p:column>
 
         </p:dataTable>
 
 
     </p:outputPanel>
 
-    <!--            =====================               modal window ADD PORTFOLIO COIN -->
-    <div id="divPortfolioAddItem" tabindex="-1">
-        <p:dialog header="Add item to Portfolio" id="dlgPortfolioAddItem" widgetVar="dlgPortfolioAddItem" modal="true"
-                  resizable="false" draggable="false" position="center top" closeOnEscape="true"
-                  showEffect="bounce" hideEffect="fade" class="modal-window">
-
-            <h:form id="formPortfolioAddItem-coin">
-
-                <h:panelGrid style="width: 100%">
-
-                    <p:outputLabel value="Coin Name" for="portfolio-add-coin-name"/>
-
-                    <p:outputPanel class="input-group" id="portfolio-add-coin-input-group"
-                                   rendered="#{portfolioBacking.coinTemp eq null}">
-
-                        <span class="input-group-addon" id="portfolio-add-coin-img">
-                            <i class="fab fa-btc" aria-hidden="true"></i>
-                        </span>
-
-                        <p:autoComplete id="portfolio-add-coin-name" value="#{portfolioBacking.coinTemp}"
-                                        completeMethod="#{portfolioBacking.completeCoinTemp}"
-                                        var="coinTemp"
-                                        itemValue="#{coinTemp}"
-                                        converter="#{autocompleteCoinConverter}" forceSelection="true"
-                                        maxResults="5" required="true" cache="true"
-                                        styleClass="form-control noshadow "
-                                        placeholder="Coin Name or Ticker">
-
-                            <p:column style="width:32px; text-align:center;">
-                                <p:graphicImage
-                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{coinTemp.id}.png"
-                                        width="32" height="32"/>
-                            </p:column>
-
-                            <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                #{coinTemp.name} <span style="margin: 0 10px">#{coinTemp.symbol}</span>
-                            </p:column>
-
-                            <p:ajax event="itemSelect"
-                                    update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-position"/>
-
-                        </p:autoComplete>
-
-                    </p:outputPanel>
-
-                    <p:outputPanel rendered="#{portfolioBacking.coinTemp eq null}">
-
-                        <h:outputText styleClass="span-10px-height"/>
-
-                        <p:outputLabel value="Coins in your portfolio:" for="portfolio-list-currents-items"/>
-
-                        <p:dataTable id="portfolio-list-currents-items">
-                            Una lista
-                        </p:dataTable>
-
-                    </p:outputPanel>
-
-                </h:panelGrid>
-
-            </h:form>
-
-            <!--   I'm trying to use different h:forms to choose Item-Coin and then to create new Item-Position-->
-            <h:form id="formPortfolioAddItem-position">
-                <h:panelGrid style="width: 100%">
-                    <p:outputPanel rendered="#{portfolioBacking.coinTemp != null}">
-
-                        <p:outputPanel style="display: flex;">
-
-                            <h:graphicImage
-                                    value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{portfolioBacking.coinTemp.id}.png"
-                                    style="height: 32px;"/>
-
-                            <h:outputText
-                                    value="#{portfolioBacking.coinTemp.name} (#{portfolioBacking.coinTemp.symbol})"
-                                    styleClass="coin-item-name-autocompleted"/>
-
-                        </p:outputPanel>
-
-                        <h:outputText styleClass="span-10px-height"/>
-
-                        <h:panelGrid style="width: 100%">
-
-                            <p:outputLabel value="Amount" for="add-position-amount"/>
-
-                            <p:outputPanel class="input-group">
-
-                                <p:inputNumber id="add-position-amount"
-                                               required="true"
-                                               styleClass="form-control form-control-right noshadow"
-                                               minValue="0" placeholder="0"
-                                               decimalSeparator="." thousandSeparator=","
-                                               decimalPlaces="8" padControl="false"
-                                               value="#{portfolioBacking.positionTemp.amount}"/>
-
-                                <span class="input-group-addon input-group-addon-right">#{portfolioBacking.coinTemp.symbol}</span>
-
-                            </p:outputPanel>
-
-                            <p:outputLabel value="Price" for="add-position-price"/>
-
-                            <p:outputPanel style="display: flex;">
-
-                                <p:inputNumber id="add-position-price"
-                                               required="true"
-                                               styleClass="form-control form-control-right noshadow"
-                                               minValue="0" placeholder="0"
-                                               decimalSeparator="." thousandSeparator=","
-                                               decimalPlaces="8" padControl="false"
-                                               value="#{portfolioBacking.positionPriceTemp}"/>
-
-                                <p:selectOneMenu id="add-position-price-currency"
-                                                 required="true" type="input"
-                                                 converter="#{selectOneMenuCurrencyConverter}"
-                                                 value="#{portfolioBacking.positionTemp.boughtCurrency}"
-                                                 effect="none" class="selectonemenu-right noshadow">
-
-                                    <f:selectItems value="#{portfolioBacking.currencies}"/>
-                                    <p:ajax event="itemSelect"
-                                            listener="#{portfolioBacking.test}"/>
-                                    <p:ajax event="itemSelect"
-                                            update="test"/>
-
-                                </p:selectOneMenu>
-
-                            </p:outputPanel>
-
-                            <p:outputLabel value="Total" for="add-position-total"/>
-
-                            <p:outputPanel class="input-group" id="test">
-
-                                <p:inputNumber id="add-position-total"
-                                               required="true"
-                                               styleClass="form-control form-control-right noshadow"
-                                               minValue="0" placeholder="0"
-                                               decimalSeparator="." thousandSeparator=","
-                                               decimalPlaces="8" padControl="false"
-                                               value="#{portfolioBacking.positionTotalTemp}"/>
-
-                                <span class="input-group-addon input-group-addon-right">
-                                    #{portfolioBacking.positionTemp.boughtCurrency}
-                                </span>
-
-                            </p:outputPanel>
-
-                            <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
-
-                            <p:accordionPanel activeIndex="null">
-                                <p:tab title="Comment">
-
-                                    <p:inputTextarea id="add-position-comment"
-                                                     styleClass="form-control noshadow"
-                                                     rows="5" autoResize="false"
-                                                     counter="add-position-comment-counter" maxlength="200"
-                                                     counterTemplate="{0} characters remaining."
-                                                     value="#{portfolioBacking.positionComment}"/>
-                                    <h:outputText id="add-position-comment-counter"/>
-
-                                </p:tab>
-                            </p:accordionPanel>
-
-                        </h:panelGrid>
-
-                        <h:outputText styleClass="span-10px-height"/>
-
-                        <p:outputPanel>
-                            <h:panelGrid style="margin: auto;">
-                                <p:outputPanel>
-
-                                    <p:commandButton id="add-position-reset"
-                                                     icon="ui-icon-arrowreturnthick-1-w"
-                                                     value="Reset"
-                                                     disabled="#{portfolioBacking.coinTemp eq null}"
-                                                     resetValues="true"
-                                                     type="reset"
-                                                     style="margin-right: 20px;">
-                                        <p:ajax listener="#{portfolioBacking.setCoinTemp(null)}"
-                                                update=":mainTabView:formPortfolioAddItem-position :mainTabView:formPortfolioAddItem-coin"/>
-                                    </p:commandButton>
-
-                                    <p:commandButton id="add-position-done"
-                                                     actionListener="#{portfolioBacking.test}"
-                                                     value="Done"
-                                                     icon="ui-icon-check"
-                                                     disabled="#{portfolioBacking.positionTemp eq null}"
-                                                     oncomplete="PF('dlgPortfolioAddItem').hide();"
-                                                     update=":mainTabView:portfolioPanel growl"
-                                                     resetValues="true">
-                                    </p:commandButton>
-
-                                </p:outputPanel>
-                            </h:panelGrid>
-                        </p:outputPanel>
-
-                    </p:outputPanel>
-                </h:panelGrid>
-            </h:form>
-
-            <p:ajax event="close" listener="#{portfolioBacking.destroy}"
-                    update=":mainTabView:dlgPortfolioAddItem"/>
-
-        </p:dialog>
-    </div>
+    <ui:include src="/faces/portfolio-add-item.xhtml"/>
 
 </ui:composition>
