@@ -73,20 +73,6 @@
         <!-- with js script with timeout delay to avoid "short" showed image -->
         <p:ajaxStatus onstart="startHandler();" oncomplete="endHandler();"/>
 
-        <script>
-            var ajaxInProgress;
-            function startHandler() {
-                ajaxInProgress = setTimeout(function () {
-                    PF('ajaxStatus').show();
-                }, 300);
-            }
-            function endHandler() {
-                clearTimeout(ajaxInProgress);
-                PF('ajaxStatus').hide();
-                ajaxInProgress = null;
-            }
-        </script>
-
         <p:dialog id="ajaxStatus" widgetVar="ajaxStatus" modal="true" closable="false"
                   draggable="false" resizable="false" showHeader="false">
 

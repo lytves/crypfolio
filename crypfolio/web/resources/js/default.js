@@ -24,16 +24,45 @@ function getWidgetVarById(id) {
     }
 }
 
-
+/*
+* 0 price - button "Done" enable/disable managed
+* */
 function showPrice(){
 
     var inputValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount_hinput").value;
     var buttonDone = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-done");
 
-    console.log(inputValue);
-
     if (inputValue === null || inputValue === '' || inputValue === '0' )
         buttonDone.classList.add('ui-state-disabled');
     else
         buttonDone.classList.remove('ui-state-disabled');
+}
+
+/*
+* button "All" on Sell transaction type
+* */
+function showButtonSellAll(){
+
+    var el = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount-sell-all");
+
+    if( el && el.style.display === 'block')
+        el.style.display = 'none';
+    else
+        el.style.display = 'block';
+}
+
+/*
+* ajax Status modal window delay
+* */
+var ajaxInProgress;
+
+function startHandler() {
+    ajaxInProgress = setTimeout(function () {
+        PF('ajaxStatus').show();
+    }, 300);
+}
+function endHandler() {
+    clearTimeout(ajaxInProgress);
+    PF('ajaxStatus').hide();
+    ajaxInProgress = null;
 }
