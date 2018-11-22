@@ -99,7 +99,7 @@
                                                        converter="#{selectOneButtonTransactionTypeConverter}"
                                                        value="#{portfolioBacking.transactionTemp.type}">
 
-                                        <p:ajax update="@this"/>
+                                        <p:ajax oncomplete="showButtonSellAll();"/>
 
                                         <f:selectItem itemLabel="BUY" itemValue="BUY"/>
                                         <f:selectItem itemLabel="SELL" itemValue="SELL"/>
@@ -108,7 +108,7 @@
 
                                 </p:outputPanel>
 
-                                <p:outputPanel class="input-group">
+                                <p:outputPanel class="input-group" style="display: flex;">
 
                                     <p:inputNumber id="add-transaction-amount"
                                                    required="true"
@@ -121,6 +121,15 @@
                                         <p:ajax event="keyup" onstart="showPrice();" process="@this"/>
 
                                     </p:inputNumber>
+
+                                    <p:commandButton style="display: none;"
+                                                     id="add-transaction-amount-sell-all"
+                                                     value="All"
+                                                     update="add-transaction-amount" process="@this"
+                                                     actionListener="#{portfolioBacking.getItemAllAmount}"
+                                                     oncomplete="showPrice();"
+                                                     resetValues="true"/>
+                                        <!--resetValues="true" is important to reset amount input validation-->
 
                                     <h:outputText styleClass="input-group-addon input-group-addon-right"
                                                   value="#{portfolioBacking.itemTemp.coin.symbol}"/>
@@ -137,8 +146,8 @@
                                                      style="margin-left: 10px;"
                                                      action="#{portfolioBacking.setTransactionPriceTemp(portfolioBacking.getCoinPrice(
                                                 portfolioBacking.itemTemp.coin, portfolioBacking.transactionTemp.boughtCurrency))}"/>
-                                    <!-- used this setter and calling other bean's method with objective of
-                                    no create other simple bean's method -->
+                                    <!-- used this bean's transactionPriceTemp setter and calling other bean's method
+                                     with objective of no create other simple bean's method -->
                                 </p:outputPanel>
 
 
