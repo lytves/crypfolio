@@ -33,17 +33,17 @@ public class PortfolioEntity implements Serializable {
     @Column(name="port_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
-    @Column(name = "port_bought_cost_usd", precision = 8)
-    private BigDecimal boughtCostUsd;
+    @Column(name = "port_net_cost_usd", precision = 8)
+    private BigDecimal netCostUsd;
 
-    @Column(name = "port_bought_cost_eur", precision = 8)
-    private BigDecimal boughtCostEur;
+    @Column(name = "port_net_cost_eur", precision = 8)
+    private BigDecimal netCostEur;
 
-    @Column(name = "port_bought_cost_btc", precision = 8)
-    private BigDecimal boughtCostBtc;
+    @Column(name = "port_net_cost_btc", precision = 8)
+    private BigDecimal netCostBtc;
 
-    @Column(name = "port_bought_cost_eth", precision = 8)
-    private BigDecimal boughtCostEth;
+    @Column(name = "port_net_cost_eth", precision = 8)
+    private BigDecimal netCostEth;
 
     @OneToOne
     @JoinColumn(name = "users_us_id")
@@ -105,36 +105,36 @@ public class PortfolioEntity implements Serializable {
         this.showedCurrency = showedCurrency;
     }
 
-    public BigDecimal getBoughtCostUsd() {
-        return boughtCostUsd;
+    public BigDecimal getNetCostUsd() {
+        return netCostUsd;
     }
 
-    public void setBoughtCostUsd(BigDecimal boughtCostUsd) {
-        this.boughtCostUsd = boughtCostUsd;
+    public void setNetCostUsd(BigDecimal netCostUsd) {
+        this.netCostUsd = netCostUsd;
     }
 
-    public BigDecimal getBoughtCostEur() {
-        return boughtCostEur;
+    public BigDecimal getNetCostEur() {
+        return netCostEur;
     }
 
-    public void setBoughtCostEur(BigDecimal boughtCostEur) {
-        this.boughtCostEur = boughtCostEur;
+    public void setNetCostEur(BigDecimal netCostEur) {
+        this.netCostEur = netCostEur;
     }
 
-    public BigDecimal getBoughtCostBtc() {
-        return boughtCostBtc;
+    public BigDecimal getNetCostBtc() {
+        return netCostBtc;
     }
 
-    public void setBoughtCostBtc(BigDecimal boughtCostBtc) {
-        this.boughtCostBtc = boughtCostBtc;
+    public void setNetCostBtc(BigDecimal netCostBtc) {
+        this.netCostBtc = netCostBtc;
     }
 
-    public BigDecimal getBoughtCostEth() {
-        return boughtCostEth;
+    public BigDecimal getNetCostEth() {
+        return netCostEth;
     }
 
-    public void setBoughtCostEth(BigDecimal boughtCostEth) {
-        this.boughtCostEth = boughtCostEth;
+    public void setNetCostEth(BigDecimal netCostEth) {
+        this.netCostEth = netCostEth;
     }
 
     public List<ItemEntity> getItems() {
@@ -170,10 +170,10 @@ public class PortfolioEntity implements Serializable {
                 Objects.equals(getShareLink(), that.getShareLink()) &&
                 Objects.equals(getIsShowAmounts(), that.getIsShowAmounts()) &&
                 getShowedCurrency() == that.getShowedCurrency() &&
-                Objects.equals(getBoughtCostUsd(), that.getBoughtCostUsd()) &&
-                Objects.equals(getBoughtCostEur(), that.getBoughtCostEur()) &&
-                Objects.equals(getBoughtCostBtc(), that.getBoughtCostBtc()) &&
-                Objects.equals(getBoughtCostEth(), that.getBoughtCostEth()) &&
+                Objects.equals(getNetCostUsd(), that.getNetCostUsd()) &&
+                Objects.equals(getNetCostEur(), that.getNetCostEur()) &&
+                Objects.equals(getNetCostBtc(), that.getNetCostBtc()) &&
+                Objects.equals(getNetCostEth(), that.getNetCostEth()) &&
 //                Objects.equals(getUser(), that.getUser()) &&
                 Objects.equals(getItems(), that.getItems());
     }
@@ -181,7 +181,8 @@ public class PortfolioEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getName(), getIsShare(), getShareLink(), getIsShowAmounts(), getShowedCurrency(), getBoughtCostUsd(), getBoughtCostEur(), getBoughtCostBtc(), getBoughtCostEth(), getUser(), getItems());
+        return Objects.hash(getId(), getName(), getIsShare(), getShareLink(), getIsShowAmounts(), getShowedCurrency(),
+                getNetCostUsd(), getNetCostEur(), getNetCostBtc(), getNetCostEth(), getUser(), getItems());
     }
 
     @Override
@@ -193,10 +194,10 @@ public class PortfolioEntity implements Serializable {
                 ", shareLink='" + shareLink + '\'' +
                 ", isShowAmounts=" + isShowAmounts +
                 ", showedCurrency=" + showedCurrency +
-                ", boughtCostUsd=" + boughtCostUsd +
-                ", boughtCostEur=" + boughtCostEur +
-                ", boughtCostBtc=" + boughtCostBtc +
-                ", boughtCostEth=" + boughtCostEth +
+                ", netCostUsd=" + netCostUsd +
+                ", netCostEur=" + netCostEur +
+                ", netCostBtc=" + netCostBtc +
+                ", netCostEth=" + netCostEth +
                 ", items=" + items +
                 ", user.id=" + user.getId() +
                 '}';
