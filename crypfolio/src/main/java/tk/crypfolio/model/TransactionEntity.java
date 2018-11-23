@@ -19,7 +19,7 @@ public class TransactionEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "trans_amount", nullable = false, precision = 8)
+    @Column(name = "trans_amount", precision = 8, nullable = false)
 //    private BigDecimal amount = BigDecimal.ZERO;
     private BigDecimal amount;
 
@@ -35,16 +35,16 @@ public class TransactionEntity implements Serializable {
     @Column(name = "trans_bought_currency", nullable = false)
     private CurrencyType boughtCurrency = CurrencyType.USD;
 
-    @Column(name = "trans_bought_price_usd", precision = 8)
+    @Column(name = "trans_bought_price_usd", precision = 8, nullable = false)
     private BigDecimal boughtPriceUsd = BigDecimal.ZERO;
 
-    @Column(name = "trans_bought_price_eur", precision = 8)
+    @Column(name = "trans_bought_price_eur", precision = 8, nullable = false)
     private BigDecimal boughtPriceEur = BigDecimal.ZERO;
 
-    @Column(name = "trans_bought_price_btc", precision = 8)
+    @Column(name = "trans_bought_price_btc", precision = 8, nullable = false)
     private BigDecimal boughtPriceBtc = BigDecimal.ZERO;
 
-    @Column(name = "trans_bought_price_eth", precision = 8)
+    @Column(name = "trans_bought_price_eth", precision = 8, nullable = false)
     private BigDecimal boughtPriceEth = BigDecimal.ZERO;
 
     @Column(name = "trans_comment")

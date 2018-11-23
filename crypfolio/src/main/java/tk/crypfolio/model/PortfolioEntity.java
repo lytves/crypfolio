@@ -33,17 +33,17 @@ public class PortfolioEntity implements Serializable {
     @Column(name="port_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
-    @Column(name = "port_net_cost_usd", precision = 8)
-    private BigDecimal netCostUsd;
+    @Column(name = "port_net_cost_usd", precision = 8, nullable = false)
+    private BigDecimal netCostUsd = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_eur", precision = 8)
-    private BigDecimal netCostEur;
+    @Column(name = "port_net_cost_eur", precision = 8, nullable = false)
+    private BigDecimal netCostEur = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_btc", precision = 8)
-    private BigDecimal netCostBtc;
+    @Column(name = "port_net_cost_btc", precision = 8, nullable = false)
+    private BigDecimal netCostBtc = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_eth", precision = 8)
-    private BigDecimal netCostEth;
+    @Column(name = "port_net_cost_eth", precision = 8, nullable = false)
+    private BigDecimal netCostEth = BigDecimal.ZERO;
 
     @OneToOne
     @JoinColumn(name = "users_us_id")

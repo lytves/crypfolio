@@ -27,16 +27,16 @@ public class ItemEntity implements Serializable {
     private CurrencyType showedCurrency = CurrencyType.USD;
 
     @Basic
-    @Column(name = "item_net_cost_usd", precision = 8)
+    @Column(name = "item_net_cost_usd", precision = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_eur", precision = 8)
+    @Column(name = "item_net_cost_eur", precision = 8, nullable = false)
     private BigDecimal netCostEur = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_btc", precision = 8)
+    @Column(name = "item_net_cost_btc", precision = 8, nullable = false)
     private BigDecimal netCostBtc = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_eth", precision = 8)
+    @Column(name = "item_net_cost_eth", precision = 8, nullable = false)
     private BigDecimal netCostEth = BigDecimal.ZERO;
 
     @Column(name = "item_is_archived", nullable = false)
@@ -65,7 +65,7 @@ public class ItemEntity implements Serializable {
 
     public void addTransaction(TransactionEntity transaction) {
         this.transactions.add(transaction);
-        // setting also for new transaction this item-parent
+        // setting also for this transaction this item-parent
         transaction.setItem(this);
 
         if (transaction.getType().equals(TransactionType.BUY)) {
