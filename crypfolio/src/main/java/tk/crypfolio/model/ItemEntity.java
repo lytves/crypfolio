@@ -26,7 +26,6 @@ public class ItemEntity implements Serializable {
     @Column(name = "item_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
-    @Basic
     @Column(name = "item_net_cost_usd", precision = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
@@ -41,6 +40,18 @@ public class ItemEntity implements Serializable {
 
     @Column(name = "item_is_archived", nullable = false)
     private Boolean isArchived = false;
+
+    @Column(name = "item_average_bought_price_usd", precision = 8, nullable = false)
+    private BigDecimal averageBoughtPriceUsd = BigDecimal.ZERO;
+
+    @Column(name = "item_average_bought_price_eur", precision = 8, nullable = false)
+    private BigDecimal averageBoughtPriceEur = BigDecimal.ZERO;
+
+    @Column(name = "item_average_bought_price_btc", precision = 8, nullable = false)
+    private BigDecimal averageBoughtPriceBtc = BigDecimal.ZERO;
+
+    @Column(name = "item_average_bought_price_eth", precision = 8, nullable = false)
+    private BigDecimal averageBoughtPriceEth = BigDecimal.ZERO;
 
     //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ManyToOne
@@ -147,6 +158,38 @@ public class ItemEntity implements Serializable {
         isArchived = archived;
     }
 
+    public BigDecimal getAverageBoughtPriceUsd() {
+        return averageBoughtPriceUsd;
+    }
+
+    public void setAverageBoughtPriceUsd(BigDecimal averageBoughtPriceUsd) {
+        this.averageBoughtPriceUsd = averageBoughtPriceUsd;
+    }
+
+    public BigDecimal getAverageBoughtPriceEur() {
+        return averageBoughtPriceEur;
+    }
+
+    public void setAverageBoughtPriceEur(BigDecimal averageBoughtPriceEur) {
+        this.averageBoughtPriceEur = averageBoughtPriceEur;
+    }
+
+    public BigDecimal getAverageBoughtPriceBtc() {
+        return averageBoughtPriceBtc;
+    }
+
+    public void setAverageBoughtPriceBtc(BigDecimal averageBoughtPriceBtc) {
+        this.averageBoughtPriceBtc = averageBoughtPriceBtc;
+    }
+
+    public BigDecimal getAverageBoughtPriceEth() {
+        return averageBoughtPriceEth;
+    }
+
+    public void setAverageBoughtPriceEth(BigDecimal averageBoughtPriceEth) {
+        this.averageBoughtPriceEth = averageBoughtPriceEth;
+    }
+
     public PortfolioEntity getPortfolio() {
         return portfolio;
     }
@@ -176,23 +219,28 @@ public class ItemEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemEntity that = (ItemEntity) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getAmount(), that.getAmount()) &&
+        return getId().equals(that.getId()) &&
+                getAmount().equals(that.getAmount()) &&
                 getShowedCurrency() == that.getShowedCurrency() &&
-                Objects.equals(getNetCostUsd(), that.getNetCostUsd()) &&
-                Objects.equals(getNetCostEur(), that.getNetCostEur()) &&
-                Objects.equals(getNetCostBtc(), that.getNetCostBtc()) &&
-                Objects.equals(getNetCostEth(), that.getNetCostEth()) &&
-                Objects.equals(getPortfolio(), that.getPortfolio()) &&
-                Objects.equals(getCoin(), that.getCoin()) &&
-                Objects.equals(getTransactions(), that.getTransactions());
+                getNetCostUsd().equals(that.getNetCostUsd()) &&
+                getNetCostEur().equals(that.getNetCostEur()) &&
+                getNetCostBtc().equals(that.getNetCostBtc()) &&
+                getNetCostEth().equals(that.getNetCostEth()) &&
+                isArchived.equals(that.isArchived) &&
+                getAverageBoughtPriceUsd().equals(that.getAverageBoughtPriceUsd()) &&
+                getAverageBoughtPriceEur().equals(that.getAverageBoughtPriceEur()) &&
+                getAverageBoughtPriceBtc().equals(that.getAverageBoughtPriceBtc()) &&
+                getAverageBoughtPriceEth().equals(that.getAverageBoughtPriceEth()) &&
+                getPortfolio().equals(that.getPortfolio()) &&
+                getCoin().equals(that.getCoin()) &&
+                getTransactions().equals(that.getTransactions());
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getId(), getAmount(), getShowedCurrency(), getNetCostUsd(), getNetCostEur(),
-                getNetCostBtc(), getNetCostEth(), getPortfolio(), getCoin(), getTransactions());
+                getNetCostBtc(), getNetCostEth(), isArchived, getAverageBoughtPriceUsd(), getAverageBoughtPriceEur(),
+                getAverageBoughtPriceBtc(), getAverageBoughtPriceEth(), getPortfolio(), getCoin(), getTransactions());
     }
 
     @Override
@@ -205,6 +253,12 @@ public class ItemEntity implements Serializable {
                 ", netCostEur=" + netCostEur +
                 ", netCostBtc=" + netCostBtc +
                 ", netCostEth=" + netCostEth +
+                ", isArchived=" + isArchived +
+                ", averageBoughtPriceUsd=" + averageBoughtPriceUsd +
+                ", averageBoughtPriceEur=" + averageBoughtPriceEur +
+                ", averageBoughtPriceBtc=" + averageBoughtPriceBtc +
+                ", averageBoughtPriceEth=" + averageBoughtPriceEth +
+                ", portfolio=" + portfolio +
                 ", coin=" + coin +
                 ", transactions=" + transactions +
                 '}';
