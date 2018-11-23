@@ -26,7 +26,7 @@ public class PortfolioEntity implements Serializable {
     @Column(name = "port_share_link", length = 8, nullable = false)
     private String shareLink;
 
-    @Column(name = "port_is_show_amounts", nullable = false)
+    @Column(name = "port_is_showed_amounts", nullable = false)
     private Boolean isShowAmounts = false;
 
     @Enumerated(EnumType.STRING)

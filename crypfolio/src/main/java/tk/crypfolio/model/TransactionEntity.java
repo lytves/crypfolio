@@ -23,7 +23,7 @@ public class TransactionEntity implements Serializable {
 //    private BigDecimal amount = BigDecimal.ZERO;
     private BigDecimal amount;
 
-    @Column(name = "trans_bought_datetime", nullable = false)
+    @Column(name = "trans_bought_date", nullable = false)
     @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate boughtDate;
 
