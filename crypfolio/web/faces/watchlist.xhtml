@@ -83,7 +83,7 @@
                               value="#{watchlistBacking.getWatchCoinChange24H(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}%"
                               styleClass="#{watchlistBacking.getWatchCoinChange24H(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) gt 0.0 ? 'green' : 'red'}"/>
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
             </p:column>
 
             <p:column headerText="7days Change" class="align-right" priority="5"
@@ -95,7 +95,7 @@
                               value="#{watchlistBacking.getWatchCoinChange7D(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}%"
                               styleClass="#{watchlistBacking.getWatchCoinChange7D(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) gt 0.0 ? 'green' : 'red'}"/>
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
             </p:column>
 
             <p:column headerText="Market Cap" class="align-right" priority="3"
