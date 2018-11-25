@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static tk.crypfolio.common.Settings.MATH_CONTEXT_8_PRECISION;
+
 @Entity
 @Table(name = "items")
 public class ItemEntity implements Serializable {
@@ -75,23 +77,75 @@ public class ItemEntity implements Serializable {
     }
 
     public void addTransaction(TransactionEntity transaction) {
+
         this.transactions.add(transaction);
         // setting also for this transaction this item-parent
         transaction.setItem(this);
 
         if (transaction.getType().equals(TransactionType.BUY)) {
+
             this.amount = this.amount.add(transaction.getAmount());
 
+            // recount Net Cost values in all currencies
+            this.netCostUsd = this.netCostUsd.add(transaction.getAmount()
+                    .multiply(transaction.getBoughtPriceUsd()), MATH_CONTEXT_8_PRECISION);
+            this.netCostEur = this.netCostEur.add(transaction.getAmount()
+                    .multiply(transaction.getBoughtPriceEur()), MATH_CONTEXT_8_PRECISION);
+            this.netCostBtc = this.netCostBtc.add(transaction.getAmount()
+                    .multiply(transaction.getBoughtPriceBtc()), MATH_CONTEXT_8_PRECISION);
+            this.netCostEth = this.netCostEth.add(transaction.getAmount()
+                    .multiply(transaction.getBoughtPriceEth()), MATH_CONTEXT_8_PRECISION);
+
+            // *START* counts average prices in all currencies of the item
+            BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
+            BigDecimal tempAverTotalEur = BigDecimal.ZERO;
+            BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
+            BigDecimal tempAverTotalEth = BigDecimal.ZERO;
+
+            for (TransactionEntity tempTransaction : getTransactions()) {
+
+                if (tempTransaction.getType().equals(TransactionType.BUY)) {
+
+                    tempAverTotalUsd = tempAverTotalUsd.add(tempTransaction.getAmount()
+                            .multiply(tempTransaction.getBoughtPriceUsd()), MATH_CONTEXT_8_PRECISION);
+
+                    tempAverTotalEur = tempAverTotalEur.add(tempTransaction.getAmount()
+                            .multiply(tempTransaction.getBoughtPriceEur()), MATH_CONTEXT_8_PRECISION);
+
+                    tempAverTotalBtc = tempAverTotalBtc.add(tempTransaction.getAmount()
+                            .multiply(tempTransaction.getBoughtPriceBtc()), MATH_CONTEXT_8_PRECISION);
+
+                    tempAverTotalEth = tempAverTotalEth.add(tempTransaction.getAmount()
+                            .multiply(tempTransaction.getBoughtPriceEth()), MATH_CONTEXT_8_PRECISION);
+                }
+            }
+
+            setAverageBoughtPriceUsd(tempAverTotalUsd.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
+            setAverageBoughtPriceEur(tempAverTotalEur.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
+            setAverageBoughtPriceBtc(tempAverTotalBtc.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
+            setAverageBoughtPriceEth(tempAverTotalEth.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
+            // *END*
+
         } else if (transaction.getType().equals(TransactionType.SELL)) {
-            // if is SELL transaction and we should increase the amount,
-            // but we should never have negative final amount, so return positive or ZERO
+            // if it's SELL transaction, we should increase the amount,
+            // but it never can be negative amount, so return positive or ZERO
             this.amount = this.amount.subtract(transaction.getAmount()).max(BigDecimal.ZERO);
+
+            // recount Net Cost values in all currencies (is used currencies' average prices!)
+            this.netCostUsd = this.netCostUsd.subtract(transaction.getAmount()
+                    .multiply(this.averageBoughtPriceUsd), MATH_CONTEXT_8_PRECISION);
+            this.netCostEur = this.netCostEur.subtract(transaction.getAmount()
+                    .multiply(this.averageBoughtPriceEur), MATH_CONTEXT_8_PRECISION);
+            this.netCostBtc = this.netCostBtc.subtract(transaction.getAmount()
+                    .multiply(this.averageBoughtPriceBtc), MATH_CONTEXT_8_PRECISION);
+            this.netCostEth = this.netCostEth.subtract(transaction.getAmount()
+                    .multiply(this.averageBoughtPriceEth), MATH_CONTEXT_8_PRECISION);
         }
 
-        this.netCostUsd = this.netCostUsd.add(transaction.getBoughtPriceUsd());
-        this.netCostEur = this.netCostEur.add(transaction.getBoughtPriceEur());
-        this.netCostBtc = this.netCostBtc.add(transaction.getBoughtPriceBtc());
-        this.netCostEth = this.netCostEth.add(transaction.getBoughtPriceEth());
+        // set item archived if it have no tokens more
+        if (amount.equals(BigDecimal.ZERO)) {
+            setArchived(true);
+        }
     }
 
     public Long getId() {
@@ -258,7 +312,7 @@ public class ItemEntity implements Serializable {
                 ", averageBoughtPriceEur=" + averageBoughtPriceEur +
                 ", averageBoughtPriceBtc=" + averageBoughtPriceBtc +
                 ", averageBoughtPriceEth=" + averageBoughtPriceEth +
-                ", portfolio=" + portfolio +
+//                ", portfolio=" + portfolio +
                 ", coin=" + coin +
                 ", transactions=" + transactions +
                 '}';
