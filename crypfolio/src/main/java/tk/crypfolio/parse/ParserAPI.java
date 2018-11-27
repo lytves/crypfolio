@@ -83,7 +83,7 @@ public abstract class ParserAPI {
                     //Get the index of the JSON objects and print the values as per the index
                     JSONObject jsonObj = (JSONObject) jsonObject;
 
-                    Long coinId = (Long) jsonObj.get("id");
+                    Long coinId = ((Number) jsonObj.get("id")).longValue();
                     String coinName = (String) jsonObj.get("name");
                     String coinSymbol = (String) jsonObj.get("symbol");
                     String coinSlug = (String) jsonObj.get("website_slug");
@@ -206,6 +206,8 @@ public abstract class ParserAPI {
             for (Object coinKey : jsonCoinsObj.keySet()) {
 
                 String coinKeyString = (String) coinKey;
+
+                // (Number) cast is not necessary here???
                 Long coinKeyLong = Long.parseLong((String) coinKey);
 
                 // loop to get the dynamic key
@@ -354,6 +356,8 @@ public abstract class ParserAPI {
     public static Map<String, Double> parseBitcoiHistoricalPrice(LocalDate localDate) {
 
         Map<String, Double> bitcoinHistoricalPrice = new HashMap<>();
+
+        // we will always compare with bitcoin, therefore it price is always 1.0 here
         bitcoinHistoricalPrice.put("BTC", 1.0);
 
         StringBuilder urlRequest = new StringBuilder();
@@ -367,9 +371,11 @@ public abstract class ParserAPI {
                 // if value is more than .now() is showed today actual price value
                 .append(localDate.atTime(23, 59, 59).atZone(ZoneId.of("Europe/Oslo")).toEpochSecond());
 
+        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
+
         String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
 
-        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
+        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice inlineString " + inlineString);
 
         if (!inlineString.trim().isEmpty()) {
 
@@ -387,7 +393,8 @@ public abstract class ParserAPI {
                     for (Object pricePair: jsonBTCObject.keySet() ){
 
                         String priceCurrency = (String) pricePair;
-                        Double priceValue = (Double) jsonBTCObject.get(priceCurrency);
+
+                        Double priceValue = ((Number) jsonBTCObject.get(priceCurrency)).doubleValue();
 
                         bitcoinHistoricalPrice.put(priceCurrency, priceValue);
                     }
