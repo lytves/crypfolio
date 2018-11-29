@@ -142,7 +142,7 @@ public class WatchlistBacking implements Serializable {
 
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error adding the coin to watchlist!",
                     ""));
             LOGGER.log(Level.WARNING, "Error adding the coin to watchlist!");
@@ -163,7 +163,7 @@ public class WatchlistBacking implements Serializable {
                     ""));
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error deleting coin from watchlist",
                     ""));
             LOGGER.log(Level.WARNING, "Error deleting coin from watchlist!");
@@ -227,9 +227,7 @@ public class WatchlistBacking implements Serializable {
                 return String.valueOf(change24h);
             }
         }
-
         return "0";
-
     }
 
     /**
@@ -348,7 +346,7 @@ public class WatchlistBacking implements Serializable {
         return 0.0;
     }
 
-    // to sort dataTable columns elements correct in order to numbers
+    // to sort dataTable columns elements correct in order to numbers (identical to PortfolioBacking)
     public int sortByModel(Object obj1, Object obj2) {
 
         try {

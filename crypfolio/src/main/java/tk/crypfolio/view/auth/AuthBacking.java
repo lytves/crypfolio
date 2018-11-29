@@ -84,7 +84,7 @@ public abstract class AuthBacking {
 
             activeUser.setUser(user);
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "In order to complete your registration, please click the confirmation link" +
                             " in the email that we just have sent to you.",
                     ""));
@@ -109,7 +109,7 @@ public abstract class AuthBacking {
 
             setShowEmailResendLink(false);
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Please check your email and click the confirmation link.",
                     ""));
         }
@@ -121,7 +121,7 @@ public abstract class AuthBacking {
 
         if (wasSentResetPasswordEmail) {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Please check the email we have just sent to you and follow the link to reset your password.",
                     ""));
         } else {
