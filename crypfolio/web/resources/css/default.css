@@ -379,6 +379,22 @@ body .ui-buttonset .ui-button {
     z-index: 9999 !important;
 }
 
+.ui-growl .ui-growl-info {
+    background-color: green !important;
+}
+
+.ui-growl .ui-growl-error {
+    background-color: red !important;
+}
+
+.ui-growl .ui-growl-warn {
+    background-color: orange !important;
+}
+
+.ui-growl .ui-growl-fatal {
+    background-color: black !important;
+}
+
 /*******************/
 /*      input    */
 /*******************/

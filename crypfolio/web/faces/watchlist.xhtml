@@ -29,6 +29,7 @@
                 <p:rowToggler/>
             </p:column>
 
+            <!--   COIN   -->
             <p:column headerText="Coin" sortBy="#{userWatchCoinEntity.coinId.name}">
 
                 <p:panelGrid styleClass="panelGridTransparent">
@@ -56,6 +57,7 @@
 
             </p:column>
 
+            <!--   MARKET PRICE   -->
             <p:column headerText="Market Price" class="align-right" priority="2"
                       sortBy="#{watchlistBacking.getWatchCoinPrice(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
@@ -74,6 +76,7 @@
 
             </p:column>
 
+            <!--   24 HOUR CHANGE   -->
             <p:column headerText="24hour Change" class="align-right" priority="4"
                       sortBy="#{watchlistBacking.getWatchCoinChange24H(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
@@ -86,6 +89,7 @@
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
             </p:column>
 
+            <!--   7 DAYS CHANGE   -->
             <p:column headerText="7days Change" class="align-right" priority="5"
                       sortBy="#{watchlistBacking.getWatchCoinChange7D(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
@@ -98,6 +102,7 @@
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
             </p:column>
 
+            <!--   MARKET CAP   -->
             <p:column headerText="Market Cap" class="align-right" priority="3"
                       sortBy="#{watchlistBacking.getWatchCoinMarketCap(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
@@ -116,12 +121,14 @@
 
             </p:column>
 
+            <!--   PRICE GRAPH   -->
             <p:column headerText="Price Graph" style="width: 300px;" class="align-right" priority="6">
 
                 <h:graphicImage style="padding: 0 20px;" value="#{resource['images/price-graph.png']}"/>
 
             </p:column>
 
+            <!--   row Expansion>   -->
             <p:rowExpansion>
 
                 <h:panelGroup styleClass="row-expansion-currency"
