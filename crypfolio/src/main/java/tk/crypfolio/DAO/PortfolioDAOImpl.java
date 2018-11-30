@@ -1,10 +1,15 @@
 package tk.crypfolio.DAO;
 
+import tk.crypfolio.business.exception.AppDAOException;
 import tk.crypfolio.model.PortfolioEntity;
 
 import javax.persistence.EntityManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PortfolioDAOImpl extends DAOImpl<Long, PortfolioEntity> implements PortfolioDAO {
+
+	private static final Logger LOGGER = Logger.getLogger(PortfolioDAOImpl.class.getName());
 
 	protected PortfolioDAOImpl(EntityManager em) {
 		super(em, PortfolioEntity.class);
@@ -27,6 +32,13 @@ public class PortfolioDAOImpl extends DAOImpl<Long, PortfolioEntity> implements 
 
     @Override
     public PortfolioEntity updatePortfolio(PortfolioEntity portfolio) {
-        return this.update(portfolio);
+
+		try {
+			return this.update(portfolio);
+
+		} catch (AppDAOException ex) {
+			LOGGER.log(Level.WARNING, ex.toString());
+		}
+		return portfolio;
     }
 }

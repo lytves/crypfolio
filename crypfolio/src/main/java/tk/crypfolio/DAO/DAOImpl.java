@@ -1,5 +1,7 @@
 package tk.crypfolio.DAO;
 
+import tk.crypfolio.business.exception.AppDAOException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -81,7 +83,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
     }
 
     @Override
-    public T update(T entity) {
+    public T update(T entity) throws AppDAOException {
 
         try {
 
@@ -95,12 +97,15 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
                 return entity;
             }
-        } catch (Exception e) {
 
+        } catch (Exception ex) {
+
+            throw new AppDAOException("DAOImpl RollbackException.update(T entity)", ex, AppDAOException._UPDATE_FAILED);
+
+        } finally {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            logger.log(Level.WARNING, e.getMessage());
         }
         return null;
     }

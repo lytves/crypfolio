@@ -1,5 +1,7 @@
 package tk.crypfolio.DAO;
 
+import tk.crypfolio.business.exception.AppDAOException;
+
 import java.util.List;
 
 public interface DAO<K, T> {
@@ -10,7 +12,7 @@ public interface DAO<K, T> {
 
     public void create(T entity);
 
-    public T update(T entity);
+    public T update(T entity) throws AppDAOException;
 
     public void delete(T entity);
 
