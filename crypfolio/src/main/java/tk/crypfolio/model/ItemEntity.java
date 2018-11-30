@@ -4,13 +4,12 @@ import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static tk.crypfolio.common.Settings.MATH_CONTEXT_8_PRECISION;
 
 @Entity
 @Table(name = "items")
@@ -21,6 +20,7 @@ public class ItemEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DecimalMax("999999999999.99999999")
     @Column(name = "item_amount", nullable = false, precision = 8)
     private BigDecimal amount = BigDecimal.ZERO;
 
@@ -28,31 +28,39 @@ public class ItemEntity implements Serializable {
     @Column(name = "item_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
-    @Column(name = "item_net_cost_usd", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_net_cost_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_eur", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_net_cost_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEur = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_btc", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_net_cost_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostBtc = BigDecimal.ZERO;
 
-    @Column(name = "item_net_cost_eth", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_net_cost_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEth = BigDecimal.ZERO;
 
     @Column(name = "item_is_archived", nullable = false)
     private Boolean isArchived = false;
 
-    @Column(name = "item_average_bought_price_usd", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_average_bought_price_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceUsd = BigDecimal.ZERO;
 
-    @Column(name = "item_average_bought_price_eur", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_average_bought_price_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceEur = BigDecimal.ZERO;
 
-    @Column(name = "item_average_bought_price_btc", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_average_bought_price_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceBtc = BigDecimal.ZERO;
 
-    @Column(name = "item_average_bought_price_eth", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "item_average_bought_price_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceEth = BigDecimal.ZERO;
 
     //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -84,17 +92,13 @@ public class ItemEntity implements Serializable {
 
         if (transaction.getType().equals(TransactionType.BUY)) {
 
-            this.amount = this.amount.add(transaction.getAmount());
+            setAmount(getAmount().add(transaction.getAmount()));
 
             // recount Net Cost values in all currencies
-            this.netCostUsd = this.netCostUsd.add(transaction.getAmount()
-                    .multiply(transaction.getBoughtPriceUsd()), MATH_CONTEXT_8_PRECISION);
-            this.netCostEur = this.netCostEur.add(transaction.getAmount()
-                    .multiply(transaction.getBoughtPriceEur()), MATH_CONTEXT_8_PRECISION);
-            this.netCostBtc = this.netCostBtc.add(transaction.getAmount()
-                    .multiply(transaction.getBoughtPriceBtc()), MATH_CONTEXT_8_PRECISION);
-            this.netCostEth = this.netCostEth.add(transaction.getAmount()
-                    .multiply(transaction.getBoughtPriceEth()), MATH_CONTEXT_8_PRECISION);
+            setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(transaction.getBoughtPriceUsd())));
+            setNetCostEur(getNetCostEur().add(transaction.getAmount().multiply(transaction.getBoughtPriceEur())));
+            setNetCostBtc(getNetCostBtc().add(transaction.getAmount().multiply(transaction.getBoughtPriceBtc())));
+            setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(transaction.getBoughtPriceEth())));
 
             // *START* counts average prices in all currencies of the item
             BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
@@ -102,44 +106,51 @@ public class ItemEntity implements Serializable {
             BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
             BigDecimal tempAverTotalEth = BigDecimal.ZERO;
 
+            BigDecimal tempBoughtTotalAmount = BigDecimal.ZERO;
+
             for (TransactionEntity tempTransaction : getTransactions()) {
 
                 if (tempTransaction.getType().equals(TransactionType.BUY)) {
 
                     tempAverTotalUsd = tempAverTotalUsd.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceUsd()), MATH_CONTEXT_8_PRECISION);
+                            .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_EVEN);
 
                     tempAverTotalEur = tempAverTotalEur.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceEur()), MATH_CONTEXT_8_PRECISION);
+                            .multiply(tempTransaction.getBoughtPriceEur())).setScale(8, BigDecimal.ROUND_HALF_EVEN);
 
                     tempAverTotalBtc = tempAverTotalBtc.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceBtc()), MATH_CONTEXT_8_PRECISION);
+                            .multiply(tempTransaction.getBoughtPriceBtc())).setScale(8, BigDecimal.ROUND_HALF_EVEN);
 
                     tempAverTotalEth = tempAverTotalEth.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceEth()), MATH_CONTEXT_8_PRECISION);
+                            .multiply(tempTransaction.getBoughtPriceEth())).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+
+                    tempBoughtTotalAmount = tempBoughtTotalAmount.add(tempTransaction.getAmount());
                 }
             }
 
-            setAverageBoughtPriceUsd(tempAverTotalUsd.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
-            setAverageBoughtPriceEur(tempAverTotalEur.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
-            setAverageBoughtPriceBtc(tempAverTotalBtc.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
-            setAverageBoughtPriceEth(tempAverTotalEth.divide(this.getAmount(), MATH_CONTEXT_8_PRECISION));
+            setAverageBoughtPriceUsd(tempAverTotalUsd.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
+
+            setAverageBoughtPriceEur(tempAverTotalEur.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
+
+            setAverageBoughtPriceBtc(tempAverTotalBtc.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
+
+            setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
             // *END*
 
         } else if (transaction.getType().equals(TransactionType.SELL)) {
             // if it's SELL transaction, we should increase the amount,
             // but it never can be negative amount, so return positive or ZERO
-            this.amount = this.amount.subtract(transaction.getAmount()).max(BigDecimal.ZERO);
+            setAmount(getAmount().subtract(transaction.getAmount()).max(BigDecimal.ZERO));
 
-            // recount Net Cost values in all currencies (is used currencies' average prices!)
-            this.netCostUsd = this.netCostUsd.subtract(transaction.getAmount()
-                    .multiply(this.averageBoughtPriceUsd), MATH_CONTEXT_8_PRECISION);
-            this.netCostEur = this.netCostEur.subtract(transaction.getAmount()
-                    .multiply(this.averageBoughtPriceEur), MATH_CONTEXT_8_PRECISION);
-            this.netCostBtc = this.netCostBtc.subtract(transaction.getAmount()
-                    .multiply(this.averageBoughtPriceBtc), MATH_CONTEXT_8_PRECISION);
-            this.netCostEth = this.netCostEth.subtract(transaction.getAmount()
-                    .multiply(this.averageBoughtPriceEth), MATH_CONTEXT_8_PRECISION);
+            // recount Net Cost values in all currencies (here is used currencies' average prices!)
+            setNetCostUsd(getNetCostUsd().subtract(transaction.getAmount().multiply(this.averageBoughtPriceUsd))
+                    .max(BigDecimal.ZERO));
+            setNetCostEur(getNetCostEur().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEur))
+                    .max(BigDecimal.ZERO));
+            setNetCostBtc(getNetCostBtc().subtract(transaction.getAmount().multiply(this.averageBoughtPriceBtc))
+                    .max(BigDecimal.ZERO));
+            setNetCostEth(getNetCostEth().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEth))
+                    .max(BigDecimal.ZERO));
         }
 
         // set item archived if it have no tokens more
@@ -161,7 +172,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+        this.amount = amount.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public CurrencyType getShowedCurrency() {
@@ -177,7 +188,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setNetCostUsd(BigDecimal netCostUsd) {
-        this.netCostUsd = netCostUsd;
+        this.netCostUsd = netCostUsd.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getNetCostEur() {
@@ -185,7 +196,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setNetCostEur(BigDecimal netCostEur) {
-        this.netCostEur = netCostEur;
+        this.netCostEur = netCostEur.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getNetCostBtc() {
@@ -193,7 +204,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setNetCostBtc(BigDecimal netCostBtc) {
-        this.netCostBtc = netCostBtc;
+        this.netCostBtc = netCostBtc.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getNetCostEth() {
@@ -201,7 +212,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setNetCostEth(BigDecimal netCostEth) {
-        this.netCostEth = netCostEth;
+        this.netCostEth = netCostEth.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public Boolean getArchived() {
@@ -217,7 +228,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setAverageBoughtPriceUsd(BigDecimal averageBoughtPriceUsd) {
-        this.averageBoughtPriceUsd = averageBoughtPriceUsd;
+        this.averageBoughtPriceUsd = averageBoughtPriceUsd.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getAverageBoughtPriceEur() {
@@ -225,7 +236,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setAverageBoughtPriceEur(BigDecimal averageBoughtPriceEur) {
-        this.averageBoughtPriceEur = averageBoughtPriceEur;
+        this.averageBoughtPriceEur = averageBoughtPriceEur.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getAverageBoughtPriceBtc() {
@@ -233,7 +244,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setAverageBoughtPriceBtc(BigDecimal averageBoughtPriceBtc) {
-        this.averageBoughtPriceBtc = averageBoughtPriceBtc;
+        this.averageBoughtPriceBtc = averageBoughtPriceBtc.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public BigDecimal getAverageBoughtPriceEth() {
@@ -241,7 +252,7 @@ public class ItemEntity implements Serializable {
     }
 
     public void setAverageBoughtPriceEth(BigDecimal averageBoughtPriceEth) {
-        this.averageBoughtPriceEth = averageBoughtPriceEth;
+        this.averageBoughtPriceEth = averageBoughtPriceEth.setScale(8, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public PortfolioEntity getPortfolio() {
@@ -294,7 +305,7 @@ public class ItemEntity implements Serializable {
     public int hashCode() {
         return Objects.hash(getId(), getAmount(), getShowedCurrency(), getNetCostUsd(), getNetCostEur(),
                 getNetCostBtc(), getNetCostEth(), isArchived, getAverageBoughtPriceUsd(), getAverageBoughtPriceEur(),
-                getAverageBoughtPriceBtc(), getAverageBoughtPriceEth(), getPortfolio(), getCoin(), getTransactions());
+                getAverageBoughtPriceBtc(), getAverageBoughtPriceEth(), getCoin(), getTransactions());
     }
 
     @Override
@@ -312,7 +323,6 @@ public class ItemEntity implements Serializable {
                 ", averageBoughtPriceEur=" + averageBoughtPriceEur +
                 ", averageBoughtPriceBtc=" + averageBoughtPriceBtc +
                 ", averageBoughtPriceEth=" + averageBoughtPriceEth +
-//                ", portfolio=" + portfolio +
                 ", coin=" + coin +
                 ", transactions=" + transactions +
                 '}';
