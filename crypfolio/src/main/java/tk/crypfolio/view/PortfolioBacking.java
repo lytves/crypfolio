@@ -1,5 +1,6 @@
 package tk.crypfolio.view;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
@@ -138,6 +139,7 @@ public class PortfolioBacking implements Serializable {
         this.transactionTotalTemp = transactionTotalTemp;
     }
 
+    @Contract(pure = true)
     private String getLastInputFormFocused() {
         return lastInputFormFocused;
     }
@@ -393,12 +395,19 @@ public class PortfolioBacking implements Serializable {
                     break;
             }
 
+            // also recount values (net costs, average prices) of item
             itemTemp.addTransaction(transactionTemp);
 
+            // if it's new item in the portfolio
             if (itemTemp.getId() == null) {
+
                 itemTemp.setShowedCurrency(transactionTemp.getBoughtCurrency());
+
                 activeUser.getUser().getPortfolio().addItem(itemTemp);
             }
+
+            // recount values (netcost) of portfolio
+            activeUser.getUser().getPortfolio().recountNetCosts();
 
             activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
@@ -626,7 +635,7 @@ public class PortfolioBacking implements Serializable {
      * Universal method which returns actual coin value by type(data) from @ApplicationScoped bean
      * (identical to WatchlistBacking)
      */
-    private Double coinCurrentData(String data, Long id, CurrencyType showedCurrency) {
+    private Double coinCurrentData(String data, Long id, @NotNull CurrencyType showedCurrency) {
 
         switch (showedCurrency.getCurrency()) {
 

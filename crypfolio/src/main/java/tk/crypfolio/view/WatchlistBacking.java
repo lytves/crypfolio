@@ -179,7 +179,7 @@ public class WatchlistBacking implements Serializable {
 
         } else {
 
-            LOGGER.log(Level.WARNING, "Error on change of watch coin currency");
+            LOGGER.log(Level.WARNING, "Error on changing watch coin currency");
 
         }
     }
