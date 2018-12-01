@@ -87,10 +87,10 @@ public class ItemEntity implements Serializable {
     public void addTransaction(TransactionEntity transaction) {
 
         this.transactions.add(transaction);
-        // setting also for this transaction this item-parent
+        // setting also for this new transaction this item as a parent
         transaction.setItem(this);
 
-        if (transaction.getType().equals(TransactionType.BUY)) {
+        if (TransactionType.BUY.equals(transaction.getType())) {
 
             setAmount(getAmount().add(transaction.getAmount()));
 
@@ -110,7 +110,7 @@ public class ItemEntity implements Serializable {
 
             for (TransactionEntity tempTransaction : getTransactions()) {
 
-                if (tempTransaction.getType().equals(TransactionType.BUY)) {
+                if (TransactionType.BUY.equals(tempTransaction.getType())) {
 
                     tempAverTotalUsd = tempAverTotalUsd.add(tempTransaction.getAmount()
                             .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_EVEN);
@@ -137,7 +137,7 @@ public class ItemEntity implements Serializable {
             setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
             // *END*
 
-        } else if (transaction.getType().equals(TransactionType.SELL)) {
+        } else if (TransactionType.SELL.equals(transaction.getType())) {
             // if it's SELL transaction, we should increase the amount,
             // but it never can be negative amount, so return positive or ZERO
             setAmount(getAmount().subtract(transaction.getAmount()).max(BigDecimal.ZERO));
@@ -154,7 +154,7 @@ public class ItemEntity implements Serializable {
         }
 
         // set item archived if it have no tokens more
-        if (amount.equals(BigDecimal.ZERO)) {
+        if (getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             setArchived(true);
         }
     }
