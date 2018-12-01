@@ -4,6 +4,7 @@ import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.StringGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,16 +34,20 @@ public class PortfolioEntity implements Serializable {
     @Column(name = "port_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
-    @Column(name = "port_net_cost_usd", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "port_net_cost_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_eur", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "port_net_cost_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEur = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_btc", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "port_net_cost_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostBtc = BigDecimal.ZERO;
 
-    @Column(name = "port_net_cost_eth", precision = 8, nullable = false)
+    @DecimalMax("999999999999.99999999")
+    @Column(name = "port_net_cost_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEth = BigDecimal.ZERO;
 
     @OneToOne
@@ -178,9 +183,32 @@ public class PortfolioEntity implements Serializable {
     }
 
     public void removeItem(ItemEntity item) {
+//        TODO: to implement this method
         this.items.remove(item);
         //!!! unsetting also for new item this portfolio-parent
         item.setPortfolio(null);
+    }
+
+    public void recountNetCosts() {
+
+        BigDecimal tempNetCostUsd = BigDecimal.ZERO;
+        BigDecimal tempNetCostEur = BigDecimal.ZERO;
+        BigDecimal tempNetCostBtc = BigDecimal.ZERO;
+        BigDecimal tempNetCostEth = BigDecimal.ZERO;
+
+        for (ItemEntity item : getItems()) {
+
+            // recount Net Cost values in all currencies
+            tempNetCostUsd = tempNetCostUsd.add(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+            tempNetCostEur = tempNetCostEur.add(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+            tempNetCostBtc = tempNetCostBtc.add(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+            tempNetCostEth = tempNetCostEth.add(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+        }
+
+        setNetCostUsd(tempNetCostUsd);
+        setNetCostEur(tempNetCostEur);
+        setNetCostBtc(tempNetCostBtc);
+        setNetCostEth(tempNetCostEth);
     }
 
     public UserEntity getUser() {
