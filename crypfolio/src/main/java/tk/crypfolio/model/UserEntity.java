@@ -222,7 +222,9 @@ public class UserEntity implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getPassword(), getSignupDateTime(), getIsEmailVerified(), getEmailVerifCode(), getEmailVerifCodeRequestDateTime(), getPasswordResetCode(), getPasswordResetCodeRequestDateTime(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
+        return Objects.hash(getId(), getEmail(), getPassword(), getSignupDateTime(), getIsEmailVerified(),
+                getEmailVerifCode(), getEmailVerifCodeRequestDateTime(), getPasswordResetCode(),
+                getPasswordResetCodeRequestDateTime(), getPortfolio(), getUserWatchCoins(), getUsersFollowees());
     }
 
     @Override

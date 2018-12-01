@@ -21,7 +21,7 @@ public class ItemEntity implements Serializable {
     private Long id;
 
     @DecimalMax("999999999999.99999999")
-    @Column(name = "item_amount", nullable = false, precision = 8)
+    @Column(name = "item_amount", precision = 20, scale = 8, nullable = false)
     private BigDecimal amount = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
@@ -95,12 +95,16 @@ public class ItemEntity implements Serializable {
             setAmount(getAmount().add(transaction.getAmount()));
 
             // recount Net Cost values in all currencies
-            setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(transaction.getBoughtPriceUsd())));
-            setNetCostEur(getNetCostEur().add(transaction.getAmount().multiply(transaction.getBoughtPriceEur())));
-            setNetCostBtc(getNetCostBtc().add(transaction.getAmount().multiply(transaction.getBoughtPriceBtc())));
-            setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(transaction.getBoughtPriceEth())));
+            setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(transaction.getBoughtPriceUsd()))
+                    .setScale(8, BigDecimal.ROUND_HALF_EVEN));
+            setNetCostEur(getNetCostEur().add(transaction.getAmount().multiply(transaction.getBoughtPriceEur()))
+                    .setScale(8, BigDecimal.ROUND_HALF_EVEN));
+            setNetCostBtc(getNetCostBtc().add(transaction.getAmount().multiply(transaction.getBoughtPriceBtc()))
+                    .setScale(8, BigDecimal.ROUND_HALF_EVEN));
+            setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(transaction.getBoughtPriceEth()))
+                    .setScale(8, BigDecimal.ROUND_HALF_EVEN));
 
-            // *START* counts average prices in all currencies of the item
+            // **START:** counts average prices in all currencies of the item
             BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
             BigDecimal tempAverTotalEur = BigDecimal.ZERO;
             BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
@@ -135,7 +139,7 @@ public class ItemEntity implements Serializable {
             setAverageBoughtPriceBtc(tempAverTotalBtc.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
 
             setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_EVEN));
-            // *END*
+            // **END**
 
         } else if (TransactionType.SELL.equals(transaction.getType())) {
             // if it's SELL transaction, we should increase the amount,
