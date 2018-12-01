@@ -61,7 +61,7 @@
                      id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
 
             <!--   COIN   -->
-            <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}">
+            <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;">
 
                 <p:panelGrid styleClass="panelGridTransparent" style="display: block;">
                     <p:row>
@@ -82,7 +82,7 @@
             </p:column>
 
             <!--   AMOUNT   -->
-            <p:column headerText="Amount" class="align-right" priority="2"
+            <p:column headerText="Amount" class="align-right" priority="3"
                       sortBy="#{itemEntity.amount}">
 
                 <h:outputText id="portfolioItemAmount"
@@ -110,7 +110,7 @@
             </p:column>
 
             <!--   MARKET PRICE   -->
-            <p:column headerText="Market Price" class="align-right td-border-right" priority="2"
+            <p:column headerText="Market Price" class="align-right td-border-right" priority="4"
                       sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
 
                 <p:outputPanel id="portfolioItemCoinPrice">
@@ -126,7 +126,7 @@
             </p:column>
 
             <!--   24 HOUR CHANGE   -->
-            <p:column headerText="24hour Change" class="align-right" priority="2"
+            <p:column headerText="24hour Change" class="align-right" style="width: 130px;" priority="6"
                       sortBy="#{portfolioBacking.getCoinChange24H(itemEntity)}"
                       sortFunction="#{portfolioBacking.sortByModel}">
 
@@ -136,7 +136,7 @@
             </p:column>
 
             <!--   PROFIT   -->
-            <p:column headerText="Profit" class="align-right" priority="2"
+            <p:column headerText="Profit" class="align-right" priority="5"
                       sortBy="#{portfolioBacking.getItemProfit(itemEntity)}"
                       sortFunction="#{portfolioBacking.sortByModel}">
 
@@ -149,20 +149,23 @@
             </p:column>
 
             <!--   PROFIT %   -->
-            <p:column headerText="Profit %" class="align-right" priority="2"
-                      sortBy="#{itemEntity.coin.name}">
+            <p:column headerText="Profit %" class="align-right" style="width: 90px;" priority="7"
+                      sortBy="#{portfolioBacking.getItemProfitPercentage(itemEntity)}"
+                      sortFunction="#{portfolioBacking.sortByModel}">
 
-                <h:outputText id="watchCoinPrice7"
-                              value="UPD"/>
+                <h:outputText id="portfolioItemProfitPercentage"
+                              value="#{portfolioBacking.getItemProfitPercentage(itemEntity)}%"
+                              styleClass="#{portfolioBacking.getItemProfitPercentage(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
 
             </p:column>
 
             <!--   SHARE %   -->
-            <p:column headerText="Share" class="align-right" priority="2"
-                      sortBy="#{itemEntity.coin.name}">
+            <p:column headerText="Share" class="align-right" style="width: 70px;" priority="8"
+                      sortBy="#{portfolioBacking.getItemSharePercentage(itemEntity)}"
+                      sortFunction="#{portfolioBacking.sortByModel}">
 
-                <h:outputText id="watchCoinPrice8"
-                              value="UPD"/>
+                <h:outputText id="portfolioItemShare"
+                              value="#{portfolioBacking.getItemSharePercentage(itemEntity)}%"/>
 
             </p:column>
 

@@ -191,12 +191,23 @@ public class PortfolioBacking implements Serializable {
                 if (transactionPriceTemp.compareTo(BigDecimal.ZERO) == 0) {
                     getTransactionTemp().setAmount(BigDecimal.ZERO);
                 } else if (("amount").equals(getLastInputFormFocused())) {
-                    setTransactionPriceTemp(getTransactionTotalTemp()
-                            .divide(transactionTemp.getAmount(), 8, BigDecimal.ROUND_HALF_EVEN));
+
+                    try {
+                        setTransactionPriceTemp(getTransactionTotalTemp()
+                                .divide(transactionTemp.getAmount(), 8, BigDecimal.ROUND_HALF_EVEN));
+
+                    } catch (ArithmeticException ex) {
+                        LOGGER.log(Level.WARNING, ex.toString());
+                    }
 
                 } else if (("price").equals(getLastInputFormFocused())) {
-                    getTransactionTemp().setAmount(transactionTotalTemp
-                            .divide(transactionPriceTemp, 8, BigDecimal.ROUND_HALF_EVEN));
+
+                    try {
+                        getTransactionTemp().setAmount(transactionTotalTemp
+                                .divide(transactionPriceTemp, 8, BigDecimal.ROUND_HALF_EVEN));
+                    } catch (ArithmeticException ex) {
+                        LOGGER.log(Level.WARNING, ex.toString());
+                    }
                 }
                 break;
         }
@@ -403,7 +414,7 @@ public class PortfolioBacking implements Serializable {
      * @param item - current ItemEntity
      * @return BigDecimal value to be showed and/or get sorted in the column: total market value or 0
      */
-    public BigDecimal geItemMarketValue(ItemEntity item) {
+    public BigDecimal geItemMarketValue(@NotNull ItemEntity item) {
 
         try {
 
@@ -425,7 +436,7 @@ public class PortfolioBacking implements Serializable {
      * @param showedCurrency - specified сurrency to show the coin's price
      * @return BigDecimal coin price value or 0
      */
-    public BigDecimal getCoinPrice(CoinEntity coin, CurrencyType showedCurrency) {
+    public BigDecimal getCoinPrice(@NotNull CoinEntity coin, @NotNull CurrencyType showedCurrency) {
 
 /*        switch (showedCurrency.getCurrency()) {
 
@@ -461,7 +472,7 @@ public class PortfolioBacking implements Serializable {
      * @param item - current itemEntity
      * @return String value to show in the column: percentage or 0
      */
-    public String getCoinChange24H(ItemEntity item) {
+    public String getCoinChange24H(@NotNull ItemEntity item) {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
         // because it provokes NullPointerException
@@ -477,42 +488,121 @@ public class PortfolioBacking implements Serializable {
         return "0";
     }
 
-    public String getItemProfit(ItemEntity item) {
+    public BigDecimal getItemProfit(@NotNull ItemEntity item) {
 
         BigDecimal profit = BigDecimal.ZERO;
 
-        if (item != null) {
+        switch (item.getShowedCurrency().getCurrency()) {
 
-            switch (item.getShowedCurrency().getCurrency()) {
+            case "USD":
 
-                case "USD":
+                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                        item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
 
-                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                            item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-                    break;
+            case "EUR":
 
-                case "EUR":
+                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                        item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
 
-                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                            item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-                    break;
+            case "BTC":
 
+                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                        item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
 
-                case "BTC":
+            case "ETH":
 
-                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                            item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-                    break;
-
-
-                case "ETH":
-
-                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                            item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-                    break;
-            }
+                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                        item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
         }
-        return String.valueOf(profit);
+//        return String.valueOf(profit);
+        return profit;
+    }
+
+    public String getItemProfitPercentage(@NotNull ItemEntity item) {
+
+        BigDecimal profitPercentage = BigDecimal.ZERO;
+
+        switch (item.getShowedCurrency().getCurrency()) {
+
+            case "USD":
+
+                profitPercentage = item.getNetCostUsd().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
+                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
+
+            case "EUR":
+
+                profitPercentage = item.getNetCostEur().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
+                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
+
+            case "BTC":
+
+                profitPercentage = item.getNetCostBtc().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
+                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
+
+            case "ETH":
+
+                profitPercentage = item.getNetCostEth().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
+                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                break;
+        }
+        return String.valueOf(profitPercentage);
+    }
+
+    public String getItemSharePercentage(@NotNull ItemEntity item) {
+
+        BigDecimal sharePercentage = BigDecimal.ZERO;
+
+        switch (activeUser.getUser().getPortfolio().getShowedCurrency().getCurrency()) {
+
+            case "USD":
+
+                try {
+                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
+                            .divide(activeUser.getUser().getPortfolio().getNetCostUsd(), 8, BigDecimal.ROUND_HALF_EVEN);
+                } catch (ArithmeticException ex){
+                    LOGGER.log(Level.WARNING, ex.toString());
+                }
+                break;
+
+            case "EUR":
+
+                try {
+                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
+                            .divide(activeUser.getUser().getPortfolio().getNetCostEur(), 8, BigDecimal.ROUND_HALF_EVEN);
+                } catch (ArithmeticException ex){
+                    LOGGER.log(Level.WARNING, ex.toString());
+                }
+                break;
+
+            case "BTC":
+
+                try {
+                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
+                            .divide(activeUser.getUser().getPortfolio().getNetCostBtc(), 8, BigDecimal.ROUND_HALF_EVEN);
+                } catch (ArithmeticException ex){
+                    LOGGER.log(Level.WARNING, ex.toString());
+                }
+                break;
+
+            case "ETH":
+
+                try {
+                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
+                            .divide(activeUser.getUser().getPortfolio().getNetCostEth(), 8, BigDecimal.ROUND_HALF_EVEN);
+                } catch (ArithmeticException ex){
+                    LOGGER.log(Level.WARNING, ex.toString());
+                }
+                break;
+        }
+
+        return String.valueOf(sharePercentage);
     }
 
     /**
@@ -580,7 +670,7 @@ public class PortfolioBacking implements Serializable {
     }
 
     // to sort dataTable columns elements correct in order to numbers (identical to WatchlistBacking)
-    public int sortByModel(Object obj1, Object obj2) {
+    public int sortByModel(@NotNull Object obj1, @NotNull Object obj2) {
 
         try {
 
