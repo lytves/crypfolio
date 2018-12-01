@@ -30,7 +30,7 @@ public class PortfolioEntity implements Serializable {
     private Boolean isShowAmounts = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="port_showed_currency", nullable = false)
+    @Column(name = "port_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
     @Column(name = "port_net_cost_usd", precision = 8, nullable = false)
@@ -145,10 +145,42 @@ public class PortfolioEntity implements Serializable {
         this.items = items;
     }
 
-    public void addItem(ItemEntity item){
+    public List<ItemEntity> getItemsNotArchived() {
+
+        List<ItemEntity> notArhivedItems = new ArrayList<>();
+
+        for (ItemEntity item : getItems()) {
+
+            if (!item.getArchived()) {
+                notArhivedItems.add(item);
+            }
+        }
+        return notArhivedItems;
+    }
+
+    public List<ItemEntity> getItemsArchived() {
+
+        List<ItemEntity> arhivedItems = new ArrayList<>();
+
+        for (ItemEntity item : getItems()) {
+
+            if (item.getArchived()) {
+                arhivedItems.add(item);
+            }
+        }
+        return arhivedItems;
+    }
+
+    public void addItem(ItemEntity item) {
         this.items.add(item);
-        // setting also for new item this portfolio-parent
+        // !!! setting also for new item this portfolio as a parent
         item.setPortfolio(this);
+    }
+
+    public void removeItem(ItemEntity item) {
+        this.items.remove(item);
+        //!!! unsetting also for new item this portfolio-parent
+        item.setPortfolio(null);
     }
 
     public UserEntity getUser() {
@@ -182,7 +214,7 @@ public class PortfolioEntity implements Serializable {
     public int hashCode() {
 
         return Objects.hash(getId(), getName(), getIsShare(), getShareLink(), getIsShowAmounts(), getShowedCurrency(),
-                getNetCostUsd(), getNetCostEur(), getNetCostBtc(), getNetCostEth(), getUser(), getItems());
+                getNetCostUsd(), getNetCostEur(), getNetCostBtc(), getNetCostEth(), getItems());
     }
 
     @Override
