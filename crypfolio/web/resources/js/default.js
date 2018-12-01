@@ -2,10 +2,10 @@
  * Listener to trigger modal close, when clicked on dialog mask
  * got it from https://stackoverflow.com/questions/14595835/primefaces-dialog-close-on-click-outside-of-the-dialog
  */
-$(document).ready(function(){
-    $("body").on("click",'.ui-dialog-mask',function () {
+$(document).ready(function () {
+    $("body").on("click", '.ui-dialog-mask', function () {
         idModal = this.id;
-        idModal = idModal.replace("_modal","");
+        idModal = idModal.replace("_modal", "");
         getWidgetVarById(idModal).hide();
     })
 });
@@ -25,27 +25,30 @@ function getWidgetVarById(id) {
 }
 
 /*
-* 0 price - button "Done" enable/disable managed
+* depends of form input values - to enable/disable the button "Done"
 * */
-function showPrice(){
+function enableDoneButton() {
 
-    var inputValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount_hinput").value;
     var buttonDone = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-done");
+    var inputAmountValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount_hinput").value;
+    var inputPriceValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-price_hinput").value;
+    var inputTotalValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-total_hinput").value;
 
-    if (inputValue === null || inputValue === '' || inputValue === '0' )
-        buttonDone.classList.add('ui-state-disabled');
-    else
+    // old version of the condition: if (Number(inputAmountValue) > 0 && inputPriceValue !== "" && inputTotalValue !== "")
+    if (Number(inputAmountValue) > 0 && Number(inputPriceValue) > 0 && Number(inputTotalValue) > 0)
         buttonDone.classList.remove('ui-state-disabled');
+    else
+        buttonDone.classList.add('ui-state-disabled');
 }
 
 /*
-* button "All" on Sell transaction type
+* working of the button "All" which works with "Sell" transaction type
 * */
-function showButtonSellAll(){
+function showButtonSellAll() {
 
     var el = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount-sell-all");
 
-    if( el && el.style.display === 'block')
+    if (el && el.style.display === 'block')
         el.style.display = 'none';
     else
         el.style.display = 'block';
@@ -61,6 +64,7 @@ function startHandler() {
         PF('ajaxStatus').show();
     }, 300);
 }
+
 function endHandler() {
     clearTimeout(ajaxInProgress);
     PF('ajaxStatus').hide();
