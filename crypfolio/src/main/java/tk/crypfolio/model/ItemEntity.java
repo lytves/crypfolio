@@ -151,11 +151,11 @@ public class ItemEntity implements Serializable {
                     .max(BigDecimal.ZERO));
             setNetCostEth(getNetCostEth().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEth))
                     .max(BigDecimal.ZERO));
-        }
 
-        // set item archived if it have no tokens more
-        if (getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            setArchived(true);
+            // set item archived if it have no tokens more
+            if (getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+                setArchived(true);
+            }
         }
     }
 
