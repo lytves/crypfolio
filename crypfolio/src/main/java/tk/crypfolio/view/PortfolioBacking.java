@@ -530,8 +530,13 @@ public class PortfolioBacking implements Serializable {
                         item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
                 break;
         }
-//        return String.valueOf(profit);
         return profit;
+    }
+
+    public String getItemProfitForSortBy(@NotNull ItemEntity item) {
+
+        return String.valueOf(getItemProfit(item));
+
     }
 
     public String getItemProfitPercentage(@NotNull ItemEntity item) {
