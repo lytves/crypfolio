@@ -134,6 +134,14 @@
             <version>1.6.1</version>
         </dependency>
 
+        <!-- org.jetbrains -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
 
     </dependencies>
 
