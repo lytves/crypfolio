@@ -6,10 +6,16 @@
 
     <p:outputPanel id="archivePanel">
 
+        <!-- The archive items table -->
+        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.getItemsArchived()}"
+                     var="itemEntity" styleClass="panelGridCenter"
+                     stickyHeader="true"
+                     id="archiveDataTableWV" widgetVar="archiveDataTableWV">
 
+            <ui:include src="/faces/items-list.xhtml"/>
+
+        </p:dataTable>
 
     </p:outputPanel>
-
-
 
 </ui:composition>
