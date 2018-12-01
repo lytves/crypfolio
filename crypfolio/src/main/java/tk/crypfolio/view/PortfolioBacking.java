@@ -254,6 +254,10 @@ public class PortfolioBacking implements Serializable {
         return transactionTemp.compareTo(new BigDecimal(Settings.STRING_MAX_BIGDECIMAL_VALUE)) >= 1;
     }
 
+    /**
+     * Method for submit "Add Transaction" form
+     *
+     */
     public void doSubmitAddTransaction() {
 
         // checking if all entered values are valid
@@ -265,6 +269,14 @@ public class PortfolioBacking implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! Some of entered values are not valid!",
                     ""));
+
+        } else if (("SELL").equals(transactionTemp.getType().getType())
+                && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1){
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error on processing your transaction! You can't sell more coins than you have!",
+                    ""));
+
         } else {
 
             // set today date by default
