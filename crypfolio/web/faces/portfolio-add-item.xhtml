@@ -127,12 +127,12 @@
                                     <p:commandButton style="display: none;"
                                                      id="add-transaction-amount-sell-all"
                                                      value="All"
-                                                     update="add-transaction-amount add-transaction-total" process="@this"
+                                                     update="add-transaction-amount add-transaction-total"
+                                                     process="@this"
                                                      actionListener="#{portfolioBacking.getItemAllAmount}"
-                                                     oncomplete="enableDoneButton();"
-                                                     />
-                                    <!--resetValues="true" is important to reset amount input validation???-->
-                                    <!--   call also method autoRecalculateTransactionInputData() from this bean's listener!   -->
+                                                     oncomplete="enableDoneButton();"/>
+                                    <!--resetValues="true" is it necesary to reset amount input validation???-->
+                                    <!--   call also method autoRecalculateTransactionInputData('amount') from this bean's listener!   -->
 
                                     <h:outputText styleClass="input-group-addon input-group-addon-right"
                                                   value="#{portfolioBacking.itemTemp.coin.symbol}"/>
@@ -145,13 +145,14 @@
 
                                     <p:commandButton id="add-transaction-market-price"
                                                      value="Market Price"
-                                                     update="add-transaction-price" process="@this"
+                                                     update="add-transaction-price add-transaction-total"
+                                                     process="@this"
                                                      style="margin-left: 10px;"
                                                      actionListener="#{portfolioBacking.setActualTransactionPriceTemp}"
                                                      oncomplete="enableDoneButton();"
                                                      resetValues="true"/>
-                                    <!--resetValues="true" is important to reset input validation???-->
-                                    <!--   call also method autoRecalculateTransactionInputData() from this bean's listener!   -->
+                                    <!--resetValues="true" is it necesary (important) to reset input validation???-->
+                                    <!--   call also method autoRecalculateTransactionInputData('price') from this bean's listener!   -->
 
                                 </p:outputPanel>
 
@@ -166,7 +167,8 @@
                                                    value="#{portfolioBacking.transactionPriceTemp}">
 
                                         <p:ajax event="keyup" oncomplete="enableDoneButton();" process="@this"
-                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData}"/>
+                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData('price')}"
+                                                update="add-transaction-total"/>
 
                                     </p:inputNumber>
 
@@ -180,12 +182,12 @@
                                         <f:selectItems value="#{portfolioBacking.currencies}"/>
 
                                         <p:ajax event="itemSelect"
-                                                update="add-transaction-price add-transaction-total-currency"
+                                                update="add-transaction-price add-transaction-total-currency add-transaction-total"
                                                 oncomplete="enableDoneButton();"
                                                 listener="#{portfolioBacking.setActualTransactionPriceTemp}"
                                                 resetValues="true"/>
-                                        <!--resetValues="true" is important to reset input validation???-->
-                                        <!--   call also method autoRecalculateTransactionInputData() from this bean's listener!   -->
+                                        <!--resetValues="true" is it necesary (important) to reset input validation???-->
+                                        <!--   call also method autoRecalculateTransactionInputData('price') from this bean's listener!   -->
 
                                     </p:selectOneMenu>
 
@@ -204,7 +206,8 @@
                                                    value="#{portfolioBacking.transactionTotalTemp}">
 
                                         <p:ajax event="keyup" oncomplete="enableDoneButton();" process="@this"
-                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData}"/>
+                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData('total')}"
+                                                update="add-transaction-price add-transaction-amount"/>
 
                                     </p:inputNumber>
 

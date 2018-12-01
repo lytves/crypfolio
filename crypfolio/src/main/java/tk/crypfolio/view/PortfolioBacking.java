@@ -1,5 +1,6 @@
 package tk.crypfolio.view;
 
+import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.Constants;
@@ -68,6 +69,10 @@ public class PortfolioBacking implements Serializable {
     // is used to show current date in the Date input placeholder
     private String datePlaceholder;
 
+    // is used only in the function autoRecalculateTransactionInputData(...)
+    // for recount or price or amount, depends of the last user's entered input form
+    private String lastInputFormFocused;
+
     @PostConstruct
     public void init() {
         LOGGER.log(Level.WARNING, "PortfolioBacking @PostConstruct");
@@ -133,6 +138,14 @@ public class PortfolioBacking implements Serializable {
         this.transactionTotalTemp = transactionTotalTemp;
     }
 
+    private String getLastInputFormFocused() {
+        return lastInputFormFocused;
+    }
+
+    private void setLastInputFormFocused(String lastInputFormFocused) {
+        this.lastInputFormFocused = lastInputFormFocused;
+    }
+
     /*
      * * * * * * * * * * * * * * * * * * * * * Bean's methods * * * * * * * * * * * * * * * * * * * * *
      * */
@@ -153,17 +166,38 @@ public class PortfolioBacking implements Serializable {
         switch (changedInputForm) {
 
             case "amount":
-                System.out.println("switch case amount");
-                setTransactionTotalTemp(transactionTemp.getAmount().multiply(transactionPriceTemp)
-                        .setScale(8, RoundingMode.DOWN));
+
+                if (transactionTemp.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+                    setTransactionTotalTemp(BigDecimal.ZERO);
+                } else if (transactionPriceTemp.compareTo(BigDecimal.ZERO) >= 1) {
+                    setTransactionTotalTemp(transactionTemp.getAmount().multiply(transactionPriceTemp)
+                            .setScale(8, RoundingMode.DOWN));
+                }
+                setLastInputFormFocused("amount");
                 break;
 
             case "price":
-                System.out.println("switch case price");
+
+                if (transactionTemp.getAmount().compareTo(BigDecimal.ZERO) >= 1) {
+
+                    setTransactionTotalTemp(transactionTemp.getAmount().multiply(transactionPriceTemp)
+                            .setScale(8, RoundingMode.DOWN));
+                }
+                setLastInputFormFocused("price");
                 break;
 
             case "total":
-                System.out.println("switch case total");
+
+                if (transactionPriceTemp.compareTo(BigDecimal.ZERO) == 0) {
+                    getTransactionTemp().setAmount(BigDecimal.ZERO);
+                } else if (("amount").equals(getLastInputFormFocused())) {
+                    setTransactionPriceTemp(getTransactionTotalTemp()
+                            .divide(transactionTemp.getAmount(), 8, BigDecimal.ROUND_HALF_EVEN));
+
+                } else if (("price").equals(getLastInputFormFocused())) {
+                    getTransactionTemp().setAmount(transactionTotalTemp
+                            .divide(transactionPriceTemp, 8, BigDecimal.ROUND_HALF_EVEN));
+                }
                 break;
         }
     }
@@ -186,6 +220,7 @@ public class PortfolioBacking implements Serializable {
     }
 
     public void createItemTemp() {
+        LOGGER.log(Level.WARNING, "PortfolioBacking.createItemTemp");
 
         itemTemp = new ItemEntity(coinTemp);
 
@@ -203,7 +238,7 @@ public class PortfolioBacking implements Serializable {
         transactionPriceTemp = getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency());
     }
 
-    private boolean isBigDecimalVaildForDB(BigDecimal transactionTemp) {
+    private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {
 
         return transactionTemp.compareTo(new BigDecimal(Settings.STRING_MAX_BIGDECIMAL_VALUE)) >= 1;
     }
@@ -392,7 +427,7 @@ public class PortfolioBacking implements Serializable {
      */
     public BigDecimal getCoinPrice(CoinEntity coin, CurrencyType showedCurrency) {
 
-        switch (showedCurrency.getCurrency()) {
+/*        switch (showedCurrency.getCurrency()) {
 
             case "USD":
                 return new BigDecimal("1");
@@ -407,9 +442,9 @@ public class PortfolioBacking implements Serializable {
                 return new BigDecimal("4");
 
         }
-        return BigDecimal.ZERO;
+        return BigDecimal.ZERO;*/
 
-/*        try {
+        try {
 
             Double coinPrice = coinCurrentData("price", coin.getId(), showedCurrency);
             return BigDecimal.valueOf(coinPrice);
@@ -417,7 +452,7 @@ public class PortfolioBacking implements Serializable {
         } catch (NullPointerException ex) {
             LOGGER.log(Level.WARNING, ex.toString());
         }
-        return BigDecimal.ZERO;*/
+        return BigDecimal.ZERO;
     }
 
     /**
