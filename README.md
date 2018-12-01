@@ -31,7 +31,7 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 ![Portfolio Page](images/portfolio.png)
 
-![Portfolio Page, add transaction](images/add-positon.png)
+![Portfolio Page, add transaction](images/add-transaction.png)
 
 ![WatchList Page](images/watchlist-page.png)
 
