@@ -10,7 +10,7 @@ import tk.crypfolio.util.StringGenerator;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -81,7 +81,7 @@ public class AppInitServlet implements ServletContextListener {
 
 //        p.addItem(item);
 //        item.setCoin(coin);
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
 
         TransactionEntity trans = new TransactionEntity(BigDecimal.valueOf(1 + (int)(Math.random() * 1000)),
                 date, CurrencyType.ETH);
