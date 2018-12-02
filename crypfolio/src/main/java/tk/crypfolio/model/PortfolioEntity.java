@@ -199,10 +199,10 @@ public class PortfolioEntity implements Serializable {
         for (ItemEntity item : getItems()) {
 
             // recount Net Cost values in all currencies
-            tempNetCostUsd = tempNetCostUsd.add(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-            tempNetCostEur = tempNetCostEur.add(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-            tempNetCostBtc = tempNetCostBtc.add(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
-            tempNetCostEth = tempNetCostEth.add(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+            tempNetCostUsd = tempNetCostUsd.add(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+            tempNetCostEur = tempNetCostEur.add(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+            tempNetCostBtc = tempNetCostBtc.add(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+            tempNetCostEth = tempNetCostEth.add(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
 
         setNetCostUsd(tempNetCostUsd);
