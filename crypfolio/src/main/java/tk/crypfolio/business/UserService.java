@@ -24,7 +24,7 @@ public class UserService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
     /*
      * user login
@@ -190,6 +190,3 @@ public class UserService implements Serializable {
         return userWatchCoinDB;
     }
 }
-
-
-

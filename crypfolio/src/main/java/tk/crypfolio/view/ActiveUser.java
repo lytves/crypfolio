@@ -1,5 +1,6 @@
 package tk.crypfolio.view;
 
+import tk.crypfolio.model.PortfolioEntity;
 import tk.crypfolio.model.UserEntity;
 
 import javax.enterprise.context.SessionScoped;
@@ -31,5 +32,9 @@ public class ActiveUser implements Serializable {
 
     public boolean isPresent() {
         return getUser() != null;
+    }
+
+    public void setPortfolio(PortfolioEntity portfolio){
+        getUser().setPortfolio(portfolio);
     }
 }
