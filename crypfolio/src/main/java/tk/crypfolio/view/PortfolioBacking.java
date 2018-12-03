@@ -1,5 +1,7 @@
 package tk.crypfolio.view;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.PortfolioService;
@@ -16,14 +18,12 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Named
 @ViewScoped
 public class PortfolioBacking implements Serializable {
 
-    private static final Logger LOGGER = Logger.getLogger(PortfolioBacking.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(PortfolioBacking.class);
 
     // application scoped
     @Inject
@@ -46,7 +46,8 @@ public class PortfolioBacking implements Serializable {
 
     @PostConstruct
     public void init() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking @PostConstruct");
+        LOGGER.info("PortfolioBacking @PostConstruct");
+
         this.marketValue = updateMarketValue();
         this.netCost = updateNetCost();
         getProfit();
@@ -54,7 +55,7 @@ public class PortfolioBacking implements Serializable {
 
     @PreDestroy
     public void destroy() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking @PreDestroy");
+        LOGGER.info("PortfolioBacking @PreDestroy");
     }
 
     /*
@@ -93,7 +94,7 @@ public class PortfolioBacking implements Serializable {
      * */
     public void updatePortfolioValues() {
 
-        System.out.println("updatePortfolioValues");
+        LOGGER.info("updatePortfolioValues...");
 
         this.marketValue = updateMarketValue();
         this.netCost = updateNetCost();
@@ -134,7 +135,7 @@ public class PortfolioBacking implements Serializable {
             return MathRounders.roundBigDecimalToTwoDecimal(
                     getMarketValue().subtract(getNetCost()).setScale(8, BigDecimal.ROUND_HALF_DOWN));
         } catch (NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return BigDecimal.ZERO;
     }
@@ -147,7 +148,7 @@ public class PortfolioBacking implements Serializable {
                     .divide(getNetCost(), 8, BigDecimal.ROUND_HALF_DOWN));
 
         } catch (ArithmeticException | NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return BigDecimal.ZERO;
     }
@@ -167,7 +168,7 @@ public class PortfolioBacking implements Serializable {
             return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return BigDecimal.ZERO;
     }
@@ -189,7 +190,7 @@ public class PortfolioBacking implements Serializable {
             return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return BigDecimal.ZERO;
     }
@@ -226,7 +227,7 @@ public class PortfolioBacking implements Serializable {
             return BigDecimal.valueOf(coinPrice);
 
         } catch (NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return BigDecimal.ZERO;
     }
@@ -326,7 +327,7 @@ public class PortfolioBacking implements Serializable {
             }
 
         } catch (ArithmeticException | NullPointerException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
 
         return String.valueOf(MathRounders.roundBigDecimalToTwoDecimal(profitPercentage));
@@ -342,7 +343,7 @@ public class PortfolioBacking implements Serializable {
                     .multiply(new BigDecimal("100")).divide(getMarketValue(), 8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException | ArithmeticException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return String.valueOf(MathRounders.roundBigDecimalToTwoDecimal(sharePercentage));
 
@@ -429,7 +430,7 @@ public class PortfolioBacking implements Serializable {
             }
 
         } catch (NumberFormatException ex) {
-            LOGGER.log(Level.WARNING, ex.toString());
+            LOGGER.warn(ex.toString());
         }
         return 0;
     }
