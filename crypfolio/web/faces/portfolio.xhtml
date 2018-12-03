@@ -38,7 +38,7 @@
 
                         <f:selectItems value="#{portfolioBacking.currencies}"/>
 
-                        <p:ajax event="itemSelect"
+                        <p:ajax event="change"
                                 update="mainTabView:portfolioMainData"
                                 listener="#{portfolioBacking.updatePortfolioValues}"/>
 
