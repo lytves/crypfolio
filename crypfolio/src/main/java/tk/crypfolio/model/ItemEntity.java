@@ -94,6 +94,11 @@ public class ItemEntity implements Serializable {
 
             setAmount(getAmount().add(transaction.getAmount()));
 
+            // set item not-archived if it already has tokens
+            if (getAmount().compareTo(BigDecimal.ZERO) >= 1 ) {
+                setArchived(false);
+            }
+
             // recount Net Cost values in all currencies
             setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(transaction.getBoughtPriceUsd()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
@@ -156,7 +161,7 @@ public class ItemEntity implements Serializable {
             setNetCostEth(getNetCostEth().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEth))
                     .max(BigDecimal.ZERO));
 
-            // set item archived if it have no tokens more
+            // set item archived if it has no tokens more
             if (getAmount().compareTo(BigDecimal.ZERO) <= 0) {
                 setArchived(true);
             }
