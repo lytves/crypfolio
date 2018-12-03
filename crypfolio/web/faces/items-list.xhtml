@@ -4,12 +4,6 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <!-- The main items table -->
-    <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.getItemsNotArchived()}"
-                 var="itemEntity" styleClass="panelGridCenter"
-                 stickyHeader="true"
-                 id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
-
         <!--   COIN   -->
         <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;">
 
@@ -118,7 +112,5 @@
                           value="#{portfolioBacking.getItemSharePercentage(itemEntity)}%"/>
 
         </p:column>
-
-    </p:dataTable>
 
 </ui:composition>

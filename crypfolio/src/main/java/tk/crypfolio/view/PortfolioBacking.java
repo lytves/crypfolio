@@ -296,32 +296,39 @@ public class PortfolioBacking implements Serializable {
 
         BigDecimal profitPercentage = BigDecimal.ZERO;
 
-        switch (item.getShowedCurrency().getCurrency()) {
+        try {
 
-            case "USD":
+            switch (item.getShowedCurrency().getCurrency()) {
 
-                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
-                        .divide(item.getNetCostUsd(), 8, BigDecimal.ROUND_HALF_DOWN));
-                break;
+                case "USD":
 
-            case "EUR":
+                    profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                            .divide(item.getNetCostUsd(), 8, BigDecimal.ROUND_HALF_DOWN));
+                    break;
 
-                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
-                        .divide(item.getNetCostEur(), 8, BigDecimal.ROUND_HALF_DOWN));
-                break;
+                case "EUR":
 
-            case "BTC":
+                    profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                            .divide(item.getNetCostEur(), 8, BigDecimal.ROUND_HALF_DOWN));
+                    break;
 
-                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
-                        .divide(item.getNetCostBtc(), 8, BigDecimal.ROUND_HALF_DOWN));
-                break;
+                case "BTC":
 
-            case "ETH":
+                    profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                            .divide(item.getNetCostBtc(), 8, BigDecimal.ROUND_HALF_DOWN));
+                    break;
 
-                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
-                        .divide(item.getNetCostEth(), 8, BigDecimal.ROUND_HALF_DOWN));
-                break;
+                case "ETH":
+
+                    profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                            .divide(item.getNetCostEth(), 8, BigDecimal.ROUND_HALF_DOWN));
+                    break;
+            }
+
+        } catch (ArithmeticException | NullPointerException ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
         }
+
         return String.valueOf(MathRounders.roundBigDecimalToTwoDecimal(profitPercentage));
     }
 

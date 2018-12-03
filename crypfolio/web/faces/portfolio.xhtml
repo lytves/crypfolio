@@ -64,8 +64,16 @@
 
         <h:outputText styleClass="span-10px-height"/>
 
-        <!-- including dataTable with list of items of portfolio -->
-        <ui:include src="/faces/items-list.xhtml"/>
+        <!-- The main items table -->
+        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.getItemsNotArchived()}"
+                     var="itemEntity" styleClass="panelGridCenter"
+                     stickyHeader="true"
+                     id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
+
+            <!-- including dataTable with list of items of portfolio -->
+            <ui:include src="/faces/items-list.xhtml"/>
+
+        </p:dataTable>
 
     </p:outputPanel>
 
