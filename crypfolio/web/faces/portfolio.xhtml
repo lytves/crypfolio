@@ -6,66 +6,70 @@
 
     <p:outputPanel id="portfolioPanel">
 
-        <div class="left" id="portfolioMainData" style="opacity: 0.1;">
+        <div style="display: flex; justify-content: space-between;">
 
-            <div class="ui-g" style="background-color: #ffda62;">
+            <p:outputPanel id="portfolioMainData" style="line-height: 2.5;">
 
-                <div class="ui-g-8 ui-g-nopad">
-                    <div class="ui-g-2 p5-20px">Market value</div>
-                    <div class="ui-g-2 p5-20px">Net cost</div>
-                    <div class="ui-g-2 p5-20px">Profit</div>
-                    <div class="ui-g-2 p5-20px">Profit %</div>
-                    <div class="ui-g-2 p5-20px">Change 24h</div>
+                <h:outputText class="title"
+                              value="Market value: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.marketValue} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
-                    <div class="ui-g-2 p5-20px">210 ETH</div>
-                    <div class="ui-g-2 p5-20px">20 ETH</div>
-                    <div class="ui-g-2 p5-20px">190 ETH</div>
-                    <div class="ui-g-2 p5-20px">100%</div>
-                    <div class="ui-g-2 p5-20px">20%</div>
-                </div>
+                <h:outputText class="title"
+                              value="Net cost: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.netCost} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
-                <div class="ui-g-4" style="background-color: crimson;">
+                <h:outputText class="title"
+                              value="Profit: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.getProfit()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
+                               (#{portfolioBacking.getProfitPercentage()}%)"
+                              styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}"/>
 
-                    <div class="ui-g">
-                        <div class="ui-g-3">BTC</div>
-                        <div class="ui-g-3">ETH</div>
-                        <div class="ui-g-3">USD</div>
-                        <div class="ui-g-3">EUR</div>
-                    </div>
+                <!--   PORTFOLIO   CURRENCIES   -->
+                <h:form id="porfolio-form" style="display: inline-block; height: 32px;">
 
-                </div>
+                    <p:selectOneMenu id="portfolio-currency"
+                                     type="input"
+                                     converter="#{selectOneMenuCurrencyTypeConverter}"
+                                     value="#{portfolioBacking.activeUser.user.portfolio.showedCurrency}"
+                                     effect="none" class="selectonemenu-right noshadow portfolio-currency">
+
+                        <f:selectItems value="#{portfolioBacking.currencies}"/>
+
+                        <p:ajax event="itemSelect"
+                                update="mainTabView:portfolioMainData"
+                                listener="#{portfolioBacking.updatePortfolioValues}"/>
+
+                    </p:selectOneMenu>
+
+                </h:form>
+
+            </p:outputPanel>
+
+            <div>
+                <!--            =====================              button ADD WATCH COIN -->
+                <h:form class="add-item-coin-form">
+
+                    <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
+                                     class="upp-case"
+                                     value="Add New Item">
+                    </p:commandButton>
+
+                </h:form>
             </div>
 
         </div>
 
-        <div class="right" style="padding-bottom: 0.5em;">
-            <!--            =====================              button ADD WATCH COIN -->
-            <h:form class="add-item-coin-form">
-
-                <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
-                                 class="upp-case"
-                                 value="Add New Item">
-                </p:commandButton>
-
-            </h:form>
-        </div>
-
-        <div class="clear"/>
-
         <h:outputText styleClass="span-10px-height"/>
 
-        <!-- The main items table -->
-        <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.getItemsNotArchived()}"
-                     var="itemEntity" styleClass="panelGridCenter"
-                     stickyHeader="true"
-                     id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
-
-            <ui:include src="/faces/items-list.xhtml"/>
-
-        </p:dataTable>
+        <!-- including dataTable with list of items of portfolio -->
+        <ui:include src="/faces/items-list.xhtml"/>
 
     </p:outputPanel>
 
+    <!-- including modal window of item adding -->
     <ui:include src="/faces/portfolio-add-item.xhtml"/>
 
 </ui:composition>

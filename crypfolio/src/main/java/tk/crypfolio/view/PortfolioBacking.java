@@ -1,31 +1,20 @@
 package tk.crypfolio.view;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
-import tk.crypfolio.business.UserService;
-import tk.crypfolio.common.Constants;
+import tk.crypfolio.business.PortfolioService;
 import tk.crypfolio.common.CurrencyType;
-import tk.crypfolio.common.Settings;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.ItemEntity;
-import tk.crypfolio.model.TransactionEntity;
-import tk.crypfolio.parse.ParserAPI;
+import tk.crypfolio.util.MathRounders;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,37 +35,21 @@ public class PortfolioBacking implements Serializable {
 
     // stateless business
     @Inject
-    private UserService userService;
+    private PortfolioService portfolioService;
 
     //it's used in p:selectOneMenu form
     private CurrencyType[] currencies;
 
-    private CoinEntity coinTemp;
+    private BigDecimal marketValue;
 
-    private ItemEntity itemTemp;
-
-    private TransactionEntity transactionTemp;
-
-    // here is using a temporary price coz we steel don't know
-    // which transaction currency will used like main
-    // so can't write directly to some TransactionEntity property
-    private BigDecimal transactionPriceTemp;
-
-    // see comment above p.s.: or won't use a separate variable, don't know yet))
-    // this variable is used only to show value on the jsf-page,
-    // in the business logic don't use it
-    private BigDecimal transactionTotalTemp;
-
-    // is used to show current date in the Date input placeholder
-    private String datePlaceholder;
-
-    // is used only in the function autoRecalculateTransactionInputData(...)
-    // for recount or price or amount, depends of the last user's entered input form
-    private String lastInputFormFocused;
+    private BigDecimal netCost;
 
     @PostConstruct
     public void init() {
         LOGGER.log(Level.WARNING, "PortfolioBacking @PostConstruct");
+        this.marketValue = updateMarketValue();
+        this.netCost = updateNetCost();
+        getProfit();
     }
 
     @PreDestroy
@@ -99,334 +72,84 @@ public class PortfolioBacking implements Serializable {
         return CurrencyType.values();
     }
 
-    public CoinEntity getCoinTemp() {
-        return coinTemp;
+    public BigDecimal getMarketValue() {
+        return marketValue;
     }
 
-    public void setCoinTemp(CoinEntity coinTemp) {
-        this.coinTemp = coinTemp;
+    public void setMarketValue(BigDecimal marketValue) {
+        this.marketValue = marketValue;
     }
 
-    public ItemEntity getItemTemp() {
-        return itemTemp;
+    public BigDecimal getNetCost() {
+        return netCost;
     }
 
-    public void setItemTemp(ItemEntity itemTemp) {
-        this.itemTemp = itemTemp;
-    }
-
-    public TransactionEntity getTransactionTemp() {
-        return transactionTemp;
-    }
-
-    public void setTransactionTemp(TransactionEntity transactionTemp) {
-        this.transactionTemp = transactionTemp;
-    }
-
-    public BigDecimal getTransactionPriceTemp() {
-        return transactionPriceTemp;
-    }
-
-    public void setTransactionPriceTemp(BigDecimal transactionPriceTemp) {
-        this.transactionPriceTemp = transactionPriceTemp;
-    }
-
-    public BigDecimal getTransactionTotalTemp() {
-        return transactionTotalTemp;
-    }
-
-    public void setTransactionTotalTemp(BigDecimal transactionTotalTemp) {
-        this.transactionTotalTemp = transactionTotalTemp;
-    }
-
-    @Contract(pure = true)
-    private String getLastInputFormFocused() {
-        return lastInputFormFocused;
-    }
-
-    private void setLastInputFormFocused(String lastInputFormFocused) {
-        this.lastInputFormFocused = lastInputFormFocused;
+    public void setNetCost(BigDecimal netCost) {
+        this.netCost = netCost;
     }
 
     /*
      * * * * * * * * * * * * * * * * * * * * * Bean's methods * * * * * * * * * * * * * * * * * * * * *
      * */
-    public String getDatePlaceholder() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern(Constants.datePattern, Constants.mainLocale));
+    public void updatePortfolioValues() {
+
+        System.out.println("updatePortfolioValues");
+
+        this.marketValue = updateMarketValue();
+        this.netCost = updateNetCost();
+        getProfit();
+
+        activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
     }
 
-    public void getItemAllAmount() {
-        transactionTemp.setAmount(itemTemp.getAmount());
+    private BigDecimal updateMarketValue() {
 
-        autoRecalculateTransactionInputData("amount");
-    }
-
-    // autocalculating add-item-transaction form variables
-    public void autoRecalculateTransactionInputData(String changedInputForm) {
-        LOGGER.log(Level.WARNING, "autoRecalculateTransactionInputData__________________________");
-
-        switch (changedInputForm) {
-
-            case "amount":
-
-                if (transactionTemp.getAmount().compareTo(BigDecimal.ZERO) == 0) {
-                    setTransactionTotalTemp(BigDecimal.ZERO);
-                } else if (transactionPriceTemp.compareTo(BigDecimal.ZERO) >= 1) {
-                    setTransactionTotalTemp(transactionTemp.getAmount().multiply(transactionPriceTemp)
-                            .setScale(8, RoundingMode.DOWN));
-                }
-                setLastInputFormFocused("amount");
-                break;
-
-            case "price":
-
-                if (transactionTemp.getAmount().compareTo(BigDecimal.ZERO) >= 1) {
-
-                    setTransactionTotalTemp(transactionTemp.getAmount().multiply(transactionPriceTemp)
-                            .setScale(8, RoundingMode.DOWN));
-                }
-                setLastInputFormFocused("price");
-                break;
-
-            case "total":
-
-                if (transactionPriceTemp.compareTo(BigDecimal.ZERO) == 0) {
-                    getTransactionTemp().setAmount(BigDecimal.ZERO);
-                } else if (("amount").equals(getLastInputFormFocused())) {
-
-                    try {
-                        setTransactionPriceTemp(getTransactionTotalTemp()
-                                .divide(transactionTemp.getAmount(), 8, BigDecimal.ROUND_HALF_EVEN));
-
-                    } catch (ArithmeticException ex) {
-                        LOGGER.log(Level.WARNING, ex.toString());
-                    }
-
-                } else if (("price").equals(getLastInputFormFocused())) {
-
-                    try {
-                        getTransactionTemp().setAmount(transactionTotalTemp
-                                .divide(transactionPriceTemp, 8, BigDecimal.ROUND_HALF_EVEN));
-                    } catch (ArithmeticException ex) {
-                        LOGGER.log(Level.WARNING, ex.toString());
-                    }
-                }
-                break;
-        }
-    }
-
-    public void setActualTransactionPriceTemp() {
-        transactionPriceTemp = getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency());
-
-        autoRecalculateTransactionInputData("price");
-    }
-
-    public void transactionAddFormReset() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking.transactionAddFormReset");
-        // executing every time when add-transaction modal window is closed
-        // or Reset button pushed
-        if (coinTemp != null) setCoinTemp(null);
-        if (itemTemp != null) setItemTemp(null);
-        if (transactionTemp != null) setTransactionTemp(null);
-        if (transactionPriceTemp != null) setTransactionPriceTemp(null);
-        if (transactionTotalTemp != null) setTransactionTotalTemp(null);
-    }
-
-    public void createItemTemp() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking.createItemTemp");
-
-        itemTemp = new ItemEntity(coinTemp);
+        BigDecimal portfolioMarketValue = BigDecimal.ZERO;
 
         for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
 
-            if (item.getCoin().getId().equals(coinTemp.getId())) {
-                itemTemp = item;
-                break;
-            }
+            portfolioMarketValue = portfolioMarketValue
+                    .add(geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
-
-        transactionTemp = new TransactionEntity();
-
-        // to set initial item's coin price
-        transactionPriceTemp = getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency());
+        return MathRounders.roundBigDecimalToTwoDecimal(portfolioMarketValue);
     }
 
-    private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {
+    private BigDecimal updateNetCost() {
 
-        return transactionTemp.compareTo(new BigDecimal(Settings.STRING_MAX_BIGDECIMAL_VALUE)) >= 1;
+        BigDecimal portfolioNetCost = BigDecimal.ZERO;
+
+        for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+            portfolioNetCost = portfolioNetCost.add(item.getNetCostByCurrency(activeUser.getUser().getPortfolio().getShowedCurrency()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN);
+        }
+        return MathRounders.roundBigDecimalToTwoDecimal(portfolioNetCost);
     }
 
-    /**
-     * Method for submit "Add Transaction" form
-     *
-     */
-    public void doSubmitAddTransaction() {
+    public BigDecimal getProfit() {
 
-        // checking if all entered values are valid
-        if (itemTemp == null || transactionTemp == null
-                || (transactionTemp.getAmount() == null || isBigDecimalVaildForDB(transactionTemp.getAmount()))
-                || (transactionPriceTemp == null || isBigDecimalVaildForDB(transactionPriceTemp))
-                || isBigDecimalVaildForDB(transactionTemp.getAmount().multiply(transactionPriceTemp))) {
+        try {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Error on processing your transaction! Some of entered values are not valid!",
-                    ""));
-
-        } else if (("SELL").equals(transactionTemp.getType().getType())
-                && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1){
-
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Error on processing your transaction! You can't sell more coins than you have!",
-                    ""));
-
-        } else {
-
-            // set today date by default
-            if (transactionTemp.getBoughtDate() == null) {
-                transactionTemp.setBoughtDate(LocalDate.now());
-            }
-
-            // makes API request to obtain history USD/EUR/BTC/ETH prices
-            Map<String, Double> bitcoinHistoricalPrice = ParserAPI.parseBitcoiHistoricalPrice(transactionTemp.getBoughtDate());
-
-            // recounts and sets prices in all currencies of the transaction
-            Double coefficientMultiplier;
-
-            switch (transactionTemp.getBoughtCurrency().getCurrency()) {
-
-                case "USD":
-
-                    // USD
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp);
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    break;
-
-                case "EUR":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // EUR
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp);
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    break;
-
-                case "BTC":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // BTC
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp);
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    break;
-
-                case "ETH":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_EVEN));
-
-                    // ETH
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp);
-
-                    break;
-            }
-
-            // also recount values (net costs, average prices) of item
-            itemTemp.addTransaction(transactionTemp);
-
-            // if it's new item in the portfolio
-            if (itemTemp.getId() == null) {
-
-                itemTemp.setShowedCurrency(transactionTemp.getBoughtCurrency());
-
-                activeUser.getUser().getPortfolio().addItem(itemTemp);
-            }
-
-            // recount values (netcost) of portfolio
-            activeUser.getUser().getPortfolio().recountNetCosts();
-
-            activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
-
+            return MathRounders.roundBigDecimalToTwoDecimal(
+                    getMarketValue().subtract(getNetCost()).setScale(8, BigDecimal.ROUND_HALF_DOWN));
+        } catch (NullPointerException ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
         }
+        return BigDecimal.ZERO;
     }
 
-    // autocomplete search method (identical to WatchlistBacking)
-    public List<CoinEntity> completeCoinTemp(String query) {
+    public BigDecimal getProfitPercentage() {
 
-        List<CoinEntity> filteredCoins = new ArrayList<>();
+        try {
 
-        for (CoinEntity coin : applicationContainer.getAllCoinsListing()) {
+            return MathRounders.roundBigDecimalToTwoDecimal(getProfit().multiply(new BigDecimal("100"))
+                    .divide(getNetCost(), 8, BigDecimal.ROUND_HALF_DOWN));
 
-            if (coin.getName().toLowerCase().startsWith(query.toLowerCase().trim())
-                    || coin.getSymbol().toLowerCase().startsWith(query.toLowerCase().trim())) {
-                filteredCoins.add(coin);
-            }
+        } catch (ArithmeticException | NullPointerException ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
         }
-        return filteredCoins;
+        return BigDecimal.ZERO;
     }
 
     /**
@@ -441,8 +164,29 @@ public class PortfolioBacking implements Serializable {
 
             BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), item.getShowedCurrency());
 
-//            Double coinMarketPrice = coinCurrentData("price", item.getCoin().getId(), item.getShowedCurrency());
-            return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+            return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+        } catch (NullPointerException ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
+        }
+        return BigDecimal.ZERO;
+    }
+
+    /**
+     * Method which returns BigDecimal value of item's coin total current Market Value
+     * is used to count portfolio Market Value
+     *
+     * @param item         - current ItemEntity
+     * @param currencyType
+     * @return BigDecimal value to be showed and/or get sorted in the column: total market value or 0
+     */
+    public BigDecimal geItemMarketValue(@NotNull ItemEntity item, CurrencyType currencyType) {
+
+        try {
+
+            BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), currencyType);
+
+            return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException ex) {
             LOGGER.log(Level.WARNING, ex.toString());
@@ -503,7 +247,7 @@ public class PortfolioBacking implements Serializable {
 
             if (change24h != null) {
 
-                return String.valueOf(change24h);
+                return String.valueOf(MathRounders.roundDoubleToTwoDecimal(change24h));
             }
         }
         return "0";
@@ -518,25 +262,25 @@ public class PortfolioBacking implements Serializable {
             case "USD":
 
                 profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                        item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
                 break;
 
             case "EUR":
 
                 profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                        item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
                 break;
 
             case "BTC":
 
                 profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                        item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
                 break;
 
             case "ETH":
 
                 profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                        item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
                 break;
         }
         return profit;
@@ -556,79 +300,45 @@ public class PortfolioBacking implements Serializable {
 
             case "USD":
 
-                profitPercentage = item.getNetCostUsd().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
-                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                        .divide(item.getNetCostUsd(), 8, BigDecimal.ROUND_HALF_DOWN));
                 break;
 
             case "EUR":
 
-                profitPercentage = item.getNetCostEur().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
-                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                        .divide(item.getNetCostEur(), 8, BigDecimal.ROUND_HALF_DOWN));
                 break;
 
             case "BTC":
 
-                profitPercentage = item.getNetCostBtc().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
-                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                        .divide(item.getNetCostBtc(), 8, BigDecimal.ROUND_HALF_DOWN));
                 break;
 
             case "ETH":
 
-                profitPercentage = item.getNetCostEth().divide(new BigDecimal("100"), 8, BigDecimal.ROUND_HALF_EVEN)
-                        .multiply(getItemProfit(item)).setScale(8, BigDecimal.ROUND_HALF_EVEN);
+                profitPercentage = getItemProfit(item).multiply(new BigDecimal("100")
+                        .divide(item.getNetCostEth(), 8, BigDecimal.ROUND_HALF_DOWN));
                 break;
         }
-        return String.valueOf(profitPercentage);
+        return String.valueOf(MathRounders.roundBigDecimalToTwoDecimal(profitPercentage));
     }
 
     public String getItemSharePercentage(@NotNull ItemEntity item) {
 
         BigDecimal sharePercentage = BigDecimal.ZERO;
 
-        switch (activeUser.getUser().getPortfolio().getShowedCurrency().getCurrency()) {
+        try {
 
-            case "USD":
+            sharePercentage = geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency())
+                    .multiply(new BigDecimal("100")).divide(getMarketValue(), 8, BigDecimal.ROUND_HALF_DOWN);
 
-                try {
-                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
-                            .divide(activeUser.getUser().getPortfolio().getNetCostUsd(), 8, BigDecimal.ROUND_HALF_EVEN);
-                } catch (ArithmeticException ex){
-                    LOGGER.log(Level.WARNING, ex.toString());
-                }
-                break;
-
-            case "EUR":
-
-                try {
-                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
-                            .divide(activeUser.getUser().getPortfolio().getNetCostEur(), 8, BigDecimal.ROUND_HALF_EVEN);
-                } catch (ArithmeticException ex){
-                    LOGGER.log(Level.WARNING, ex.toString());
-                }
-                break;
-
-            case "BTC":
-
-                try {
-                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
-                            .divide(activeUser.getUser().getPortfolio().getNetCostBtc(), 8, BigDecimal.ROUND_HALF_EVEN);
-                } catch (ArithmeticException ex){
-                    LOGGER.log(Level.WARNING, ex.toString());
-                }
-                break;
-
-            case "ETH":
-
-                try {
-                    sharePercentage = geItemMarketValue(item).multiply(new BigDecimal("100"))
-                            .divide(activeUser.getUser().getPortfolio().getNetCostEth(), 8, BigDecimal.ROUND_HALF_EVEN);
-                } catch (ArithmeticException ex){
-                    LOGGER.log(Level.WARNING, ex.toString());
-                }
-                break;
+        } catch (NullPointerException | ArithmeticException ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
         }
+        return String.valueOf(MathRounders.roundBigDecimalToTwoDecimal(sharePercentage));
 
-        return String.valueOf(sharePercentage);
     }
 
     /**

@@ -4,113 +4,121 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <!--   COIN   -->
-    <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;">
+    <!-- The main items table -->
+    <p:dataTable value="#{portfolioBacking.activeUser.user.portfolio.getItemsNotArchived()}"
+                 var="itemEntity" styleClass="panelGridCenter"
+                 stickyHeader="true"
+                 id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
 
-        <p:panelGrid styleClass="panelGridTransparent" style="display: block;">
-            <p:row>
-                <p:column rowspan="2" style="width: 32px;">
-                    <h:graphicImage styleClass="symbol-image-32px"
-                                    value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
-                                    width="32" height="32"/>
-                </p:column>
+        <!--   COIN   -->
+        <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;">
 
-                <p:column>
-                    <h:outputText value="#{itemEntity.coin.name}"
-                                  style="font-weight:bold;" styleClass="left"/>
-                </p:column>
-            </p:row>
+            <p:panelGrid styleClass="panelGridTransparent" style="display: block;">
+                <p:row>
+                    <p:column rowspan="2" style="width: 32px;">
+                        <h:graphicImage styleClass="symbol-image-32px"
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
+                                        width="32" height="32"/>
+                    </p:column>
 
-        </p:panelGrid>
+                    <p:column>
+                        <h:outputText value="#{itemEntity.coin.name}"
+                                      style="font-weight:bold;" styleClass="left"/>
+                    </p:column>
+                </p:row>
 
-    </p:column>
+            </p:panelGrid>
 
-    <!--   AMOUNT   -->
-    <p:column headerText="Amount" class="align-right" priority="3"
-              sortBy="#{itemEntity.amount}">
+        </p:column>
 
-        <h:outputText id="portfolioItemAmount"
-                      value="#{itemEntity.amount}">
-            <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
-        </h:outputText>
-        <h:outputText value=" #{itemEntity.coin.symbol}"/>
+        <!--   AMOUNT   -->
+        <p:column headerText="Amount" class="align-right" priority="3"
+                  sortBy="#{itemEntity.amount}">
 
-    </p:column>
-
-    <!--   MARKET VALUE   -->
-    <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
-              sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
-
-        <p:outputPanel id="portfolioItemMarketValue">
-
-            <h:outputText
-                    value="#{portfolioBacking.geItemMarketValue(itemEntity)}">
+            <h:outputText id="portfolioItemAmount"
+                          value="#{itemEntity.amount}">
                 <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
             </h:outputText>
-            <h:outputText value=" #{itemEntity.showedCurrency}"/>
+            <h:outputText value=" #{itemEntity.coin.symbol}"/>
 
-        </p:outputPanel>
+        </p:column>
 
-    </p:column>
+        <!--   MARKET VALUE   -->
+        <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
+                  sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
 
-    <!--   MARKET PRICE   -->
-    <p:column headerText="Market Price" class="align-right td-border-right" priority="4"
-              sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
+            <p:outputPanel id="portfolioItemMarketValue">
 
-        <p:outputPanel id="portfolioItemCoinPrice">
+                <h:outputText
+                        value="#{portfolioBacking.geItemMarketValue(itemEntity)}">
+                    <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                </h:outputText>
+                <h:outputText value=" #{itemEntity.showedCurrency}"/>
 
-            <h:outputText
-                    value="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
-                <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
-            </h:outputText>
-            <h:outputText value=" #{itemEntity.showedCurrency}"/>
+            </p:outputPanel>
 
-        </p:outputPanel>
+        </p:column>
 
-    </p:column>
+        <!--   MARKET PRICE   -->
+        <p:column headerText="Market Price" class="align-right td-border-right" priority="4"
+                  sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
 
-    <!--   24 HOUR CHANGE   -->
-    <p:column headerText="24hour Change" class="align-right" style="width: 130px;" priority="6"
-              sortBy="#{portfolioBacking.getCoinChange24H(itemEntity)}"
-              sortFunction="#{portfolioBacking.sortByModel}">
+            <p:outputPanel id="portfolioItemCoinPrice">
 
-        <h:outputText id="portfolioItem24hrChange"
-                      value="#{portfolioBacking.getCoinChange24H(itemEntity)}%"
-                      styleClass="#{portfolioBacking.getCoinChange24H(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
-    </p:column>
+                <h:outputText
+                        value="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
+                    <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                </h:outputText>
+                <h:outputText value=" #{itemEntity.showedCurrency}"/>
 
-    <!--   PROFIT   -->
-    <p:column headerText="Profit" class="align-right" priority="5"
-              sortBy="#{portfolioBacking.getItemProfitForSortBy(itemEntity)}"
-              sortFunction="#{portfolioBacking.sortByModel}">
+            </p:outputPanel>
 
-        <h:outputText id="portfolioItemProfit"
-                      value="#{portfolioBacking.getItemProfit(itemEntity)}"
-                      styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
-        <h:outputText value=" #{itemEntity.showedCurrency}"
-                      styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
+        </p:column>
 
-    </p:column>
+        <!--   24 HOUR CHANGE   -->
+        <p:column headerText="24h Change" class="align-right" style="width: 110px;" priority="6"
+                  sortBy="#{portfolioBacking.getCoinChange24H(itemEntity)}"
+                  sortFunction="#{portfolioBacking.sortByModel}">
 
-    <!--   PROFIT %   -->
-    <p:column headerText="Profit %" class="align-right" style="width: 90px;" priority="7"
-              sortBy="#{portfolioBacking.getItemProfitPercentage(itemEntity)}"
-              sortFunction="#{portfolioBacking.sortByModel}">
+            <h:outputText id="portfolioItem24hrChange"
+                          value="#{portfolioBacking.getCoinChange24H(itemEntity)}%"
+                          styleClass="#{portfolioBacking.getCoinChange24H(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
+        </p:column>
 
-        <h:outputText id="portfolioItemProfitPercentage"
-                      value="#{portfolioBacking.getItemProfitPercentage(itemEntity)}%"
-                      styleClass="#{portfolioBacking.getItemProfitPercentage(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
+        <!--   PROFIT   -->
+        <p:column headerText="Profit" class="align-right" priority="5"
+                  sortBy="#{portfolioBacking.getItemProfitForSortBy(itemEntity)}"
+                  sortFunction="#{portfolioBacking.sortByModel}">
 
-    </p:column>
+            <h:outputText id="portfolioItemProfit"
+                          value="#{portfolioBacking.getItemProfit(itemEntity)}"
+                          styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
+            <h:outputText value=" #{itemEntity.showedCurrency}"
+                          styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
 
-    <!--   SHARE %   -->
-    <p:column headerText="Share" class="align-right" style="width: 70px;" priority="8"
-              sortBy="#{portfolioBacking.getItemSharePercentage(itemEntity)}"
-              sortFunction="#{portfolioBacking.sortByModel}">
+        </p:column>
 
-        <h:outputText id="portfolioItemShare"
-                      value="#{portfolioBacking.getItemSharePercentage(itemEntity)}%"/>
+        <!--   PROFIT %   -->
+        <p:column headerText="Profit %" class="align-right" style="width: 100px;" priority="7"
+                  sortBy="#{portfolioBacking.getItemProfitPercentage(itemEntity)}"
+                  sortFunction="#{portfolioBacking.sortByModel}">
 
-    </p:column>
+            <h:outputText id="portfolioItemProfitPercentage"
+                          value="#{portfolioBacking.getItemProfitPercentage(itemEntity)}%"
+                          styleClass="#{portfolioBacking.getItemProfitPercentage(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
+
+        </p:column>
+
+        <!--   SHARE %   -->
+        <p:column headerText="Share" class="align-right" style="width: 80px;" priority="8"
+                  sortBy="#{portfolioBacking.getItemSharePercentage(itemEntity)}"
+                  sortFunction="#{portfolioBacking.sortByModel}">
+
+            <h:outputText id="portfolioItemShare"
+                          value="#{portfolioBacking.getItemSharePercentage(itemEntity)}%"/>
+
+        </p:column>
+
+    </p:dataTable>
 
 </ui:composition>

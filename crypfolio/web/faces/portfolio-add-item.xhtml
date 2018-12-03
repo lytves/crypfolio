@@ -18,14 +18,14 @@
                     <p:outputLabel value="Coin Name" for="portfolio-add-coin-name"/>
 
                     <p:outputPanel class="input-group" id="portfolio-add-coin-input-group"
-                                   rendered="#{portfolioBacking.coinTemp eq null}">
+                                   rendered="#{transactionsBacking.coinTemp eq null}">
 
                         <span class="input-group-addon" id="portfolio-add-coin-img">
                             <i class="fab fa-btc" aria-hidden="true"></i>
                         </span>
 
-                        <p:autoComplete id="portfolio-add-coin-name" value="#{portfolioBacking.coinTemp}"
-                                        completeMethod="#{portfolioBacking.completeCoinTemp}"
+                        <p:autoComplete id="portfolio-add-coin-name" value="#{transactionsBacking.coinTemp}"
+                                        completeMethod="#{transactionsBacking.completeCoinTemp}"
                                         var="coinTemp"
                                         itemValue="#{coinTemp}"
                                         converter="#{autocompleteCoinConverter}" forceSelection="true"
@@ -45,13 +45,13 @@
 
                             <p:ajax event="itemSelect"
                                     update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-transaction"/>
-                            <p:ajax event="itemSelect" listener="#{portfolioBacking.createItemTemp}"/>
+                            <p:ajax event="itemSelect" listener="#{transactionsBacking.createItemTemp}"/>
 
                         </p:autoComplete>
 
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="#{portfolioBacking.coinTemp eq null}">
+                    <p:outputPanel rendered="#{transactionsBacking.coinTemp eq null}">
 
                         <h:outputText styleClass="span-10px-height"/>
 
@@ -72,16 +72,16 @@
 
                 <h:form id="formPortfolioAddItem-transaction">
                     <h:panelGrid style="width: 100%;">
-                        <p:outputPanel rendered="#{portfolioBacking.itemTemp.coin != null}">
+                        <p:outputPanel rendered="#{transactionsBacking.itemTemp.coin != null}">
 
                             <p:outputPanel style="display: flex;">
 
                                 <h:graphicImage
-                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{portfolioBacking.itemTemp.coin.id}.png"
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{transactionsBacking.itemTemp.coin.id}.png"
                                         style="height: 32px;"/>
 
                                 <h:outputText
-                                        value="#{portfolioBacking.itemTemp.coin.name} (#{portfolioBacking.itemTemp.coin.symbol})"
+                                        value="#{transactionsBacking.itemTemp.coin.name} (#{transactionsBacking.itemTemp.coin.symbol})"
                                         styleClass="coin-item-name-autocompleted"/>
 
                             </p:outputPanel>
@@ -97,7 +97,7 @@
                                     <p:selectOneButton id="add-transaction-type"
                                                        required="true" unselectable="false"
                                                        converter="#{selectOneButtonTransactionTypeConverter}"
-                                                       value="#{portfolioBacking.transactionTemp.type}">
+                                                       value="#{transactionsBacking.transactionTemp.type}">
 
                                         <p:ajax oncomplete="showButtonSellAll();"/>
 
@@ -115,10 +115,10 @@
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
                                                    decimalPlaces="8" padControl="false"
-                                                   value="#{portfolioBacking.transactionTemp.amount}">
+                                                   value="#{transactionsBacking.transactionTemp.amount}">
 
                                         <p:ajax event="keyup" oncomplete="enableDoneButton();" process="@this"
-                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData('amount')}"
+                                                listener="#{transactionsBacking.autoRecalculateTransactionInputData('amount')}"
                                                 update="add-transaction-total"/>
 
                                     </p:inputNumber>
@@ -129,13 +129,13 @@
                                                      value="All"
                                                      update="add-transaction-amount add-transaction-total"
                                                      process="@this"
-                                                     actionListener="#{portfolioBacking.getItemAllAmount}"
+                                                     actionListener="#{transactionsBacking.getItemAllAmount}"
                                                      oncomplete="enableDoneButton();"/>
                                     <!--resetValues="true" is it necesary to reset amount input validation???-->
                                     <!--   call also method autoRecalculateTransactionInputData('amount') from this bean's listener!   -->
 
                                     <h:outputText styleClass="input-group-addon input-group-addon-right"
-                                                  value="#{portfolioBacking.itemTemp.coin.symbol}"/>
+                                                  value="#{transactionsBacking.itemTemp.coin.symbol}"/>
                                 </p:outputPanel>
 
                                 <!--   MARKET PRICE   -->
@@ -148,7 +148,7 @@
                                                      update="add-transaction-price add-transaction-total"
                                                      process="@this"
                                                      style="margin-left: 10px;"
-                                                     actionListener="#{portfolioBacking.setActualTransactionPriceTemp}"
+                                                     actionListener="#{transactionsBacking.setActualTransactionPriceTemp}"
                                                      oncomplete="enableDoneButton();"
                                                      resetValues="true"/>
                                     <!--resetValues="true" is it necesary (important) to reset input validation???-->
@@ -164,10 +164,10 @@
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
                                                    decimalPlaces="8" padControl="false"
-                                                   value="#{portfolioBacking.transactionPriceTemp}">
+                                                   value="#{transactionsBacking.transactionPriceTemp}">
 
                                         <p:ajax event="keyup" oncomplete="enableDoneButton();" process="@this"
-                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData('price')}"
+                                                listener="#{transactionsBacking.autoRecalculateTransactionInputData('price')}"
                                                 update="add-transaction-total"/>
 
                                     </p:inputNumber>
@@ -176,15 +176,15 @@
                                     <p:selectOneMenu id="add-transaction-price-currency"
                                                      required="true" type="input"
                                                      converter="#{selectOneMenuCurrencyTypeConverter}"
-                                                     value="#{portfolioBacking.transactionTemp.boughtCurrency}"
+                                                     value="#{transactionsBacking.transactionTemp.boughtCurrency}"
                                                      effect="none" class="selectonemenu-right noshadow">
 
-                                        <f:selectItems value="#{portfolioBacking.currencies}"/>
+                                        <f:selectItems value="#{transactionsBacking.currencies}"/>
 
                                         <p:ajax event="itemSelect"
                                                 update="add-transaction-price add-transaction-total-currency add-transaction-total"
                                                 oncomplete="enableDoneButton();"
-                                                listener="#{portfolioBacking.setActualTransactionPriceTemp}"
+                                                listener="#{transactionsBacking.setActualTransactionPriceTemp}"
                                                 resetValues="true"/>
                                         <!--resetValues="true" is it necesary (important) to reset input validation???-->
                                         <!--   call also method autoRecalculateTransactionInputData('price') from this bean's listener!   -->
@@ -203,17 +203,17 @@
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
                                                    decimalPlaces="8" padControl="false"
-                                                   value="#{portfolioBacking.transactionTotalTemp}">
+                                                   value="#{transactionsBacking.transactionTotalTemp}">
 
                                         <p:ajax event="keyup" oncomplete="enableDoneButton();" process="@this"
-                                                listener="#{portfolioBacking.autoRecalculateTransactionInputData('total')}"
+                                                listener="#{transactionsBacking.autoRecalculateTransactionInputData('total')}"
                                                 update="add-transaction-price add-transaction-amount"/>
 
                                     </p:inputNumber>
 
                                     <h:outputText id="add-transaction-total-currency"
                                                   class="input-group-addon input-group-addon-right"
-                                                  value="#{portfolioBacking.transactionTemp.boughtCurrency}"/>
+                                                  value="#{transactionsBacking.transactionTemp.boughtCurrency}"/>
                                 </p:outputPanel>
 
                                 <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
@@ -224,12 +224,12 @@
 
                                     <p:calendar id="add-transaction-date"
                                                 readonlyInput="true"
-                                                value="#{portfolioBacking.transactionTemp.boughtDate}"
+                                                value="#{transactionsBacking.transactionTemp.boughtDate}"
                                                 pattern="dd MMMM, yyyy" mask="false" locale="en_US"
                                                 navigator="true" maxdate="today"
                                                 styleClass="form-control form-control-center noshadow"
                                                 style="padding-left: 20px;"
-                                                placeholder="#{portfolioBacking.datePlaceholder}"
+                                                placeholder="#{transactionsBacking.datePlaceholder}"
                                                 converter="calendarLocalDateConverter">
 
                                     </p:calendar>
@@ -247,7 +247,7 @@
                                                          rows="5" autoResize="false"
                                                          counter="add-transaction-comment-counter" maxlength="200"
                                                          counterTemplate="{0} characters remaining."
-                                                         value="#{portfolioBacking.transactionTemp.comment}"/>
+                                                         value="#{transactionsBacking.transactionTemp.comment}"/>
                                         <h:outputText id="add-transaction-comment-counter"/>
 
                                     </p:tab>
@@ -271,7 +271,7 @@
                                                          update="formPortfolioAddItem-transaction"
                                                          process="@this">
 
-                                            <p:ajax listener="#{portfolioBacking.transactionAddFormReset}"
+                                            <p:ajax listener="#{transactionsBacking.transactionAddFormReset}"
                                                     update="formPortfolioAddItem-transaction
                                                      mainTabView:formPortfolioAddItem-coin"/>
 
@@ -279,7 +279,7 @@
 
                                         <!--   DONE   -->
                                         <p:commandButton id="add-transaction-done"
-                                                         actionListener="#{portfolioBacking.doSubmitAddTransaction}"
+                                                         actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          value="Done"
                                                          icon="ui-icon-check"
                                                          styleClass="ui-state-disabled"
@@ -299,7 +299,7 @@
             </p:outputPanel>
 
             <!-- ¿¿¿formPortfolioAddItem-transaction:add-transaction-amount and other don't reset input error css class???-->
-            <p:ajax event="close" listener="#{portfolioBacking.transactionAddFormReset}"
+            <p:ajax event="close" listener="#{transactionsBacking.transactionAddFormReset}"
                     update="formPortfolioAddItem-coin formPortfolioAddItem-transaction
                         formPortfolioAddItem-transaction:add-transaction-amount
                         formPortfolioAddItem-transaction:add-transaction-price
