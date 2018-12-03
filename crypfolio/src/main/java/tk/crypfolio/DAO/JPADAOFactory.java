@@ -1,14 +1,15 @@
 package tk.crypfolio.DAO;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JPADAOFactory extends AbstractDAOFactory {
 
-    private static final Logger logger = Logger.getLogger(JPADAOFactory.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(JPADAOFactory.class);
 
     private volatile static EntityManagerFactory emf;
 
@@ -28,16 +29,19 @@ public class JPADAOFactory extends AbstractDAOFactory {
     private static EntityManager getEntityManager() {
 
         try {
+            LOGGER.info("EntityManager is created");
             return getInstanceEntityManagerFactory().createEntityManager();
-        } catch (Exception e){
-            logger.log(Level.WARNING, e.getMessage());
+        } catch (Exception ex) {
+            LOGGER.error("Failed on creating EntityManager" + ex.getMessage());
         }
 
         return null;
     }
 
     @Override
-    public CoinDAO getCoinDAO() {return new CoinDAOImpl(getEntityManager());}
+    public CoinDAO getCoinDAO() {
+        return new CoinDAOImpl(getEntityManager());
+    }
 
     @Override
     public ItemDAO getItemDAO() {

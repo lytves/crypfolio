@@ -1,5 +1,7 @@
 package tk.crypfolio.DAO;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.business.exception.AppDAOException;
 
 import javax.persistence.EntityManager;
@@ -9,14 +11,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 // TODO create some general DAO Exception functions, may be should use my own exception class
 
 public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
-    private static final Logger logger = Logger.getLogger(DAOImpl.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(DAOImpl.class);
 
     private EntityManager em;
     private Class<T> entityClass;
@@ -37,7 +37,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (Exception e) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
         return null;
     }
@@ -53,7 +53,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (Exception e) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
         return null;
     }
@@ -77,7 +77,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
 
     }
@@ -159,7 +159,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (NoResultException e) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
 
         return null;
