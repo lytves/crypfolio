@@ -4,14 +4,12 @@ import tk.crypfolio.DAO.*;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.SettingsDB;
 import tk.crypfolio.model.*;
-import tk.crypfolio.parse.ParserAPI;
 import tk.crypfolio.util.StringGenerator;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class AppInitServlet implements ServletContextListener {
@@ -41,7 +39,8 @@ public class AppInitServlet implements ServletContextListener {
                 "░░██░░░░░░░░░░░░██░░░░██░░░░░░░░\n" +
                 "░░██░░░░██████░░██░░░░░░░░██████\n" +
                 "░░████░░██░░██░░██░░░░██░░██░░██\n" +
-                "░░██░░░░██████░░████░░██░░██████\n");
+                "░░██░░░░██████░░████░░██░░██████\n" +
+                "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
 
 //        ParserAPI.parseCoinByCoinTickerId(Long.valueOf(1));
 
@@ -128,7 +127,7 @@ public class AppInitServlet implements ServletContextListener {
     /*
      * Insert all parsed coin to SettingsDB.APP_DB_TYPE - DataBase
      * */
-    private void initTableCoins() {
+/*    private void initTableCoins() {
 
 //        ParserAPI parserAPI = new ParserAPI();
         ArrayList<CoinEntity> listCoins = (ArrayList<CoinEntity>) ParserAPI.parseAllCoin();
@@ -143,7 +142,7 @@ public class AppInitServlet implements ServletContextListener {
             cDAO.createCoin(coin);
         }
 
-    }
+    }*/
 
     private void addUserFollowee() {
 
