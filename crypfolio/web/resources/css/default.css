@@ -109,9 +109,9 @@ a, a:visited {
     background-color: #f2f5f9;
 }
 
-#portfMainData {
-    line-height: 0.3em;
-    width: 80%;
+#mainTabView\:portfolioMainData .title {
+    margin-left: 10px;
+    color: #a8a8a8;
 }
 
 .order-table {
@@ -502,12 +502,14 @@ body .ui-buttonset .ui-button {
     background-color: #eee !important;
 }
 
-#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items {
     padding: .2em 0 !important;
     font-weight: bold;
 }
 
-#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
     border-radius: 0 !important;
     background: none;
     box-shadow: none !important;
@@ -516,12 +518,14 @@ body .ui-buttonset .ui-button {
     text-shadow: none !important;
 }
 
-#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-state-highlight {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-state-highlight,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-state-highlight {
     color: #4f4f4f;
     background: url("#{resource['images/check-solid.svg']}") 35px 0 no-repeat !important;
 }
 
-#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
     background-color: #0093e4 !important;
     color: #ffffff;
 }
@@ -578,4 +582,10 @@ mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount_input {
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     text-shadow: none !important;
+}
+
+.portfolio-currency {
+    border-radius: 3px !important;
+    line-height: normal;
+    margin-left: 5px;
 }
