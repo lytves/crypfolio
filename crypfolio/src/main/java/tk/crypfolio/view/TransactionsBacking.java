@@ -255,8 +255,10 @@ public class TransactionsBacking implements Serializable {
 
         // checking if all entered values are valid
         if (itemTemp == null || transactionTemp == null
-                || (transactionTemp.getAmount() == null || isBigDecimalVaildForDB(transactionTemp.getAmount()))
-                || (transactionPriceTemp == null || isBigDecimalVaildForDB(transactionPriceTemp))
+                || transactionTemp.getAmount().compareTo(BigDecimal.ZERO) == 0 || transactionTemp.getAmount() == null
+                || isBigDecimalVaildForDB(transactionTemp.getAmount())
+                || transactionPriceTemp == null || transactionPriceTemp.compareTo(BigDecimal.ZERO) == 0
+                || isBigDecimalVaildForDB(transactionPriceTemp)
                 || isBigDecimalVaildForDB(transactionTemp.getAmount().multiply(transactionPriceTemp))) {
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
