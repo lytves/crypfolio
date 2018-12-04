@@ -422,7 +422,7 @@ public class PortfolioBacking implements Serializable {
     }
 
     // to sort dataTable columns elements correct in order to numbers (identical to WatchlistBacking)
-    public int sortByModel(@NotNull Object obj1, @NotNull Object obj2) {
+    public int sortByModel(Object obj1, Object obj2) {
 
         try {
 

@@ -53,6 +53,6 @@ public abstract class MathRounders {
                     return value.setScale(7, BigDecimal.ROUND_HALF_DOWN);
                 }
         }
-        return value.setScale(8, BigDecimal.ROUND_HALF_DOWN);
+        return value.setScale(8, BigDecimal.ROUND_HALF_UP);
     }
 }
