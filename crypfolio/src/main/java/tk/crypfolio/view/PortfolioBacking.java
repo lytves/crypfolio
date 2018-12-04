@@ -17,6 +17,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Named
@@ -44,9 +46,17 @@ public class PortfolioBacking implements Serializable {
 
     private BigDecimal netCost;
 
+    // is used in jsf-views p:datatable, because table sorting is worked
+    // only with bean's parameters and not method call
+    private List<ItemEntity> archivedItems;
+    private List<ItemEntity> notArchivedItems;
+
     @PostConstruct
     public void init() {
         LOGGER.info("PortfolioBacking @PostConstruct");
+
+        setArchivedItems(loadArchivedAndNotArchivedItems("archived"));
+        setNotArchivedItems(loadArchivedAndNotArchivedItems("notArchived"));
 
         this.marketValue = updateMarketValue();
         this.netCost = updateNetCost();
@@ -87,6 +97,23 @@ public class PortfolioBacking implements Serializable {
 
     public void setNetCost(BigDecimal netCost) {
         this.netCost = netCost;
+    }
+
+    public List<ItemEntity> getArchivedItems() {
+        return archivedItems;
+    }
+
+    public void setArchivedItems(List<ItemEntity> archivedItems) {
+        this.archivedItems = archivedItems;
+    }
+
+    public List<ItemEntity> getNotArchivedItems() {
+        return notArchivedItems;
+    }
+
+
+    public void setNotArchivedItems(List<ItemEntity> notArchivedItems) {
+        this.notArchivedItems = notArchivedItems;
     }
 
     /*
@@ -354,7 +381,31 @@ public class PortfolioBacking implements Serializable {
      * (identical necessary in WatchlistBacking????)
      */
     public String roundingForView(BigDecimal value, CurrencyType currencyType) {
-        return  MathRounders.roundBigDecimalByCurrency(value, currencyType).toPlainString();
+        return MathRounders.roundBigDecimalByCurrency(value, currencyType).toPlainString();
+    }
+
+    private List<ItemEntity> loadArchivedAndNotArchivedItems(String itemsType) {
+
+        LOGGER.info("loadArchivedAndNotArchivedItems " + itemsType);
+
+        List<ItemEntity> notArchivedItems = new ArrayList<>();
+
+        if (("archived").equals(itemsType)) {
+            for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                if (item.getArchived()) {
+                    notArchivedItems.add(item);
+                }
+            }
+        } else if (("notArchived").equals(itemsType)) {
+            for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                if (!item.getArchived()) {
+                    notArchivedItems.add(item);
+                }
+            }
+        }
+        return notArchivedItems;
     }
 
     /**

@@ -150,32 +150,6 @@ public class PortfolioEntity implements Serializable {
         this.items = items;
     }
 
-    public List<ItemEntity> getItemsNotArchived() {
-
-        List<ItemEntity> notArchivedItems = new ArrayList<>();
-
-        for (ItemEntity item : getItems()) {
-
-            if (!item.getArchived()) {
-                notArchivedItems.add(item);
-            }
-        }
-        return notArchivedItems;
-    }
-
-    public List<ItemEntity> getItemsArchived() {
-
-        List<ItemEntity> archivedItems = new ArrayList<>();
-
-        for (ItemEntity item : getItems()) {
-
-            if (item.getArchived()) {
-                archivedItems.add(item);
-            }
-        }
-        return archivedItems;
-    }
-
     public void addItem(ItemEntity item) {
         this.items.add(item);
         // !!! setting also for new item this portfolio as a parent

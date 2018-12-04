@@ -20,7 +20,7 @@ public abstract class MathRounders {
         return (double) Math.round(value * 100) / 100;
     }
 
-    public static BigDecimal roundBigDecimalByCurrency(BigDecimal value, @NotNull CurrencyType currencyType) {
+    public static BigDecimal roundBigDecimalByCurrency(@NotNull BigDecimal value, @NotNull CurrencyType currencyType) {
 
         if (value.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
