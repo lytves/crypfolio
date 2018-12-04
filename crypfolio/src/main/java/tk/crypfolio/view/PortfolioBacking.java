@@ -353,8 +353,8 @@ public class PortfolioBacking implements Serializable {
      * Universal method to do BigDecimal rounding to use it in jsf-view
      * (identical necessary in WatchlistBacking????)
      */
-    public BigDecimal roundingForView(BigDecimal value, CurrencyType currencyType) {
-        return  MathRounders.roundBigDecimalByCurrency(value, currencyType);
+    public String roundingForView(BigDecimal value, CurrencyType currencyType) {
+        return  MathRounders.roundBigDecimalByCurrency(value, currencyType).toPlainString();
     }
 
     /**
