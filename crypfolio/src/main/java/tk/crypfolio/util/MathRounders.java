@@ -22,23 +22,37 @@ public abstract class MathRounders {
 
     public static BigDecimal roundBigDecimalByCurrency(BigDecimal value, @NotNull CurrencyType currencyType) {
 
-        switch (currencyType.getCurrency()) {
-
-            case "USD":
-
-                return value.setScale(2, BigDecimal.ROUND_HALF_DOWN);
-
-            case "EUR":
-                break;
-
-            case "BTC":
-                break;
-
-            case "ETH":
-                break;
-
+        if (value.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
         }
 
-        return value;
+        switch (currencyType.getCurrency()) {
+
+            // same rounding method for USD && EUR
+            case "USD":
+            case "EUR":
+
+                if (value.abs().compareTo(new BigDecimal("1")) >= 1) {
+                    return value.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+
+                } else if (value.setScale(4, BigDecimal.ROUND_HALF_DOWN).compareTo(new BigDecimal("0")) != 0) {
+                    return value.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+
+                } else if (value.setScale(6, BigDecimal.ROUND_HALF_DOWN).compareTo(new BigDecimal("0")) != 0) {
+                    return value.setScale(6, BigDecimal.ROUND_HALF_DOWN);
+                }
+
+            // same rounding method for USD && EUR
+            case "BTC":
+            case "ETH":
+
+                if (value.setScale(6, BigDecimal.ROUND_HALF_DOWN).compareTo(BigDecimal.ZERO) != 0) {
+                    return value.setScale(6, BigDecimal.ROUND_HALF_DOWN);
+
+                } else if (value.setScale(7, BigDecimal.ROUND_HALF_DOWN).compareTo(BigDecimal.ZERO) != 0) {
+                    return value.setScale(7, BigDecimal.ROUND_HALF_DOWN);
+                }
+        }
+        return value.setScale(8, BigDecimal.ROUND_HALF_DOWN);
     }
 }
