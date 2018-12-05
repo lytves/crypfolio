@@ -378,10 +378,10 @@ public class PortfolioBacking implements Serializable {
 
     /**
      * Universal method to do BigDecimal rounding to use it in jsf-view
-     * (identical necessary in WatchlistBacking????)
+     * (identical one is in WatchlistBacking)
      */
     public String roundingForView(BigDecimal value, CurrencyType currencyType) {
-        return MathRounders.roundBigDecimalByCurrency(value, currencyType).toPlainString();
+        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
     }
 
     private List<ItemEntity> loadArchivedAndNotArchivedItems(String itemsType) {

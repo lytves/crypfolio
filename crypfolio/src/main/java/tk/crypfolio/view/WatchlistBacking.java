@@ -5,6 +5,7 @@ import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.UserWatchCoinEntity;
+import tk.crypfolio.util.MathRounders;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -14,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -224,7 +226,7 @@ public class WatchlistBacking implements Serializable {
 
             if (change24h != null) {
 
-                return String.valueOf(change24h);
+                return String.valueOf(MathRounders.roundDoubleToTwoDecimal(change24h));
             }
         }
         return "0";
@@ -247,7 +249,8 @@ public class WatchlistBacking implements Serializable {
 
             if (change7d != null) {
 
-                return String.valueOf(change7d);
+                return String.valueOf(MathRounders.roundDoubleToTwoDecimal(change7d));
+
             }
         }
 
@@ -266,17 +269,25 @@ public class WatchlistBacking implements Serializable {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
         // because it provokes NullPointerException
-//        if (id != null && showedCurrency != null) {
+        if (id != null && showedCurrency != null) {
 
             Double marketCap = getCoinCurrentData("market_cap", id, showedCurrency);
 
             if (marketCap != null) {
                 return String.valueOf(marketCap);
             }
-//        }
+        }
 
         return "0";
 
+    }
+
+    /**
+     * Universal method to do BigDecimal rounding to use it in jsf-view
+     * (identical is necessary in PortfolioBacking)
+     */
+    public String roundingForView(BigDecimal value, CurrencyType currencyType) {
+        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
     }
 
     /**
