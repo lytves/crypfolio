@@ -2,6 +2,7 @@ package tk.crypfolio.view;
 
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.UserService;
+import tk.crypfolio.common.Constants;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.UserWatchCoinEntity;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -284,10 +287,27 @@ public class WatchlistBacking implements Serializable {
 
     /**
      * Universal method to do BigDecimal rounding to use it in jsf-view
-     * (identical is necessary in PortfolioBacking)
+     * (identical is in PortfolioBacking)
      */
     public String roundingForView(BigDecimal value, CurrencyType currencyType) {
-        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
+
+        String pattern = "###,###.########";
+        DecimalFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(Constants.mainLocale));
+
+        return df.format(MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros());
+
+//        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
+    }
+
+    public String roundingMarketCapForView(BigDecimal value, CurrencyType currencyType) {
+
+        String pattern = "###,###.########";
+        DecimalFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(Constants.mainLocale));
+
+        return df.format(MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros());
+
+//        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
+
     }
 
     /**

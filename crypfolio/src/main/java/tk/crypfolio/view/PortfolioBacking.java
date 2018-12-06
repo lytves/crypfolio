@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.PortfolioService;
+import tk.crypfolio.common.Constants;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.ItemEntity;
@@ -17,6 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -381,7 +384,13 @@ public class PortfolioBacking implements Serializable {
      * (identical one is in WatchlistBacking)
      */
     public String roundingForView(BigDecimal value, CurrencyType currencyType) {
-        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
+
+        String pattern = "###,###.########";
+        DecimalFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(Constants.mainLocale));
+
+        return df.format(MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros());
+
+//        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
     }
 
     private List<ItemEntity> loadArchivedAndNotArchivedItems(String itemsType) {

@@ -14,7 +14,9 @@
                 <h:outputText class="title"
                               value="Market value: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.marketValue} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+                              value="#{portfolioBacking.roundingForView(
+                                        portfolioBacking.marketValue, portfolioBacking.activeUser.user.portfolio.showedCurrency)}
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
                 <!--   PORTFOLIO   CURRENCIES   -->
                 <h:form id="porfolio-form" style="display: inline-block; height: 32px;">
@@ -39,14 +41,17 @@
                 <h:outputText class="title"
                               value="Net cost: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.netCost} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+                              value="#{portfolioBacking.roundingForView(
+                                        portfolioBacking.netCost, portfolioBacking.activeUser.user.portfolio.showedCurrency)}
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
                 <!--   PROFIT   -->
                 <h:outputText class="title"
                               value="Profit: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.getProfit()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
-                               (#{portfolioBacking.getProfitPercentage()}%)"
+                              value="#{portfolioBacking.roundingForView(
+                                        portfolioBacking.getProfit(), portfolioBacking.activeUser.user.portfolio.showedCurrency)}
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"
                               styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}"/>
 
             </p:outputPanel>

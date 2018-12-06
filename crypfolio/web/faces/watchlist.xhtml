@@ -111,8 +111,8 @@
                 <!--now is using new type of values showing as number and f:convertNumber used-->
                 <p:outputPanel id="watchCoinMarketCap">
                     <h:outputText
-                            value="#{watchlistBacking.getWatchCoinMarketCap(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}">
+                            value="#{watchlistBacking.roundingMarketCapForView(watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency), userWatchCoinEntity.showedCurrency)}">
                         <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
                     </h:outputText>
 
