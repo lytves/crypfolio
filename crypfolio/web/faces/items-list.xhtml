@@ -41,8 +41,6 @@
     <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
               sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
 
-        <p:outputPanel id="portfolioItemMarketValue">
-
             <h:outputText
                     value="#{portfolioBacking.roundingForView(
                     portfolioBacking.geItemMarketValue(itemEntity), itemEntity.showedCurrency)}">
@@ -50,15 +48,11 @@
             </h:outputText>
             <h:outputText value=" #{itemEntity.showedCurrency}"/>
 
-        </p:outputPanel>
-
     </p:column>
 
     <!--   MARKET PRICE   -->
     <p:column headerText="Market Price" class="align-right td-border-right" priority="4"
               sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
-
-        <p:outputPanel id="portfolioItemCoinPrice">
 
             <h:outputText
                     value="#{portfolioBacking.roundingForView(
@@ -66,8 +60,6 @@
                 <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
             </h:outputText>
             <h:outputText value=" #{itemEntity.showedCurrency}"/>
-
-        </p:outputPanel>
 
     </p:column>
 
