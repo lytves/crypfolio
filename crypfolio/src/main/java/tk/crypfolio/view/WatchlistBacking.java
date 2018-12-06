@@ -299,15 +299,26 @@ public class WatchlistBacking implements Serializable {
 //        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
     }
 
+    /*
+    *  https://stackoverflow.com/a/25679958/6841308
+    * */
     public String roundingMarketCapForView(BigDecimal value, CurrencyType currencyType) {
 
-        String pattern = "###,###.########";
-        DecimalFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(Constants.mainLocale));
+        BigDecimal number = MathRounders.roundBigDecimalByCurrency(value, currencyType);
 
-        return df.format(MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros());
+        String[] denominations = {"", "k", "M", "B", "T"};
+        int denominationIndex = 0;
 
-//        return MathRounders.roundBigDecimalByCurrency(value, currencyType).stripTrailingZeros().toPlainString();
+        // If number is greater than 1000, divide the number by 1000 and
+        // increment the index for the denomination.
+        while(number.compareTo(new BigDecimal("1000")) >= 1)
+        {
+            denominationIndex++;
+            number = number.divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_DOWN);
+        }
 
+        // Add the number with the denomination to get the final value.
+        return number + denominations[denominationIndex];
     }
 
     /**
