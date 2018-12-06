@@ -369,6 +369,9 @@ body .ui-buttonset .ui-button {
     padding: 1em;
 }
 
+.noHeader.ui-datatable table thead tr {
+    display: none;
+}
 /*.ui-button-text-only .ui-button-text{*/
 /*padding: 0 !important;*/
 /*}*/

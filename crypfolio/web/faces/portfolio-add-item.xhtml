@@ -15,6 +15,7 @@
 
                 <h:panelGrid style="width: 100%;">
 
+                    <!--   COIN CHOOSING AUTOCOMPLETE FORM   -->
                     <p:outputLabel value="Coin Name" for="portfolio-add-coin-name"/>
 
                     <p:outputPanel class="input-group" id="portfolio-add-coin-input-group"
@@ -51,15 +52,43 @@
 
                     </p:outputPanel>
 
+                    <!--   COIN CHOOSING LIST OF USER's CURRENT ITEMS FORM   -->
                     <p:outputPanel rendered="#{transactionsBacking.coinTemp eq null}">
 
                         <h:outputText styleClass="span-10px-height"/>
 
                         <p:outputLabel value="Coins in your portfolio:" for="portfolio-list-currents-items"/>
 
-                        <p:dataTable id="portfolio-list-currents-items">
-                            Una lista
-                        </p:dataTable>
+                        <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
+
+                        <p:scrollPanel mode="native" style="width:100%; height:300px;">
+                            <p:dataTable id="portfolio-list-currents-items"
+                                         styleClass="noHeader"
+                                         value="#{portfolioBacking.activeUser.user.portfolio.items}"
+                                         var="itemEntity"
+                                         sortBy="#{itemEntity.coin.name}">
+
+                                <p:column style="display: flex; justify-content: space-between;">
+                                            <div style="padding: 5px;">
+                                                <h:graphicImage styleClass="symbol-image-32px"
+                                                                value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
+                                                                width="32" height="32"/>
+                                            </div>
+
+                                            <div style="line-height: 2; padding: 5px;">
+                                                <h:outputText value="#{itemEntity.coin.name}"
+                                                              style="font-weight:bold;" styleClass="left"/>
+                                            </div>
+
+                                            <div style="margin-left: auto; line-height: 2; padding: 5px;">
+                                                <h:outputText value="#{itemEntity.coin.symbol}"/>
+                                            </div>
+
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:scrollPanel>
 
                     </p:outputPanel>
 
