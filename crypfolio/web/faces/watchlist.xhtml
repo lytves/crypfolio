@@ -76,6 +76,25 @@
 
             </p:column>
 
+            <!--   MARKET CAP   -->
+            <p:column headerText="Market Cap" class="align-right td-border-right" priority="3"
+                      sortBy="#{watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
+                      sortFunction="#{watchlistBacking.sortByModel}">
+
+                <!--now is using new type of values showing as number and f:convertNumber used-->
+                <p:outputPanel id="watchCoinMarketCap">
+                    <h:outputText
+                            value="#{watchlistBacking.roundingMarketCapForView(watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency), userWatchCoinEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+
+                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
+                </p:outputPanel>
+
+            </p:column>
+
             <!--   24 HOUR CHANGE   -->
             <p:column headerText="24hour Change" class="align-right" priority="4"
                       sortBy="#{watchlistBacking.getWatchCoinChange24H(
@@ -100,25 +119,6 @@
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}%"
                               styleClass="#{watchlistBacking.getWatchCoinChange7D(
                     userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
-            </p:column>
-
-            <!--   MARKET CAP   -->
-            <p:column headerText="Market Cap" class="align-right" priority="3"
-                      sortBy="#{watchlistBacking.getWatchCoinMarketCap(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
-                      sortFunction="#{watchlistBacking.sortByModel}">
-
-                <!--now is using new type of values showing as number and f:convertNumber used-->
-                <p:outputPanel id="watchCoinMarketCap">
-                    <h:outputText
-                            value="#{watchlistBacking.roundingMarketCapForView(watchlistBacking.getWatchCoinMarketCap(
-                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency), userWatchCoinEntity.showedCurrency)}">
-                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
-                    </h:outputText>
-
-                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
-                </p:outputPanel>
-
             </p:column>
 
             <!--   PRICE GRAPH   -->
