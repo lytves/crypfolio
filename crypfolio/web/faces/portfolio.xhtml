@@ -57,7 +57,7 @@
             </p:outputPanel>
 
             <div>
-                <!--            =====================              button ADD WATCH COIN -->
+                <!--            =====================              button ADD NEW ITEM -->
                 <h:form class="add-item-coin-form">
 
                     <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
@@ -73,19 +73,30 @@
         <h:outputText styleClass="span-10px-height"/>
 
         <!-- The main items table -->
-        <p:dataTable value="#{portfolioBacking.notArchivedItems}"
-                     var="itemEntity" styleClass="panelGridCenter"
-                     stickyHeader="true"
-                     id="portfolioDataTableWV" widgetVar="portfolioDataTableWV">
+        <h:form id="portfolioDataTableForm">
+            <p:dataTable value="#{portfolioBacking.notArchivedItems}"
+                         var="itemEntity" styleClass="panelGridCenter"
+                         stickyHeader="true"
+                         id="portfolioDataTableWV" widgetVar="portfolioDataTableWV"
+                         selectionMode="single" selection="#{itemBacking.selectedItem}"
+                         rowKey="#{itemBacking.getRowKey(itemEntity.id)}">
 
-            <!-- including dataTable with list of items of portfolio -->
-            <ui:include src="/faces/items-list.xhtml"/>
+                <p:ajax event="rowSelect" oncomplete="PF('dlgPortfolioItemDetails').show();"
+                        listener="#{itemBacking.onRowSelect}"
+                        update="mainTabView:formPortfolioItemDetails growl"/>
 
-        </p:dataTable>
+                <!-- including dataTable with list of items of portfolio -->
+                <ui:include src="/faces/items-list.xhtml"/>
+
+            </p:dataTable>
+        </h:form>
 
     </p:outputPanel>
 
     <!-- including modal window of item adding -->
     <ui:include src="/faces/portfolio-add-item.xhtml"/>
+
+    <!-- including modal window of item details -->
+    <ui:include src="/faces/item.xhtml"/>
 
 </ui:composition>

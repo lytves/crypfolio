@@ -163,6 +163,10 @@ a, a:visited {
     margin-top: 100px;
 }
 
+.modal-window-item-details {
+    width: 100% !important;
+    /*height: 80% !important;*/
+}
 /******************     Primefaces UI Styles      **********************/
 .ui-widget {
     font-family: 'Roboto Mono', monospace !important;
@@ -232,12 +236,12 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
     padding: 5px;
 }
 
-.ui-dialog-content {
+/*???? for what is it used ????*/
+/*.ui-dialog-content {
     width: 90% !important;
-}
+}*/
 
 .ui-state-highlight, .ui-widget-content .ui-state-highlight {
-    background: none !important;
     background-color: #0093e4 !important;
 }
 
@@ -271,6 +275,27 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
 .ui-datatable .ui-row-toggler.ui-icon-circle-triangle-s {
     background-image: url("#{resource['images/arrow-down-solid.svg']}") !important;
     background-position: 0 0;
+}
+
+.ui-datatable-selectable.ui-state-highlight {
+    background: unset !important;
+    border: 0;
+    /*background-color: red !important;*/
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+    color: inherit;
+}
+
+.ui-datatable-selectable.ui-state-hover, .ui-datatable-selectable.ui-state-highlight {
+    background-color: #f2f5f9 !important;
+    border-bottom-width: 2px !important;
+    border-bottom-color: #f2f5f9 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
 }
 
 /*******************/
@@ -372,6 +397,7 @@ body .ui-buttonset .ui-button {
 .noHeader.ui-datatable table thead tr {
     display: none;
 }
+
 /*.ui-button-text-only .ui-button-text{*/
 /*padding: 0 !important;*/
 /*}*/

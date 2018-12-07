@@ -55,6 +55,17 @@ function showButtonSellAll() {
 }
 
 /*
+* remove highlight background color of selected row after closed dialog window
+* */
+function portfolioDataTableRowUnselect() {
+    // https://stackoverflow.com/questions/22270664/how-to-remove-a-class-from-elements-in-pure-javascript
+
+    var selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-highlight");
+    [].forEach.call(selectedRows, function(el) {
+        el.classList.remove("ui-state-highlight");
+    });
+}
+/*
 * ajax Status modal window delay
 * */
 var ajaxInProgress;

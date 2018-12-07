@@ -4,12 +4,12 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <!--            =====================               modal window ADD PORTFOLIO ITEM -->
-    <div id="divPortfolioAddItem" tabindex="-1">
+    <!--            =====================               modal window PORTFOLIO: ADD NEW ITEM -->
+    <div id="divPortfolioAddItem">
 
         <p:dialog header="Add item to Portfolio" id="dlgPortfolioAddItem" widgetVar="dlgPortfolioAddItem" modal="true"
                   resizable="false" draggable="false" position="center top" closeOnEscape="true"
-                  showEffect="bounce" hideEffect="fade" class="modal-window">
+                  hideEffect="fade" class="modal-window">
 
             <h:form id="formPortfolioAddItem-coin">
 
@@ -87,7 +87,6 @@
                                 </p:column>
 
                             </p:dataTable>
-
                         </p:scrollPanel>
 
                     </p:outputPanel>
