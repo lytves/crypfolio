@@ -165,8 +165,17 @@ a, a:visited {
 
 .modal-window-item-details {
     width: 100% !important;
-    /*height: 80% !important;*/
+    height: 90% !important;
 }
+
+.panelgrid-items-details .item-details-td {
+    color: #a8a8a8;
+}
+
+td.flex {
+    display: flex;
+}
+
 /******************     Primefaces UI Styles      **********************/
 .ui-widget {
     font-family: 'Roboto Mono', monospace !important;

@@ -5,23 +5,14 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <!--   COIN   -->
-    <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;">
+    <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;" styleClass="flex">
 
-        <p:panelGrid styleClass="panelGridTransparent" style="display: block;">
-            <p:row>
-                <p:column rowspan="2" style="width: 32px;">
-                    <h:graphicImage styleClass="symbol-image-32px"
-                                    value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
-                                    width="32" height="32"/>
-                </p:column>
-
-                <p:column>
-                    <h:outputText value="#{itemEntity.coin.name}"
-                                  style="font-weight:bold;" styleClass="left"/>
-                </p:column>
-            </p:row>
-
-        </p:panelGrid>
+        <h:graphicImage styleClass="symbol-image-32px"
+                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
+                        width="32" height="32"
+                        style="padding: 5px;"/>
+        <h:outputText value="#{itemEntity.coin.name}"
+                      style="font-weight:bold; line-height: 2; padding-left: 10px;" styleClass="left"/>
 
     </p:column>
 
@@ -41,12 +32,12 @@
     <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
               sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
 
-            <h:outputText
-                    value="#{portfolioBacking.roundingForView(
+        <h:outputText
+                value="#{portfolioBacking.roundingForView(
                     portfolioBacking.geItemMarketValue(itemEntity), itemEntity.showedCurrency)}">
-                <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
-            </h:outputText>
-            <h:outputText value=" #{itemEntity.showedCurrency}"/>
+            <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+        </h:outputText>
+        <h:outputText value=" #{itemEntity.showedCurrency}"/>
 
     </p:column>
 
@@ -54,12 +45,12 @@
     <p:column headerText="Market Price" class="align-right td-border-right" priority="4"
               sortBy="#{portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency)}">
 
-            <h:outputText
-                    value="#{portfolioBacking.roundingForView(
+        <h:outputText
+                value="#{portfolioBacking.roundingForView(
                     portfolioBacking.getCoinPrice(itemEntity.coin, itemEntity.showedCurrency), itemEntity.showedCurrency)}">
-                <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
-            </h:outputText>
-            <h:outputText value=" #{itemEntity.showedCurrency}"/>
+            <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+        </h:outputText>
+        <h:outputText value=" #{itemEntity.showedCurrency}"/>
 
     </p:column>
 
