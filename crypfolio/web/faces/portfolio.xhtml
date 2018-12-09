@@ -8,6 +8,7 @@
 
         <div style="display: flex; justify-content: space-between;">
 
+            <!--   PORTFOLIO   MAIN   INFORMATION   -->
             <p:outputPanel id="portfolioMainData" style="line-height: 2.5;">
 
                 <!--   MARKET VALUE   -->
@@ -72,7 +73,7 @@
 
         <h:outputText styleClass="span-10px-height"/>
 
-        <!-- The main items table -->
+        <!--   PORTFOLIO   ITEMS   FORM   &&   TABLE   -->
         <h:form id="portfolioDataTableForm">
             <p:dataTable value="#{portfolioBacking.notArchivedItems}"
                          var="itemEntity" styleClass="panelGridCenter"
@@ -81,9 +82,9 @@
                          selectionMode="single" selection="#{itemBacking.selectedItem}"
                          rowKey="#{itemBacking.getRowKey(itemEntity.id)}">
 
-                <p:ajax event="rowSelect" oncomplete="PF('dlgPortfolioItemDetails').show();"
+                <p:ajax event="rowSelect" oncomplete="PF('dlgItemDetails').show();"
                         listener="#{itemBacking.onRowSelect}"
-                        update="mainTabView:formPortfolioItemDetails growl"/>
+                        update="mainTabView:formItemDetails"/>
 
                 <!-- including dataTable with list of items of portfolio -->
                 <ui:include src="/faces/items-list.xhtml"/>

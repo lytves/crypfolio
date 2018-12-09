@@ -1,5 +1,7 @@
 package tk.crypfolio.view;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.business.ApplicationContainer;
@@ -25,14 +27,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Named
 @ViewScoped
 public class TransactionsBacking implements Serializable {
 
-    private static final Logger LOGGER = Logger.getLogger(TransactionsBacking.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(TransactionsBacking.class);
 
     // application scoped
     @Inject
@@ -155,7 +155,7 @@ public class TransactionsBacking implements Serializable {
 
     // autocalculating add-item-transaction form variables
     public void autoRecalculateTransactionInputData(String changedInputForm) {
-        LOGGER.log(Level.WARNING, "autoRecalculateTransactionInputData__________________________");
+        LOGGER.warn("autoRecalculateTransactionInputData__________________________");
 
         switch (changedInputForm) {
 
@@ -191,7 +191,7 @@ public class TransactionsBacking implements Serializable {
                                 .divide(transactionTemp.getAmount(), 8, BigDecimal.ROUND_HALF_DOWN));
 
                     } catch (ArithmeticException ex) {
-                        LOGGER.log(Level.WARNING, ex.toString());
+                        LOGGER.warn(ex.toString());
                     }
 
                 } else if (("price").equals(getLastInputFormFocused())) {
@@ -200,7 +200,7 @@ public class TransactionsBacking implements Serializable {
                         getTransactionTemp().setAmount(transactionTotalTemp
                                 .divide(transactionPriceTemp, 8, BigDecimal.ROUND_HALF_DOWN));
                     } catch (ArithmeticException ex) {
-                        LOGGER.log(Level.WARNING, ex.toString());
+                        LOGGER.warn(ex.toString());
                     }
                 }
                 break;
@@ -214,7 +214,7 @@ public class TransactionsBacking implements Serializable {
     }
 
     public void transactionAddFormReset() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking.transactionAddFormReset");
+        LOGGER.info("PortfolioBacking.transactionAddFormReset");
         // executing every time when add-transaction modal window is closed
         // or Reset button pushed
         if (coinTemp != null) setCoinTemp(null);
@@ -225,7 +225,7 @@ public class TransactionsBacking implements Serializable {
     }
 
     public void createItemTemp() {
-        LOGGER.log(Level.WARNING, "PortfolioBacking.createItemTemp");
+        LOGGER.info("PortfolioBacking.createItemTemp");
 
         itemTemp = new ItemEntity(coinTemp);
 
@@ -402,10 +402,11 @@ public class TransactionsBacking implements Serializable {
             // recount values (netcost) of portfolio
             activeUser.getUser().getPortfolio().recountNetCosts();
 
-            portfolioBacking.init();
-
+            // updates whole portfolio entity
             activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
 
+            // reread items to update and show in porftolio and archive datatables (after updatePortfolioDB!!!)
+            portfolioBacking.init();
         }
     }
 

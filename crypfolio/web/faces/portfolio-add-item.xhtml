@@ -75,9 +75,8 @@
                                                                 width="32" height="32"/>
                                             </div>
 
-                                            <div style="line-height: 2; padding: 5px;">
-                                                <h:outputText value="#{itemEntity.coin.name}"
-                                                              style="font-weight:bold;" styleClass="left"/>
+                                            <div style="line-height: 2; padding: 5px; font-weight:bold;">
+                                                <h:outputText value="#{itemEntity.coin.name}"/>
                                             </div>
 
                                             <div style="margin-left: auto; line-height: 2; padding: 5px;">
@@ -138,7 +137,7 @@
                                 <!--   AMOUNT   -->
                                 <p:outputPanel class="input-group" style="display: flex;">
                                     <p:inputNumber id="add-transaction-amount"
-                                                   required="true"
+                                                   required="true" autocomplete="off"
                                                    styleClass="form-control form-control-right noshadow"
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
@@ -187,7 +186,7 @@
                                 <!--   PRICE   -->
                                 <p:outputPanel style="display: flex;">
                                     <p:inputNumber id="add-transaction-price"
-                                                   required="true"
+                                                   required="true" autocomplete="off"
                                                    styleClass="form-control form-control-right noshadow"
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
@@ -226,7 +225,7 @@
 
                                 <p:outputPanel class="input-group">
                                     <p:inputNumber id="add-transaction-total"
-                                                   required="true"
+                                                   required="true" autocomplete="off"
                                                    styleClass="form-control form-control-right noshadow"
                                                    minValue="0" maxValue="999999999999.99999999" placeholder="0"
                                                    decimalSeparator="." thousandSeparator=","
@@ -251,7 +250,7 @@
                                     <p:outputLabel for="add-transaction-date" value="Date:" style="margin-top: 5px;"/>
 
                                     <p:calendar id="add-transaction-date"
-                                                readonlyInput="true"
+                                                readonlyInput="true" autocomplete="off"
                                                 value="#{transactionsBacking.transactionTemp.boughtDate}"
                                                 pattern="dd MMMM, yyyy" mask="false" locale="en_US"
                                                 navigator="true" maxdate="today"
@@ -308,11 +307,13 @@
                                         <!--   DONE   -->
                                         <p:commandButton id="add-transaction-done"
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
+                                                         update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
+                                                                    mainTabView:archiveDataTableWV growl"
+                                                         oncomplete="PF('dlgPortfolioAddItem').hide();"
+                                                         process="@this"
                                                          value="Done"
                                                          icon="ui-icon-check"
                                                          styleClass="ui-state-disabled"
-                                                         oncomplete="PF('dlgPortfolioAddItem').hide();"
-                                                         update="mainTabView:portfolioPanel mainTabView:archivePanel @form growl"
                                                          resetValues="true">
                                         </p:commandButton>
 
