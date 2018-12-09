@@ -56,7 +56,7 @@ public class VerifyEmailFilter implements Filter {
                     activeUser.setUser(user);
 
                     // TODO make some variable in activeUser with text to show a modal popup
-                    // TODO on /user page to inform when email verification is done
+                    //  on /user page to inform when email verification is done
 
                     resp.sendRedirect(req.getContextPath() + "/user");
 
