@@ -2,6 +2,7 @@ package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
+import tk.crypfolio.util.MathRounders;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -281,6 +282,30 @@ public class ItemEntity implements Serializable {
 
     public void setAverageBoughtPriceEth(BigDecimal averageBoughtPriceEth) {
         this.averageBoughtPriceEth = averageBoughtPriceEth.setScale(8, BigDecimal.ROUND_HALF_DOWN);
+    }
+
+    public BigDecimal getAverageBoughtPriceByCurrency(){
+
+        BigDecimal getAverageBoughtPriceByCurrency = BigDecimal.ZERO;
+
+        switch (getShowedCurrency().getCurrency()) {
+            case "USD":
+                getAverageBoughtPriceByCurrency = getAverageBoughtPriceUsd();
+                break;
+
+            case "EUR":
+                getAverageBoughtPriceByCurrency = getAverageBoughtPriceEur();
+                break;
+
+            case "BTC":
+                getAverageBoughtPriceByCurrency = getAverageBoughtPriceBtc();
+                break;
+
+            case "ETH":
+                getAverageBoughtPriceByCurrency = getAverageBoughtPriceEth();
+                break;
+        }
+        return MathRounders.roundBigDecimalByCurrency(getAverageBoughtPriceByCurrency, getShowedCurrency());
     }
 
     public PortfolioEntity getPortfolio() {
