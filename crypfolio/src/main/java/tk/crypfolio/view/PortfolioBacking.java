@@ -59,7 +59,7 @@ public class PortfolioBacking implements Serializable {
         setArchivedItems(loadArchivedAndNotArchivedItems("archived"));
         setNotArchivedItems(loadArchivedAndNotArchivedItems("notArchived"));
 
-        this.marketValue = updateMarketValue();
+        this.marketValue = countMarketValue();
         getProfit();
     }
 
@@ -115,14 +115,14 @@ public class PortfolioBacking implements Serializable {
 
         LOGGER.info("updatePortfolioValues...");
 
-        this.marketValue = updateMarketValue();
+        this.marketValue = countMarketValue();
         getProfit();
 
         // is used only to save changed Portfolio showerCurrency
         activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
     }
 
-    private BigDecimal updateMarketValue() {
+    private BigDecimal countMarketValue() {
 
         BigDecimal portfolioMarketValue = BigDecimal.ZERO;
 
