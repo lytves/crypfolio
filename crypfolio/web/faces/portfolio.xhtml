@@ -15,9 +15,7 @@
                 <h:outputText class="title"
                               value="Market value: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.roundingForView(
-                                        portfolioBacking.marketValue, portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
+                              value="#{portfolioBacking.countMarketValue()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
                     <f:convertNumber type="number" pattern="###,###.########"
                                      locale="en_US"/>
                 </h:outputText>
@@ -57,11 +55,9 @@
                 <h:outputText class="title"
                               value="Profit: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.roundingForView(
-                                        portfolioBacking.getProfit(), portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
+                              value="#{portfolioBacking.countProfit()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
                                         (#{portfolioBacking.getProfitPercentage()}%)"
-                              styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}">
+                              styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}">
                     <f:convertNumber type="number" pattern="###,###.########"
                                      locale="en_US"/>
                 </h:outputText>

@@ -42,10 +42,8 @@ public class PortfolioBacking implements Serializable {
     @Inject
     private PortfolioService portfolioService;
 
-    //it's used in p:selectOneMenu form
+    // it's used in p:selectOneMenu form
     private CurrencyType[] currencies;
-
-    private BigDecimal marketValue;
 
     // is used in jsf-views p:datatable, because table sorting is worked
     // only with bean's parameters and not method call
@@ -58,9 +56,6 @@ public class PortfolioBacking implements Serializable {
 
         setArchivedItems(loadArchivedAndNotArchivedItems("archived"));
         setNotArchivedItems(loadArchivedAndNotArchivedItems("notArchived"));
-
-        this.marketValue = countMarketValue();
-        getProfit();
     }
 
     @PreDestroy
@@ -81,14 +76,6 @@ public class PortfolioBacking implements Serializable {
 
     public CurrencyType[] getCurrencies() {
         return CurrencyType.values();
-    }
-
-    public BigDecimal getMarketValue() {
-        return marketValue;
-    }
-
-    public void setMarketValue(BigDecimal marketValue) {
-        this.marketValue = marketValue;
     }
 
     public List<ItemEntity> getArchivedItems() {
@@ -112,17 +99,13 @@ public class PortfolioBacking implements Serializable {
      * * * * * * * * * * * * * * * * * * * * * Bean's methods * * * * * * * * * * * * * * * * * * * * *
      * */
     public void updatePortfolioValues() {
-
         LOGGER.info("updatePortfolioValues...");
-
-        this.marketValue = countMarketValue();
-        getProfit();
 
         // is used only to save changed Portfolio showerCurrency
         activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
     }
 
-    private BigDecimal countMarketValue() {
+    public BigDecimal countMarketValue() {
 
         BigDecimal portfolioMarketValue = BigDecimal.ZERO;
 
@@ -135,11 +118,11 @@ public class PortfolioBacking implements Serializable {
         return MathRounders.roundBigDecimalByCurrency(portfolioMarketValue, activeUser.getUser().getPortfolio().getShowedCurrency());
     }
 
-    public BigDecimal getProfit() {
+    public BigDecimal countProfit() {
 
         try {
 
-            return MathRounders.roundBigDecimalByCurrency(getMarketValue().subtract(
+            return MathRounders.roundBigDecimalByCurrency(countMarketValue().subtract(
                     activeUser.getUser().getPortfolio().getNetCostByCurrentCurrency()), activeUser.getUser().getPortfolio().getShowedCurrency());
 
         } catch (NullPointerException ex) {
@@ -152,7 +135,7 @@ public class PortfolioBacking implements Serializable {
 
         try {
 
-            return MathRounders.roundBigDecimalToTwoDecimal(getProfit().multiply(new BigDecimal("100"))
+            return MathRounders.roundBigDecimalToTwoDecimal(countProfit().multiply(new BigDecimal("100"))
                     .divide(activeUser.getUser().getPortfolio().getNetCostByCurrentCurrency(), 8, BigDecimal.ROUND_HALF_DOWN));
 
         } catch (ArithmeticException | NullPointerException ex) {
@@ -348,7 +331,7 @@ public class PortfolioBacking implements Serializable {
         try {
 
             sharePercentage = geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency())
-                    .multiply(new BigDecimal("100")).divide(getMarketValue(), 8, BigDecimal.ROUND_HALF_DOWN);
+                    .multiply(new BigDecimal("100")).divide(countMarketValue(), 8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException | ArithmeticException ex) {
             LOGGER.warn(ex.toString());
