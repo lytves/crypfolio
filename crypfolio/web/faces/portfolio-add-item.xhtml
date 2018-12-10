@@ -306,11 +306,11 @@
 
                                         <!--   DONE   -->
                                         <p:commandButton id="add-transaction-done"
+                                                         process="@this"
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
                                                                     mainTabView:archiveDataTableWV growl"
                                                          oncomplete="PF('dlgPortfolioAddItem').hide();"
-                                                         process="@this"
                                                          value="Done"
                                                          icon="ui-icon-check"
                                                          styleClass="ui-state-disabled"

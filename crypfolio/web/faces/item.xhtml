@@ -6,39 +6,424 @@
 
 
     <!--            =====================               modal window PORTFOLIO: ADD NEW ITEM -->
-    <div id="divPortfolioItemDetails">
+    <div id="divItemDetails">
 
-        <p:dialog header="Item details" id="dlgPortfolioItemDetails" widgetVar="dlgPortfolioItemDetails" modal="true"
+        <p:dialog header="Item details" id="dlgItemDetails" widgetVar="dlgItemDetails" modal="true"
                   resizable="false" draggable="false" position="bottom" closeOnEscape="true"
                   hideEffect="fade"
                   class="modal-window-item-details">
 
-            <h:form id="formPortfolioItemDetails">
+            <p:scrollPanel mode="native" style="width:100%;     overflow-y: scroll;
+    height: 92%;">
+                <h:form id="formItemDetails">
 
-            <h:panelGrid style="width: 100%;">
+                    <div class="ui-g" style="border: 1px solid green;">
 
-                <p:scrollPanel mode="native" style="width:100%; height:300px;">
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" style="border: 1px solid red; padding: 0 !important;">
 
-                    <h:outputText value="#{itemBacking.selectedItem.id}"/>
+                            <p:panelGrid styleClass="panelgrid-items-details" id="itemDetails"
+                                         style="border:none; margin:0 auto; width:100%;">
 
-                    <h:outputText styleClass="span-10px-height"/>
+                                <!--   COIN   NAME   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:graphicImage styleClass="symbol-image-32px"
+                                                        value="#{itemBacking.itemImageID}"
+                                                        width="32" height="32"
+                                                        style="display: inline-block; padding-left: 20px;"/>
 
-                    <h:outputText value="_____________________"/>
+                                        <h:outputText value="#{itemBacking.selectedItem.coin.name}"
+                                                      style="font-weight:bold; font-size: 1.4em; padding-left: 20px;
+                                                          vertical-align: top; line-height: 1.5; color: #000;"/>
+                                    </p:column>
+                                </p:row>
 
-                    <h:outputText styleClass="span-10px-height"/>
+                                <!--   @@@@@@@@@@   ITEM   DETAILS   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="Position Details"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                    </p:column>
+                                </p:row>
 
-                    <h:outputText value="Item details:"/>
+                                <!--   AMOUNT   -->
+                                <p:row>
+                                    <p:column style="width: 25%;">
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Amount:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
 
-                    <h:outputText styleClass="span-10px-height"/>
+                                <!--   AVERAGE   BUY   PRICE  -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Average Buy Price:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="999999999999.99999999"/>
+                                    </p:column>
+                                </p:row>
 
-                </p:scrollPanel>
+                                <!--   NET   COST   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Net Cost:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
 
-            </h:panelGrid>
+                                <!--   MARKET   VALUE   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Market Value:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
 
-            </h:form>
+                                <!--   PROFIT   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Profit:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   PORTFOLIO   SHARE  -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Portfolio Share:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="2%"/>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   @@@@@@@@@@   TOKEN   DETAILS   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="Token Details"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   MARKET   PRICE   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Market Price:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   24   HOUR   CHANGE   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="24h Change:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   CIRCULATING   SUPPLY   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Circulating Supply:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   TOTAL   SUPPLY   -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="Total Supply:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   CMC   RANK  -->
+                                <p:row>
+                                    <p:column>
+                                        <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                      value="CoinMarketCap Rank:"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="12"/>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   @@@@@@@@@@   ITEM   CURRENCY   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="Item Currency"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   CURRENCIES   BUTTONS  -->
+                                <p:row>
+                                    <p:column colspan="2">
+
+                                        <p:selectOneButton value="#{itemBacking.selectedItem.showedCurrency}"
+                                                           unselectable="false"
+                                                           styleClass="select-currency-button">
+                                            <f:selectItems value="#{itemBacking.currencies}"/>
+
+                                            <p:ajax event="change" process="@this"
+                                                    listener="#{itemBacking.changeItemShowedCurrency}"/>
+
+                                        </p:selectOneButton>
+
+                                    </p:column>
+                                </p:row>
+
+                                <!--   @@@@@@@@@@   DELETE   ITEM   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="Delete Item"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                    </p:column>
+                                </p:row>
+
+                                <!--   DELETE BUTTON  -->
+                                <p:row>
+                                    <p:column colspan="2">
+
+                                        <p:commandButton
+                                                process="@this"
+                                                actionListener="#{itemBacking.doSubmitDeleteItem}"
+                                                update="mainTabView:portfolioDataTableForm
+                                                        mainTabView:portfolioMainData
+                                                        mainTabView:formPortfolioAddItem-coin:portfolio-list-currents-items growl"
+                                                oncomplete="PF('dlgItemDetails').hide();"
+                                                style="width: auto !important; margin-left: 10px;"
+                                                styleClass="upp-case"
+                                                value="Delete Item" icon="ui-icon ui-icon-trash">
+
+                                            <p:confirm header="DELETE ITEM"
+                                                       message="Are you sure you want to delete this item?"
+                                                       icon="ui-icon-alert"/>
+
+                                        </p:commandButton>
+
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-9" style="border: 1px solid red; padding: 0 !important;">
+
+                            <h:graphicImage value="#{resource['images/trading-view-widget-example.png']}"
+                                            style="display: block; margin: auto;"/>
+
+                            <!-- TradingView Widget BEGIN -->
+                            <!--                                <div class="tradingview-widget-container">
+                                                                <div id="tradingview_94bde"></div>
+                                                                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                                                                <script type="text/javascript">
+                                                                    new TradingView.widget(
+                                                                        {
+                                                                            "width": 640,
+                                                                            "height": 400,
+                                                                            "symbol": "NASDAQ:AAPL",
+                                                                            "interval": "D",
+                                                                            "timezone": "Etc/UTC",
+                                                                            "theme": "Light",
+                                                                            "style": "1",
+                                                                            "locale": "en",
+                                                                            "toolbar_bg": "#f1f3f6",
+                                                                            "enable_publishing": false,
+                                                                            "allow_symbol_change": true,
+                                                                            "container_id": "tradingview_94bde"
+                                                                        }
+                                                                    );
+                                                                </script>
+                                                            </div>-->
+                            <!-- TradingView Widget END -->
+
+                            <p:panelGrid style="margin:0 auto; width:100%;">
+
+                                <!--   @@@@@@@@@@   TRANSACTIONS   -->
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <h:outputText value="TRANSACTIONS"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column>
+                                        <p:scrollPanel mode="native" style="width:100%; height:100%;">
+                                            <p:dataTable id="panelgrid-items-details-transactions"
+                                                         styleClass="noHeader"
+                                                         value="#{itemBacking.selectedItem.transactions}"
+                                                         var="transactionEntity">
+                                            </p:dataTable>
+                                        </p:scrollPanel>
+                                    </p:column>
+                                </p:row>
+
+                                <p:row colspan="2">
+                                    <p:column>
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+
+                                        <h:outputText value="right"
+                                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+                                    </p:column>
+                                </p:row>
+
+                            </p:panelGrid>
+
+                        </div>
+
+
+                    </div>
+
+                    <div style="border: 1px solid blue; display: flex; justify-content: space-between;">
+                        <h:outputText value="left"
+                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+
+                        <h:outputText value="right"
+                                      style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase;"/>
+                    </div>
+
+                </h:form>
+            </p:scrollPanel>
 
             <!--//remove highlight background color of selected row after closed dialog window-->
-            <p:ajax event="close" oncomplete="portfolioDataTableRowUnselect();" resetValues="true"/>
+            <p:ajax event="close" oncomplete="portfolioDataTableRowUnselect();" resetValues="true"
+                    update="mainTabView:portfolioDataTableForm:portfolioDataTableWV mainTabView:portfolioMainData"/>
 
         </p:dialog>
 
