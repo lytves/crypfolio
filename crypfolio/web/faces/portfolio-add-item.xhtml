@@ -310,7 +310,7 @@
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
                                                                     mainTabView:archiveDataTableWV growl"
-                                                         oncomplete="PF('dlgPortfolioAddItem').hide();"
+                                                         oncomplete="PF('dlgPortfolioAddItem').hide(); portfolioDataTableRowUnselect();"
                                                          value="Done"
                                                          icon="ui-icon-check"
                                                          styleClass="ui-state-disabled"
