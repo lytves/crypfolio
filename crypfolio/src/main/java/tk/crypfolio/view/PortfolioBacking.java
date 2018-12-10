@@ -143,7 +143,7 @@ public class PortfolioBacking implements Serializable {
                     .add(geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
-        return MathRounders.roundBigDecimalToTwoDecimal(portfolioMarketValue);
+        return MathRounders.roundBigDecimalByCurrency(portfolioMarketValue, activeUser.getUser().getPortfolio().getShowedCurrency());
     }
 
     private BigDecimal updateNetCost() {
@@ -155,15 +155,15 @@ public class PortfolioBacking implements Serializable {
             portfolioNetCost = portfolioNetCost.add(item.getNetCostByCurrency(activeUser.getUser().getPortfolio().getShowedCurrency()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
-        return MathRounders.roundBigDecimalToTwoDecimal(portfolioNetCost);
+        return MathRounders.roundBigDecimalByCurrency(portfolioNetCost, activeUser.getUser().getPortfolio().getShowedCurrency());
     }
 
     public BigDecimal getProfit() {
 
         try {
 
-            return MathRounders.roundBigDecimalToTwoDecimal(
-                    getMarketValue().subtract(getNetCost()).setScale(8, BigDecimal.ROUND_HALF_DOWN));
+            return MathRounders.roundBigDecimalByCurrency(getMarketValue().subtract(getNetCost()), activeUser.getUser().getPortfolio().getShowedCurrency());
+
         } catch (NullPointerException ex) {
             LOGGER.warn(ex.toString());
         }
