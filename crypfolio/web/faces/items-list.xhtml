@@ -30,11 +30,11 @@
 
     <!--   MARKET VALUE   -->
     <p:column headerText="Market Value" class="align-right td-border-right" priority="2"
-              sortBy="#{portfolioBacking.geItemMarketValue(itemEntity)}">
+              sortBy="#{portfolioBacking.getItemMarketValue(itemEntity)}">
 
         <h:outputText
                 value="#{portfolioBacking.roundingForView(
-                    portfolioBacking.geItemMarketValue(itemEntity), itemEntity.showedCurrency)}">
+                    portfolioBacking.getItemMarketValue(itemEntity), itemEntity.showedCurrency)}">
             <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
         </h:outputText>
         <h:outputText value=" #{itemEntity.showedCurrency}"/>

@@ -112,7 +112,7 @@ public class PortfolioBacking implements Serializable {
         for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
 
             portfolioMarketValue = portfolioMarketValue
-                    .add(geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency()))
+                    .add(getItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
         return MathRounders.roundBigDecimalByCurrency(portfolioMarketValue, activeUser.getUser().getPortfolio().getShowedCurrency());
@@ -150,7 +150,7 @@ public class PortfolioBacking implements Serializable {
      * @param item - current ItemEntity
      * @return BigDecimal value to be showed and/or get sorted in the column: total market value or 0
      */
-    public BigDecimal geItemMarketValue(@NotNull ItemEntity item) {
+    public BigDecimal getItemMarketValue(@NotNull ItemEntity item) {
 
         try {
 
@@ -172,7 +172,7 @@ public class PortfolioBacking implements Serializable {
      * @param currencyType
      * @return BigDecimal value to be showed and/or get sorted in the column: total market value or 0
      */
-    public BigDecimal geItemMarketValue(@NotNull ItemEntity item, CurrencyType currencyType) {
+    public BigDecimal getItemMarketValue(@NotNull ItemEntity item, CurrencyType currencyType) {
 
         try {
 
@@ -330,7 +330,7 @@ public class PortfolioBacking implements Serializable {
 
         try {
 
-            sharePercentage = geItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency())
+            sharePercentage = getItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency())
                     .multiply(new BigDecimal("100")).divide(countMarketValue(), 8, BigDecimal.ROUND_HALF_DOWN);
 
         } catch (NullPointerException | ArithmeticException ex) {
