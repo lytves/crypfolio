@@ -7,10 +7,13 @@
     <!--   COIN   -->
     <p:column headerText="Coin" sortBy="#{itemEntity.coin.name}" style="width: 200px;" styleClass="flex">
 
-        <h:graphicImage styleClass="symbol-image-32px"
+        <p:graphicImage styleClass="symbol-image-32px"
                         value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
                         width="32" height="32"
-                        style="padding: 5px;"/>
+                        style="padding: 5px;"
+                        onclick="PF('portfolioDataTableWV').unselectAllRows();
+                                    PF('portfolioDataTableWV').selectRow(#{selectedRowIndexPortolioItems}, false);"/>
+
         <h:outputText value="#{itemEntity.coin.name}"
                       style="font-weight:bold; line-height: 2; padding-left: 10px;" styleClass="left"/>
 

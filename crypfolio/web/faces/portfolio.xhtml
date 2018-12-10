@@ -92,7 +92,8 @@
                          stickyHeader="true"
                          id="portfolioDataTableWV" widgetVar="portfolioDataTableWV"
                          selectionMode="single" selection="#{itemBacking.selectedItem}"
-                         rowKey="#{itemBacking.getRowKey(itemEntity.id)}">
+                         rowKey="#{itemBacking.getRowKey(itemEntity.id)}"
+                         rowIndexVar="selectedRowIndexPortolioItems">
 
                 <p:ajax event="rowSelect" oncomplete="PF('dlgItemDetails').show();"
                         listener="#{itemBacking.onRowSelect}"

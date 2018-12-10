@@ -68,7 +68,9 @@
                                          var="itemEntity"
                                          sortBy="#{itemEntity.coin.name}"
                                          selectionMode="single" selection="#{transactionsBacking.itemTemp}"
-                                         rowKey="#{itemEntity.id}">
+                                         rowKey="#{itemEntity.id}"
+                                         widgetVar="portfolio-list-currents-itemsWV"
+                                         rowIndexVar="selectedRowIndexAllItems">
 
                                 <p:ajax event="rowSelect"
                                         listener="#{transactionsBacking.createItemTemp}"
@@ -77,7 +79,9 @@
                                 <p:column style="display: flex; justify-content: space-between;">
                                     <p:graphicImage styleClass="symbol-image-32px" style="padding: 5px;"
                                                     value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
-                                                    width="32" height="32"/>
+                                                    width="32" height="32"
+                                                    onclick="PF('portfolio-list-currents-itemsWV').unselectAllRows();
+                                                                PF('portfolio-list-currents-itemsWV').selectRow(#{selectedRowIndexAllItems}, false);"/>
 
                                     <h:outputText value="#{itemEntity.coin.name}"
                                                   style="line-height: 2; padding: 5px; font-weight:bold;"/>
@@ -104,7 +108,7 @@
 
                             <p:outputPanel style="display: flex;">
 
-                                <h:graphicImage
+                                <p:graphicImage
                                         value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{transactionsBacking.itemTemp.coin.id}.png"
                                         style="height: 32px;"/>
 
