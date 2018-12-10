@@ -71,11 +71,9 @@
 
         <h:outputText id="portfolioItemProfit"
                       value="#{portfolioBacking.roundingForView(
-                      portfolioBacking.getItemProfit(itemEntity), itemEntity.showedCurrency)}"
+                      portfolioBacking.getItemProfit(itemEntity), itemEntity.showedCurrency)}
+                            #{itemEntity.showedCurrency}"
                       styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
-        <h:outputText value=" #{itemEntity.showedCurrency}"
-                      styleClass="#{portfolioBacking.getItemProfit(itemEntity) >= 0.0 ? 'green' : 'red'}"/>
-
     </p:column>
 
     <!--   PROFIT %   -->
