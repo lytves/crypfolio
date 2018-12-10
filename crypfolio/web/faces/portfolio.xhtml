@@ -15,10 +15,12 @@
                 <h:outputText class="title"
                               value="Market value: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.countMarketValue()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
+                              value="#{portfolioBacking.countMarketValue()}">
                     <f:convertNumber type="number" pattern="###,###.########"
                                      locale="en_US"/>
                 </h:outputText>
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
                 <!--   PORTFOLIO   CURRENCIES   -->
                 <h:form id="porfolio-form" style="display: inline-block; height: 32px;">
@@ -45,23 +47,26 @@
                 <h:outputText style="font-weight: bold;"
                               value="#{portfolioBacking.roundingForView(
                                         portfolioBacking.activeUser.user.portfolio.getNetCostByCurrentCurrency(),
-                                         portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
+                                         portfolioBacking.activeUser.user.portfolio.showedCurrency)}">
                     <f:convertNumber type="number" pattern="###,###.########"
                                      locale="en_US"/>
                 </h:outputText>
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
 
                 <!--   PROFIT   -->
                 <h:outputText class="title"
                               value="Profit: "/>
                 <h:outputText style="font-weight: bold;"
-                              value="#{portfolioBacking.countProfit()} #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
-                                        (#{portfolioBacking.getProfitPercentage()}%)"
+                              value="#{portfolioBacking.countProfit()}"
                               styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}">
                     <f:convertNumber type="number" pattern="###,###.########"
                                      locale="en_US"/>
                 </h:outputText>
-
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
+                                        (#{portfolioBacking.getProfitPercentage()}%)"
+                              styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}"/>
             </p:outputPanel>
 
             <div>
