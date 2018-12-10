@@ -20,7 +20,6 @@ public class ActiveUser implements Serializable {
 
     public void setUser(UserEntity user) {
         this.user = user;
-        LOGGER.info("activeUser.user: " + user.getPortfolio().toString());
     }
 
     public UserEntity getUser() {
