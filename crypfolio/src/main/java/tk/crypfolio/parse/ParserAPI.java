@@ -54,12 +54,11 @@ public abstract class ParserAPI {
         } catch (IOException ex) {
             LOGGER.log(Level.WARNING, "IOException in parseAPIByURL: {0}", ex.getMessage());
         }
-
         return inlineString.toString();
     }
 
     /*
-     *  Method to get from early parsed JSON list of ALL CMC COINS and then save it to DB - testing of Sandbox API
+     *  Method to get from previously parsed JSON list of ALL CMC COINS and then save it to DB - testing of Sandbox API
      * */
     public static List<CoinEntity> parseJSONAllCoinsListing(@NotNull String inlineString) {
 
@@ -86,7 +85,6 @@ public abstract class ParserAPI {
 
                 listCoins.add(coin);
             }
-
         } catch (ParseException | ClassCastException ex) {
 
             LOGGER.log(Level.WARNING, "Exception in parseAllCoin: {0}", ex.getMessage());
@@ -94,9 +92,8 @@ public abstract class ParserAPI {
         return listCoins;
     }
 
-
     /*
-     *  Method to get from early parsed JSON list of ALL CMC COINS to use actual prices information
+     *  Method to get from previously parsed JSON list of ALL CMC COINS to use actual prices information
      * */
     public static Map<Long, Map<String, Double>> parseAllCoinsInfoByCoinTickerIdForOneCurrency(String inlineString, String currency) {
 
@@ -138,13 +135,11 @@ public abstract class ParserAPI {
                 if (coinQuoteCurrency.get("percent_change_7d") != null) {
 
                     coinPercentChange7D = ((Number) coinQuoteCurrency.get("percent_change_7d")).doubleValue();
-
                 }
 
                 if (coinQuoteCurrency.get("market_cap") != null) {
 
                     coinMarketCap = ((Number) coinQuoteCurrency.get("market_cap")).doubleValue();
-
                 }
 
                 coinInfoMap.put("price", coinPrice);
@@ -153,13 +148,10 @@ public abstract class ParserAPI {
                 coinInfoMap.put("market_cap", coinMarketCap);
 
                 coinsMap.put(coinId, coinInfoMap);
-
             }
-
         } catch (ParseException | ClassCastException ex) {
             LOGGER.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency" + ex.toString());
         }
-
         return coinsMap;
     }
 
@@ -212,15 +204,67 @@ public abstract class ParserAPI {
 
                         bitcoinHistoricalPrice.put(priceCurrency, priceValue);
                     }
-
                 }
             } catch (ClassCastException | ParseException ex) {
 
                 LOGGER.log(Level.WARNING, "Exception in parseCoinByCoinsTickerId" + ex);
-
             }
         }
-
         return bitcoinHistoricalPrice;
+    }
+
+    /*
+     *  Method to get from previously parsed JSON list of ALL CMC COINS and take additional coin's data
+     * */
+    public static Map<Long, Map<String, Double>> parseAllCoinsAdditonalDataByCoinTicker(String inlineString) {
+
+        Map<Long, Map<String, Double>> coinsMap = new HashMap<>();
+
+        //JSONParser reads the data from string object and break each data into key-value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+
+            JSONObject jsonDataObj = (JSONObject) parserJSON.parse(inlineString);
+            JSONArray jsonCoinsArray = (JSONArray) jsonDataObj.get("data");
+
+            for (Object object : jsonCoinsArray) {
+
+                JSONObject jsonCoinObject = (JSONObject) object;
+
+                Long coinId = ((Number) jsonCoinObject.get("id")).longValue();
+
+                Map<String, Double> coinInfoMap = new HashMap<>();
+
+                Double coinCirculatingSupply = null;
+                Double coinTotalSupply = null;
+                Double coinCmcRank = null;
+
+                if (jsonCoinObject.get("circulating_supply") != null) {
+
+                    coinCirculatingSupply = ((Number) jsonCoinObject.get("circulating_supply")).doubleValue();
+                }
+
+                if (jsonCoinObject.get("total_supply") != null) {
+
+                    coinTotalSupply = ((Number) jsonCoinObject.get("total_supply")).doubleValue();
+                }
+
+                if (jsonCoinObject.get("cmc_rank") != null) {
+
+                    coinCmcRank = ((Number) jsonCoinObject.get("cmc_rank")).doubleValue();
+                }
+
+                coinInfoMap.put("circulating_supply", coinCirculatingSupply);
+                coinInfoMap.put("total_supply", coinTotalSupply);
+                coinInfoMap.put("cmc_rank", coinCmcRank);
+
+                coinsMap.put(coinId, coinInfoMap);
+            }
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, "Error in parseAllCoinsAdditonalDataByCoinTicker - " + ex.toString());
+        }
+        return coinsMap;
     }
 }

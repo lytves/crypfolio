@@ -1,6 +1,8 @@
 package tk.crypfolio.business;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import tk.crypfolio.DAO.AbstractDAOFactory;
 import tk.crypfolio.DAO.CoinDAO;
@@ -15,8 +17,6 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +26,8 @@ import java.util.stream.Stream;
 @Startup
 public class ApiParsingSchedulers {
 
-    private static final Logger LOGGER = Logger.getLogger(ApiParsingSchedulers.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ApiParsingSchedulers.class);
+
 
     @Inject
     private ApplicationContainer applicationContainer;
@@ -36,7 +37,7 @@ public class ApiParsingSchedulers {
 
     @PostConstruct
     private void init() {
-        LOGGER.log(Level.WARNING, "ApiParsingSchedulers start!");
+        LOGGER.info( "ApiParsingSchedulers start!");
     }
 
 //    https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
@@ -49,30 +50,33 @@ public class ApiParsingSchedulers {
 
             StringBuilder urlRequest = new StringBuilder();
 
+            // https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000&convert=USD,EUR,BTC,ETH
+            // &CMC_PRO_API_KEY=PUT_YOUR_CMC_SANDBOX_API_KEY_HERE
             urlRequest.append(SettingsParseAPI.CMC_SANDBOX_ALL_COINS_FOUR_CURRENCIES)
                     .append(SettingsParseAPI.CMC_SANDBOX_API_KEY);
 
-            LOGGER.log(Level.WARNING, "parseAllCoinsOnSandboxCMC.urlRequest: " + urlRequest);
+            LOGGER.info("parseAllCoinsOnSandboxCMC.urlRequest: " + urlRequest);
 
             String inlineString = ParserAPI.parseAPIByURL(urlRequest.toString(), "GET");
 
             if (!(inlineString.trim()).isEmpty()) {
 
-                // save ALL CMC COINS, form early parsed JSON, to DB - testing of the Sandbox API
+                // save ALL CMC COINS, from previously parsed JSON, to DB - testing of the Sandbox API
                 updateCoinsTableDB(inlineString);
 
-                // save ALL CMC COINS, form early parsed JSON, to Map separated by CurrencyType - testing of the Sandbox API
+                // save ALL CMC COINS, from previously parsed JSON, to Map separated by CurrencyType - testing of the Sandbox API
                 parseJSONAllCoinsToMapByCurrency(inlineString);
 
+                // save additional data of ALL CMC COINS, from previously parsed JSON, to Map - testing of the Sandbox API
+                parseJSONAllCoinsAdditionalDataToMap(inlineString);
             }
-
         } catch (Exception ex) {
-            LOGGER.log(Level.WARNING, "ApiParsingSchedulers.parseAllCoinsSandboxCMC exception" + ex.toString());
+            LOGGER.warn( "ApiParsingSchedulers.parseAllCoinsSandboxCMC exception - " + ex.toString());
         }
     }
 
     /*
-     *  Method to get from early parsed JSON list of ALL CMC COINS and then save it to DB - testing of Sandbox API
+     *  Method to get from previously parsed JSON list of ALL CMC COINS and then save it to DB - testing of Sandbox API
      * */
     private void updateCoinsTableDB(@NotNull String inlineString) {
 
@@ -89,7 +93,7 @@ public class ApiParsingSchedulers {
     }
 
     /*
-     *  Method to get early parsed list of ALL CMC COINS and order it by CurrencyType and then
+     *  Method to get previously parsed list of ALL CMC COINS and order it by CurrencyType and then
      *  put it to Map<String, Map<Long, Map<String, Double>>> in the @ApplicationScoped bean ApplicationContainer
      * */
     private void parseJSONAllCoinsToMapByCurrency(@NotNull String inlineString) {
@@ -127,5 +131,14 @@ public class ApiParsingSchedulers {
                     break;
             }
         }
+    }
+
+    /*
+     *  Method to get previously parsed list of ALL CMC COINS and then save additional data,
+     *  put it to Map<Long, Map<String, Double>> in the @ApplicationScoped bean ApplicationContainer
+     * */
+    private void parseJSONAllCoinsAdditionalDataToMap(@NotNull String inlineString) {
+
+        applicationContainer.setAllCoinsByTickerAdditionalData(ParserAPI.parseAllCoinsAdditonalDataByCoinTicker(inlineString));
     }
 }

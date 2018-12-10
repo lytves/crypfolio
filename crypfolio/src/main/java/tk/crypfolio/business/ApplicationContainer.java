@@ -31,6 +31,8 @@ public class ApplicationContainer {
 
     private Map<Long, Map<String, Double>> allCoinsByTickerInEth = new HashMap<>();
 
+    private Map<Long, Map<String, Double>> allCoinsByTickerAdditionalData = new HashMap<>();
+
     @PostConstruct
     private void init() {
 
@@ -73,5 +75,13 @@ public class ApplicationContainer {
 
     public void setAllCoinsByTickerInEth(Map<Long, Map<String, Double>> allCoinsByTickerInEth) {
         this.allCoinsByTickerInEth = allCoinsByTickerInEth;
+    }
+
+    public Map<Long, Map<String, Double>> getAllCoinsByTickerAdditionalData() {
+        return allCoinsByTickerAdditionalData;
+    }
+
+    public void setAllCoinsByTickerAdditionalData(Map<Long, Map<String, Double>> allCoinsByTickerAdditionalData) {
+        this.allCoinsByTickerAdditionalData = allCoinsByTickerAdditionalData;
     }
 }
