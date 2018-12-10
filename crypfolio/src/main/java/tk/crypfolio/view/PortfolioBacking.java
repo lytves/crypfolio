@@ -243,7 +243,9 @@ public class PortfolioBacking implements Serializable {
 
         // this conditional is using to avoid "null" values on the add/delete coins,
         // because it provokes NullPointerException
-        if (item != null) {
+        // && this condition is used to avoid some use cases when we still don't have
+        // a coin assigned to the item, e.g. to load item detail modal window!!!
+        if (item != null && item.getCoin() != null) {
 
             Double change24h = coinCurrentData("percent_change_24h", item.getCoin().getId(), item.getShowedCurrency());
 
@@ -408,7 +410,7 @@ public class PortfolioBacking implements Serializable {
                     Long key = entry.getKey();
                     Map<String, Double> value = entry.getValue();
 
-                    if (id.equals(key)) {
+                    if (key.equals(id)) {
                         return value.get(data);
                     }
                 }
