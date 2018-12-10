@@ -68,11 +68,11 @@
                                     </p:column>
                                     <p:column>
                                         <h:outputText
-                                                value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}
-                                                               #{itemBacking.selectedItem.showedCurrency}">
+                                                value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
                                     </p:column>
                                 </p:row>
 
@@ -83,11 +83,11 @@
                                                       value="Net Cost:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.getNetCostByCurrentCurrency()}
-                                                                #{itemBacking.selectedItem.showedCurrency}">
+                                        <h:outputText value="#{itemBacking.selectedItem.getNetCostByCurrentCurrency()}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
                                     </p:column>
                                 </p:row>
 
@@ -100,11 +100,11 @@
                                     <p:column>
                                         <h:outputText value="#{portfolioBacking.roundingForView(
                                             portfolioBacking.getItemMarketValue(itemBacking.selectedItem),
-                                            itemBacking.selectedItem.showedCurrency)}
-                                                                #{itemBacking.selectedItem.showedCurrency}">
+                                            itemBacking.selectedItem.showedCurrency)}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
                                     </p:column>
                                 </p:row>
 
@@ -116,14 +116,14 @@
                                     </p:column>
                                     <p:column>
                                         <h:outputText value="#{portfolioBacking.roundingForView(
-                                            portfolioBacking.getItemProfit(itemBacking.selectedItem),
-                                            itemBacking.selectedItem.showedCurrency)}
-                                                                #{itemBacking.selectedItem.showedCurrency}
-                                                                (#{portfolioBacking.getItemProfitPercentage(itemBacking.selectedItem)}%)"
+                                            portfolioBacking.getItemProfit(itemBacking.selectedItem), itemBacking.selectedItem.showedCurrency)}"
                                                       styleClass="#{portfolioBacking.getItemProfit(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}
+                                            (#{portfolioBacking.getItemProfitPercentage(itemBacking.selectedItem)}%)"
+                                                      styleClass="#{portfolioBacking.getItemProfit(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}"/>
                                     </p:column>
                                 </p:row>
 
@@ -134,7 +134,8 @@
                                                       value="Portfolio Share:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{portfolioBacking.getItemSharePercentage(itemBacking.selectedItem)}%"/>
+                                        <h:outputText
+                                                value="#{portfolioBacking.getItemSharePercentage(itemBacking.selectedItem)}%"/>
                                     </p:column>
                                 </p:row>
 
@@ -154,10 +155,13 @@
                                                       value="Market Price:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getCoinPrice(itemBacking.selectedItem.coin, itemBacking.selectedItem.showedCurrency),
+                                             itemBacking.selectedItem.showedCurrency)}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
                                     </p:column>
                                 </p:row>
 
@@ -168,10 +172,9 @@
                                                       value="24h Change:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
-                                            <f:convertNumber type="number" pattern="###,###.########"
-                                                             locale="en_US"/>
-                                        </h:outputText>
+                                        <h:outputText
+                                                value="#{portfolioBacking.getCoinChange24H(itemBacking.selectedItem)}%"
+                                                styleClass="#{portfolioBacking.getCoinChange24H(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}"/>
                                     </p:column>
                                 </p:row>
 
@@ -182,10 +185,12 @@
                                                       value="Circulating Supply:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText
+                                                value="#{itemBacking.getCoinCirculatingSupply(itemBacking.selectedItem)}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
                                     </p:column>
                                 </p:row>
 
@@ -196,10 +201,12 @@
                                                       value="Total Supply:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText
+                                                value="#{itemBacking.getCoinTotalSupply(itemBacking.selectedItem)}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
+                                        <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
                                     </p:column>
                                 </p:row>
 
@@ -210,7 +217,7 @@
                                                       value="CoinMarketCap Rank:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="12"/>
+                                        <h:outputText value="#{itemBacking.getCoinCmcRank(itemBacking.selectedItem)}"/>
                                     </p:column>
                                 </p:row>
 

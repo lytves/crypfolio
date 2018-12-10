@@ -2,11 +2,15 @@ package tk.crypfolio.view;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.primefaces.event.SelectEvent;
+import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.ItemService;
 import tk.crypfolio.business.PortfolioService;
 import tk.crypfolio.common.CurrencyType;
+import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.ItemEntity;
+import tk.crypfolio.util.MathRounders;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,12 +19,18 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Map;
 
 @Named
 @ViewScoped
 public class ItemBacking implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(PortfolioBacking.class);
+
+    // application scoped
+    @Inject
+    private ApplicationContainer applicationContainer;
 
     // session scoped
     @Inject
@@ -50,7 +60,7 @@ public class ItemBacking implements Serializable {
         LOGGER.info("ItemBacking @PostConstruct");
 
         // initialize selectedItem to avoid "itemBacking.selectedItem.showedCurrency" error in the jsf-view
-        setSelectedItem(new ItemEntity());
+        setSelectedItem(new ItemEntity(new CoinEntity()));
     }
 
     /*
@@ -89,8 +99,7 @@ public class ItemBacking implements Serializable {
      * */
     public void onRowSelect(SelectEvent event) {
 
-        LOGGER.info("onRowSelect");
-        System.out.println(((ItemEntity) event.getObject()).toString());
+        LOGGER.info("onRowSelect: " + event.getObject().toString());
 
         // to avoid "html/js console error" with no image at the page loaded
         String imageID = String.valueOf(((ItemEntity) event.getObject()).getCoin().getId());
@@ -143,5 +152,47 @@ public class ItemBacking implements Serializable {
                     ""));
             LOGGER.warn("Error on deleting an item from user's portfolio!");
         }
+    }
+
+    public BigDecimal getCoinCirculatingSupply(@NotNull ItemEntity itemEntity) {
+
+        for (Map.Entry<Long, Map<String, Double>> entry : applicationContainer.getAllCoinsByTickerAdditionalData().entrySet()) {
+
+            Long key = entry.getKey();
+            Map<String, Double> value = entry.getValue();
+
+            if (key.equals(itemEntity.getCoin().getId())) {
+                return MathRounders.roundBigDecimalToTwoDecimal(BigDecimal.valueOf(value.get("circulating_supply")));
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getCoinTotalSupply(@NotNull ItemEntity itemEntity) {
+
+        for (Map.Entry<Long, Map<String, Double>> entry : applicationContainer.getAllCoinsByTickerAdditionalData().entrySet()) {
+
+            Long key = entry.getKey();
+            Map<String, Double> value = entry.getValue();
+
+            if (key.equals(itemEntity.getCoin().getId())) {
+                return MathRounders.roundBigDecimalToTwoDecimal(BigDecimal.valueOf(value.get("total_supply")));
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public String getCoinCmcRank(@NotNull ItemEntity itemEntity) {
+
+        for (Map.Entry<Long, Map<String, Double>> entry : applicationContainer.getAllCoinsByTickerAdditionalData().entrySet()) {
+
+            Long key = entry.getKey();
+            Map<String, Double> value = entry.getValue();
+
+            if (key.equals(itemEntity.getCoin().getId())) {
+                return String.valueOf(value.get("cmc_rank").intValue());
+            }
+        }
+        return "-";
     }
 }
