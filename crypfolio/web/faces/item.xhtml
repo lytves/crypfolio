@@ -13,8 +13,7 @@
                   hideEffect="fade"
                   class="modal-window-item-details">
 
-            <p:scrollPanel mode="native" style="width:100%;     overflow-y: scroll;
-    height: 92%;">
+            <p:scrollPanel mode="native" style="width:100%; overflow-y: scroll; height: 92%;">
                 <h:form id="formItemDetails">
 
                     <div class="ui-g" style="border: 1px solid green;">
@@ -68,7 +67,8 @@
                                                       value="Average Buy Price:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="999999999999.99999999"/>
+                                        <h:outputText value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}
+                                                               #{itemBacking.selectedItem.showedCurrency}"/>
                                     </p:column>
                                 </p:row>
 

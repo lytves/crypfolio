@@ -52,7 +52,8 @@
                 <h:outputText style="font-weight: bold;"
                               value="#{portfolioBacking.roundingForView(
                                         portfolioBacking.getProfit(), portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
+                                        (#{portfolioBacking.getProfitPercentage()}%)"
                               styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}"/>
 
             </p:outputPanel>
