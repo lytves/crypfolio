@@ -1,6 +1,7 @@
 package tk.crypfolio.model;
 
 import tk.crypfolio.common.CurrencyType;
+import tk.crypfolio.util.MathRounders;
 import tk.crypfolio.util.StringGenerator;
 
 import javax.persistence.*;
@@ -140,6 +141,31 @@ public class PortfolioEntity implements Serializable {
 
     public void setNetCostEth(BigDecimal netCostEth) {
         this.netCostEth = netCostEth;
+    }
+
+    public BigDecimal getNetCostByCurrentCurrency(){
+
+        BigDecimal netCostByCurrentCurrency = BigDecimal.ZERO;
+
+        switch (getShowedCurrency().getCurrency()) {
+            case "USD":
+                netCostByCurrentCurrency = getNetCostUsd();
+                break;
+
+            case "EUR":
+                netCostByCurrentCurrency =  getNetCostEur();
+                break;
+
+            case "BTC":
+                netCostByCurrentCurrency =  getNetCostBtc();
+                break;
+
+            case "ETH":
+                netCostByCurrentCurrency =  getNetCostEth();
+                break;
+
+        }
+        return MathRounders.roundBigDecimalByCurrency(netCostByCurrentCurrency, getShowedCurrency());
     }
 
     public List<ItemEntity> getItems() {

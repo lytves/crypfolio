@@ -17,7 +17,10 @@
                 <h:outputText style="font-weight: bold;"
                               value="#{portfolioBacking.roundingForView(
                                         portfolioBacking.marketValue, portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
 
                 <!--   PORTFOLIO   CURRENCIES   -->
                 <h:form id="porfolio-form" style="display: inline-block; height: 32px;">
@@ -43,8 +46,12 @@
                               value="Net cost: "/>
                 <h:outputText style="font-weight: bold;"
                               value="#{portfolioBacking.roundingForView(
-                                        portfolioBacking.netCost, portfolioBacking.activeUser.user.portfolio.showedCurrency)}
-                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+                                        portfolioBacking.activeUser.user.portfolio.getNetCostByCurrentCurrency(),
+                                         portfolioBacking.activeUser.user.portfolio.showedCurrency)}
+                                        #{portfolioBacking.activeUser.user.portfolio.showedCurrency}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
 
                 <!--   PROFIT   -->
                 <h:outputText class="title"
@@ -54,7 +61,10 @@
                                         portfolioBacking.getProfit(), portfolioBacking.activeUser.user.portfolio.showedCurrency)}
                                         #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
                                         (#{portfolioBacking.getProfitPercentage()}%)"
-                              styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}"/>
+                              styleClass="#{portfolioBacking.getProfit() >= 0.0 ? 'green' : 'red'}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
 
             </p:outputPanel>
 
