@@ -227,20 +227,28 @@ public class TransactionsBacking implements Serializable {
     public void createItemTemp() {
         LOGGER.info("PortfolioBacking.createItemTemp");
 
-        itemTemp = new ItemEntity(coinTemp);
+        // if itemTemp is still == null, it menas that user have used autocomplete to choose coin
+        if (getItemTemp() == null) {
 
-        for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+            itemTemp = new ItemEntity(coinTemp);
 
-            if (item.getCoin().getId().equals(coinTemp.getId())) {
-                itemTemp = item;
-                break;
+            for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                if (item.getCoin().getId().equals(coinTemp.getId())) {
+                    itemTemp = item;
+                    break;
+                }
             }
+        // user have chosen a coin from list of existing items
+        } else {
+            // should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+            setCoinTemp(itemTemp.getCoin());
         }
 
-        transactionTemp = new TransactionEntity();
+        setTransactionTemp(new TransactionEntity());
 
         // to set initial item's coin price
-        transactionPriceTemp = portfolioBacking.getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency());
+        setTransactionPriceTemp(portfolioBacking.getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency()));
     }
 
     private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {

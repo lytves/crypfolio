@@ -66,23 +66,24 @@
                                          styleClass="noHeader"
                                          value="#{portfolioBacking.activeUser.user.portfolio.items}"
                                          var="itemEntity"
-                                         sortBy="#{itemEntity.coin.name}">
+                                         sortBy="#{itemEntity.coin.name}"
+                                         selectionMode="single" selection="#{transactionsBacking.itemTemp}"
+                                         rowKey="#{itemEntity.id}">
+
+                                <p:ajax event="rowSelect"
+                                        listener="#{transactionsBacking.createItemTemp}"
+                                        update="@form mainTabView:formPortfolioAddItem-transaction"/>
 
                                 <p:column style="display: flex; justify-content: space-between;">
-                                            <div style="padding: 5px;">
-                                                <h:graphicImage styleClass="symbol-image-32px"
-                                                                value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
-                                                                width="32" height="32"/>
-                                            </div>
+                                    <p:graphicImage styleClass="symbol-image-32px" style="padding: 5px;"
+                                                    value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
+                                                    width="32" height="32"/>
 
-                                            <div style="line-height: 2; padding: 5px; font-weight:bold;">
-                                                <h:outputText value="#{itemEntity.coin.name}"/>
-                                            </div>
+                                    <h:outputText value="#{itemEntity.coin.name}"
+                                                  style="line-height: 2; padding: 5px; font-weight:bold;"/>
 
-                                            <div style="margin-left: auto; line-height: 2; padding: 5px;">
-                                                <h:outputText value="#{itemEntity.coin.symbol}"/>
-                                            </div>
-
+                                    <h:outputText value="#{itemEntity.coin.symbol}"
+                                                  style="margin-left: auto; line-height: 2; padding: 5px;"/>
                                 </p:column>
 
                             </p:dataTable>
