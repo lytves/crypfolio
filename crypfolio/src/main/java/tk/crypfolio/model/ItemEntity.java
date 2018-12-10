@@ -244,6 +244,31 @@ public class ItemEntity implements Serializable {
         return BigDecimal.ZERO;
     }
 
+    public BigDecimal getNetCostByCurrentCurrency(){
+
+        BigDecimal netCostByCurrentCurrency = BigDecimal.ZERO;
+
+        switch (getShowedCurrency().getCurrency()) {
+            case "USD":
+                netCostByCurrentCurrency = getNetCostUsd();
+                break;
+
+            case "EUR":
+                netCostByCurrentCurrency =  getNetCostEur();
+                break;
+
+            case "BTC":
+                netCostByCurrentCurrency =  getNetCostBtc();
+                break;
+
+            case "ETH":
+                netCostByCurrentCurrency =  getNetCostEth();
+                break;
+
+        }
+        return MathRounders.roundBigDecimalByCurrency(netCostByCurrentCurrency, getShowedCurrency());
+    }
+
     public Boolean getArchived() {
         return isArchived;
     }
@@ -286,26 +311,26 @@ public class ItemEntity implements Serializable {
 
     public BigDecimal getAverageBoughtPriceByCurrency(){
 
-        BigDecimal getAverageBoughtPriceByCurrency = BigDecimal.ZERO;
+        BigDecimal averageBoughtPriceByCurrency = BigDecimal.ZERO;
 
         switch (getShowedCurrency().getCurrency()) {
             case "USD":
-                getAverageBoughtPriceByCurrency = getAverageBoughtPriceUsd();
+                averageBoughtPriceByCurrency = getAverageBoughtPriceUsd();
                 break;
 
             case "EUR":
-                getAverageBoughtPriceByCurrency = getAverageBoughtPriceEur();
+                averageBoughtPriceByCurrency = getAverageBoughtPriceEur();
                 break;
 
             case "BTC":
-                getAverageBoughtPriceByCurrency = getAverageBoughtPriceBtc();
+                averageBoughtPriceByCurrency = getAverageBoughtPriceBtc();
                 break;
 
             case "ETH":
-                getAverageBoughtPriceByCurrency = getAverageBoughtPriceEth();
+                averageBoughtPriceByCurrency = getAverageBoughtPriceEth();
                 break;
         }
-        return MathRounders.roundBigDecimalByCurrency(getAverageBoughtPriceByCurrency, getShowedCurrency());
+        return MathRounders.roundBigDecimalByCurrency(averageBoughtPriceByCurrency, getShowedCurrency());
     }
 
     public PortfolioEntity getPortfolio() {
