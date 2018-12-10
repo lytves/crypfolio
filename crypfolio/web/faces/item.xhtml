@@ -48,7 +48,7 @@
 
                                 <!--   AMOUNT   -->
                                 <p:row>
-                                    <p:column style="width: 25%;">
+                                    <p:column style="width: 160px;">
                                         <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
                                                       value="Amount:"/>
                                     </p:column>
@@ -67,8 +67,12 @@
                                                       value="Average Buy Price:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}
-                                                               #{itemBacking.selectedItem.showedCurrency}"/>
+                                        <h:outputText
+                                                value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}
+                                                               #{itemBacking.selectedItem.showedCurrency}">
+                                            <f:convertNumber type="number" pattern="###,###.########"
+                                                             locale="en_US"/>
+                                        </h:outputText>
                                     </p:column>
                                 </p:row>
 
@@ -79,7 +83,8 @@
                                                       value="Net Cost:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText value="#{itemBacking.selectedItem.getNetCostByCurrentCurrency()}
+                                                                #{itemBacking.selectedItem.showedCurrency}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
@@ -93,7 +98,10 @@
                                                       value="Market Value:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getItemMarketValue(itemBacking.selectedItem),
+                                            itemBacking.selectedItem.showedCurrency)}
+                                                                #{itemBacking.selectedItem.showedCurrency}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
@@ -107,7 +115,12 @@
                                                       value="Profit:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getItemProfit(itemBacking.selectedItem),
+                                            itemBacking.selectedItem.showedCurrency)}
+                                                                #{itemBacking.selectedItem.showedCurrency}
+                                                                (#{portfolioBacking.getItemProfitPercentage(itemBacking.selectedItem)}%)"
+                                                      styleClass="#{portfolioBacking.getItemProfit(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}">
                                             <f:convertNumber type="number" pattern="###,###.########"
                                                              locale="en_US"/>
                                         </h:outputText>
@@ -121,14 +134,14 @@
                                                       value="Portfolio Share:"/>
                                     </p:column>
                                     <p:column>
-                                        <h:outputText value="2%"/>
+                                        <h:outputText value="#{portfolioBacking.getItemSharePercentage(itemBacking.selectedItem)}%"/>
                                     </p:column>
                                 </p:row>
 
-                                <!--   @@@@@@@@@@   TOKEN   DETAILS   -->
+                                <!--   @@@@@@@@@@   COIN   DETAILS   -->
                                 <p:row>
                                     <p:column colspan="2">
-                                        <h:outputText value="Token Details"
+                                        <h:outputText value="Coin Details"
                                                       style="padding: 5px 0 0 20px; font-weight: bold; display: block;
                                                           text-transform: uppercase; color: #000;"/>
                                     </p:column>
@@ -220,7 +233,8 @@
                                             <f:selectItems value="#{itemBacking.currencies}"/>
 
                                             <p:ajax event="change" process="@this"
-                                                    listener="#{itemBacking.changeItemShowedCurrency}"/>
+                                                    listener="#{itemBacking.changeItemShowedCurrency}"
+                                                    update="itemDetails"/>
 
                                         </p:selectOneButton>
 

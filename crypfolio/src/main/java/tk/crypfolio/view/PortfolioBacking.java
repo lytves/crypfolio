@@ -90,7 +90,6 @@ public class PortfolioBacking implements Serializable {
         return notArchivedItems;
     }
 
-
     public void setNotArchivedItems(List<ItemEntity> notArchivedItems) {
         this.notArchivedItems = notArchivedItems;
     }
@@ -152,14 +151,19 @@ public class PortfolioBacking implements Serializable {
      */
     public BigDecimal getItemMarketValue(@NotNull ItemEntity item) {
 
-        try {
+        // this condition is used to avoid some use cases when we still don't have
+        // a coin assigned to the item, e.g. to load item detail modal window!!!
+        if (item != null && item.getCoin() != null) {
 
-            BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), item.getShowedCurrency());
+            try {
 
-            return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), item.getShowedCurrency());
 
-        } catch (NullPointerException ex) {
-            LOGGER.warn(ex.toString());
+                return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+            } catch (NullPointerException ex) {
+                LOGGER.warn(ex.toString());
+            }
         }
         return BigDecimal.ZERO;
     }
@@ -174,15 +178,21 @@ public class PortfolioBacking implements Serializable {
      */
     public BigDecimal getItemMarketValue(@NotNull ItemEntity item, CurrencyType currencyType) {
 
-        try {
+        // this condition is used to avoid some use cases when we still don't have
+        // a coin assigned to the item, e.g. to load item detail modal window!!!
+        if (item != null && item.getCoin() != null) {
 
-            BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), currencyType);
+            try {
 
-            return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                BigDecimal coinMarketPrice = getCoinPrice(item.getCoin(), currencyType);
 
-        } catch (NullPointerException ex) {
-            LOGGER.warn(ex.toString());
+                return item.getAmount().multiply(coinMarketPrice).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+            } catch (NullPointerException ex) {
+                LOGGER.warn(ex.toString());
+            }
         }
+
         return BigDecimal.ZERO;
     }
 
@@ -249,31 +259,36 @@ public class PortfolioBacking implements Serializable {
 
         BigDecimal profit = BigDecimal.ZERO;
 
-        switch (item.getShowedCurrency().getCurrency()) {
+        // this condition is used to avoid some use cases when we still don't have
+        // a coin assigned to the item, e.g. to load item detail modal window!!!
+        if (item != null && item.getCoin() != null) {
 
-            case "USD":
+            switch (item.getShowedCurrency().getCurrency()) {
 
-                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-                break;
+                case "USD":
 
-            case "EUR":
+                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                            item.getAmount())).subtract(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                    break;
 
-                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-                break;
+                case "EUR":
 
-            case "BTC":
+                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                            item.getAmount())).subtract(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                    break;
 
-                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-                break;
+                case "BTC":
 
-            case "ETH":
+                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                            item.getAmount())).subtract(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                    break;
 
-                profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
-                        item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-                break;
+                case "ETH":
+
+                    profit = (getCoinPrice(item.getCoin(), item.getShowedCurrency()).multiply(
+                            item.getAmount())).subtract(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                    break;
+            }
         }
         return profit;
     }

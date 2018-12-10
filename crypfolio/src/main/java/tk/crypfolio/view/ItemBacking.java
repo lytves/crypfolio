@@ -40,6 +40,7 @@ public class ItemBacking implements Serializable {
 
     private ItemEntity selectedItem;
 
+    // it's used in p:selectOneButton form
     private CurrencyType[] currencies;
 
     private String itemImageID = "https://s2.coinmarketcap.com/static/img/coins/32x32/1.png";
