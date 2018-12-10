@@ -65,6 +65,10 @@ function portfolioDataTableRowUnselect() {
     [].forEach.call(selectedRows, function(el) {
         el.classList.remove("ui-state-highlight");
     });
+    var selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-hover");
+    [].forEach.call(selectedRows, function(el) {
+        el.classList.remove("ui-state-hover");
+    });
 
     window.scrollTo(0,0);
 }
