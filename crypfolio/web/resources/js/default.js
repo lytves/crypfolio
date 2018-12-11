@@ -62,15 +62,15 @@ function portfolioDataTableRowUnselect() {
     // https://stackoverflow.com/questions/22270664/how-to-remove-a-class-from-elements-in-pure-javascript
 
     var selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-highlight");
-    [].forEach.call(selectedRows, function(el) {
+    [].forEach.call(selectedRows, function (el) {
         el.classList.remove("ui-state-highlight");
     });
     var selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-hover");
-    [].forEach.call(selectedRows, function(el) {
+    [].forEach.call(selectedRows, function (el) {
         el.classList.remove("ui-state-hover");
     });
 
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 
 /*
@@ -88,4 +88,34 @@ function endHandler() {
     clearTimeout(ajaxInProgress);
     PF('ajaxStatus').hide();
     ajaxInProgress = null;
+}
+
+
+/*
+* fixing problem with duplicated datatable's sticky header on change tabs
+* see: https://github.com/primefaces/primefaces/issues/960
+* */
+function refreshStickyHeader(widgetVars) {
+    var widgetArray = widgetVars.split(',');
+
+    for (var i = 0; i < widgetArray.length; i++) {
+
+        var tableWidget_ID = widgetArray[i];
+
+        var $this = PF(tableWidget_ID);
+
+        if ($this) {
+
+            var stickyContainer = $this.jq.find('.ui-datatable-sticky');
+
+            if (stickyContainer) {
+
+                stickyContainer.css('display', 'none');
+
+                stickyContainer.css('width', $this.jq.width());
+
+            }
+        }
+        console.log("Kyla La Grange - Cut Your Teeth (Kygo Remix)");
+    }
 }

@@ -34,7 +34,8 @@
 
         <p:growl id="growl" showDetail="false" life="10000"/>
 
-        <p:tabView id="mainTabView" dynamic="true" cache="true" styleClass="myTabview">
+        <p:tabView id="mainTabView" dynamic="true" cache="true" styleClass="myTabview"
+                   onTabShow="refreshStickyHeader('portfolioDataTableWV,archiveDataTableWV,watchlistDataTableWV');">
 
             <!-- include Portfolio tabView-->
             <p:tab title="Portfolio">
