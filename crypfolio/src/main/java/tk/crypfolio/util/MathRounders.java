@@ -41,6 +41,7 @@ public abstract class MathRounders {
                 } else if (value.setScale(6, BigDecimal.ROUND_HALF_DOWN).compareTo(new BigDecimal("0")) != 0) {
                     return value.setScale(6, BigDecimal.ROUND_HALF_DOWN);
                 }
+                break;
 
             // same rounding method for USD && EUR
             case "BTC":
@@ -52,6 +53,7 @@ public abstract class MathRounders {
                 } else if (value.setScale(7, BigDecimal.ROUND_HALF_DOWN).compareTo(BigDecimal.ZERO) != 0) {
                     return value.setScale(7, BigDecimal.ROUND_HALF_DOWN);
                 }
+                break;
         }
         return value.setScale(8, BigDecimal.ROUND_HALF_UP);
     }
