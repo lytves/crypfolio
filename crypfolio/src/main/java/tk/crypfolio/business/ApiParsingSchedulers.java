@@ -46,7 +46,7 @@ public class ApiParsingSchedulers {
 
 //    https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
 
-    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    @Schedule(minute = "*/30", hour = "*", persistent = false)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public void parseAllCoinsOnSandboxCMC() {
 
