@@ -46,6 +46,10 @@ public class TransactionsBacking implements Serializable {
     @Inject
     private PortfolioBacking portfolioBacking;
 
+    // view scoped
+    @Inject
+    private ItemBacking itemBacking;
+
     // stateless business
     @Inject
     private PortfolioService portfolioService;
@@ -68,9 +72,6 @@ public class TransactionsBacking implements Serializable {
     // this variable is used only to show value on the jsf-page,
     // in the business logic don't use it
     private BigDecimal transactionTotalTemp;
-
-    // is used to show current date in the Date input placeholder
-    private String datePlaceholder;
 
     // is used only in the function autoRecalculateTransactionInputData(...)
     // for recount or price or amount, depends of the last user's entered input form
@@ -143,7 +144,8 @@ public class TransactionsBacking implements Serializable {
     /*
      * * * * * * * * * * * * * * * * * * * * * Bean's methods * * * * * * * * * * * * * * * * * * * * *
      * */
-    public String getDatePlaceholder() {
+    // is used to show current date in the Date input placeholder
+    public String getDateNowPlaceholder() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern(Constants.datePattern, Constants.mainLocale));
     }
 
@@ -227,10 +229,12 @@ public class TransactionsBacking implements Serializable {
     public void createItemTemp() {
         LOGGER.info("PortfolioBacking.createItemTemp");
 
-        // if itemTemp is still == null, it menas that user have used autocomplete to choose coin
-        if (getItemTemp() == null) {
+        // if itemTemp is still == null, it means that user have used autocomplete to choose coin
+        // and vice versa itemTemp != null, means user have chosen from the list of existing items,
+        // coz on select from the list of existing items works ... selection="#{transactionsBacking.itemTemp}"
+        if (getItemTemp() == null && getCoinTemp() != null) {
 
-            itemTemp = new ItemEntity(coinTemp);
+            setItemTemp(new ItemEntity(coinTemp));
 
             for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
 
@@ -239,10 +243,20 @@ public class TransactionsBacking implements Serializable {
                     break;
                 }
             }
-        // user have chosen a coin from list of existing items
-        } else {
-            // should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+
+            // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
+        } else if (getItemTemp() != null) {
+            // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
             setCoinTemp(itemTemp.getCoin());
+
+            // user have clicked "add transaction" from item's details,
+            // so in the itemBacking we have itemEntity in the selectedItem attribute
+        } else if (itemBacking.getSelectedItem() != null) {
+
+            setItemTemp(itemBacking.getSelectedItem());
+
+            // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+            setCoinTemp(itemBacking.getSelectedItem().getCoin());
         }
 
         setTransactionTemp(new TransactionEntity());

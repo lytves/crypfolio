@@ -7,9 +7,11 @@ import org.primefaces.event.SelectEvent;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.ItemService;
 import tk.crypfolio.business.PortfolioService;
+import tk.crypfolio.common.Constants;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.ItemEntity;
+import tk.crypfolio.model.TransactionEntity;
 import tk.crypfolio.util.MathRounders;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Named
@@ -194,5 +197,11 @@ public class ItemBacking implements Serializable {
             }
         }
         return "-";
+    }
+
+    // is used to show bought date of the transaction
+    public String getTransactionBoughtDate(TransactionEntity transactionEntity) {
+
+        return transactionEntity.getBoughtDate().format(DateTimeFormatter.ofPattern(Constants.dateShortPattern, Constants.mainLocale));
     }
 }
