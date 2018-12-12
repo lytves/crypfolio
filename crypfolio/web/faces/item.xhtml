@@ -235,6 +235,7 @@
                                     <p:column colspan="2">
 
                                         <p:selectOneButton value="#{itemBacking.selectedItem.showedCurrency}"
+                                                           process="@this"
                                                            unselectable="false"
                                                            styleClass="select-currency-button">
                                             <f:selectItems value="#{itemBacking.currencies}"/>
@@ -257,7 +258,7 @@
                                     </p:column>
                                 </p:row>
 
-                                <!--   DELETE BUTTON  -->
+                                <!--   DELETE ITEM BUTTON  -->
                                 <p:row>
                                     <p:column colspan="2">
 
@@ -319,22 +320,102 @@
 
                                 <!--   @@@@@@@@@@   TRANSACTIONS   -->
                                 <p:row>
-                                    <p:column colspan="2">
+                                    <p:column colspan="2" styleClass="flex-space-between">
                                         <h:outputText value="TRANSACTIONS"
                                                       style="padding: 5px 0 0 20px; font-weight: bold; display: block;
                                                           text-transform: uppercase; color: #000;"/>
+
+                                        <!--   ADD TRANSACTION BUTTON   -->
+                                        <p:commandButton
+                                                actionListener="#{transactionsBacking.createItemTemp}"
+                                                onclick="PF('dlgPortfolioAddItem').show();"
+                                                update="mainTabView:formPortfolioAddItem-coin
+                                                    mainTabView:formPortfolioAddItem-transaction"
+                                                process="@this"
+                                                class="upp-case"
+                                                value="Add Transaction"/>
                                     </p:column>
                                 </p:row>
 
                                 <p:row>
                                     <p:column>
-                                        <p:scrollPanel mode="native" style="width:100%; height:100%;">
-                                            <p:dataTable id="panelgrid-items-details-transactions"
-                                                         styleClass="noHeader"
-                                                         value="#{itemBacking.selectedItem.transactions}"
-                                                         var="transactionEntity">
-                                            </p:dataTable>
-                                        </p:scrollPanel>
+                                        <p:dataTable id="panelgrid-items-details-transactions"
+                                                     value="#{itemBacking.selectedItem.transactions}"
+                                                     var="transactionEntity">
+
+                                            <!--  instead rowSelection do rowToggle !!!??? -->
+
+                                            <!--   type   -->
+                                            <p:column headerText="Type" class="align-right" style="width: 100px;"
+                                                      styleClass="flex" priority="1">
+                                                <h:panelGroup rendered="#{'BUY' eq transactionEntity.type}"
+                                                              styleClass="buy-sell-image">
+                                                    <i class="fas fa-arrow-circle-down"></i>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{'SELL' eq transactionEntity.type}"
+                                                              styleClass="buy-sell-image"
+                                                              style="color: red;">
+                                                    <i class="fas fa-arrow-circle-up"></i>
+                                                </h:panelGroup>
+
+                                                <h:outputText style="padding-left: 5px; font-weight: bold;"
+                                                              value="#{transactionEntity.type}"/>
+                                            </p:column>
+
+                                            <!--   amount   -->
+                                            <p:column headerText="Amount" class="align-right" priority="1">
+                                                <h:outputText value="#{transactionEntity.amount}">
+                                                    <f:convertNumber type="number" pattern="###,###.########"
+                                                                     locale="en_US"/>
+                                                </h:outputText>
+                                                <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
+                                            </p:column>
+
+                                            <!--   price per coin   -->
+                                            <p:column headerText="Price" class="align-right" priority="2">
+                                                <h:outputText
+                                                        value="#{transactionEntity.gePriceByCurrentCurrency()}">
+                                                    <f:convertNumber type="number" pattern="###,###.########"
+                                                                     locale="en_US"/>
+                                                </h:outputText>
+                                                <h:outputText value=" #{transactionEntity.boughtCurrency}"/>
+                                            </p:column>
+
+                                            <!--   total   -->
+                                            <p:column headerText="Total" class="align-right" priority="1">
+                                                <h:outputText
+                                                        value="#{transactionEntity.getTotalPriceByCurrency()}">
+                                                    <f:convertNumber type="number" pattern="###,###.########"
+                                                                     locale="en_US"/>
+                                                </h:outputText>
+                                                <h:outputText value=" #{transactionEntity.boughtCurrency}"/>
+                                            </p:column>
+
+                                            <!--   date   -->
+                                            <p:column headerText="Date" class="align-right" style="width: 130px;"
+                                                      priority="3">
+                                                <h:outputText
+                                                        value="#{itemBacking.getTransactionBoughtDate(transactionEntity)}"/>
+                                            </p:column>
+
+                                            <!--   edit && delete buttons   -->
+                                            <p:column class="align-right transaction-menu" style="width: 60px;"
+                                                      priority="4">
+                                                <p:menuButton value="···" iconPos="right">
+
+                                                    <p:menuitem value="Edit" action="#{itemBacking.getRowKey(1)}"/>
+
+                                                    <p:menuitem value="Delete" action="#{itemBacking.getRowKey(1)}">
+                                                        <p:confirm header="DELETE TRANSACTION"
+                                                                   message="Are you sure you want to delete this transaction?"
+                                                                   icon="ui-icon-alert"/>
+                                                    </p:menuitem>
+
+                                                </p:menuButton>
+                                            </p:column>
+
+                                        </p:dataTable>
                                     </p:column>
                                 </p:row>
 
@@ -429,7 +510,7 @@
 
                     </div>
 
-                    <div style="border: 1px solid blue; display: flex; justify-content: space-between;">
+                    <div style="border: 1px solid blue; " class="flex-space-between">
                         <h:outputText value="left"
                                       style="padding: 5px 0 0 20px; font-weight: bold; display: block;
                                                           text-transform: uppercase;"/>
