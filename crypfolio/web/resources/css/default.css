@@ -177,7 +177,7 @@ td.flex {
 }
 
 .flex-space-between {
-    display: flex;
+    display: flex !important;
     justify-content: space-between;
 }
 

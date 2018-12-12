@@ -10,7 +10,8 @@
         <p:dataTable value="#{portfolioBacking.archivedItems}"
                      var="itemEntity" styleClass="panelGridCenter"
                      stickyHeader="true"
-                     id="archiveDataTableWV" widgetVar="archiveDataTableWV">
+                     id="archiveDataTableWV" widgetVar="archiveDataTableWV"
+                     sortBy="#{itemEntity.id}">
 
             <ui:include src="/faces/items-list.xhtml"/>
 

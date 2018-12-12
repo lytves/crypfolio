@@ -89,6 +89,7 @@
                          var="itemEntity" styleClass="panelGridCenter"
                          stickyHeader="true"
                          id="portfolioDataTableWV" widgetVar="portfolioDataTableWV"
+                         sortBy="#{itemEntity.id}"
                          selectionMode="single" selection="#{itemBacking.selectedItem}"
                          rowKey="#{itemBacking.getRowKey(itemEntity.id)}"
                          rowIndexVar="selectedRowIndexPortolioItems">

@@ -23,7 +23,8 @@
         <p:dataTable value="#{watchlistBacking.activeUser.user.userWatchCoins}"
                      var="userWatchCoinEntity" styleClass="panelGridCenter"
                      stickyHeader="true" rowExpandMode="single"
-                     id="watchlistDataTableWV" widgetVar="watchlistDataTableWV">
+                     id="watchlistDataTableWV" widgetVar="watchlistDataTableWV"
+                     sortBy="#{userWatchCoinEntity.coinId.name}">
 
             <p:column style="width:16px;" styleClass="togglerClass">
                 <p:rowToggler/>
@@ -232,7 +233,8 @@
 
                     <p:selectOneButton id="watch-add-coin-currency" value="#{watchlistBacking.currency}"
                                        unselectable="false"
-                                       styleClass="select-currency-button"
+                                       styleClass="select-currency-button flex-space-between"
+                                       style="justify-content: center;"
                                        required="true"
                                        disabled="#{watchlistBacking.coinTemp eq null}">
 
