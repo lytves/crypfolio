@@ -96,7 +96,7 @@
 
                 <p:ajax event="rowSelect" oncomplete="PF('dlgItemDetails').show();"
                         listener="#{itemBacking.onRowSelect}"
-                        update="mainTabView:formItemDetails"/>
+                        update="mainTabView:formItemDetails mainTabView:formItemTransactions"/>
 
                 <!-- including dataTable with list of items of portfolio -->
                 <ui:include src="/faces/items-list.xhtml"/>
