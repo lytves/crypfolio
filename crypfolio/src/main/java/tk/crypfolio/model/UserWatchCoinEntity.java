@@ -22,7 +22,7 @@ public class UserWatchCoinEntity implements Serializable {
     private CoinEntity coinId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="us_coin_currency", nullable = false)
+    @Column(name="us_watchcoin_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
     public UserEntity getUserId() {
