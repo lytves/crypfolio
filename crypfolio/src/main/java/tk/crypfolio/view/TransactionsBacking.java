@@ -251,7 +251,7 @@ public class TransactionsBacking implements Serializable {
 
             // user have clicked "add transaction" from item's details,
             // so in the itemBacking we have itemEntity in the selectedItem attribute
-        } else if (itemBacking.getSelectedItem() != null) {
+        } else if (itemBacking.getSelectedItem().getId() != null) {
 
             setItemTemp(itemBacking.getSelectedItem());
 
@@ -429,6 +429,26 @@ public class TransactionsBacking implements Serializable {
 
             // reread items to update and show in porftolio and archive datatables (after updatePortfolioDB!!!)
             portfolioBacking.init();
+
+            // if itemBacking.getSelectedItem().getId() exists, it means operation was come
+            // from item's details modal window and we should update itemBacking.selectedItem
+            // after update DB and activeUser too
+            if (itemBacking.getSelectedItem().getId() != null) {
+
+                for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                    if (itemBacking.getSelectedItem().getId().equals(item.getId())) {
+
+                        itemBacking.setSelectedItem(item);
+                    }
+                }
+            }
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "The transaction has been processed successfully.",
+                    ""));
+
+            LOGGER.error("activeUser.getUser().getPortfolio().getItems(): " + activeUser.getUser().getPortfolio().getItems().toString());
         }
     }
 
