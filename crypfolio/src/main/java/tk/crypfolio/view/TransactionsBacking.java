@@ -447,8 +447,6 @@ public class TransactionsBacking implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "The transaction has been processed successfully.",
                     ""));
-
-            LOGGER.error("activeUser.getUser().getPortfolio().getItems(): " + activeUser.getUser().getPortfolio().getItems().toString());
         }
     }
 
