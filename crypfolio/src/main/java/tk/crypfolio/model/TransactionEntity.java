@@ -3,6 +3,7 @@ package tk.crypfolio.model;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
 import tk.crypfolio.util.LocalDateAttributeConverter;
+import tk.crypfolio.util.MathRounders;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -145,12 +146,60 @@ public class TransactionEntity implements Serializable {
         this.boughtPriceEth = boughtPriceEth;
     }
 
+    public BigDecimal gePriceByCurrentCurrency(){
+
+        BigDecimal priceByBoughtCurrency = BigDecimal.ZERO;
+
+        switch (getBoughtCurrency().getCurrency()) {
+            case "USD":
+                priceByBoughtCurrency = getBoughtPriceUsd();
+                break;
+
+            case "EUR":
+                priceByBoughtCurrency =  getBoughtPriceEur();
+                break;
+
+            case "BTC":
+                priceByBoughtCurrency =  getBoughtPriceBtc();
+                break;
+
+            case "ETH":
+                priceByBoughtCurrency =  getBoughtPriceEth();
+                break;
+        }
+        return MathRounders.roundBigDecimalByCurrency(priceByBoughtCurrency, getBoughtCurrency());
+    }
+
     public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public BigDecimal getTotalPriceByCurrency(){
+
+        BigDecimal totalPriceByCurrency = BigDecimal.ZERO;
+
+        switch (getBoughtCurrency().getCurrency()) {
+            case "USD":
+                totalPriceByCurrency = getAmount().multiply(getBoughtPriceUsd());
+                break;
+
+            case "EUR":
+                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceEur());
+                break;
+
+            case "BTC":
+                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceBtc());
+                break;
+
+            case "ETH":
+                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceEth());
+                break;
+        }
+        return MathRounders.roundBigDecimalByCurrency(totalPriceByCurrency, getBoughtCurrency());
     }
 
     public ItemEntity getItem() {
