@@ -119,27 +119,30 @@ public abstract class ParserAPI {
 
                 Map<String, Double> coinInfoMap = new HashMap<>();
 
-                Double coinPrice = null, coinPercentChange24H = null,
-                        coinPercentChange7D = null, coinMarketCap = null;
+                Double coinPrice, coinPercentChange24H, coinPercentChange7D, coinMarketCap;
 
                 if (coinQuoteCurrency.get("price") != null) {
-
                     coinPrice = ((Number) coinQuoteCurrency.get("price")).doubleValue();
+                } else {
+                    coinPrice = Double.valueOf("0.0");
                 }
 
                 if (coinQuoteCurrency.get("percent_change_24h") != null) {
-
                     coinPercentChange24H = ((Number) coinQuoteCurrency.get("percent_change_24h")).doubleValue();
+                } else {
+                    coinPercentChange24H = Double.valueOf("0.0");
                 }
 
                 if (coinQuoteCurrency.get("percent_change_7d") != null) {
-
                     coinPercentChange7D = ((Number) coinQuoteCurrency.get("percent_change_7d")).doubleValue();
+                } else {
+                    coinPercentChange7D = Double.valueOf("0.0");
                 }
 
                 if (coinQuoteCurrency.get("market_cap") != null) {
-
                     coinMarketCap = ((Number) coinQuoteCurrency.get("market_cap")).doubleValue();
+                } else {
+                    coinMarketCap = Double.valueOf("0.0");
                 }
 
                 coinInfoMap.put("price", coinPrice);
@@ -200,7 +203,13 @@ public abstract class ParserAPI {
 
                         String priceCurrency = (String) pricePair;
 
-                        Double priceValue = ((Number) jsonBTCObject.get(priceCurrency)).doubleValue();
+                        Double priceValue;
+
+                        if (jsonBTCObject.get(priceCurrency) != null) {
+                            priceValue = ((Number) jsonBTCObject.get(priceCurrency)).doubleValue();
+                        } else {
+                            priceValue = Double.valueOf("0.0");
+                        }
 
                         bitcoinHistoricalPrice.put(priceCurrency, priceValue);
                     }
@@ -236,23 +245,24 @@ public abstract class ParserAPI {
 
                 Map<String, Double> coinInfoMap = new HashMap<>();
 
-                Double coinCirculatingSupply = null;
-                Double coinTotalSupply = null;
-                Double coinCmcRank = null;
+                Double coinCirculatingSupply, coinTotalSupply, coinCmcRank;
 
                 if (jsonCoinObject.get("circulating_supply") != null) {
-
                     coinCirculatingSupply = ((Number) jsonCoinObject.get("circulating_supply")).doubleValue();
+                } else {
+                    coinCirculatingSupply = Double.valueOf("0.0");
                 }
 
                 if (jsonCoinObject.get("total_supply") != null) {
-
                     coinTotalSupply = ((Number) jsonCoinObject.get("total_supply")).doubleValue();
+                } else {
+                    coinTotalSupply = Double.valueOf("0.0");
                 }
 
                 if (jsonCoinObject.get("cmc_rank") != null) {
-
                     coinCmcRank = ((Number) jsonCoinObject.get("cmc_rank")).doubleValue();
+                } else {
+                    coinCmcRank = Double.valueOf("0.0");
                 }
 
                 coinInfoMap.put("circulating_supply", coinCirculatingSupply);
