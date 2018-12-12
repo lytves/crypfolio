@@ -92,7 +92,7 @@ public class WatchlistBacking implements Serializable {
     /*
      * * * * * * * * * * * * * * * * * * * * * Bean's methods * * * * * * * * * * * * * * * * * * * * *
      * */
-    public void watchCoinAddFormReset(){
+    public void watchCoinAddFormReset() {
         LOGGER.log(Level.WARNING, "WatchlistBacking.watchCoinAddFormReset");
         // executing every time when watch-add-coin modal window is closed
         // or Reset button pushed
@@ -120,13 +120,14 @@ public class WatchlistBacking implements Serializable {
 
         if (coinTemp != null) {
 
-            for (UserWatchCoinEntity userWatchCoinEntity : activeUser.getUser().getUserWatchCoins())
+            for (UserWatchCoinEntity userWatchCoinEntity : activeUser.getUser().getUserWatchCoins()) {
 
                 if (userWatchCoinEntity.getCoinId().equals(coinTemp)) {
 
                     isCoinAlreadyInWatchList = true;
                     break;
                 }
+            }
 
             if (!isCoinAlreadyInWatchList) {
 
@@ -300,8 +301,8 @@ public class WatchlistBacking implements Serializable {
     }
 
     /*
-    *  https://stackoverflow.com/a/25679958/6841308
-    * */
+     *  https://stackoverflow.com/a/25679958/6841308
+     * */
     public String roundingMarketCapForView(BigDecimal value, CurrencyType currencyType) {
 
         BigDecimal number = MathRounders.roundBigDecimalByCurrency(value, currencyType);
@@ -311,8 +312,7 @@ public class WatchlistBacking implements Serializable {
 
         // If number is greater than 1000, divide the number by 1000 and
         // increment the index for the denomination.
-        while(number.compareTo(new BigDecimal("1000")) >= 1)
-        {
+        while (number.compareTo(new BigDecimal("1000")) >= 1) {
             denominationIndex++;
             number = number.divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_DOWN);
         }
@@ -404,7 +404,7 @@ public class WatchlistBacking implements Serializable {
                 return 1;
             }
 
-        } catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             LOGGER.log(Level.WARNING, ex.toString());
         }
         return 0;

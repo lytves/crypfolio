@@ -142,7 +142,8 @@ public class ItemBacking implements Serializable {
             // updates whole portfolio entity
             activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
 
-            // reread items to update and show in porftolio and archive datatables (after updatePortfolioDB!!!)
+            // reread items (archived and notArchived) to update
+            // and show in porftolio and archive datatables (after updatePortfolioDB!!!)
             portfolioBacking.init();
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
