@@ -28,7 +28,7 @@ public class ApiParsingSchedulers {
 
     private static final Logger LOGGER = LogManager.getLogger(ApiParsingSchedulers.class);
 
-
+    // application scoped
     @Inject
     private ApplicationContainer applicationContainer;
 
@@ -37,7 +37,11 @@ public class ApiParsingSchedulers {
 
     @PostConstruct
     private void init() {
-        LOGGER.info( "ApiParsingSchedulers start!");
+        LOGGER.info("ApiParsingSchedulers start!");
+
+        // on the start of application we do the parsing of actual CMC info
+        // and set all applicationContainer data
+        parseAllCoinsOnSandboxCMC();
     }
 
 //    https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
@@ -45,6 +49,8 @@ public class ApiParsingSchedulers {
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public void parseAllCoinsOnSandboxCMC() {
+
+        LOGGER.info("ApiParsingSchedulers.parseAllCoinsOnSandboxCMC is running...");
 
         try {
 
@@ -61,7 +67,8 @@ public class ApiParsingSchedulers {
 
             if (!(inlineString.trim()).isEmpty()) {
 
-                // save ALL CMC COINS, from previously parsed JSON, to DB - testing of the Sandbox API
+                // save ALL CMC COINS, from previously parsed JSON, to DB
+                // && set actual applicationContainer.allCoinsListing then - testing of the Sandbox API
                 updateCoinsTableDB(inlineString);
 
                 // save ALL CMC COINS, from previously parsed JSON, to Map separated by CurrencyType - testing of the Sandbox API
@@ -71,7 +78,7 @@ public class ApiParsingSchedulers {
                 parseJSONAllCoinsAdditionalDataToMap(inlineString);
             }
         } catch (Exception ex) {
-            LOGGER.warn( "ApiParsingSchedulers.parseAllCoinsSandboxCMC exception - " + ex.toString());
+            LOGGER.warn("ApiParsingSchedulers.parseAllCoinsSandboxCMC exception - " + ex.toString());
         }
     }
 
@@ -90,6 +97,9 @@ public class ApiParsingSchedulers {
         for (CoinEntity coin : listCoins) {
             cDAO.createCoin(coin);
         }
+
+        // to dump/update data about all already exists coins from DB
+        applicationContainer.setAllCoinsListing(listCoins);
     }
 
     /*
