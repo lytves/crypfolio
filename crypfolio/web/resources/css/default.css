@@ -176,6 +176,24 @@ td.flex {
     display: flex;
 }
 
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.portfolio-currency {
+    border-radius: 3px !important;
+    line-height: normal;
+    margin-left: 10px;
+}
+
+.buy-sell-image {
+    padding: 5px;
+    font-size: 1.5em;
+    color: green;
+    vertical-align: inherit;
+}
+
 /******************     Primefaces UI Styles      **********************/
 .ui-widget {
     font-family: 'Roboto Mono', monospace !important;
@@ -219,6 +237,10 @@ td.flex {
     width: 100%;
 }
 
+.ui-button.ui-widget {
+    width: auto;
+}
+
 .ui-expanded-row-content td {
     padding: 0 !important;
 }
@@ -245,7 +267,7 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
     padding: 5px;
 }
 
-/*???? for what is it used ????*/
+/*???? why was it used ????*/
 /*.ui-dialog-content {
     width: 90% !important;
 }*/
@@ -305,6 +327,19 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     text-shadow: none !important;
+}
+
+.transaction-menu .ui-icon {
+    display: none;
+}
+
+.transaction-menu .ui-button.ui-widget {
+    width: 100%;
+}
+
+/* stickyHeader appears over modal dialog sometimes */
+.ui-datatable-sticky {
+    z-index: 1001 !important;
 }
 
 /*******************/
@@ -379,13 +414,13 @@ body .ui-buttonset .ui-button {
     text-align: center !important;
 }
 
-.ui-selectonebutton {
-    display: inline-flex !important;
-}
+/*.ui-selectonebutton {*/
+/*display: inline-flex !important;*/
+/*}*/
 
-.select-currency-button .ui-button-text-only {
-    margin-right: 10px !important;
-}
+/*.select-currency-button .ui-button-text-only {*/
+    /*margin-right: 10px !important;*/
+/*}*/
 
 #ajaxStatus {
     background: transparent;
@@ -620,10 +655,4 @@ mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount_input {
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     text-shadow: none !important;
-}
-
-.portfolio-currency {
-    border-radius: 3px !important;
-    line-height: normal;
-    margin-left: 10px;
 }

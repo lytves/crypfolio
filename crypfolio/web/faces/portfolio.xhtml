@@ -6,7 +6,7 @@
 
     <p:outputPanel id="portfolioPanel">
 
-        <div style="display: flex; justify-content: space-between;">
+        <div class="flex-space-between">
 
             <!--   PORTFOLIO   MAIN   INFORMATION   -->
             <p:outputPanel id="portfolioMainData" style="line-height: 2.5;">
@@ -69,17 +69,15 @@
                               styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}"/>
             </p:outputPanel>
 
-            <div>
-                <!--            =====================              button ADD NEW ITEM -->
-                <h:form class="add-item-coin-form">
+            <!--            =====================              button ADD NEW ITEM -->
+            <h:form class="add-item-coin-form">
 
-                    <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
-                                     class="upp-case"
-                                     value="Add New Item">
-                    </p:commandButton>
+                <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
+                                 class="upp-case"
+                                 value="Add New Item">
+                </p:commandButton>
 
-                </h:form>
-            </div>
+            </h:form>
 
         </div>
 

@@ -32,7 +32,7 @@
                                         converter="#{autocompleteCoinConverter}" forceSelection="true"
                                         maxResults="5" required="true" cache="true"
                                         styleClass="form-control noshadow"
-                                        placeholder="Coin Name or Ticker">
+                                        placeholder="Type Coin Name or Ticker">
 
                             <p:column style="width:32px; text-align:center;">
                                 <p:graphicImage
@@ -40,7 +40,7 @@
                                         width="32" height="32"/>
                             </p:column>
 
-                            <p:column style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <p:column styleClass="flex-space-between" style="margin-top: 5px;">
                                 #{coinTemp.name} <h:outputText style="margin: 0 10px;" value="#{coinTemp.symbol}"/>
                             </p:column>
 
@@ -76,7 +76,7 @@
                                         listener="#{transactionsBacking.createItemTemp}"
                                         update="@form mainTabView:formPortfolioAddItem-transaction"/>
 
-                                <p:column style="display: flex; justify-content: space-between;">
+                                <p:column styleClass="flex-space-between">
                                     <p:graphicImage styleClass="symbol-image-32px" style="padding: 5px;"
                                                     value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{itemEntity.coin.id}.png"
                                                     width="32" height="32"
@@ -99,7 +99,8 @@
 
             </h:form>
 
-            <!--   I'm trying to use different h:forms to choose Item-Coin and then to create new Item-Transaction-->
+            <!--   I'm trying to use different h:forms (but one p:dialog)
+             to choose Item-Coin and then to create new Item-Transaction   -->
             <p:outputPanel id="portfolioAddItem-transaction-panel">
 
                 <h:form id="formPortfolioAddItem-transaction">
@@ -261,7 +262,7 @@
                                                 navigator="true" maxdate="today"
                                                 styleClass="form-control form-control-center noshadow"
                                                 style="padding-left: 20px;"
-                                                placeholder="#{transactionsBacking.datePlaceholder}"
+                                                placeholder="#{transactionsBacking.getDateNowPlaceholder()}"
                                                 converter="calendarLocalDateConverter">
 
                                     </p:calendar>
@@ -314,7 +315,10 @@
                                                          process="@this"
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
-                                                                    mainTabView:archiveDataTableWV growl"
+                                                                    mainTabView:archiveDataTableWV
+                                                                    mainTabView:formItemDetails:itemDetails
+                                                                    mainTabView:formItemDetails:panelgrid-items-details-transactions
+                                                                    growl"
                                                          oncomplete="PF('dlgPortfolioAddItem').hide(); portfolioDataTableRowUnselect();"
                                                          value="Done"
                                                          icon="ui-icon-check"
