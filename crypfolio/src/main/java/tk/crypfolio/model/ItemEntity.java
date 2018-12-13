@@ -94,7 +94,7 @@ public class ItemEntity implements Serializable {
 
             setAmount(getAmount().add(transaction.getAmount()));
 
-            // set item not-archived if it already has tokens
+            // set item as not-archived if it already has some tokens
             if (getAmount().compareTo(BigDecimal.ZERO) >= 1) {
                 setArchived(false);
             }
@@ -102,14 +102,20 @@ public class ItemEntity implements Serializable {
             // recount Net Cost values in all currencies
             setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(transaction.getBoughtPriceUsd()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
             setNetCostEur(getNetCostEur().add(transaction.getAmount().multiply(transaction.getBoughtPriceEur()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
             setNetCostBtc(getNetCostBtc().add(transaction.getAmount().multiply(transaction.getBoughtPriceBtc()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
             setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(transaction.getBoughtPriceEth()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
 
-            // **START:** counts average prices in all currencies of the item
+            /*
+             *   **START:**
+             *   recounts average prices in all currencies of the item
+             * */
             BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
             BigDecimal tempAverTotalEur = BigDecimal.ZERO;
             BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
@@ -144,28 +150,108 @@ public class ItemEntity implements Serializable {
             setAverageBoughtPriceBtc(tempAverTotalBtc.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
 
             setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
-            // **END**
+            /*
+             *   **END:**
+             * */
 
         } else if (TransactionType.SELL.equals(transaction.getType())) {
             // if it's SELL transaction, we should decrease the amount,
             // but it never can be negative amount, so return positive or ZERO
+            // this is 2nd checking for amount 0, 1st was in the TransactionBacking
             setAmount(getAmount().subtract(transaction.getAmount()).max(BigDecimal.ZERO));
 
             // recount Net Cost values in all currencies (here is used currencies' average prices!)
-            setNetCostUsd(getNetCostUsd().subtract(transaction.getAmount().multiply(this.averageBoughtPriceUsd))
-                    .max(BigDecimal.ZERO));
-            setNetCostEur(getNetCostEur().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEur))
-                    .max(BigDecimal.ZERO));
-            setNetCostBtc(getNetCostBtc().subtract(transaction.getAmount().multiply(this.averageBoughtPriceBtc))
-                    .max(BigDecimal.ZERO));
-            setNetCostEth(getNetCostEth().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEth))
-                    .max(BigDecimal.ZERO));
+            setNetCostUsd((getNetCostUsd().subtract(transaction.getAmount().multiply(getAverageBoughtPriceUsd()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+            setNetCostEur((getNetCostEur().subtract(transaction.getAmount().multiply(getAverageBoughtPriceEur()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+            setNetCostBtc((getNetCostBtc().subtract(transaction.getAmount().multiply(getAverageBoughtPriceBtc()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+            setNetCostEth((getNetCostEth().subtract(transaction.getAmount().multiply(getAverageBoughtPriceEth()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
 
             // set item as archived if it has no more tokens
             if (getAmount().compareTo(BigDecimal.ZERO) == 0) {
+
+                // plus setting in the setter all net costs and average prices = ZERO
                 setArchived(true);
             }
         }
+    }
+
+    public Boolean removeTransaction(TransactionEntity transaction) {
+
+        Boolean isTransactionValid = false;
+
+        if (TransactionType.BUY.equals(transaction.getType())) {
+
+            // if it's BUY transaction and we cancel it, we should decrease the item's amount,
+            // but we never can have negative amount, so will compare future amount (after subtract operation)
+            // if it more than ZERO
+            if (getAmount().subtract(transaction.getAmount()).compareTo(BigDecimal.ZERO) >= 0) {
+
+                isTransactionValid = true;
+
+                setAmount(getAmount().subtract(transaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+
+                // recount Net Cost values for all currencies (here is used currencies' average prices!)
+                // values should never can be negative, so return positive or ZERO
+                setNetCostUsd((getNetCostUsd().subtract(transaction.getAmount().multiply(getAverageBoughtPriceUsd()))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+                setNetCostEur((getNetCostEur().subtract(transaction.getAmount().multiply(getAverageBoughtPriceEur()))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+                setNetCostBtc((getNetCostBtc().subtract(transaction.getAmount().multiply(getAverageBoughtPriceBtc()))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+                setNetCostEth((getNetCostEth().subtract(transaction.getAmount().multiply(getAverageBoughtPriceEth()))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN)).max(BigDecimal.ZERO));
+
+                // set item as archived if it has no more tokens
+                if (getAmount().compareTo(BigDecimal.ZERO) == 0) {
+
+                    // plus setting in the setter all net costs and average prices = ZERO
+                    setArchived(true);
+                }
+            }
+
+        } else if (TransactionType.SELL.equals(transaction.getType())) {
+
+            isTransactionValid = true;
+
+            setAmount(getAmount().add(transaction.getAmount()).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+
+            // recount Net Cost values in all currencies
+            setNetCostUsd(getNetCostUsd().add(transaction.getAmount().multiply(getAverageBoughtPriceUsd()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+            setNetCostEur(getNetCostEur().add(transaction.getAmount().multiply(getAverageBoughtPriceEur()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+            setNetCostBtc(getNetCostBtc().add(transaction.getAmount().multiply(getAverageBoughtPriceBtc()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+            setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(getAverageBoughtPriceEth()))
+                    .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+            // set item as not-archived if it already has some tokens
+            if (getAmount().compareTo(BigDecimal.ZERO) >= 1) {
+
+                setArchived(false);
+            }
+        }
+
+        if (isTransactionValid) {
+
+            transactions.remove(transaction);
+
+        }
+
+        return isTransactionValid;
     }
 
     public Long getId() {
@@ -255,6 +341,20 @@ public class ItemEntity implements Serializable {
 
     public void setArchived(Boolean archived) {
         isArchived = archived;
+
+        if (archived) {
+            // (just in case for some recounting issues)
+            setAverageBoughtPriceUsd(BigDecimal.ZERO);
+            setAverageBoughtPriceEur(BigDecimal.ZERO);
+            setAverageBoughtPriceBtc(BigDecimal.ZERO);
+            setAverageBoughtPriceEth(BigDecimal.ZERO);
+
+            // (just in case for some recounting issues)
+            setNetCostUsd(BigDecimal.ZERO);
+            setNetCostEur(BigDecimal.ZERO);
+            setNetCostBtc(BigDecimal.ZERO);
+            setNetCostEth(BigDecimal.ZERO);
+        }
     }
 
     public BigDecimal getAverageBoughtPriceUsd() {
