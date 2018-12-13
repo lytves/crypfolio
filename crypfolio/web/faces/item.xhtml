@@ -303,7 +303,7 @@
                     <div class="ui-g-12 ui-md-6 ui-lg-9" style="border: 1px solid red; padding: 0 !important;">
 
                         <h:graphicImage value="#{resource['images/trading-view-widget-example.png']}"
-                                        style="display: block; margin: auto;"/>
+                                        style="display: block; margin: auto; height: 200px;"/>
 
                         <!-- TradingView Widget BEGIN -->
                         <!--                                <div class="tradingview-widget-container">
@@ -357,7 +357,8 @@
                                     <p:column>
                                         <p:dataTable id="itemTransactionsDataTableWV"
                                                      value="#{itemBacking.selectedItem.transactions}"
-                                                     var="transactionEntity">
+                                                     var="transactionEntity"
+                                                     sortBy="#{transactionEntity.boughtDate}">
 
                                             <!--  instead rowSelection do rowToggle !!!??? -->
 
@@ -415,7 +416,8 @@
                                                         value="#{itemBacking.getTransactionBoughtDate(transactionEntity)}"/>
                                             </p:column>
 
-                                            <!--   edit && delete buttons   -->
+                                            <!--   EDIT TRANSACTION BUTTON   -->
+                                            <!--   DELETE TRANSACTION BUTTON   -->
                                             <p:column class="align-right transaction-menu" style="width: 60px;"
                                                       priority="4">
                                                 <p:menuButton value="···" iconPos="right">
@@ -426,9 +428,11 @@
                                                                 process="@this"
                                                                 action="#{itemBacking.doSubmitDeleteTransaction(transactionEntity)}"
                                                                 update="@form mainTabView:formItemDetails">
+
                                                         <p:confirm header="DELETE TRANSACTION"
                                                                    message="Are you sure you want to delete this transaction?"
                                                                    icon="ui-icon-alert"/>
+
                                                     </p:menuitem>
 
                                                 </p:menuButton>
@@ -460,7 +464,8 @@
 
             <!--//remove highlight background color of selected row after closed dialog window-->
             <p:ajax event="close" oncomplete="portfolioDataTableRowUnselect();" resetValues="true"
-                    update="mainTabView:portfolioDataTableForm:portfolioDataTableWV mainTabView:portfolioMainData"/>
+                    update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
+                        mainTabView:archiveDataTableWV"/>
 
         </p:dialog>
 

@@ -7,6 +7,7 @@ import org.primefaces.event.SelectEvent;
 import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.ItemService;
 import tk.crypfolio.business.PortfolioService;
+import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.Constants;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.model.CoinEntity;
@@ -42,6 +43,10 @@ public class ItemBacking implements Serializable {
     // view scoped
     @Inject
     private PortfolioBacking portfolioBacking;
+
+    // stateless business
+    @Inject
+    private UserService userService;
 
     // stateless business
     @Inject
@@ -203,5 +208,59 @@ public class ItemBacking implements Serializable {
     public String getTransactionBoughtDate(TransactionEntity transactionEntity) {
 
         return transactionEntity.getBoughtDate().format(DateTimeFormatter.ofPattern(Constants.dateShortPattern, Constants.mainLocale));
+    }
+
+    public void doSubmitDeleteTransaction(TransactionEntity transactionEntity) {
+        LOGGER.info("doSubmitDeleteTransaction.........");
+
+        if (getSelectedItem().getTransactions().contains(transactionEntity)) {
+
+            // search a current item index in the ArrayLst of transactions to then replace them
+            int index = activeUser.getUser().getPortfolio().getItems().indexOf(getSelectedItem());
+
+            // here we tested transaction && then remove from the item, but
+            // remove only from this selectedItem instance,
+            // and not from activeUser SessionScoped bean, so we will do it then with
+            Boolean isTransactionValid = selectedItem.removeTransaction(transactionEntity);
+
+            if (isTransactionValid) {
+
+                // recount values (netcost) of portfolio
+                activeUser.getUser().getPortfolio().recountNetCosts();
+
+                activeUser.getUser().getPortfolio().getItems().set(index, getSelectedItem());
+
+                // updates whole user entity
+                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
+
+                // updates whole portfolio entity
+                // !!! - not working - causes removing 2 transactions from DB, dunno why !!!
+                // activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+
+                // reSetting itemBacking.selectedItem to keep it actual with DB
+                for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                    if (getSelectedItem().getId().equals(item.getId())) {
+
+                        setSelectedItem(item);
+                    }
+                }
+
+                // almost reSetting portfolio's datatables-tabViews in case some items was archived or desarchived
+                portfolioBacking.init();
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "The transaction has been deleted successfully.",
+                        ""));
+                // exit from the method, thereby don't need to do a few "else"
+                // to return FacesContext.getCurrentInstance().addMessage... depends of situation
+                return;
+            }
+        }
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error on deleting the transaction!",
+                ""));
+        LOGGER.warn("Error on deleting a transaction!");
     }
 }
