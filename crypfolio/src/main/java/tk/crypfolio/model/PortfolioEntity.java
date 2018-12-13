@@ -56,7 +56,8 @@ public class PortfolioEntity implements Serializable {
     @MapsId
     private UserEntity user;
 
-    @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemEntity> items = new ArrayList<>();
 
     public PortfolioEntity() {
@@ -143,7 +144,7 @@ public class PortfolioEntity implements Serializable {
         this.netCostEth = netCostEth;
     }
 
-    public BigDecimal getNetCostByCurrentCurrency(){
+    public BigDecimal getNetCostByCurrentCurrency() {
 
         BigDecimal netCostByCurrentCurrency = BigDecimal.ZERO;
 
@@ -153,15 +154,15 @@ public class PortfolioEntity implements Serializable {
                 break;
 
             case "EUR":
-                netCostByCurrentCurrency =  getNetCostEur();
+                netCostByCurrentCurrency = getNetCostEur();
                 break;
 
             case "BTC":
-                netCostByCurrentCurrency =  getNetCostBtc();
+                netCostByCurrentCurrency = getNetCostBtc();
                 break;
 
             case "ETH":
-                netCostByCurrentCurrency =  getNetCostEth();
+                netCostByCurrentCurrency = getNetCostEth();
                 break;
 
         }
@@ -196,13 +197,31 @@ public class PortfolioEntity implements Serializable {
         BigDecimal tempNetCostBtc = BigDecimal.ZERO;
         BigDecimal tempNetCostEth = BigDecimal.ZERO;
 
-        for (ItemEntity item : getItems()) {
+        BigDecimal tempAllItemsTotalAmount = BigDecimal.ZERO;
 
-            // recount Net Cost values in all currencies
-            tempNetCostUsd = tempNetCostUsd.add(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-            tempNetCostEur = tempNetCostEur.add(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-            tempNetCostBtc = tempNetCostBtc.add(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-            tempNetCostEth = tempNetCostEth.add(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+        // if there is items in the portfolio then we will recount net costs,
+        // if there is not then all values will rewrite with BigDecimal.ZERO
+        if (!getItems().isEmpty()) {
+
+            System.out.println("getItems(): " + getItems());
+
+            for (ItemEntity item : getItems()) {
+
+                // recount Net Cost values in all currencies
+                tempNetCostUsd = tempNetCostUsd.add(item.getNetCostUsd()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                tempNetCostEur = tempNetCostEur.add(item.getNetCostEur()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                tempNetCostBtc = tempNetCostBtc.add(item.getNetCostBtc()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+                tempNetCostEth = tempNetCostEth.add(item.getNetCostEth()).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+                tempAllItemsTotalAmount = tempAllItemsTotalAmount.add(item.getAmount())
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN);
+            }
+
+            // if there is items but none has amount, then net costs should be ZERO too
+            // (just in case for some recounting issues)
+            if (tempAllItemsTotalAmount.compareTo(BigDecimal.ZERO) == 0) {
+                tempNetCostUsd = tempNetCostEur = tempNetCostBtc = tempNetCostEth = BigDecimal.ZERO;
+            }
         }
 
         setNetCostUsd(tempNetCostUsd);
