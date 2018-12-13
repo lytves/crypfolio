@@ -118,9 +118,9 @@ public class ItemBacking implements Serializable {
 
     public void changeItemShowedCurrency() {
 
-        if (selectedItem != null) {
+        if (getSelectedItem().getId() != null) {
 
-            itemService.updateItemDB(selectedItem);
+            itemService.updateItemDB(getSelectedItem());
 
         } else {
             LOGGER.warn("Error on changing item showed currency!");
@@ -130,11 +130,10 @@ public class ItemBacking implements Serializable {
     public void doSubmitDeleteItem() {
 
         LOGGER.info("doSubmitDeleteItem____");
-        LOGGER.warn(selectedItem.toString());
 
-        if (selectedItem != null && activeUser.getUser().getPortfolio().getItems().contains(selectedItem)) {
+        if (getSelectedItem().getId() != null && activeUser.getUser().getPortfolio().getItems().contains(getSelectedItem())) {
 
-            activeUser.getUser().getPortfolio().getItems().remove(selectedItem);
+            activeUser.getUser().getPortfolio().getItems().remove(getSelectedItem());
 
             // recount values (netcost) of portfolio
             activeUser.getUser().getPortfolio().recountNetCosts();
@@ -142,12 +141,12 @@ public class ItemBacking implements Serializable {
             // updates whole portfolio entity
             activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
 
-            // reread items (archived and notArchived) to update
-            // and show in porftolio and archive datatables (after updatePortfolioDB!!!)
+            // reread items (archived and notArchived) to update them in tabViews-datatables (portfolio and archive)
+            // do it strictly only after updatePortfolioDB !!!
             portfolioBacking.init();
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "The item has been deleted from your portfolio successully.",
+                    "The item has been deleted from your portfolio successfully.",
                     ""));
         } else {
 
@@ -197,7 +196,7 @@ public class ItemBacking implements Serializable {
                 return String.valueOf(value.get("cmc_rank").intValue());
             }
         }
-        return "-";
+        return "?";
     }
 
     // is used to show bought date of the transaction
