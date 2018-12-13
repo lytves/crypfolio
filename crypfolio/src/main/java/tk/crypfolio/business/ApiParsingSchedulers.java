@@ -32,8 +32,6 @@ public class ApiParsingSchedulers {
     @Inject
     private ApplicationContainer applicationContainer;
 
-//    https://stackoverflow.com/questions/14402068/ejb-schedule-wait-until-method-completed
-//    this type of Timer is managed by the ApplicationServer and not by the application-owner
 
     @PostConstruct
     private void init() {
@@ -44,8 +42,10 @@ public class ApiParsingSchedulers {
         parseAllCoinsOnSandboxCMC();
     }
 
-//    https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
+//    more about timers: https://stackoverflow.com/questions/14402068/ejb-schedule-wait-until-method-completed
+//    but that type of Timer is managed by the ApplicationServer and not by the application-owner
 
+    //    is used now: https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
     @Schedule(minute = "*/30", hour = "*", persistent = false)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public void parseAllCoinsOnSandboxCMC() {
@@ -67,25 +67,32 @@ public class ApiParsingSchedulers {
 
             if (!(inlineString.trim()).isEmpty()) {
 
-                // save ALL CMC COINS, from previously parsed JSON, to DB
-                // && set actual applicationContainer.allCoinsListing then - testing of the Sandbox API
-                updateCoinsTableDB(inlineString);
+                // save ALL CMC COINS, from previously parsed JSON, to DB - testing of the Sandbox API
+                updateAllCoinsTableDB(inlineString);
 
-                // save ALL CMC COINS, from previously parsed JSON, to Map separated by CurrencyType - testing of the Sandbox API
+                // save CMC COINS prices/changes, from previously parsed JSON,
+                // to Map separated by CurrencyType - testing of the Sandbox API
                 parseJSONAllCoinsToMapByCurrency(inlineString);
 
                 // save additional data of ALL CMC COINS, from previously parsed JSON, to Map - testing of the Sandbox API
                 parseJSONAllCoinsAdditionalDataToMap(inlineString);
             }
+
         } catch (Exception ex) {
-            LOGGER.warn("ApiParsingSchedulers.parseAllCoinsSandboxCMC exception - " + ex.toString());
+
+            LOGGER.error("ApiParsingSchedulers.parseAllCoinsSandboxCMC exception - " + ex.toString());
+
+        } finally {
+
+            // dump new data to applicationContainer = set actual applicationContainer.allCoinsListing
+            dumpAllCoins();
         }
     }
 
     /*
      *  Method to get from previously parsed JSON list of ALL CMC COINS and then save it to DB - testing of Sandbox API
      * */
-    private void updateCoinsTableDB(@NotNull String inlineString) {
+    private void updateAllCoinsTableDB(@NotNull String inlineString) {
 
         // get all CMC coins
         ArrayList<CoinEntity> listCoins = (ArrayList<CoinEntity>) ParserAPI.parseJSONAllCoinsListing(inlineString);
@@ -97,9 +104,6 @@ public class ApiParsingSchedulers {
         for (CoinEntity coin : listCoins) {
             cDAO.createCoin(coin);
         }
-
-        // to dump/update data about all already exists coins from DB
-        applicationContainer.setAllCoinsListing(listCoins);
     }
 
     /*
@@ -150,5 +154,16 @@ public class ApiParsingSchedulers {
     private void parseJSONAllCoinsAdditionalDataToMap(@NotNull String inlineString) {
 
         applicationContainer.setAllCoinsByTickerAdditionalData(ParserAPI.parseAllCoinsAdditonalDataByCoinTicker(inlineString));
+    }
+
+    /*
+     * To dump data of all exists coins from DB to applicationContainer
+     * */
+    private void dumpAllCoins() {
+
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        CoinDAO cDAO = myFactory.getCoinDAO();
+
+        applicationContainer.setAllCoinsListing(cDAO.getAllCoins());
     }
 }
