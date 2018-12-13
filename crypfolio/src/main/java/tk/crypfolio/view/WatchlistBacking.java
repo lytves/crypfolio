@@ -165,7 +165,7 @@ public class WatchlistBacking implements Serializable {
             activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "The coin has been deleted from your watchlist successully.",
+                    "The coin has been deleted from your watchlist successfully.",
                     ""));
         } else {
 

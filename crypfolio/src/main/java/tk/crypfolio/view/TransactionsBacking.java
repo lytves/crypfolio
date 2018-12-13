@@ -249,7 +249,7 @@ public class TransactionsBacking implements Serializable {
             // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
             setCoinTemp(itemTemp.getCoin());
 
-            // user have clicked "add transaction" from item's details,
+            // user have clicked "add transaction" from item's details modal window,
             // so in the itemBacking we have itemEntity in the selectedItem attribute
         } else if (itemBacking.getSelectedItem().getId() != null) {
 
