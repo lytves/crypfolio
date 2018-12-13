@@ -100,6 +100,8 @@ public class PortfolioBacking implements Serializable {
     public void updatePortfolioValues() {
         LOGGER.info("updatePortfolioValues...");
 
+        activeUser.getUser().getPortfolio().recountNetCosts();
+
         // is used only to save changed Portfolio showerCurrency
         activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
     }
