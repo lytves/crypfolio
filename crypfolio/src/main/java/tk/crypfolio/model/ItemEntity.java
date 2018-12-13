@@ -64,17 +64,16 @@ public class ItemEntity implements Serializable {
     @Column(name = "item_average_bought_price_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceEth = BigDecimal.ZERO;
 
-    //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL) - causes deletion of all items on delete one transaction!
     @ManyToOne
     @JoinColumn(name = "portfolios_users_us_id", referencedColumnName = "users_us_id", nullable = false)
     private PortfolioEntity portfolio;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @JoinColumn(name = "coins_coin_id", referencedColumnName = "coin_id", nullable = false)
     private CoinEntity coin;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OneToMany(mappedBy = "item")
     private List<TransactionEntity> transactions = new ArrayList<>();
 
@@ -87,7 +86,7 @@ public class ItemEntity implements Serializable {
 
     public void addTransaction(TransactionEntity transaction) {
 
-        this.transactions.add(transaction);
+        transactions.add(transaction);
         // setting also for this new transaction this item as a parent
         transaction.setItem(this);
 
@@ -96,7 +95,7 @@ public class ItemEntity implements Serializable {
             setAmount(getAmount().add(transaction.getAmount()));
 
             // set item not-archived if it already has tokens
-            if (getAmount().compareTo(BigDecimal.ZERO) >= 1 ) {
+            if (getAmount().compareTo(BigDecimal.ZERO) >= 1) {
                 setArchived(false);
             }
 
@@ -148,7 +147,7 @@ public class ItemEntity implements Serializable {
             // **END**
 
         } else if (TransactionType.SELL.equals(transaction.getType())) {
-            // if it's SELL transaction, we should increase the amount,
+            // if it's SELL transaction, we should decrease the amount,
             // but it never can be negative amount, so return positive or ZERO
             setAmount(getAmount().subtract(transaction.getAmount()).max(BigDecimal.ZERO));
 
@@ -162,8 +161,8 @@ public class ItemEntity implements Serializable {
             setNetCostEth(getNetCostEth().subtract(transaction.getAmount().multiply(this.averageBoughtPriceEth))
                     .max(BigDecimal.ZERO));
 
-            // set item archived if it has no tokens more
-            if (getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            // set item as archived if it has no more tokens
+            if (getAmount().compareTo(BigDecimal.ZERO) == 0) {
                 setArchived(true);
             }
         }
@@ -225,26 +224,7 @@ public class ItemEntity implements Serializable {
         this.netCostEth = netCostEth.setScale(8, BigDecimal.ROUND_HALF_DOWN);
     }
 
-    public BigDecimal getNetCostByCurrency(CurrencyType currencyType){
-
-        switch (currencyType.getCurrency()) {
-            case "USD":
-                return getNetCostUsd();
-
-            case "EUR":
-                return getNetCostEur();
-
-            case "BTC":
-                return getNetCostBtc();
-
-            case "ETH":
-                return getNetCostEth();
-
-        }
-        return BigDecimal.ZERO;
-    }
-
-    public BigDecimal getNetCostByCurrentCurrency(){
+    public BigDecimal getNetCostByCurrentCurrency() {
 
         BigDecimal netCostByCurrentCurrency = BigDecimal.ZERO;
 
@@ -254,15 +234,15 @@ public class ItemEntity implements Serializable {
                 break;
 
             case "EUR":
-                netCostByCurrentCurrency =  getNetCostEur();
+                netCostByCurrentCurrency = getNetCostEur();
                 break;
 
             case "BTC":
-                netCostByCurrentCurrency =  getNetCostBtc();
+                netCostByCurrentCurrency = getNetCostBtc();
                 break;
 
             case "ETH":
-                netCostByCurrentCurrency =  getNetCostEth();
+                netCostByCurrentCurrency = getNetCostEth();
                 break;
 
         }
@@ -309,7 +289,7 @@ public class ItemEntity implements Serializable {
         this.averageBoughtPriceEth = averageBoughtPriceEth.setScale(8, BigDecimal.ROUND_HALF_DOWN);
     }
 
-    public BigDecimal getAverageBoughtPriceByCurrency(){
+    public BigDecimal getAverageBoughtPriceByCurrency() {
 
         BigDecimal averageBoughtPriceByCurrency = BigDecimal.ZERO;
 
