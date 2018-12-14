@@ -116,15 +116,14 @@ public class PortfolioBacking implements Serializable {
                     .add(getItemMarketValue(item, activeUser.getUser().getPortfolio().getShowedCurrency()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN);
         }
-        return MathRounders.roundBigDecimalByCurrency(portfolioMarketValue, activeUser.getUser().getPortfolio().getShowedCurrency());
+        return portfolioMarketValue;
     }
 
     public BigDecimal countProfit() {
 
         try {
 
-            return MathRounders.roundBigDecimalByCurrency(countMarketValue().subtract(
-                    activeUser.getUser().getPortfolio().getNetCostByCurrentCurrency()), activeUser.getUser().getPortfolio().getShowedCurrency());
+            return countMarketValue().subtract(activeUser.getUser().getPortfolio().getNetCostByCurrentCurrency());
 
         } catch (NullPointerException ex) {
             LOGGER.warn(ex.toString());
