@@ -5,11 +5,22 @@ Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
 
 **Is under development...**
 
- This is a simple portfolio of the crypto coins and tokens. You can open 
- positions in your own portfolio to control your investments and see profit of the each positon
- in different currencies (USD, EUR, BTC, ETH) and your portfolio total market value.
+This is a simple portfolio of digital cryptocoins and tokens. You can open positions 
+(even add your previously made transactions) to control your investments and observe 
+profit of the each coin  separately and even total market value and profit of your 
+portfolio as a whole.
+
+You can choice (USD, EUR, BTC, ETH) to create and observe 
+positions. All transactions are stored in the database and  you can at any time get 
+informed about them, edit or delete any.
  
- You can stay informed of your favorites coins cost by add them in your watchlist.
+You can also stay informed about your favorite crypto coins by add them into 
+your separate watchlist.
+
+Is used information from officials APIs of the 
+[CoinMarketCap](https://coinmarketcap.com/api/ "CoinMarketCap") and 
+historical prices of cryptocoins from 
+[CryptoCompare.com](https://min-api.cryptocompare.com/ "CryptoCompare.com")
 
 -----
 
