@@ -17,7 +17,7 @@ informed about them, edit or delete any.
 You can also stay informed about your favorite crypto coins by add them into 
 your separate watchlist.
 
-Is used information from officials APIs of the 
+Is used data from officials APIs of the 
 [CoinMarketCap](https://coinmarketcap.com/api/ "CoinMarketCap") and 
 historical prices of cryptocoins from 
 [CryptoCompare.com](https://min-api.cryptocompare.com/ "CryptoCompare.com")
