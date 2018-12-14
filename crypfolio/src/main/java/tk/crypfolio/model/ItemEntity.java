@@ -112,47 +112,8 @@ public class ItemEntity implements Serializable {
             setNetCostEth(getNetCostEth().add(transaction.getAmount().multiply(transaction.getBoughtPriceEth()))
                     .setScale(8, BigDecimal.ROUND_HALF_DOWN));
 
-            /*
-             *   **START:**
-             *   recounts average prices in all currencies of the item
-             * */
-            BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
-            BigDecimal tempAverTotalEur = BigDecimal.ZERO;
-            BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
-            BigDecimal tempAverTotalEth = BigDecimal.ZERO;
-
-            BigDecimal tempBoughtTotalAmount = BigDecimal.ZERO;
-
-            for (TransactionEntity tempTransaction : getTransactions()) {
-
-                if (TransactionType.BUY.equals(tempTransaction.getType())) {
-
-                    tempAverTotalUsd = tempAverTotalUsd.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                    tempAverTotalEur = tempAverTotalEur.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceEur())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                    tempAverTotalBtc = tempAverTotalBtc.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceBtc())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                    tempAverTotalEth = tempAverTotalEth.add(tempTransaction.getAmount()
-                            .multiply(tempTransaction.getBoughtPriceEth())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                    tempBoughtTotalAmount = tempBoughtTotalAmount.add(tempTransaction.getAmount());
-                }
-            }
-
-            setAverageBoughtPriceUsd(tempAverTotalUsd.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
-
-            setAverageBoughtPriceEur(tempAverTotalEur.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
-
-            setAverageBoughtPriceBtc(tempAverTotalBtc.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
-
-            setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
-            /*
-             *   **END:**
-             * */
+            //recounts average bought prices in all currencies
+            recountAveragesBoughtPrices();
 
         } else if (TransactionType.SELL.equals(transaction.getType())) {
             // if it's SELL transaction, we should decrease the amount,
@@ -249,6 +210,10 @@ public class ItemEntity implements Serializable {
 
             transactions.remove(transaction);
 
+            // only if it was BUY transaction, then we should to recount average bought prices
+            if (TransactionType.BUY.equals(transaction.getType())) {
+                recountAveragesBoughtPrices();
+            }
         }
 
         return isTransactionValid;
@@ -411,6 +376,45 @@ public class ItemEntity implements Serializable {
                 break;
         }
         return MathRounders.roundBigDecimalByCurrency(averageBoughtPriceByCurrency, getShowedCurrency());
+    }
+
+    private void recountAveragesBoughtPrices() {
+
+        BigDecimal tempAverTotalUsd = BigDecimal.ZERO;
+        BigDecimal tempAverTotalEur = BigDecimal.ZERO;
+        BigDecimal tempAverTotalBtc = BigDecimal.ZERO;
+        BigDecimal tempAverTotalEth = BigDecimal.ZERO;
+
+        BigDecimal tempBoughtTotalAmount = BigDecimal.ZERO;
+
+        for (TransactionEntity tempTransaction : getTransactions()) {
+
+            if (TransactionType.BUY.equals(tempTransaction.getType())) {
+
+                tempAverTotalUsd = tempAverTotalUsd.add(tempTransaction.getAmount()
+                        .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+                tempAverTotalEur = tempAverTotalEur.add(tempTransaction.getAmount()
+                        .multiply(tempTransaction.getBoughtPriceEur())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+                tempAverTotalBtc = tempAverTotalBtc.add(tempTransaction.getAmount()
+                        .multiply(tempTransaction.getBoughtPriceBtc())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+                tempAverTotalEth = tempAverTotalEth.add(tempTransaction.getAmount()
+                        .multiply(tempTransaction.getBoughtPriceEth())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
+
+                tempBoughtTotalAmount = tempBoughtTotalAmount.add(tempTransaction.getAmount());
+            }
+        }
+
+        setAverageBoughtPriceUsd(tempAverTotalUsd.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
+
+        setAverageBoughtPriceEur(tempAverTotalEur.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
+
+        setAverageBoughtPriceBtc(tempAverTotalBtc.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
+
+        setAverageBoughtPriceEth(tempAverTotalEth.divide(tempBoughtTotalAmount, 8, BigDecimal.ROUND_HALF_DOWN));
+
     }
 
     public PortfolioEntity getPortfolio() {
