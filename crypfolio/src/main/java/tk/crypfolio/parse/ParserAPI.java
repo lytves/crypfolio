@@ -1,5 +1,7 @@
 package tk.crypfolio.parse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,12 +16,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class ParserAPI {
 
-    private static final Logger LOGGER = Logger.getLogger(ParserAPI.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ParserAPI.class);
 
     /*
      *  Universal method to launch API request
@@ -48,11 +48,11 @@ public abstract class ParserAPI {
                 sc.close();
 
             } else {
-                LOGGER.log(Level.WARNING, "Error in parseAPIByURL: {0}", responseCode);
+                LOGGER.error("Error in parseAPIByURL: {0}", responseCode);
             }
 
         } catch (IOException ex) {
-            LOGGER.log(Level.WARNING, "IOException in parseAPIByURL: {0}", ex.getMessage());
+            LOGGER.error("IOException in parseAPIByURL: {0}", ex.getMessage());
         }
         return inlineString.toString();
     }
@@ -87,7 +87,7 @@ public abstract class ParserAPI {
             }
         } catch (ParseException | ClassCastException ex) {
 
-            LOGGER.log(Level.WARNING, "Exception in parseAllCoin: {0}", ex.getMessage());
+            LOGGER.error("Exception in parseAllCoin: {0}", ex.getMessage());
         }
         return listCoins;
     }
@@ -153,7 +153,7 @@ public abstract class ParserAPI {
                 coinsMap.put(coinId, coinInfoMap);
             }
         } catch (ParseException | ClassCastException ex) {
-            LOGGER.log(Level.WARNING, "Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency" + ex.toString());
+            LOGGER.error("Error in parseAllCoinsInfoByCoinTickerIdForOneCurrency" + ex.toString());
         }
         return coinsMap;
     }
@@ -180,11 +180,9 @@ public abstract class ParserAPI {
                 // if value is more than .now() is showed today actual price value
                 .append(localDate.atTime(23, 59, 59).atZone(ZoneId.of("Europe/Oslo")).toEpochSecond());
 
-        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
+        LOGGER.info( "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
 
         String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
-
-        LOGGER.log(Level.WARNING, "parseBitcoiHistoricalPrice inlineString " + inlineString);
 
         if (!inlineString.trim().isEmpty()) {
 
@@ -216,7 +214,7 @@ public abstract class ParserAPI {
                 }
             } catch (ClassCastException | ParseException ex) {
 
-                LOGGER.log(Level.WARNING, "Exception in parseCoinByCoinsTickerId" + ex);
+                LOGGER.error( "Exception in parseCoinByCoinsTickerId" + ex);
             }
         }
         return bitcoinHistoricalPrice;
@@ -273,7 +271,7 @@ public abstract class ParserAPI {
             }
 
         } catch (Exception ex) {
-            LOGGER.log(Level.WARNING, "Error in parseAllCoinsAdditonalDataByCoinTicker - " + ex.toString());
+            LOGGER.error( "Error in parseAllCoinsAdditonalDataByCoinTicker - " + ex.toString());
         }
         return coinsMap;
     }
