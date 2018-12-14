@@ -1,5 +1,7 @@
 package tk.crypfolio.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.common.Constants;
 
 import javax.faces.application.FacesMessage;
@@ -11,8 +13,6 @@ import javax.faces.convert.FacesConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A utility class-converter, is using  in p:calendar to convert  Date (String) <-> LocalDate
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @FacesConverter("calendarLocalDateConverter")
 public class CalendarLocalDateConverter implements Converter {
 
-    private static final Logger logger = Logger.getLogger(CalendarLocalDateConverter.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(CalendarLocalDateConverter.class);
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String submittedString) {
@@ -36,7 +36,7 @@ public class CalendarLocalDateConverter implements Converter {
 
         } catch (DateTimeParseException e) {
 
-            logger.log(Level.WARNING, "DateTimeParseException en CalendarLocalDateConverter getAsObject!");
+            LOGGER.error("DateTimeParseException en CalendarLocalDateConverter getAsObject!");
             throw new ConverterException(new FacesMessage(submittedString + " is not a valid LocalDate"), e);
         }
     }
@@ -61,7 +61,7 @@ public class CalendarLocalDateConverter implements Converter {
 
         } catch (ConverterException e) {
 
-            logger.log(Level.WARNING, "ConverterException en CalendarLocalDateConverter getAsObject!");
+            LOGGER.error("ConverterException en CalendarLocalDateConverter getAsObject!");
             throw new ConverterException(new FacesMessage(object.toString() + " is not a valid LocalDate"), e);
         }
     }
