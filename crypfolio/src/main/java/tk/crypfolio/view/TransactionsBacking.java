@@ -14,6 +14,7 @@ import tk.crypfolio.model.ItemEntity;
 import tk.crypfolio.model.TransactionEntity;
 import tk.crypfolio.parse.ParserAPI;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -76,6 +77,11 @@ public class TransactionsBacking implements Serializable {
     // is used only in the function autoRecalculateTransactionInputData(...)
     // for recount or price or amount, depends of the last user's entered input form
     private String lastInputFormFocused;
+
+    @PostConstruct
+    private void init(){
+        LOGGER.info("TransactionsBacking @PostConstruct");
+    }
 
     /*
      * * * * * * * * * * * * * * * * * * * * * Setters and Getters * * * * * * * * * * * * * * * * * * * * *

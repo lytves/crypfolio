@@ -247,7 +247,6 @@
                                     <p:column colspan="2">
 
                                         <p:selectOneButton value="#{itemBacking.selectedItem.showedCurrency}"
-                                                           process="@this"
                                                            unselectable="false"
                                                            styleClass="select-currency-button">
                                             <f:selectItems value="#{itemBacking.currencies}"/>
@@ -275,7 +274,6 @@
                                     <p:column colspan="2">
 
                                         <p:commandButton
-                                                process="@this"
                                                 actionListener="#{itemBacking.doSubmitDeleteItem}"
                                                 update="mainTabView:portfolioDataTableForm
                                                         mainTabView:portfolioMainData
@@ -347,7 +345,6 @@
                                                 onclick="PF('dlgPortfolioAddItem').show();"
                                                 update="mainTabView:formPortfolioAddItem-coin
                                                     mainTabView:formPortfolioAddItem-transaction"
-                                                process="@this"
                                                 class="upp-case"
                                                 value="Add Transaction"/>
                                     </p:column>
@@ -425,7 +422,6 @@
                                                     <p:menuitem value="Edit" action="#{itemBacking.getRowKey(1)}"/>
 
                                                     <p:menuitem value="Delete"
-                                                                process="@this"
                                                                 action="#{itemBacking.doSubmitDeleteTransaction(transactionEntity)}"
                                                                 update="@form mainTabView:formItemDetails">
 

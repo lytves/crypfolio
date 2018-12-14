@@ -304,6 +304,7 @@
                                                          update="formPortfolioAddItem-transaction"
                                                          process="@this">
 
+                                            <p:resetInput target="@form" />
                                             <p:ajax listener="#{transactionsBacking.transactionAddFormReset}"
                                                     update="formPortfolioAddItem-transaction
                                                      mainTabView:formPortfolioAddItem-coin"/>
@@ -312,7 +313,6 @@
 
                                         <!--   DONE   -->
                                         <p:commandButton id="add-transaction-done"
-                                                         process="@this"
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
                                                                     mainTabView:archiveDataTableWV

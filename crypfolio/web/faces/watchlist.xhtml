@@ -254,9 +254,13 @@
                                                  disabled="#{watchlistBacking.coinTemp eq null}"
                                                  resetValues="true"
                                                  type="reset"
+                                                 process="@this"
                                                  style="margin-right: 20px;">
+
+                                    <p:resetInput target="@form" />
                                     <p:ajax listener="#{watchlistBacking.watchCoinAddFormReset}"
                                             update="formWatchAddCoin"/>
+
                                 </p:commandButton>
 
                                 <p:commandButton id="watch-add-coin-done"
