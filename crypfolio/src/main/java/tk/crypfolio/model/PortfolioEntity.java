@@ -200,10 +200,8 @@ public class PortfolioEntity implements Serializable {
         BigDecimal tempAllItemsTotalAmount = BigDecimal.ZERO;
 
         // if there is items in the portfolio then we will recount net costs,
-        // if there is not then all values will rewrite with BigDecimal.ZERO
+        // otherwise all values should be replaced with BigDecimal.ZERO
         if (!getItems().isEmpty()) {
-
-            System.out.println("getItems(): " + getItems());
 
             for (ItemEntity item : getItems()) {
 

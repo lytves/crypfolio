@@ -114,10 +114,9 @@ public class ItemBacking implements Serializable {
         setItemImageID("https://s2.coinmarketcap.com/static/img/coins/32x32/" + imageID + ".png");
     }
 
-    // is used to avoid rowKey=null
+    // is used to avoid rowKey=null on select an item from <p:dataTable
     public int getRowKey(Integer id) {
 
-        LOGGER.info("getRowKey " + id);
         return id != null ? id : -1;
     }
 
