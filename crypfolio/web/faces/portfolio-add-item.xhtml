@@ -46,7 +46,7 @@
 
                             <p:ajax event="itemSelect"
                                     update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-transaction"/>
-                            <p:ajax event="itemSelect" listener="#{transactionsBacking.createItemTemp}"/>
+                            <p:ajax event="itemSelect" listener="#{transactionsBacking.createEntitiesForAddition}"/>
 
                         </p:autoComplete>
 
@@ -73,7 +73,7 @@
                                          rowIndexVar="selectedRowIndexAllItems">
 
                                 <p:ajax event="rowSelect"
-                                        listener="#{transactionsBacking.createItemTemp}"
+                                        listener="#{transactionsBacking.createEntitiesForAddition}"
                                         update="@form mainTabView:formPortfolioAddItem-transaction"/>
 
                                 <p:column styleClass="flex-space-between">
@@ -99,8 +99,8 @@
 
             </h:form>
 
-            <!--   I'm trying to use different h:forms (but one p:dialog)
-             to choose Item-Coin and then to create new Item-Transaction   -->
+            <!--   I'm trying to use different h:forms (inside one p:dialog)
+             to choose Item-Coin and then to create/edit new Item-Transaction   -->
             <p:outputPanel id="portfolioAddItem-transaction-panel">
 
                 <h:form id="formPortfolioAddItem-transaction">
@@ -302,9 +302,10 @@
                                                          type="reset"
                                                          style="margin-right: 20px;"
                                                          update="formPortfolioAddItem-transaction"
-                                                         process="@this">
+                                                         process="@this"
+                                                         rendered="#{empty itemBacking.selectedItem.id}">
 
-                                            <p:resetInput target="@form" />
+                                            <p:resetInput target="@form"/>
                                             <p:ajax listener="#{transactionsBacking.transactionAddFormReset}"
                                                     update="formPortfolioAddItem-transaction
                                                      mainTabView:formPortfolioAddItem-coin"/>
@@ -337,7 +338,9 @@
             </p:outputPanel>
 
             <!-- ¿¿¿formPortfolioAddItem-transaction:add-transaction-amount and other don't reset input error css class???-->
-            <p:ajax event="close" listener="#{transactionsBacking.transactionAddFormReset}"
+            <p:ajax event="close"
+                    listener="#{transactionsBacking.transactionAddFormReset}"
+                    oncomplete="changeDlgPortfolioAddItemTitle();"
                     update="formPortfolioAddItem-coin formPortfolioAddItem-transaction
                         formPortfolioAddItem-transaction:add-transaction-amount
                         formPortfolioAddItem-transaction:add-transaction-price

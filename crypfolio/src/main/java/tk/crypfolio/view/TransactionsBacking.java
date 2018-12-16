@@ -232,8 +232,8 @@ public class TransactionsBacking implements Serializable {
         if (transactionTotalTemp != null) setTransactionTotalTemp(null);
     }
 
-    public void createItemTemp() {
-        LOGGER.info("PortfolioBacking.createItemTemp");
+    public void createEntitiesForAddition() {
+        LOGGER.info("PortfolioBacking.createEntitiesForAddition");
 
         // if itemTemp is still == null, it means that user have used autocomplete to choose coin
         // and vice versa itemTemp != null, means user have chosen from the list of existing items,
@@ -250,13 +250,14 @@ public class TransactionsBacking implements Serializable {
                 }
             }
 
-            // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
+        // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
         } else if (getItemTemp() != null) {
+
             // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
             setCoinTemp(itemTemp.getCoin());
 
-            // user have clicked "add transaction" from item's details modal window,
-            // so in the itemBacking we have itemEntity in the selectedItem attribute
+        // user have clicked "add transaction" from item's details modal window,
+        // so in the itemBacking we already have itemEntity in the selectedItem attribute
         } else if (itemBacking.getSelectedItem().getId() != null) {
 
             setItemTemp(itemBacking.getSelectedItem());
@@ -269,6 +270,21 @@ public class TransactionsBacking implements Serializable {
 
         // to set initial item's coin price
         setTransactionPriceTemp(portfolioBacking.getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency()));
+    }
+
+    public void createEntitiesForEdition(TransactionEntity transactionEntity) {
+        LOGGER.info("PortfolioBacking.createEntitiesForAddition(transactionEntity)");
+
+        setItemTemp(itemBacking.getSelectedItem());
+
+        // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+        setCoinTemp(itemBacking.getSelectedItem().getCoin());
+
+        setTransactionTemp(transactionEntity);
+
+        // to set initial item's coin price
+        setTransactionPriceTemp(transactionEntity.gePriceByCurrentCurrency());
+
     }
 
     private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {

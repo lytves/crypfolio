@@ -25,7 +25,8 @@ function getWidgetVarById(id) {
 }
 
 /*
-* depends of form input values - to enable/disable the button "Done"
+* modal window Add/edit Item/transaction - to enable/disable showing of the button "Done"
+ * depends of the correct input values in the form
 * */
 function enableDoneButton() {
 
@@ -56,7 +57,7 @@ function showButtonSellAll() {
 
 /*
 * remove highlight background color of selected row after closed dialog window
-* && scroll to top of the page
+* && scroll up display to top of the page
 * */
 function portfolioDataTableRowUnselect() {
     // https://stackoverflow.com/questions/22270664/how-to-remove-a-class-from-elements-in-pure-javascript
@@ -65,7 +66,7 @@ function portfolioDataTableRowUnselect() {
     [].forEach.call(selectedRows, function (el) {
         el.classList.remove("ui-state-highlight");
     });
-    var selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-hover");
+    selectedRows = document.querySelectorAll(".ui-datatable-selectable.ui-state-hover");
     [].forEach.call(selectedRows, function (el) {
         el.classList.remove("ui-state-hover");
     });
@@ -90,7 +91,6 @@ function endHandler() {
     ajaxInProgress = null;
 }
 
-
 /*
 * fixing problem with duplicated datatable's sticky header on change tabs
 * see: https://github.com/primefaces/primefaces/issues/960
@@ -113,9 +113,32 @@ function refreshStickyHeader(widgetVars) {
                 stickyContainer.css('display', 'none');
 
                 stickyContainer.css('width', $this.jq.width());
-
             }
         }
-        console.log("Kyla La Grange - Cut Your Teeth (Kygo Remix)");
+    }
+}
+
+/*
+* edit the title of the modal window DlgPortfolioAddItem
+* depends is it add item, add transaction or edit transaction
+* */
+function changeDlgPortfolioAddItemTitle(name) {
+
+    var valTitle = document.getElementById("mainTabView:dlgPortfolioAddItem_title");
+
+    if (valTitle != null) {
+
+        if (name === "addTransaction") {
+
+            valTitle.innerText = "Add Transaction";
+
+        } else if (name === "editTransaction") {
+
+            valTitle.innerText = "Edit Transaction";
+
+        } else {
+
+            valTitle.innerText = "Add item to Portfolio";
+        }
     }
 }
