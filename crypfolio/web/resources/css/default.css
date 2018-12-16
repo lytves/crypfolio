@@ -165,7 +165,7 @@ a, a:visited {
 
 .modal-window-item-details {
     width: 100% !important;
-    height: 90% !important;
+    height: 92% !important;
 }
 
 .panelgrid-items-details .item-details-td {
@@ -419,7 +419,7 @@ body .ui-buttonset .ui-button {
 /*}*/
 
 /*.select-currency-button .ui-button-text-only {*/
-    /*margin-right: 10px !important;*/
+/*margin-right: 10px !important;*/
 /*}*/
 
 #ajaxStatus {
@@ -655,4 +655,10 @@ mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount_input {
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     text-shadow: none !important;
+}
+
+
+.ui-scrollpanel-conten {
+    height: calc(100% - 50px) !important;
+    overflow: auto;
 }
