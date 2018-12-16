@@ -31,15 +31,26 @@ function getWidgetVarById(id) {
 function enableDoneButton() {
 
     var buttonDone = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-done");
+    var buttonDoneEditTransaction = document.getElementById(
+        "mainTabView:formPortfolioAddItem-transaction:add-transaction-done-edit-transaction");
+
     var inputAmountValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-amount_hinput").value;
     var inputPriceValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-price_hinput").value;
     var inputTotalValue = document.getElementById("mainTabView:formPortfolioAddItem-transaction:add-transaction-total_hinput").value;
 
     // old version of the condition: if (Number(inputAmountValue) > 0 && inputPriceValue !== "" && inputTotalValue !== "")
-    if (Number(inputAmountValue) > 0 && Number(inputPriceValue) > 0 && Number(inputTotalValue) > 0)
+    if (buttonDone && Number(inputAmountValue) > 0 && Number(inputPriceValue) > 0 && Number(inputTotalValue) > 0)
         buttonDone.classList.remove('ui-state-disabled');
-    else
-        buttonDone.classList.add('ui-state-disabled');
+
+    else if (buttonDoneEditTransaction && Number(inputAmountValue) > 0 && Number(inputPriceValue) > 0 && Number(inputTotalValue) > 0)
+        buttonDoneEditTransaction.classList.remove('ui-state-disabled');
+
+    else {
+        if (buttonDone)
+            buttonDone.classList.add('ui-state-disabled');
+        else if (buttonDoneEditTransaction)
+            buttonDoneEditTransaction.classList.add('ui-state-disabled');
+    }
 }
 
 /*

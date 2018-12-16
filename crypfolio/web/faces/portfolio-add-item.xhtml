@@ -130,7 +130,8 @@
                                     <p:selectOneButton id="add-transaction-type"
                                                        required="true" unselectable="false"
                                                        converter="#{selectOneButtonTransactionTypeConverter}"
-                                                       value="#{transactionsBacking.transactionTemp.type}">
+                                                       value="#{transactionsBacking.transactionTemp.type}"
+                                                       rendered="#{empty transactionsBacking.transactionTemp.id}">
 
                                         <p:ajax oncomplete="showButtonSellAll();"/>
 
@@ -138,6 +139,12 @@
                                         <f:selectItem itemLabel="SELL" itemValue="SELL"/>
 
                                     </p:selectOneButton>
+
+                                    <h:outputText value="#{transactionsBacking.transactionTemp.type}"
+                                                  rendered="#{not empty transactionsBacking.transactionTemp.id}"
+                                                  styleClass="buy-sell-type
+                                                  #{transactionsBacking.transactionTemp.type eq 'BUY' ? 'green-background' : 'red-background'}"/>
+
                                 </p:outputPanel>
 
                                 <!--   AMOUNT   -->
@@ -312,7 +319,7 @@
 
                                         </p:commandButton>
 
-                                        <!--   DONE   -->
+                                        <!--   DONE   (ADD)   -->
                                         <p:commandButton id="add-transaction-done"
                                                          actionListener="#{transactionsBacking.doSubmitAddTransaction}"
                                                          update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
@@ -324,7 +331,22 @@
                                                          value="Done"
                                                          icon="ui-icon-check"
                                                          styleClass="ui-state-disabled"
-                                                         resetValues="true">
+                                                         resetValues="true"
+                                                         rendered="#{empty transactionsBacking.transactionTemp.id}">
+                                        </p:commandButton>
+
+                                        <!--   DONE   (EDIT)   -->
+                                        <p:commandButton id="add-transaction-done-edit-transaction"
+                                                         actionListener="#{transactionsBacking.doSubmitEditTransaction}"
+                                                         update="mainTabView:formItemDetails
+                                                                    mainTabView:formItemTransactions
+                                                                    growl"
+                                                         oncomplete="PF('dlgPortfolioAddItem').hide(); portfolioDataTableRowUnselect();"
+                                                         value="Done"
+                                                         icon="ui-icon-check"
+                                                         styleClass="ui-state-disabled"
+                                                         resetValues="true"
+                                                         rendered="#{not empty transactionsBacking.transactionTemp.id}">
                                         </p:commandButton>
 
                                     </p:outputPanel>

@@ -70,8 +70,16 @@ a, a:visited {
     color: red !important;
 }
 
+.red-background {
+    background: #e4685d !important;
+}
+
 .green {
     color: green !important;
+}
+
+.green-background {
+    background: #77b55a !important;
 }
 
 .blue {
@@ -657,8 +665,10 @@ mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount_input {
     text-shadow: none !important;
 }
 
-
-.ui-scrollpanel-conten {
-    height: calc(100% - 50px) !important;
-    overflow: auto;
+.buy-sell-type {
+    line-height: 1.7;
+    font-weight: 500;
+    border-radius: 3px;
+    padding: 0 0.5em;
+    margin-left: 10px;
 }
