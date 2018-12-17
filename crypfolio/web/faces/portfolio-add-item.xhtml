@@ -284,7 +284,7 @@
 
                                         <p:inputTextarea id="add-transaction-comment"
                                                          styleClass="form-control noshadow"
-                                                         rows="5" autoResize="false"
+                                                         rows="3" autoResize="false"
                                                          counter="add-transaction-comment-counter" maxlength="200"
                                                          counterTemplate="{0} characters remaining."
                                                          value="#{transactionsBacking.transactionTemp.comment}"/>
@@ -344,7 +344,6 @@
                                                          oncomplete="PF('dlgPortfolioAddItem').hide(); portfolioDataTableRowUnselect();"
                                                          value="Done"
                                                          icon="ui-icon-check"
-                                                         styleClass="ui-state-disabled"
                                                          resetValues="true"
                                                          rendered="#{not empty transactionsBacking.transactionTemp.id}">
                                         </p:commandButton>
