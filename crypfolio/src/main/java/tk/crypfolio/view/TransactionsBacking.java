@@ -1,5 +1,6 @@
 package tk.crypfolio.view;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -64,6 +65,10 @@ public class TransactionsBacking implements Serializable {
 
     private TransactionEntity transactionTemp;
 
+    // temporary transaction that is used only in the case
+    // user intent to edit a transaction from itemDetails modal window
+    private TransactionEntity transactionEditedOld;
+
     // here is using a temporary price coz we steel don't know
     // which transaction currency will used like main
     // so can't write directly to some TransactionEntity property
@@ -79,7 +84,7 @@ public class TransactionsBacking implements Serializable {
     private String lastInputFormFocused;
 
     @PostConstruct
-    private void init(){
+    private void init() {
         LOGGER.info("TransactionsBacking @PostConstruct");
     }
 
@@ -120,6 +125,14 @@ public class TransactionsBacking implements Serializable {
 
     public void setTransactionTemp(TransactionEntity transactionTemp) {
         this.transactionTemp = transactionTemp;
+    }
+
+    public TransactionEntity getTransactionEditedOld() {
+        return transactionEditedOld;
+    }
+
+    public void setTransactionEditedOld(TransactionEntity transactionEditedOld) {
+        this.transactionEditedOld = transactionEditedOld;
     }
 
     public BigDecimal getTransactionPriceTemp() {
@@ -228,6 +241,7 @@ public class TransactionsBacking implements Serializable {
         if (coinTemp != null) setCoinTemp(null);
         if (itemTemp != null) setItemTemp(null);
         if (transactionTemp != null) setTransactionTemp(null);
+        if (transactionEditedOld != null) setTransactionEditedOld(null);
         if (transactionPriceTemp != null) setTransactionPriceTemp(null);
         if (transactionTotalTemp != null) setTransactionTotalTemp(null);
     }
@@ -250,14 +264,14 @@ public class TransactionsBacking implements Serializable {
                 }
             }
 
-        // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
+            // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
         } else if (getItemTemp() != null) {
 
             // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
             setCoinTemp(itemTemp.getCoin());
 
-        // user have clicked "add transaction" from item's details modal window,
-        // so in the itemBacking we already have itemEntity in the selectedItem attribute
+            // user have clicked "add transaction" from item's details modal window,
+            // so in the itemBacking we already have itemEntity in the selectedItem attribute
         } else if (itemBacking.getSelectedItem().getId() != null) {
 
             setItemTemp(itemBacking.getSelectedItem());
@@ -280,22 +294,25 @@ public class TransactionsBacking implements Serializable {
         // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
         setCoinTemp(itemBacking.getSelectedItem().getCoin());
 
-        setTransactionTemp(transactionEntity);
+        // as transactionTemp is used a copy(clone) of the transaction to edit
+        setTransactionTemp((TransactionEntity) SerializationUtils.clone(transactionEntity));
 
-        // to set initial item's coin price
+        // and original transaction to edit we also temporary save to compare then
+        // with the new one in doSubmitEditTransaction() and ItemEntity.editTransaction!!!
+        setTransactionEditedOld(transactionEntity);
+
+        // to set initial price of the current transaction, depends of the currency
         setTransactionPriceTemp(transactionEntity.gePriceByCurrentCurrency());
 
-    }
-
-    private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {
-
-        return transactionTemp.compareTo(new BigDecimal(Settings.STRING_MAX_BIGDECIMAL_VALUE)) >= 1;
+        // to set total price of the current transaction, depends of the currency too
+        setTransactionTotalTemp(transactionTemp.getTotalPriceByCurrency());
     }
 
     /**
      * Method for submit "Add Transaction" form
      */
     public void doSubmitAddTransaction() {
+        LOGGER.info("PortfolioBacking.doSubmitAddTransaction");
 
         // checking if all entered values are valid
         if (itemTemp == null || transactionTemp == null
@@ -323,114 +340,8 @@ public class TransactionsBacking implements Serializable {
                 transactionTemp.setBoughtDate(LocalDate.now());
             }
 
-            // makes API request to obtain history USD/EUR/BTC/ETH prices
-            Map<String, Double> bitcoinHistoricalPrice = ParserAPI.parseBitcoiHistoricalPrice(transactionTemp.getBoughtDate());
-
-            // recounts and sets prices in all currencies of the transaction
-            Double coefficientMultiplier;
-
-            switch (transactionTemp.getBoughtCurrency().getCurrency()) {
-
-                case "USD":
-
-                    // USD
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp);
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("USD");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    break;
-
-                case "EUR":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // EUR
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp);
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("EUR");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    break;
-
-                case "BTC":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // BTC
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp);
-
-                    // ETH
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("BTC");
-
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    break;
-
-                case "ETH":
-
-                    // USD
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceUsd(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // EUR
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceEur(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // BTC
-                    coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("ETH");
-
-                    transactionTemp.setBoughtPriceBtc(transactionPriceTemp.multiply(BigDecimal.valueOf(coefficientMultiplier))
-                            .setScale(8, BigDecimal.ROUND_HALF_DOWN));
-
-                    // ETH
-                    transactionTemp.setBoughtPriceEth(transactionPriceTemp);
-
-                    break;
-            }
+            // recount prices in all currencies by request historical prices by API
+            recountTransactionPricesByHistoricalPricesAPI(transactionTemp, transactionPriceTemp);
 
             // also recount values (net costs, average prices) of item
             itemTemp.addTransaction(transactionTemp);
@@ -470,6 +381,214 @@ public class TransactionsBacking implements Serializable {
                     "The transaction has been processed successfully.",
                     ""));
         }
+    }
+
+    /**
+     * Method for submit form "Edit Transaction" from modal window ItemDetails:transactions
+     * see similar method itemBacking.doSubmitDeleteTransaction(TransactionEntity transactionEntity)
+     */
+    public void doSubmitEditTransaction() {
+        LOGGER.info("PortfolioBacking.doSubmitEditTransaction");
+
+        // checking if all entered values are valid
+        if (itemTemp == null || transactionTemp == null
+                || transactionTemp.getAmount().compareTo(BigDecimal.ZERO) == 0 || transactionTemp.getAmount() == null
+                || isBigDecimalVaildForDB(transactionTemp.getAmount())
+                || transactionPriceTemp == null || transactionPriceTemp.compareTo(BigDecimal.ZERO) == 0
+                || isBigDecimalVaildForDB(transactionPriceTemp)
+                || isBigDecimalVaildForDB(transactionTemp.getAmount().multiply(transactionPriceTemp))
+                || (!transactionEditedOld.getType().equals(transactionTemp.getType()))) {
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error on processing your transaction! Some of entered values are not valid!",
+                    ""));
+
+        } else if (("SELL").equals(transactionTemp.getType().getType())
+                && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1) {
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error on processing your transaction! You can't sell more coins than you have!",
+                    ""));
+
+        } else {
+
+            if (itemBacking.getSelectedItem().getTransactions().contains(transactionEditedOld)) {
+
+                // recount prices in all currencies by request historical prices by API
+                recountTransactionPricesByHistoricalPricesAPI(transactionTemp, transactionPriceTemp);
+
+                // search a current item index in the ArrayLst of transactions to then replace them
+                int index = activeUser.getUser().getPortfolio().getItems().indexOf(itemBacking.getSelectedItem());
+
+                // here we tested transaction && then edit it in the itemEntity, but
+                // editing occurs only in this selectedItem instance, and not in the activeUser SessionScoped bean,
+                // so we will do it by replace this old item in SessionScoped bean with the new one by do
+                // activeUser.getUser().getPortfolio().getItems().set(index, getSelectedItem());
+                Boolean isTransactionValid = itemBacking.getSelectedItem().editTransaction(transactionEditedOld, transactionTemp);
+
+                if (isTransactionValid) {
+
+                    // recount values (netcost) of portfolio
+                    activeUser.getUser().getPortfolio().recountNetCosts();
+
+                    // replace the item after transaction deleting in the SessionScoped bean activeUser
+                    activeUser.getUser().getPortfolio().getItems().set(index, itemBacking.getSelectedItem());
+
+                    // updates whole user entity
+                    // activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
+
+                    // updates whole portfolio entity
+                    // !!! - not working - causes removing 2 transactions from DB, dunno why !!!
+                    activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+
+                    // reSetting itemBacking.selectedItem to keep it actual with DB
+                    for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
+
+                        if (itemBacking.getSelectedItem().getId().equals(item.getId())) {
+
+                            itemBacking.setSelectedItem(item);
+                        }
+                    }
+
+                    // almost reSetting portfolio's datatables-tabViews in case some items was archived or desarchived
+                    portfolioBacking.init();
+
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "The transaction has been edited successfully.",
+                            ""));
+                    // exit from the method, thereby don't need to do a few "else"
+                    // to return FacesContext.getCurrentInstance().addMessage... depends of situation
+                    return;
+                }
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Error on editing the transaction!",
+                        ""));
+                LOGGER.warn("Error on editing a transaction!");
+            }
+        }
+    }
+
+    /*
+    * universal method to recount transaction prices in all currencies depends of the bought currency and
+    * with respect to the historical prices of USD/EUR/BTC/ETH
+    * */
+    private void recountTransactionPricesByHistoricalPricesAPI(TransactionEntity transaction, BigDecimal typedPrice) {
+
+        // makes API request to obtain history USD/EUR/BTC/ETH prices
+        Map<String, Double> bitcoinHistoricalPrice = ParserAPI.parseBitcoiHistoricalPrice(transaction.getBoughtDate());
+
+        // recounts and sets prices in all currencies of the transaction
+        Double coefficientMultiplier;
+
+        switch (transaction.getBoughtCurrency().getCurrency()) {
+
+            case "USD":
+
+                // USD
+                transaction.setBoughtPriceUsd(typedPrice);
+
+                // EUR
+                coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("USD");
+
+                transaction.setBoughtPriceEur(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // BTC
+                coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("USD");
+
+                transaction.setBoughtPriceBtc(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // ETH
+                coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("USD");
+
+                transaction.setBoughtPriceEth(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                break;
+
+            case "EUR":
+
+                // USD
+                coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("EUR");
+
+                transaction.setBoughtPriceUsd(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // EUR
+                transaction.setBoughtPriceEur(typedPrice);
+
+                // BTC
+                coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("EUR");
+
+                transaction.setBoughtPriceBtc(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // ETH
+                coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("EUR");
+
+                transaction.setBoughtPriceEth(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                break;
+
+            case "BTC":
+
+                // USD
+                coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("BTC");
+
+                transaction.setBoughtPriceUsd(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // EUR
+                coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("BTC");
+
+                transaction.setBoughtPriceEur(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // BTC
+                transaction.setBoughtPriceBtc(typedPrice);
+
+                // ETH
+                coefficientMultiplier = bitcoinHistoricalPrice.get("ETH") / bitcoinHistoricalPrice.get("BTC");
+
+                transaction.setBoughtPriceEth(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                break;
+
+            case "ETH":
+
+                // USD
+                coefficientMultiplier = bitcoinHistoricalPrice.get("USD") / bitcoinHistoricalPrice.get("ETH");
+
+                transaction.setBoughtPriceUsd(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // EUR
+                coefficientMultiplier = bitcoinHistoricalPrice.get("EUR") / bitcoinHistoricalPrice.get("ETH");
+
+                transaction.setBoughtPriceEur(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // BTC
+                coefficientMultiplier = bitcoinHistoricalPrice.get("BTC") / bitcoinHistoricalPrice.get("ETH");
+
+                transaction.setBoughtPriceBtc(typedPrice.multiply(BigDecimal.valueOf(coefficientMultiplier))
+                        .setScale(8, BigDecimal.ROUND_HALF_DOWN));
+
+                // ETH
+                transaction.setBoughtPriceEth(typedPrice);
+
+                break;
+        }
+    }
+
+    // check if BigDecimal value corresponds to settings max value
+    private boolean isBigDecimalVaildForDB(@NotNull BigDecimal transactionTemp) {
+
+        return transactionTemp.compareTo(new BigDecimal(Settings.STRING_MAX_BIGDECIMAL_VALUE)) >= 1;
     }
 
     // autocomplete search method (identical to WatchlistBacking)

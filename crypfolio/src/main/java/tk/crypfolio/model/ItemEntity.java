@@ -142,7 +142,6 @@ public class ItemEntity implements Serializable {
         if (isTransactionValid) {
 
             transactions.remove(transaction);
-//            transaction.setItem(null);
 
             // only if it was BUY transaction, then we should to recount average bought prices
             if (TransactionType.BUY.equals(transaction.getType())) {
@@ -156,6 +155,65 @@ public class ItemEntity implements Serializable {
             recountNetCost();
         }
 
+        return isTransactionValid;
+    }
+
+    public Boolean editTransaction(TransactionEntity transactionOld, TransactionEntity transactionNew) {
+
+        Boolean isTransactionValid = false;
+
+        /*
+         * !!!   IS PROHIBITED TO CHANGE THE TRANSACTION TYPE   !!!
+         *  so always would/should be transactionOld.getType() == transactionNew.getType()
+         * */
+
+        // do it just in case, coz before there is a condition for checking transactions types
+        if (!transactionOld.getType().equals(transactionNew.getType())) {
+            return isTransactionValid;
+        }
+
+        // if it's BUY transaction and we will edit it (maybe decrease or increase the  amount)
+        // but we never can have negativefinal  amount of the ITEM, so will compare future amount
+        // (after subtract old amount and adding new amount) if it will be more than ZERO
+        if (TransactionType.BUY.equals(transactionOld.getType())) {
+
+            if (getAmount().subtract(transactionOld.getAmount()).add(transactionNew.getAmount()).compareTo(BigDecimal.ZERO) >= 0) {
+
+                isTransactionValid = true;
+
+                setAmount(getAmount().subtract(transactionOld.getAmount()).add(transactionNew.getAmount()));
+            }
+
+            // if it's SELL transaction and we will edit it (maybe decrease or increase the amount)
+            // but we never can have negative final amount of the ITEM, so will compare future amount
+            // (after subtract new amount and adding old amount) if it will be more than ZERO
+        } else if (TransactionType.SELL.equals(transactionOld.getType())) {
+
+            if (getAmount().subtract(transactionNew.getAmount()).add(transactionOld.getAmount()).compareTo(BigDecimal.ZERO) >= 0) {
+
+                isTransactionValid = true;
+
+                setAmount(getAmount().subtract(transactionNew.getAmount()).add(transactionOld.getAmount()));
+            }
+        }
+
+        // IF WE CAN EDIT the TRANSACTION without problems of item amount, so will make the editing
+        if (isTransactionValid) {
+
+            transactions.remove(transactionOld);
+            transactions.add(transactionNew);
+
+            // only if it was BUY transaction, then we should to recount average bought prices
+            if (TransactionType.BUY.equals(transactionOld.getType())) {
+                recountAveragesBoughtPrices();
+            }
+
+            // set item as archived/not-archived depends of the tokens amount
+            checkItemAmountToSetUnsetArchived();
+
+            // recount Net Cost values in all currencies
+            recountNetCost();
+        }
         return isTransactionValid;
     }
 
@@ -236,50 +294,11 @@ public class ItemEntity implements Serializable {
             case "ETH":
                 netCostByCurrentCurrency = getNetCostEth();
                 break;
-
         }
         return MathRounders.roundBigDecimalByCurrency(netCostByCurrentCurrency, getShowedCurrency());
     }
 
     private void recountNetCost() {
-
-/*
-        BigDecimal netCostUsd = BigDecimal.ZERO;
-        BigDecimal netCostEur = BigDecimal.ZERO;
-        BigDecimal netCostBtc = BigDecimal.ZERO;
-        BigDecimal netCostEth = BigDecimal.ZERO;
-
-        for (TransactionEntity tempTransaction : getTransactions()) {
-
-            if (TransactionType.BUY.equals(tempTransaction.getType())) {
-
-                netCostUsd = netCostUsd.add(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostEur = netCostEur.add(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceEur())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostBtc = netCostBtc.add(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceBtc())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostEth = netCostEth.add(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceEth())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-            } else if (TransactionType.SELL.equals(tempTransaction.getType())){
-
-                netCostUsd = netCostUsd.subtract(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceUsd())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostEur = netCostEur.subtract(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceEur())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostBtc = netCostBtc.subtract(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceBtc())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-
-                netCostEth = netCostEth.subtract(tempTransaction.getAmount()
-                        .multiply(tempTransaction.getBoughtPriceEth())).setScale(8, BigDecimal.ROUND_HALF_DOWN);
-            }
-        }*/
 
         setNetCostUsd(getAmount().multiply(getAverageBoughtPriceUsd().setScale(8, BigDecimal.ROUND_HALF_DOWN)));
         setNetCostEur(getAmount().multiply(getAverageBoughtPriceEur().setScale(8, BigDecimal.ROUND_HALF_DOWN)));
