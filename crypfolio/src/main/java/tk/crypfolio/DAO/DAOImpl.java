@@ -100,7 +100,7 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         } catch (Exception ex) {
 
-            throw new AppDAOException("DAOImpl.update Exception)", ex, AppDAOException._UPDATE_FAILED);
+            throw new AppDAOException("DAOImpl.update Exception: ", ex, AppDAOException._UPDATE_FAILED);
 
         } finally {
             if (em.getTransaction().isActive()) {
