@@ -233,12 +233,11 @@ public class ItemBacking implements Serializable {
                 activeUser.getUser().getPortfolio().getItems().set(index, getSelectedItem());
 
                 // updates whole user entity - just in case, if won't work portfolioService.updatePortfolioDB
-//                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
+                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
                 // updates whole portfolio entity
                 // !!! - earlier didn't work - causes removing 2 transactions from DB, dunno why !!!
-                // after some edits is working atm
-                 activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+                // activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
 
                 // reSetting itemBacking.selectedItem to keep it actual with DB
                 for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
