@@ -209,17 +209,19 @@ public class ItemBacking implements Serializable {
         return transactionEntity.getBoughtDate().format(DateTimeFormatter.ofPattern(Constants.dateShortPattern, Constants.mainLocale));
     }
 
+    // see similar method transactionsBacking.doSubmitEditTransaction()
     public void doSubmitDeleteTransaction(TransactionEntity transactionEntity) {
         LOGGER.info("doSubmitDeleteTransaction.........");
 
         if (getSelectedItem().getTransactions().contains(transactionEntity)) {
 
-            // search a current item index in the ArrayLst of transactions to then replace them
+            // search a current item index in the ArrayLst of transactions to then replace it
             int index = activeUser.getUser().getPortfolio().getItems().indexOf(getSelectedItem());
 
-            // here we tested transaction && then remove from the item, but
-            // remove only from this selectedItem instance,
-            // and not from activeUser SessionScoped bean, so we will do it then with
+            // here we tested transaction && then remove it in the itemEntity, but
+            // removed occurs in this selectedItem instance, and not in the activeUser SessionScoped bean,
+            // so we need update it, we will do it with replace this item in SessionScoped bean with the new one
+            // by execute activeUser.getUser().getPortfolio().getItems().set(index, getSelectedItem());
             Boolean isTransactionValid = selectedItem.removeTransaction(transactionEntity);
 
             if (isTransactionValid) {
@@ -227,14 +229,16 @@ public class ItemBacking implements Serializable {
                 // recount values (netcost) of portfolio
                 activeUser.getUser().getPortfolio().recountNetCosts();
 
+                // replace the item after transaction deleting in the SessionScoped bean activeUser
                 activeUser.getUser().getPortfolio().getItems().set(index, getSelectedItem());
 
-                // updates whole user entity
-                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
+                // updates whole user entity - just in case, if won't work portfolioService.updatePortfolioDB
+//                activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
                 // updates whole portfolio entity
-                // !!! - not working - causes removing 2 transactions from DB, dunno why !!!
-                // activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+                // !!! - earlier didn't work - causes removing 2 transactions from DB, dunno why !!!
+                // after some edits is working atm
+                 activeUser.getUser().setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
 
                 // reSetting itemBacking.selectedItem to keep it actual with DB
                 for (ItemEntity item : activeUser.getUser().getPortfolio().getItems()) {
