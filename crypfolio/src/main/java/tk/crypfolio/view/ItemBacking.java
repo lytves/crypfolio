@@ -209,7 +209,7 @@ public class ItemBacking implements Serializable {
         return transactionEntity.getBoughtDate().format(DateTimeFormatter.ofPattern(Constants.dateShortPattern, Constants.mainLocale));
     }
 
-    // see similar method transactionsBacking.doSubmitEditTransaction()
+    // see similar method addTransactionOrItemBacking.doSubmitEditTransaction()
     public void doSubmitDeleteTransaction(TransactionEntity transactionEntity) {
         LOGGER.info("doSubmitDeleteTransaction.........");
 

@@ -32,9 +32,9 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class TransactionsBacking implements Serializable {
+public class AddTransactionOrItemBacking implements Serializable {
 
-    private static final Logger LOGGER = LogManager.getLogger(TransactionsBacking.class);
+    private static final Logger LOGGER = LogManager.getLogger(AddTransactionOrItemBacking.class);
 
     // application scoped
     @Inject
@@ -85,7 +85,7 @@ public class TransactionsBacking implements Serializable {
 
     @PostConstruct
     private void init() {
-        LOGGER.info("TransactionsBacking @PostConstruct");
+        LOGGER.info("AddTransactionOrItemBacking @PostConstruct");
     }
 
     /*
@@ -251,7 +251,7 @@ public class TransactionsBacking implements Serializable {
 
         // if itemTemp is still == null, it means that user have used autocomplete to choose coin
         // and vice versa itemTemp != null, means user have chosen from the list of existing items,
-        // coz on select from the list of existing items works ... selection="#{transactionsBacking.itemTemp}"
+        // coz on select from the list of existing items works ... selection="#{addTransactionOrItemBacking.itemTemp}"
         if (getItemTemp() == null && getCoinTemp() != null) {
 
             setItemTemp(new ItemEntity(coinTemp));
@@ -264,10 +264,10 @@ public class TransactionsBacking implements Serializable {
                 }
             }
 
-            // user have chosen a coin from the list of existing items: ... selection="#{transactionsBacking.itemTemp}"
+            // user have chosen a coin from the list of existing items: ... selection="#{addTransactionOrItemBacking.itemTemp}"
         } else if (getItemTemp() != null) {
 
-            // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+            // also should do this to update condition in the jsf-view: rendered="#{addTransactionOrItemBacking.coinTemp eq null}
             setCoinTemp(itemTemp.getCoin());
 
             // user have clicked "add transaction" from item's details modal window,
@@ -276,7 +276,7 @@ public class TransactionsBacking implements Serializable {
 
             setItemTemp(itemBacking.getSelectedItem());
 
-            // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+            // also should do this to update condition in the jsf-view: rendered="#{addTransactionOrItemBacking.coinTemp eq null}
             setCoinTemp(itemBacking.getSelectedItem().getCoin());
         }
 
@@ -291,7 +291,7 @@ public class TransactionsBacking implements Serializable {
 
         setItemTemp(itemBacking.getSelectedItem());
 
-        // also should do this to update condition in the jsf-view: rendered="#{transactionsBacking.coinTemp eq null}
+        // also should do this to update condition in the jsf-view: rendered="#{addTransactionOrItemBacking.coinTemp eq null}
         setCoinTemp(itemBacking.getSelectedItem().getCoin());
 
         // as transactionTemp is used a copy(clone) of the transaction to edit
