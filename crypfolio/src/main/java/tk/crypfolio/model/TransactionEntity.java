@@ -51,8 +51,9 @@ public class TransactionEntity implements Serializable {
     @Column(name = "trans_comment")
     private String comment;
 
-    //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ManyToOne(cascade = CascadeType.ALL)
+    // @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @ManyToOne(cascade = CascadeType.ALL) - before editTransaction(...)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "items_item_id", referencedColumnName = "item_id", nullable = false)
     private ItemEntity item;
 
