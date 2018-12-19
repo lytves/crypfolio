@@ -66,14 +66,9 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public void addWatchCoin(CoinEntity coin) {
-
-        UserWatchCoinEntity userWatchCoin = new UserWatchCoinEntity();
-
-        userWatchCoin.setCoinId(coin);
-        userWatchCoin.setUserId(this);
-
-        this.userWatchCoins.add(userWatchCoin);
+    public UserEntity(PortfolioEntity portfolio) {
+        this.portfolio = portfolio;
+        portfolio.setUser(this);
     }
 
     public void addWatchCoin(CoinEntity coin, CurrencyType currencyType) {

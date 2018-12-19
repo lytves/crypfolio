@@ -1,9 +1,12 @@
 package tk.crypfolio.view.auth;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.model.PortfolioEntity;
 import tk.crypfolio.model.UserEntity;
 import tk.crypfolio.view.ActiveUser;
+import tk.crypfolio.view.UserBacking;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,15 +15,17 @@ import javax.inject.Inject;
 
 public abstract class AuthBacking {
 
+    private static final Logger LOGGER = LogManager.getLogger(UserBacking.class);
+
     protected UserEntity user;
 
     private String password;
 
-    private PortfolioEntity portfolio;
-
     private Boolean showEmailResendLink;
 
-    private Boolean showSignUpForm;
+    // (rendered) by default we show signUp form until user submitted form successfully,
+    // then is showed email activating notification
+    private Boolean showSignUpForm = true;
 
     // session scoped
     @Inject
@@ -32,12 +37,9 @@ public abstract class AuthBacking {
 
     @PostConstruct
     public void init() {
+        LOGGER.info("AuthBacking init");
 
-        System.out.println("AuthBacking init");
-
-        this.user = new UserEntity();
-        this.portfolio = new PortfolioEntity();
-        setShowSignUpForm(true);
+        this.user = new UserEntity(new PortfolioEntity());
     }
 
     protected String authenticate() {
@@ -75,9 +77,6 @@ public abstract class AuthBacking {
 
     protected String register() {
 
-        // complete user entity with portfolio.name
-        user.setPortfolio(portfolio);
-
         user = userService.doRegisterDB(user, password);
 
         if (user != null) {
@@ -95,7 +94,7 @@ public abstract class AuthBacking {
                     ""));
         }
 
-        // to remove signup form && show email-activate message
+        // to remove (do not rendered) signUp form && show (rendered) email activationg notification
         setShowSignUpForm(false);
 
         return null;
@@ -134,8 +133,8 @@ public abstract class AuthBacking {
 
     protected String saveNewPassword(String code) {
 
-        System.out.println("code:" + code);
-        System.out.println("password:" + password);
+        LOGGER.info("code: " + code);
+        LOGGER.info("password: " + password);
 
         if (code != null && password != null) {
 
@@ -167,10 +166,6 @@ public abstract class AuthBacking {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public PortfolioEntity getPortfolio() {
-        return portfolio;
     }
 
     public Boolean getShowEmailResendLink() {
