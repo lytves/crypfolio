@@ -25,6 +25,7 @@
 
                         <h:panelGrid styleClass="order-table">
 
+                            <!--   USER'S   EMAIL   -->
                             <p:outputLabel for="usEmail" value="Email:"/>
 
                             <p:outputPanel class="input-group">
@@ -36,17 +37,20 @@
                                              requiredMessage="Error: enter your email"/>
                             </p:outputPanel>
 
+                            <!--   USER'S   PASSWORD   -->
                             <p:outputLabel for="password" value="Password:"/>
 
                             <p:outputPanel class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
                                 <p:inputText id="password" value="#{loginBacking.password}"
+                                             autocomplete="off"
                                              styleClass="form-control noshadow"
                                              required="true" type="password" placeholder="Password"
                                              requiredMessage="Error: enter your password"/>
                             </p:outputPanel>
 
+                            <!--   RESET   PASSWORD   LINK   -->
                             <h:link outcome="forgot-password" styleClass="upp-case" value="Reset password"/>
 
                             <h:outputText styleClass="span-10px-height"/>
@@ -64,7 +68,7 @@
 
                     </h:form>
 
-                    <!-- information message showed ONLY if user haven't confirmed his email yet-->
+                    <!-- notification message is showed ONLY if user haven't confirmed his email yet-->
                     <h:form rendered="#{loginBacking.showEmailResendLink}">
 
                             <hr/>

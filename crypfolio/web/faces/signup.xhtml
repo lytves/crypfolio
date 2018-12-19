@@ -42,8 +42,8 @@
                             <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
 
                             <p:outputPanel class="input-group">
-
                                 <span class="input-group-addon"><i class="fas fa-tachometer-alt"></i></span>
+
                                 <p:inputText id="usPortfilioName" value="#{signupBacking.user.portfolio.name}"
                                              required="true" type="text" size="20" placeholder="Portfolio Name"
                                              requiredMessage="Error: enter portfolio name"
@@ -55,14 +55,17 @@
                             <p:outputLabel for="usPassword" value="Password:"/>
 
                             <p:outputPanel class="input-group">
-
                                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
                                 <p:password id="usPassword" value="#{signupBacking.password}"
+                                            autocomplete="off"
                                             required="true" placeholder="Password"
                                             requiredMessage="Error: enter your password"
                                             match="usPasswordConfirm" feedback="true"
                                             styleClass="form-control noshadow">
+
                                     <f:validateLength minimum="6"/>
+
                                 </p:password>
 
                             </p:outputPanel>
@@ -72,11 +75,15 @@
 
                             <p:outputPanel class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
                                 <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
+                                            autocomplete="off"
                                             required="true" placeholder="Repeat Password"
                                             requiredMessage="Error: repeat your password"
                                             styleClass="form-control noshadow">
+
                                     <f:validateLength minimum="6"/>
+
                                 </p:password>
 
                             </p:outputPanel>
@@ -96,7 +103,7 @@
 
                     </h:form>
 
-                    <!-- information message showed ONLY after user have submitted sign up form-->
+                    <!-- notification message is showed ONLY after user have submitted sign up form-->
                     <h:outputText rendered="#{!signupBacking.showSignUpForm}"
                                   value="In order to complete your registration, please click the confirmation link
                                   in the email that we just have sent to you."/>
@@ -105,6 +112,7 @@
 
             </p:outputPanel>
 
+            <!--   LOGIN   LINK   -->
             <h:panelGrid styleClass="added-links">
                 <h:outputText value="Already have an account?"/>
                 <h:link outcome="login" styleClass="upp-case" value="Login"/>
