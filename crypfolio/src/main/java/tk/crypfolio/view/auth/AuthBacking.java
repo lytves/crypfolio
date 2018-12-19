@@ -17,6 +17,13 @@ public abstract class AuthBacking {
 
     private static final Logger LOGGER = LogManager.getLogger(UserBacking.class);
 
+    // stateless business
+    @Inject
+    protected UserService userService;
+    // session scoped
+    @Inject
+    private ActiveUser activeUser;
+
     protected UserEntity user;
 
     private String password;
@@ -26,14 +33,6 @@ public abstract class AuthBacking {
     // (rendered) by default we show signUp form until user submitted form successfully,
     // then is showed email activating notification
     private Boolean showSignUpForm = true;
-
-    // session scoped
-    @Inject
-    private ActiveUser activeUser;
-
-    // stateless business
-    @Inject
-    protected UserService userService;
 
     @PostConstruct
     public void init() {
@@ -133,9 +132,6 @@ public abstract class AuthBacking {
 
     protected String saveNewPassword(String code) {
 
-        LOGGER.info("code: " + code);
-        LOGGER.info("password: " + password);
-
         if (code != null && password != null) {
 
             user = userService.setUserNewPasswordDB(code, password);
@@ -147,13 +143,11 @@ public abstract class AuthBacking {
                 return "user?faces-redirect=true";
             }
         }
-
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Cannot save new password!",
                 ""));
 
         return null;
-
     }
 
     public UserEntity getUser() {

@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <!--    =====================   modal window User's Settings   -->
+    <p:dialog header="Settings" id="dlgSettings" widgetVar="dlgSettings" modal="true"
+              resizable="false" draggable="false" position="center top" closeOnEscape="true"
+              hideEffect="fade" class="modal-window"
+              focus="dlgSettings">
+
+        <p:outputPanel id="userSettingsPanel">
+
+            <p:tabView id="userSettingsMainTabView" dynamic="true" cache="true" styleClass="myTabview">
+
+                <!-- USER'S SETTINGS-->
+                <p:tab title="User">
+
+                    <h:form id="userSettingsForm">
+
+                        <h:panelGrid styleClass="order-table">
+
+                            <!--   USER'S   EMAIL   -->
+                            <p:outputLabel for="settings-user-email" value="Email:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                <p:inputText id="settings-user-email" value="#{userBacking.activeUser.user.email}"
+                                             styleClass="form-control noshadow" readonly="true" disabled="true"
+                                             required="true" type="email"/>
+                            </p:outputPanel>
+
+                            <!--   USER'S   OLD   PASSWORD   -->
+                            <p:outputLabel for="settings-oldPassword" value="Old Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:password id="settings-oldPassword" value="#{userBacking.oldPassword}"
+                                            required="true" placeholder="Old Password"
+                                            requiredMessage="Error: enter old newPassword"
+                                            styleClass="form-control noshadow">
+
+                                    <f:validateLength minimum="6"/>
+
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <!--   USER'S   NEW   PASSWORD   -->
+                            <p:outputLabel for="settings-newPassword" value="New Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:password id="settings-newPassword" value="#{userBacking.newPassword}"
+                                            required="true" placeholder="New Password"
+                                            requiredMessage="Error: enter new newPassword"
+                                            match="settings-newPassword-confirm" feedback="true"
+                                            styleClass="form-control noshadow">
+
+                                    <f:validateLength minimum="6"/>
+
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <!--   USER'S   NEW   PASSWORD   CONFIRM   -->
+                            <p:outputLabel for="settings-newPassword-confirm" value="Repeat New Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:password id="settings-newPassword-confirm" value="#{userBacking.newPassword}"
+                                            required="true" placeholder="Repeat New Password"
+                                            requiredMessage="Error: repeat new newPassword"
+                                            styleClass="form-control noshadow">
+
+                                    <f:validateLength minimum="6"/>
+
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <h:outputText styleClass="span-10px-height"/>
+
+                            <p:commandButton action="#{userBacking.doSubmitSaveUserSettings}"
+                                             value="Save"
+                                             styleClass="button-center"
+                                             update="userSettingsForm growl">
+
+                                <p:resetInput target="userSettingsForm"/>
+
+                            </p:commandButton>
+
+                        </h:panelGrid>
+
+                    </h:form>
+
+                </p:tab>
+
+                <!-- PORTFOLIO SETTINGS-->
+                <p:tab title="Portfolio">
+
+                    <h:form id="portfolioSettingsForm">
+
+                        <h:panelGrid styleClass="order-table">
+
+                            <!--   PORTFOLIO   NAME   -->
+                            <p:outputLabel value="Portfolio Name:" for="settings-portfolio-name"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-tachometer-alt"></i></span>
+
+                                <p:inputText id="settings-portfolio-name"
+                                             value="#{userBacking.activeUser.user.portfolio.name}"
+                                             styleClass="form-control noshadow"
+                                             required="true" type="text" placeholder="Portfolio Name"
+                                             requiredMessage="Error: enter name of the portfolio"/>
+
+                            </p:outputPanel>
+
+                            <p:outputLabel value="Share Portfolio" for="settings-portfolio-share"/>
+
+                            <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShare}"
+                                           id="settings-portfolio-share">
+                                <p:ajax listener="#{userBacking.doSubmitSavePortfolioSettings}"/>
+                            </p:inputSwitch>
+
+                            <p:outputLabel value="Show Holdings Amounts" for="settings-portfolio-show-amounts"/>
+
+                            <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShowAmounts}"
+                                           id="settings-portfolio-show-amounts">
+                                <p:ajax listener="#{userBacking.doSubmitSavePortfolioSettings}"/>
+                            </p:inputSwitch>
+
+                        </h:panelGrid>
+
+                        <h:panelGrid styleClass="order-table" id="ttt">
+
+
+                            <p:outputPanel style="display: flex;">
+
+                                <p:outputLabel value="Sharing link" for="settings-portfolio-link"
+                                               style="line-height: 3;"/>
+
+
+                                <p:commandButton action="#{userBacking.doSubmitSavePortfolioSettings}"
+                                                 value="Copy"
+                                                 styleClass="button-center"
+                                                 update="growl">
+
+                                </p:commandButton>
+                            </p:outputPanel>
+
+                            <p:inputText id="settings-portfolio-link"
+                                         value="#{userBacking.activeUser.user.portfolio.shareLink}"
+                                         styleClass="form-control form-control-right noshadow"
+                                         style="border-radius:3px !important"
+                                         readonly="true"/>
+
+                        </h:panelGrid>
+
+
+                    </h:form>
+
+                </p:tab>
+
+            </p:tabView>
+
+
+        </p:outputPanel>
+
+        <p:ajax event="close" listener="#{userBacking.settingsFormReset}" update="userSettingsPanel"
+                resetValues="true"/>
+
+    </p:dialog>
+
+
+</ui:composition>
