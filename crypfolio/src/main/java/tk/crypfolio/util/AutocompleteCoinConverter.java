@@ -36,7 +36,6 @@ public class AutocompleteCoinConverter implements Converter {
             } catch (NumberFormatException e) {
                 logger.log(Level.WARNING, "Error AutocompleteCoinConverter getAsObject!");
             }
-
         }
         return null;
     }
@@ -45,8 +44,7 @@ public class AutocompleteCoinConverter implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object object) {
         if (object != null) {
             return String.valueOf(((CoinEntity) object).getId());
-        } else {
-            return null;
         }
+        return null;
     }
 }
