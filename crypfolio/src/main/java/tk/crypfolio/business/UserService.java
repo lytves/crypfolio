@@ -64,6 +64,9 @@ public class UserService implements Serializable {
         return null;
     }
 
+    /*
+     * resend to user new verification email
+     * */
     public void sendConfEmailDB(UserEntity user) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
@@ -82,7 +85,7 @@ public class UserService implements Serializable {
     }
 
     /*
-     * confirmation user's email by URL confirmation link
+     * confirm user's email by URL confirmation link
      * */
     public UserEntity doConfirmEmailDB(String verificationCode) {
 
@@ -107,7 +110,9 @@ public class UserService implements Serializable {
         return null;
     }
 
-
+    /*
+     * reset user password and send an email to user
+     * */
     public Boolean setUserResetPasswordCodeDB(UserEntity user) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
@@ -132,6 +137,9 @@ public class UserService implements Serializable {
         return false;
     }
 
+    /*
+     * is used in ResetPasswordFilter, to check reset password code
+     * */
     public UserEntity searchUserResetPasswordCodeDB(String passwordResetCode) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
@@ -146,7 +154,33 @@ public class UserService implements Serializable {
         return null;
     }
 
-    public UserEntity setUserNewPasswordDB(String resetPasswordCode, String password){
+    /*
+     * set new user password, with checking old password
+     * */
+    public UserEntity setUserNewPasswordDB(UserEntity user, String oldPassword, String newPassword) {
+
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        UserDAO uDAO = myFactory.getUserDAO();
+        UserEntity userDB = uDAO.getUserById(user.getId());
+
+        if (userDB != null && StringEncoder.encodePassword(user.getEmail(), oldPassword).equals(userDB.getPassword())) {
+
+            userDB.setPassword(StringEncoder.encodePassword(userDB.getEmail(), newPassword));
+
+            userDB = uDAO.updateUser(userDB);
+
+            if (userDB != null) {
+
+                return userDB;
+            }
+        }
+        return null;
+    }
+
+    /*
+     * set new user password after reset password and using email reset password code
+     * */
+    public UserEntity setUserNewPasswordDB(String resetPasswordCode, String password) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
         UserDAO uDAO = myFactory.getUserDAO();
@@ -172,7 +206,10 @@ public class UserService implements Serializable {
         return null;
     }
 
-    public UserEntity updateUserDB(UserEntity user){
+    /*
+     * update user in DB
+     * */
+    public UserEntity updateUserDB(UserEntity user) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
         UserDAO uDAO = myFactory.getUserDAO();
@@ -181,7 +218,10 @@ public class UserService implements Serializable {
         return userDB;
     }
 
-    public UserWatchCoinEntity updateUserWatchCoinDB(UserWatchCoinEntity userWatchCoin){
+    /*
+     * update watchCoin of user in DB
+     * */
+    public UserWatchCoinEntity updateUserWatchCoinDB(UserWatchCoinEntity userWatchCoin) {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
         UserWatchCoinDAO uwcDAO = myFactory.getUserWatchCoinDAO();
