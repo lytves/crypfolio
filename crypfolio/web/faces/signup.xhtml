@@ -25,18 +25,7 @@
 
                         <h:panelGrid styleClass="order-table">
 
-                            <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
-
-                            <p:outputPanel class="input-group">
-
-                                <span class="input-group-addon"><i class="fas fa-tachometer-alt"></i></span>
-                                <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
-                                             required="true" type="text" size="20" placeholder="Portfolio Name"
-                                             requiredMessage="Error: enter portfolio name"
-                                             styleClass="form-control noshadow"/>
-
-                            </p:outputPanel>
-
+                            <!--   USER'S   EMAIL   -->
                             <p:outputLabel for="usEmail" value="Email:"/>
 
                             <p:outputPanel class="input-group">
@@ -49,6 +38,20 @@
 
                             </p:outputPanel>
 
+                            <!--   PORTFOLIO   NAME   -->
+                            <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
+
+                            <p:outputPanel class="input-group">
+
+                                <span class="input-group-addon"><i class="fas fa-tachometer-alt"></i></span>
+                                <p:inputText id="usPortfilioName" value="#{signupBacking.portfolio.name}"
+                                             required="true" type="text" size="20" placeholder="Portfolio Name"
+                                             requiredMessage="Error: enter portfolio name"
+                                             styleClass="form-control noshadow"/>
+
+                            </p:outputPanel>
+
+                            <!--   USER'S   PASSWORD   -->
                             <p:outputLabel for="usPassword" value="Password:"/>
 
                             <p:outputPanel class="input-group">
@@ -64,6 +67,7 @@
 
                             </p:outputPanel>
 
+                            <!--   USER'S   PASSWORD   CONFIRM   -->
                             <p:outputLabel for="usPasswordConfirm" value="Repeat Password:"/>
 
                             <p:outputPanel class="input-group">
