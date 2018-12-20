@@ -18,11 +18,10 @@ public class JPADAOFactory extends AbstractDAOFactory {
         if (emf == null) {
             synchronized (EntityManagerFactory.class) {
                 if (emf == null) {
-                    emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnit");
+                    emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnitJPA");
                 }
             }
         }
-
         return emf;
     }
 
@@ -31,10 +30,10 @@ public class JPADAOFactory extends AbstractDAOFactory {
         try {
             LOGGER.info("EntityManager is created");
             return getInstanceEntityManagerFactory().createEntityManager();
+
         } catch (Exception ex) {
             LOGGER.error("Failed on creating EntityManager" + ex.getMessage());
         }
-
         return null;
     }
 

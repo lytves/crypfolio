@@ -4,10 +4,20 @@ import tk.crypfolio.common.SettingsDB;
 
 public abstract class AbstractDAOFactory {
 
-//    public enum TYPE {JPA,XML}
+    /*
+    * DAOFactory getter
+    * */
+    public static AbstractDAOFactory getDAOFactory(SettingsDB.Type t) {
 
-    //Definimos un getDAO para cada entidad
-    public abstract CoinDAO getCoinDAO();
+        switch (t) {
+            case JPA:
+                return new JPADAOFactory();
+
+            case NoSQL:
+                return new NoSQLDAOFactory();
+        }
+        return null;
+    }
 
     public abstract ItemDAO getItemDAO();
 
@@ -19,15 +29,8 @@ public abstract class AbstractDAOFactory {
 
     public abstract UserWatchCoinDAO getUserWatchCoinDAO();
 
-    @SuppressWarnings("incomplete-switch")
-    public static AbstractDAOFactory getDAOFactory(SettingsDB.Type t){
-
-        switch(t){
-            case JPA:
-                return new JPADAOFactory();
-            /*case XML:
-                return new XMLDAOFactory();*/
-        }
-        return null;
-    }
+    /*
+     * define the getDAO method for all entities here
+     * */
+    public abstract CoinDAO getCoinDAO();
 }

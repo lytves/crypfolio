@@ -4,7 +4,7 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
-    <persistence-unit name="CrypFolioPersistenceUnit">
+    <persistence-unit name="CrypFolioPersistenceUnitJPA">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -17,19 +17,21 @@
 
         <properties>
 
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/crypfolio?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/crypfolio?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
             <!-- ========================================== or org.mariadb.jdbc.Driver -->
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <!-- ========================================== put your userName here -->
             <property name="hibernate.connection.username" value="userName"/>
             <!-- ========================================== put your userPassword here -->
             <property name="hibernate.connection.password" value="userPassword"/>
-            <property name="hibernate.archive.autodetection" value="class"/>
+            <!--<property name="hibernate.archive.autodetection" value="class"/>-->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hbm2ddl.auto" value="update"/>
+            <!--<property name="hbm2ddl.auto" value="update"/>-->
 
         </properties>
+
     </persistence-unit>
 
 </persistence>
