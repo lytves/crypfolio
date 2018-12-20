@@ -105,6 +105,11 @@ public class UserBacking implements Serializable {
                 ""));
     }
 
+    public void doSubmitPortfolioNameEdit(){
+        LOGGER.info("UserBacking.doSubmitPortfolioNameEdit");
+
+        activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+    }
     public void doSubmitSharePortfolioSettings() {
         LOGGER.info("UserBacking.doSubmitSavePortfolioSettings");
 

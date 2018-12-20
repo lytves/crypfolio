@@ -119,7 +119,12 @@
                                              value="#{userBacking.activeUser.user.portfolio.name}"
                                              styleClass="form-control noshadow"
                                              required="true" type="text" placeholder="Portfolio Name"
-                                             requiredMessage="Error: enter name of the portfolio"/>
+                                             requiredMessage="Error: enter name of the portfolio">
+
+                                    <p:ajax event="keyup" process="@this"
+                                            listener="#{userBacking.doSubmitPortfolioNameEdit}"/>
+
+                                </p:inputText>
 
                             </p:outputPanel>
 
