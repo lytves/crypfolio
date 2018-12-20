@@ -125,31 +125,46 @@
 
                             <h:panelGrid styleClass="order-table">
 
+                                <!--   SHARE   PORTFOLIO   -->
                                 <p:outputLabel value="Share Portfolio" for="settings-portfolio-share"/>
 
                                 <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShare}"
                                                id="settings-portfolio-share">
-                                    <p:ajax listener="#{userBacking.doSubmitSharePortfolioSettings}"/>
+                                    <p:ajax listener="#{userBacking.doSubmitSharePortfolioSettings}"
+                                            update="portfolioSettingsForm"/>
                                 </p:inputSwitch>
 
-                                <p:outputLabel value="Show Holdings Amounts" for="settings-portfolio-show-amounts"/>
+                                <p:outputPanel rendered="#{userBacking.activeUser.user.portfolio.isShare}">
 
-                                <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShowAmounts}"
-                                               id="settings-portfolio-show-amounts">
-                                    <p:ajax listener="#{userBacking.doSubmitShowHoldingsAmountsSettings}"/>
-                                </p:inputSwitch>
+                                    <h:panelGrid styleClass="order-table">
+
+                                        <!--   SHOW   HOLDINGS   AMOUNTS   -->
+                                        <p:outputLabel value="Show Holdings Amounts"
+                                                       for="settings-portfolio-show-amounts"/>
+
+                                        <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShowAmounts}"
+                                                       id="settings-portfolio-show-amounts">
+                                            <p:ajax listener="#{userBacking.doSubmitShowHoldingsAmountsSettings}"/>
+                                        </p:inputSwitch>
+
+                                    </h:panelGrid>
+
+                                </p:outputPanel>
 
                             </h:panelGrid>
 
                         </h:panelGrid>
 
-                        <h:panelGrid styleClass="order-table">
+                        <!--   SHARE   LINK   -->
+                        <h:panelGrid styleClass="order-table"
+                                     rendered="#{userBacking.activeUser.user.portfolio.isShare}">
 
                             <p:outputPanel style="display: flex; justify-content: space-evenly;">
 
-                                <p:outputLabel value="Sharing link" for="settings-portfolio-link"
+                                <p:outputLabel value="Sharing link:" for="settings-portfolio-link"
                                                style="line-height: 3;"/>
 
+                                <!--   SHARE   LINK   COPY   BUTTON   -->
                                 <p:commandButton id="btnAjaxCopy" value="Copy" icon="fa fa-copy"/>
 
                                 <pe:clipboard id="clipAjax" trigger="btnAjaxCopy" action="copy"
@@ -164,6 +179,7 @@
 
                             <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
 
+                            <!--   SHARE   LINK   INPUT FORM   -->
                             <p:inputText id="settings-portfolio-link"
                                          value="#{userBacking.getPortfolioSharingLink()}"
                                          styleClass="form-control form-control-right noshadow"
