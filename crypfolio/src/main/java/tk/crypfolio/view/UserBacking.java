@@ -2,11 +2,13 @@ package tk.crypfolio.view;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tk.crypfolio.business.PortfolioService;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.model.UserEntity;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -26,6 +28,10 @@ public class UserBacking implements Serializable {
     // stateless business
     @Inject
     private UserService userService;
+
+    // stateless business
+    @Inject
+    private PortfolioService portfolioService;
 
     private String newPassword;
 
@@ -99,8 +105,31 @@ public class UserBacking implements Serializable {
                 ""));
     }
 
-    public void doSubmitSavePortfolioSettings() {
+    public void doSubmitSharePortfolioSettings() {
         LOGGER.info("UserBacking.doSubmitSavePortfolioSettings");
 
+        activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+    }
+
+    public void doSubmitShowHoldingsAmountsSettings() {
+        LOGGER.info("UserBacking.doSubmitSavePortfolioSettings");
+
+        activeUser.setPortfolio(portfolioService.updatePortfolioDB(activeUser.getUser().getPortfolio()));
+    }
+
+    public void clipboardListener() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Portfolio sharing link has been copied to clipboard!",
+                ""));
+    }
+
+    public String getPortfolioSharingLink() {
+        ExternalContext ectx = FacesContext.getCurrentInstance().getExternalContext();
+
+        return ectx.getRequestScheme()
+                + "://" + ectx.getRequestServerName()
+                + ":" + ectx.getRequestServerPort()
+                + ectx.getRequestContextPath()
+                + "/" + activeUser.getUser().getPortfolio().getShareLink();
     }
 }

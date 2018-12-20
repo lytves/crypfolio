@@ -2,7 +2,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
     <!--    =====================   modal window User's Settings   -->
     <p:dialog header="Settings" id="dlgSettings" widgetVar="dlgSettings" modal="true"
@@ -122,47 +123,54 @@
 
                             </p:outputPanel>
 
-                            <p:outputLabel value="Share Portfolio" for="settings-portfolio-share"/>
+                            <h:panelGrid styleClass="order-table">
 
-                            <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShare}"
-                                           id="settings-portfolio-share">
-                                <p:ajax listener="#{userBacking.doSubmitSavePortfolioSettings}"/>
-                            </p:inputSwitch>
+                                <p:outputLabel value="Share Portfolio" for="settings-portfolio-share"/>
 
-                            <p:outputLabel value="Show Holdings Amounts" for="settings-portfolio-show-amounts"/>
+                                <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShare}"
+                                               id="settings-portfolio-share">
+                                    <p:ajax listener="#{userBacking.doSubmitSharePortfolioSettings}"/>
+                                </p:inputSwitch>
 
-                            <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShowAmounts}"
-                                           id="settings-portfolio-show-amounts">
-                                <p:ajax listener="#{userBacking.doSubmitSavePortfolioSettings}"/>
-                            </p:inputSwitch>
+                                <p:outputLabel value="Show Holdings Amounts" for="settings-portfolio-show-amounts"/>
+
+                                <p:inputSwitch value="#{userBacking.activeUser.user.portfolio.isShowAmounts}"
+                                               id="settings-portfolio-show-amounts">
+                                    <p:ajax listener="#{userBacking.doSubmitShowHoldingsAmountsSettings}"/>
+                                </p:inputSwitch>
+
+                            </h:panelGrid>
 
                         </h:panelGrid>
 
-                        <h:panelGrid styleClass="order-table" id="ttt">
+                        <h:panelGrid styleClass="order-table">
 
-
-                            <p:outputPanel style="display: flex;">
+                            <p:outputPanel style="display: flex; justify-content: space-evenly;">
 
                                 <p:outputLabel value="Sharing link" for="settings-portfolio-link"
                                                style="line-height: 3;"/>
 
+                                <p:commandButton id="btnAjaxCopy" value="Copy" icon="fa fa-copy"/>
 
-                                <p:commandButton action="#{userBacking.doSubmitSavePortfolioSettings}"
-                                                 value="Copy"
-                                                 styleClass="button-center"
-                                                 update="growl">
+                                <pe:clipboard id="clipAjax" trigger="btnAjaxCopy" action="copy"
+                                              text="#{userBacking.getPortfolioSharingLink()}">
 
-                                </p:commandButton>
+                                    <p:ajax event="success" listener="#{userBacking.clipboardListener}"
+                                            update="growl"/>
+
+                                </pe:clipboard>
+
                             </p:outputPanel>
 
+                            <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
+
                             <p:inputText id="settings-portfolio-link"
-                                         value="#{userBacking.activeUser.user.portfolio.shareLink}"
+                                         value="#{userBacking.getPortfolioSharingLink()}"
                                          styleClass="form-control form-control-right noshadow"
                                          style="border-radius:3px !important"
-                                         readonly="true"/>
+                                         readonly="true" disabled="true"/>
 
                         </h:panelGrid>
-
 
                     </h:form>
 
@@ -170,13 +178,11 @@
 
             </p:tabView>
 
-
         </p:outputPanel>
 
         <p:ajax event="close" listener="#{userBacking.settingsFormReset}" update="userSettingsPanel"
                 resetValues="true"/>
 
     </p:dialog>
-
 
 </ui:composition>
