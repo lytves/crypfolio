@@ -19,6 +19,9 @@ public abstract class AbstractDAOFactory {
         return null;
     }
 
+    /*
+     * define the getDAO method for all entities here
+     * */
     public abstract ItemDAO getItemDAO();
 
     public abstract PortfolioDAO getPortfolioDAO();
@@ -29,8 +32,5 @@ public abstract class AbstractDAOFactory {
 
     public abstract UserWatchCoinDAO getUserWatchCoinDAO();
 
-    /*
-     * define the getDAO method for all entities here
-     * */
     public abstract CoinDAO getCoinDAO();
 }
