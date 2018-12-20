@@ -65,6 +65,22 @@
             <version>6.2</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.primefaces.extensions/primefaces-extensions -->
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>6.2.10</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/javax.faces/javax.faces-api -->
         <dependency>
             <groupId>javax.faces</groupId>
