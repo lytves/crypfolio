@@ -476,6 +476,24 @@ body .ui-buttonset .ui-button {
     background-color: black !important;
 }
 
+/* Overlays */
+.ui-widget-overlay {
+    background: #000000;
+    opacity: .5;
+    filter: Alpha(Opacity=50);
+}
+
+.ui-widget-shadow {
+    margin: -7px 0 0 -7px;
+    padding: 7px;
+    background: #000000;
+    opacity: .30;
+    filter: Alpha(Opacity=30);
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
 /*******************/
 /*      input    */
 /*******************/
