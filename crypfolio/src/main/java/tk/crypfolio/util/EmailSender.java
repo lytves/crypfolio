@@ -1,9 +1,10 @@
 package tk.crypfolio.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.common.Settings;
 
 import javax.ejb.Asynchronous;
-import javax.ejb.Singleton;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -11,13 +12,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-@Singleton
 public abstract class EmailSender {
 
-    private static final Logger logger = Logger.getLogger(EmailSender.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(EmailSender.class);
 
     /*
      * Outgoing Mail (SMTP) Server
@@ -50,7 +48,7 @@ public abstract class EmailSender {
 
                 "<p>For security reasons, this link will expire in 30 minutes.</p>";
 
-        logger.log(Level.INFO, "Start sending sendConfirmationEmail()..");
+        LOGGER.info("Start sending sendConfirmationEmail()..");
 
         sendEmail(emailRecipient, subject, text);
     }
@@ -77,7 +75,7 @@ public abstract class EmailSender {
 
                 "<p>For security reasons, this link will expire in 30 minutes.</p>";
 
-        logger.log(Level.INFO, "Start sending sendResetPasswordEmail()..");
+        LOGGER.info("Start sending sendResetPasswordEmail()..");
 
         sendEmail(emailRecipient, subject, text);
     }
@@ -91,18 +89,17 @@ public abstract class EmailSender {
         */
 
         // Step1
-        logger.log(Level.INFO, "1st ===> setup Mail Server Properties..");
+        LOGGER.info("1st ===> setup Mail Server Properties..");
 
         Properties mailServerProperties = System.getProperties();
         mailServerProperties.put("mail.smtp.port", "587");
         mailServerProperties.put("mail.smtp.auth", "true");
         mailServerProperties.put("mail.smtp.starttls.enable", "true");
 
-        logger.log(Level.INFO, "Mail Server Properties have been setup successfully..");
-
+        LOGGER.info( "Mail Server Properties have been setup successfully..");
 
         // Step2
-        logger.log(Level.INFO, "2nd ===> get Mail Session..");
+        LOGGER.info("2nd ===> get Mail Session..");
 
         Session getMailSession = Session.getDefaultInstance(mailServerProperties, null);
         MimeMessage generateMailMessage = new MimeMessage(getMailSession);
@@ -112,39 +109,38 @@ public abstract class EmailSender {
             generateMailMessage.setSubject(subject);
             generateMailMessage.setContent(text, "text/html");
 
-        } catch (MessagingException e) {
-            logger.log(Level.WARNING, e.getMessage());
+        } catch (MessagingException ex) {
+            LOGGER.warn(ex.getMessage());
         }
 
-        logger.log(Level.INFO, "Mail Session has been created successfully..");
-
+        LOGGER.info( "Mail Session has been created successfully..");
 
         // Step3
-        logger.log(Level.INFO, "3rd ===> Get Session and Send mail");
+        LOGGER.info("3rd ===> Get Session and Send mail");
         Transport transport = null;
         try {
 
             transport = getMailSession.getTransport("smtp");
+
             // Enter your correct gmail UserID and Password
             // if you have 2FA enabled then provide App Specific Password
             transport.connect("smtp.gmail.com", Settings.ADMIN_EMAIL, Settings.ADMIN_EMAIL_PASSWORD);
             transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 
-            logger.log(Level.INFO, "Email was sent successfully!!");
+            LOGGER.info("Email was sent successfully!!");
 
-        } catch (MessagingException e) {
+        } catch (MessagingException ex) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(ex.getMessage());
 
         } finally {
 
             try {
-
                 assert transport != null;
                 transport.close();
 
-            } catch (MessagingException e) {
-                logger.log(Level.WARNING, e.getMessage());
+            } catch (MessagingException ex) {
+                LOGGER.warn(ex.getMessage());
             }
         }
     }

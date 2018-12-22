@@ -32,7 +32,7 @@ public class JPADAOFactory extends AbstractDAOFactory {
             return getInstanceEntityManagerFactory().createEntityManager();
 
         } catch (Exception ex) {
-            LOGGER.error("Failed on creating EntityManager" + ex.getMessage());
+            LOGGER.error("Failed on creating EntityManager: " + ex.getMessage());
         }
         return null;
     }

@@ -21,13 +21,11 @@
     </servlet-mapping>
 
     <!-- Application initializing servlet -->
-
     <listener>
         <listener-class>tk.crypfolio.init.AppInitServlet</listener-class>
     </listener>
 
     <!-- Welcome file and error pages -->
-
     <welcome-file-list>
         <welcome-file>/faces/login.xhtml</welcome-file>
     </welcome-file-list>
@@ -60,7 +58,6 @@
     </context-param>
 
     <!-- Session configuration -->
-
     <session-config>
 
         <session-timeout>0</session-timeout>
@@ -71,7 +68,6 @@
         <tracking-mode>COOKIE</tracking-mode> <!-- This disables URL rewriting. -->
 
     </session-config>
-
 
     <mime-mapping>
         <extension>ico</extension>
