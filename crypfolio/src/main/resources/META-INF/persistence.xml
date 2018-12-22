@@ -4,6 +4,7 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
+    <!--   @@@   HIBERNATE   ORM   JPA   PERSISTENCE   UNIT   @@@   -->
     <persistence-unit name="CrypFolioPersistenceUnitJPA">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
