@@ -13,9 +13,9 @@
                   hideEffect="fade" height="91%" width="100%"
                   class="modal-window-item-details">
 
-            <div class="ui-g" style="border: 1px solid green;">
+            <div class="ui-g">
 
-                <div class="ui-g-12 ui-md-6 ui-lg-3" style="border: 1px solid red; padding: 0 !important;">
+                <div class="ui-g-12 ui-md-6 ui-lg-3" style="padding: 0 !important;">
 
                     <h:form id="formItemDetails">
 
@@ -51,7 +51,7 @@
                                     <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
                                                   value="Amount:"/>
                                 </p:column>
-                                <p:column>
+                                <p:column style="font-weight: bold;">
                                     <h:outputText value="#{itemBacking.selectedItem.amount}">
                                         <f:convertNumber type="number" pattern="###,###.########"
                                                          locale="en_US"/>
@@ -97,7 +97,7 @@
                                     <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
                                                   value="Market Value:"/>
                                 </p:column>
-                                <p:column>
+                                <p:column style="font-weight: bold;">
                                     <h:outputText value="#{portfolioBacking.roundingForView(
                                             portfolioBacking.getItemMarketValue(itemBacking.selectedItem),
                                             itemBacking.selectedItem.showedCurrency)}">
@@ -154,7 +154,7 @@
                                     <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
                                                   value="Market Price:"/>
                                 </p:column>
-                                <p:column>
+                                <p:column style="font-weight: bold;">
                                     <h:outputText value="#{portfolioBacking.roundingForView(
                                             portfolioBacking.getCoinPrice(itemBacking.selectedItem.coin, itemBacking.selectedItem.showedCurrency),
                                              itemBacking.selectedItem.showedCurrency)}">
@@ -302,39 +302,40 @@
 
                 </div>
 
-                <div class="ui-g-12 ui-md-6 ui-lg-9" style="border: 1px solid red; padding: 0 !important;">
+                <div class="ui-g-12 ui-md-6 ui-lg-9" style="padding: 0 !important;">
 
                     <h:graphicImage value="#{resource['images/trading-view-widget-example.png']}"
-                                    style="display: block; margin: auto; height: 400px;"/>
+                                    style="display: block; margin: auto; height: 320px;"/>
 
                     <!-- TradingView Widget BEGIN -->
-                    <!--                                <div class="tradingview-widget-container">
-                                                        <div id="tradingview_94bde"></div>
-                                                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                                                        <script type="text/javascript">
-                                                            new TradingView.widget(
-                                                                {
-                                                                    "width": 640,
-                                                                    "height": 400,
-                                                                    "symbol": "NASDAQ:AAPL",
-                                                                    "interval": "D",
-                                                                    "timezone": "Etc/UTC",
-                                                                    "theme": "Light",
-                                                                    "style": "1",
-                                                                    "locale": "en",
-                                                                    "toolbar_bg": "#f1f3f6",
-                                                                    "enable_publishing": false,
-                                                                    "allow_symbol_change": true,
-                                                                    "container_id": "tradingview_94bde"
-                                                                }
-                                                            );
-                                                        </script>
-                                                    </div>-->
+                    <!--                    <div class="tradingview-widget-container">
+                                            <div id="tradingview_94bde"></div>
+                                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                                            <script type="text/javascript">
+                                                var a = #{itemBacking.selectedItem.coin.symbol}
+                                                    new TradingView.widget(
+                                                        {
+                                                            "width": 640,
+                                                            "height": 400,
+                                                            "symbol": "NASDAQ:AAPL",
+                                                            "interval": "D",
+                                                            "timezone": "Etc/UTC",
+                                                            "theme": "Light",
+                                                            "style": "1",
+                                                            "locale": "en",
+                                                            "toolbar_bg": "#f1f3f6",
+                                                            "enable_publishing": false,
+                                                            "allow_symbol_change": true,
+                                                            "container_id": "tradingview_94bde"
+                                                        }
+                                                    );
+                                            </script>
+                                        </div>-->
                     <!-- TradingView Widget END -->
 
                     <h:form id="formItemTransactions">
 
-                        <p:panelGrid style="margin:0 auto; width:100%;">
+                        <p:panelGrid styleClass="panelgrid-items-details" style="margin:0 auto; width:100%;">
 
                             <!--   @@@@@@@@@@   TRANSACTIONS   -->
                             <p:row>
