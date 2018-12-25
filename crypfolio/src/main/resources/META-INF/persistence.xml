@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
 
     <!--   @@@   HIBERNATE   ORM   JPA   PERSISTENCE   UNIT   @@@   -->
     <persistence-unit name="CrypFolioPersistenceUnitJPA">
@@ -29,7 +29,7 @@
             <!--<property name="hibernate.archive.autodetection" value="class"/>-->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <!--<property name="hbm2ddl.auto" value="update"/>-->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 
         </properties>
 

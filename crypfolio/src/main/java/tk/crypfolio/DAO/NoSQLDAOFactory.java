@@ -7,9 +7,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class JPADAOFactory extends AbstractDAOFactory {
+public class NoSQLDAOFactory extends AbstractDAOFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger(JPADAOFactory.class);
+    private static final Logger LOGGER = LogManager.getLogger(NoSQLDAOFactory.class);
 
     private volatile static EntityManagerFactory emf;
 
@@ -18,7 +18,7 @@ public class JPADAOFactory extends AbstractDAOFactory {
         if (emf == null) {
             synchronized (EntityManagerFactory.class) {
                 if (emf == null) {
-                    emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnitJPA");
+                    emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnitNoSQL");
                 }
             }
         }
