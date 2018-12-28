@@ -1,9 +1,18 @@
 # Crypfolio
 
-*Trabajo Fin de Máster
-Universidad de Valencia, Ingeniería de Servicios y Aplicaciones Web 2017-18*
-
 **Is under development...**
+
+*Trabajo Fin de Máster, Universidad de Valencia, 
+Ingeniería de Servicios y Aplicaciones Web (ISAW) 2018-19*
+
+### Project goal:
+to compare project performance using two different mechanisms
+of storage and retrieval of data like Relational database
+(**MySQL**) and Non Relational Database (**MongoDB**)
+and two different realizations of the frontend 
+frameworks of the application, like **Primefaces** and (*Vue.js?*)
+
+-----
 
 This is a simple portfolio of digital cryptocoins and tokens. You can open positions 
 (even add your previously made transactions) to control your investments and observe 
@@ -22,13 +31,14 @@ Is used data from officials APIs of the
 historical prices of cryptocoins from 
 [CryptoCompare.com](https://min-api.cryptocompare.com/ "CryptoCompare.com")
 
+
 -----
 
 **Conceptual Data Model:**
 
 ![Conceptual Data Model](database/CrypFolio-Conceptual_Model_UML.png "Conceptual Data Model")
 
-**Logical Data Model:**
+**MySQL Logical Data Model:**
 
 ![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
 
@@ -41,6 +51,8 @@ historical prices of cryptocoins from
 ![Reset Password Page](images/password-reset-page.png)
 
 ![Portfolio Page](images/portfolio.png)
+
+![Item detail](images/item-detail.png)
 
 ![Portfolio Page, add transaction](images/add-transaction.png)
 
