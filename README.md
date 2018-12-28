@@ -54,6 +54,8 @@ historical prices of cryptocoins from
 
 ![Item detail](images/item-detail.png)
 
+![Item detail-2](images/item-detail-page2.png)
+
 ![Portfolio Page, add transaction](images/add-transaction.png)
 
 ![Portfolio Page, add transaction](images/add-transaction-2.png)
