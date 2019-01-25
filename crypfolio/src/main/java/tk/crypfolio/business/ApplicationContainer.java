@@ -7,6 +7,7 @@ import tk.crypfolio.model.CoinEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,8 @@ public class ApplicationContainer {
 
     private static final Logger LOGGER = LogManager.getLogger(ApplicationContainer.class);
 
-    private List<CoinEntity> allCoinsListing;
+    // best java practice - is preferable to return empty Collection, to avoid NullPointerException
+    private List<CoinEntity> allCoinsListing = new ArrayList<>();
 
     private Map<Long, Map<String, Double>> allCoinsByTickerInUsd = new HashMap<>();
 
