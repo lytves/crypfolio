@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO create some general DAO Exception functions, may be should use my own exception class
@@ -46,16 +47,18 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
     @Override
     public List<T> findAll() {
 
+        List<T> resultList = new ArrayList<T>();
+
         try {
 
             Query q = em.createQuery("from " + this.entityClass.getName());
-            return (List<T>) q.getResultList();
+            resultList = (List<T>) q.getResultList();
 
         } catch (Exception e) {
 
             LOGGER.warn(e.getMessage());
         }
-        return null;
+        return resultList;
     }
 
     @Override
