@@ -84,6 +84,7 @@ modules.xml
 ### Java ###
 # Compiled class file
 *.class
+classes/
 
 # Log file
 *.log
@@ -109,5 +110,16 @@ hs_err_pid*
 ### Java-Web ###
 ## ignoring target file
 target/
+
+### Windows ###
+# Windows image file caches
+Thumbs.db
+
+ # Folder config file
+Desktop.ini
+
+### OSX ###
+ .DS_Store
+.svn
 
 # End of https://www.gitignore.io/api/java,intellij,java-web
