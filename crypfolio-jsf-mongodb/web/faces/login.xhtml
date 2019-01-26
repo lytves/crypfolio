@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/templates/general-layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <f:metadata>
+        <f:viewAction action="#{controller.allowLoadLoginPage}"/>
+    </f:metadata>
+
+    <ui:define name="title">CrypFolio - Login page</ui:define>
+
+    <ui:define name="content">
+
+        <div class="forms-wrapper">
+
+            <p:growl id="growl" showDetail="false" life="15000"/>
+
+            <p:outputPanel id="loginOutputPanel">
+
+                <p:panel header="Login to portfolio">
+
+                    <h:form id="loginForm">
+
+                        <h:panelGrid styleClass="order-table">
+
+                            <!--   USER'S   EMAIL   -->
+                            <p:outputLabel for="usEmail" value="Email:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                <p:inputText id="usEmail" value="#{loginBacking.user.email}"
+                                             styleClass="form-control noshadow"
+                                             required="true" type="email" placeholder="Email"
+                                             requiredMessage="Error: enter your email"/>
+                            </p:outputPanel>
+
+                            <!--   USER'S   PASSWORD   -->
+                            <p:outputLabel for="password" value="Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:inputText id="password" value="#{loginBacking.password}"
+                                             autocomplete="off"
+                                             styleClass="form-control noshadow"
+                                             required="true" type="password" placeholder="Password"
+                                             requiredMessage="Error: enter your password"/>
+                            </p:outputPanel>
+
+                            <!--   RESET   PASSWORD   LINK   -->
+                            <h:link outcome="forgot-password" styleClass="upp-case" value="Reset password"/>
+
+                            <h:outputText styleClass="span-10px-height"/>
+
+                            <p:commandButton action="#{loginBacking.login}"
+                                             value="Login"
+                                             styleClass="button-center"
+                                             update="loginOutputPanel growl">
+
+                                <p:resetInput target="loginForm"/>
+
+                            </p:commandButton>
+
+                        </h:panelGrid>
+
+                    </h:form>
+
+                    <!-- notification message is showed ONLY if user haven't confirmed his email yet-->
+                    <h:form rendered="#{loginBacking.showEmailResendLink}">
+
+                            <hr/>
+
+                            <h:outputText value="Your email address hasn't been confirmed yet."
+                                          style="text-align: center; display: block; font-size: 0.9em;"/>
+
+                            <p:commandButton value="Resend email"
+                                             styleClass="button-center"
+                                             update="loginOutputPanel"
+                                             onclick="myCommand();">
+
+                            </p:commandButton>
+
+                        <p:remoteCommand name="myCommand" actionListener="#{loginBacking.resendEmail}"
+                                         style="display: none;" update="growl"/>
+
+                    </h:form>
+
+                </p:panel>
+
+            </p:outputPanel>
+
+            <h:panelGrid styleClass="added-links">
+                <h:link outcome="signup" styleClass="upp-case" value="Create an account"/>
+            </h:panelGrid>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

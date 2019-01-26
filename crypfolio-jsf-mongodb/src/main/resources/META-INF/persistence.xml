@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <!--   @@@   MongoDB   HIBERNATE   OGM   PERSISTENCE   UNIT   @@@   -->
+    <persistence-unit name="CrypFolioPersistenceUnitNoSQL" transaction-type="JTA">
+
+        <provider>org.hibernate.ogm.jpa.HibernateOgmPersistence</provider>
+
+        <class>tk.crypfolio.model.CoinEntity</class>
+        <class>tk.crypfolio.model.ItemEntity</class>
+        <class>tk.crypfolio.model.PortfolioEntity</class>
+        <class>tk.crypfolio.model.TransactionEntity</class>
+        <class>tk.crypfolio.model.UserEntity</class>
+        <class>tk.crypfolio.model.UserWatchCoinEntity</class>
+
+        <properties>
+
+            <property name="hibernate.ogm.datastore.provider" value="mongodb"/>
+            <property name="hibernate.ogm.datastore.host" value="localhost:27017"/>
+            <property name="hibernate.ogm.datastore.database" value="crypfolio"/>
+            <property name="hibernate.ogm.datastore.create_database" value="true"/>
+            <!-- hibernate.search.lucene_version Index format compatibility
+            https://docs.jboss.org/hibernate/search/5.10/reference/en-US/html_single/#_index_format_compatibility -->
+            <property name="hibernate.search.lucene_version" value="LATEST"/>
+            <!-- to avoid error-Exception: "Work Type  org.hibernate.search.backend.AddLuceneWork: org.apache.lucene.store.LockObtainFailedException: Lock held by this virtual machine
+             Couldn't open the IndexWriter because of previous error: operation skipped, index ouf of sync!"
+             manual: http://docs.jboss.org/hibernate/search/4.4/reference/en-US/html_single/#search-configuration-directory-lockfactories -->
+            <property name="hibernate.search.default.locking_strategy" value="single"/>
+
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div class="menu-account right">
+
+        <h:form>
+
+            <i class="fas fa-user-circle menu-account-img blue"></i>
+
+            <p:menuButton value="#{userBacking.activeUser.user.email}" iconPos="right">
+
+                <p:menuitem value="Settings"
+                            onclick="PF('dlgSettings').show();"
+                            icon="menubutton1"/>
+
+                <p:menuitem value="Friends"
+                            onclick="PF('dlgFriends').show();"
+                            icon="menubutton2"/>
+
+                <p:menuitem value="Logout"
+                            action="#{logoutBacking.logout}"
+                            icon="menubutton3"/>
+
+            </p:menuButton>
+
+        </h:form>
+
+    </div>
+
+</ui:composition>

@@ -1,0 +1,692 @@
+@import url('https://fonts.googleapis.com/css?family=Jua|Lobster|Roboto+Mono');
+
+html {
+    background-color: #ffffff;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 13px;
+    color: #000000;
+    margin: 0 auto;
+    min-width: 800px;
+    max-width: 1300px;
+    width: 100%;
+}
+
+header, section, article, aside, footer {
+    /*display: block;*/
+}
+
+a, a:visited {
+    color: #0093e4;
+    text-decoration: none;
+}
+
+.main-wrapper {
+    margin: 10px 0;
+}
+
+.login-logo {
+    padding: 30px 0 30px 0;
+    margin: auto;
+    width: 384px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.menu-account {
+    padding: 5px 5px 0 0;
+}
+
+.menu-account-img {
+    margin-right: 5px;
+    vertical-align: middle;
+    font-size: 2em;
+}
+
+.forms-wrapper {
+    margin: auto;
+    width: 400px;
+    line-height: 2.5;
+}
+
+.upp-case {
+    text-transform: uppercase;
+}
+
+.hidden {
+    display: none;
+}
+
+.red {
+    color: red !important;
+}
+
+.red-background {
+    background: #e4685d !important;
+}
+
+.green {
+    color: green !important;
+}
+
+.green-background {
+    background: #77b55a !important;
+}
+
+.blue {
+    color: #0093e4;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.panelGridCenter tr {
+    border-bottom-width: 2px !important;
+    border-bottom-color: #f2f5f9;
+}
+
+.panelGridCenter .td-border-right {
+    border-right: 2px solid #f2f5f9 !important;
+}
+
+.panelGridTransparent td, .panelGridTransparent tr {
+    background-color: transparent;
+    border: 0 !important;
+}
+
+.symbol-image-32px {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+.row-expansion-currency {
+    display: block;
+    height: 30px;
+    padding: 10px 0;
+    background-color: #f2f5f9;
+}
+
+#mainTabView\:portfolioMainData .title {
+    margin-left: 10px;
+    color: #a8a8a8;
+}
+
+.order-table {
+    width: 100%;
+}
+
+.added-links {
+    margin: auto;
+    line-height: 1.5;
+    margin-top: 10px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.isaw {
+    font-family: Jua, monospace !important;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.menubutton1, .menubutton2, .menubutton3 {
+    background-image: url("#{resource['images/id-card-regular.svg']}") !important;
+    height: 16px;
+    width: 16px;
+    margin-right: 10px;
+}
+
+.menubutton2 {
+    background-image: url("#{resource['images/star-solid.svg']}") !important;
+}
+
+.menubutton3 {
+    background-image: url("#{resource['images/sign-out-alt-solid.svg']}") !important;
+}
+
+.span-10px-height {
+    height: 10px;
+    display: block;
+}
+
+.coin-item-name-autocompleted {
+    margin: 3px 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.modal-window {
+    width: 350px !important;
+    margin-top: 100px;
+}
+
+.modal-window-item-details {
+    width: 100% !important;
+    height: 92% !important;
+}
+
+.panelgrid-items-details .item-details-td {
+    color: #a8a8a8;
+}
+
+td.flex {
+    display: flex;
+}
+
+.flex-space-between {
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.portfolio-currency {
+    border-radius: 3px !important;
+    line-height: normal;
+    margin-left: 10px;
+}
+
+.buy-sell-image {
+    padding: 5px;
+    font-size: 1.5em;
+    color: green;
+    vertical-align: inherit;
+}
+
+/******************     Primefaces UI Styles      **********************/
+.ui-widget {
+    font-family: 'Roboto Mono', monospace !important;
+}
+
+.ui-selectonemenu {
+    width: 84% !important;
+}
+
+.ui-selectonemenu-label {
+    width: 100% !important;
+}
+
+.ui-datatable * {
+    border-width: 0 !important;
+}
+
+.ui-widget-content {
+    background: white;
+}
+
+.ui-datatable-even, .ui-datatable-odd {
+    background: white;
+
+}
+
+.ui-state-default {
+    background: #f5f7f8;
+    color: #333;
+}
+
+.ui-state-active, .ui-sortable-column:hover {
+    background: #ffda62;
+}
+
+.ui-separator {
+    height: 4px;
+}
+
+.ui-panelgrid .ui-widget {
+    width: 100%;
+}
+
+.ui-button.ui-widget {
+    width: auto;
+}
+
+.ui-expanded-row-content td {
+    padding: 0 !important;
+}
+
+/* to fix dataTable - stickyHeader="true" problem */
+.myTabview.ui-tabs {
+    position: static;
+}
+
+body .ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
+    border-top: 4px solid #0093e4;
+}
+
+.ui-widget-header {
+    background: #eee !important;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 0.5em 0.5em !important;
+}
+
+.ui-g-2.p5-20px {
+    width: 20% !important;
+    padding: 5px;
+}
+
+/*???? why was it used ????*/
+/*.ui-dialog-content {
+    width: 90% !important;
+}*/
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {
+    background-color: #0093e4 !important;
+}
+
+.ui-outputlabel-rfi {
+    color: #0093e4;
+}
+
+.ui-autocomplete-panel td {
+    padding: 4px !important;
+    border-style: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+    font-weight: bold;
+}
+
+.ui-autocomplete-moretext {
+    display: none;
+}
+
+.ui-accordion .ui-accordion-content {
+    padding: 0 !important;
+}
+
+.ui-datatable .ui-row-toggler {
+    background-image: url("#{resource['images/arrow-right-solid.svg']}") !important;
+    background-position: 0 0;
+}
+
+.ui-datatable .ui-row-toggler.ui-icon-circle-triangle-s {
+    background-image: url("#{resource['images/arrow-down-solid.svg']}") !important;
+    background-position: 0 0;
+}
+
+.ui-datatable-selectable.ui-state-highlight {
+    background: unset !important;
+    border: 0;
+    /*background-color: red !important;*/
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+    color: inherit;
+}
+
+.ui-datatable-selectable.ui-state-hover, .ui-datatable-selectable.ui-state-highlight {
+    background-color: #f2f5f9 !important;
+    border-bottom-width: 2px !important;
+    border-bottom-color: #f2f5f9 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.transaction-menu .ui-icon {
+    display: none;
+}
+
+.transaction-menu .ui-button.ui-widget {
+    width: 100%;
+}
+
+/* stickyHeader appears over modal dialog sometimes */
+.ui-datatable-sticky {
+    z-index: 1001 !important;
+}
+
+/*******************/
+/*      buttons    */
+/*******************/
+.ui-button,
+.ui-button span,
+button.ui-button.ui-state-default span,
+.ui-button.ui-state-default span {
+    font-weight: 500;
+}
+
+.ui-button {
+    /*padding: 4px 12px;*/
+/ / display: block !important;
+/ / margin: auto !important;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.74857143;
+    text-align: center;
+    /* white-space: nowrap;*/
+    white-space: normal;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    text-shadow: none !important;
+    color: #444444;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+    overflow: hidden;
+
+    border: 2px solid #0093e4 !important;
+    background: #ffffff !important;
+}
+
+.ui-button.button-center {
+    display: block !important;
+    margin: auto !important;
+}
+
+.ui-button:hover {
+    background: #0093e4 !important;
+    color: #ffffff;
+}
+
+body .ui-buttonset .ui-state-active {
+    background: #0093e4 !important;
+    color: #ffffff;
+}
+
+body .ui-buttonset .ui-button {
+    margin-left: 10px;
+}
+
+.ui-buttonset {
+    margin-right: 0 !important;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    text-align: center !important;
+}
+
+/*.ui-selectonebutton {*/
+/*display: inline-flex !important;*/
+/*}*/
+
+/*.select-currency-button .ui-button-text-only {*/
+/*margin-right: 10px !important;*/
+/*}*/
+
+#ajaxStatus {
+    background: transparent;
+    border: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+#ajaxStatus .ui-dialog-content {
+    width: 100%;
+}
+
+#ajaxStatus .ui-dialog .ui-dialog-content {
+    padding: 1em;
+}
+
+.noHeader.ui-datatable table thead tr {
+    display: none;
+}
+
+/*.ui-button-text-only .ui-button-text{*/
+/*padding: 0 !important;*/
+/*}*/
+/*******************/
+/*      growl    */
+/*******************/
+.ui-growl {
+    z-index: 9999 !important;
+}
+
+.ui-growl .ui-growl-info {
+    background-color: green !important;
+}
+
+.ui-growl .ui-growl-error {
+    background-color: red !important;
+}
+
+.ui-growl .ui-growl-warn {
+    background-color: orange !important;
+}
+
+.ui-growl .ui-growl-fatal {
+    background-color: black !important;
+}
+
+/* Overlays */
+.ui-widget-overlay {
+    background: #000000;
+    opacity: .5;
+    filter: Alpha(Opacity=50);
+}
+
+.ui-widget-shadow {
+    margin: -7px 0 0 -7px;
+    padding: 7px;
+    background: #000000;
+    opacity: .30;
+    filter: Alpha(Opacity=30);
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+/*******************/
+/*      input    */
+/*******************/
+.ui-inputfield {
+    display: block !important;
+    padding: .3em 1em !important;
+    width: 90%;
+}
+
+.ui-inputfield.noshadow {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.input-group {
+    position: relative;
+    display: table;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.input-group .input-group-addon {
+    border-color: #d2d6de;
+}
+
+.input-group-addon {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: table-cell;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.input-group-addon.input-group-addon-right {
+    border: 1px solid #ccc;
+    /*border-left: 0;*/
+    border-radius: 0 3px 3px 0;
+    width: auto;
+    line-height: inherit;
+}
+
+.form-control, .form-control.ui-inputfield, .form-control .ui-inputfield {
+    width: 100% !important;
+    height: 34px;
+    border-radius: 0 3px 3px 0;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    box-sizing: border-box;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.form-control.form-control-right .ui-inputfield {
+    border-radius: 3px 0 0 3px;
+    border-right: 0;
+}
+
+.form-control.form-control-center .ui-inputfield {
+    border-radius: 3px;
+}
+
+.ui-inputtextarea.form-control {
+    resize: none !important;
+    height: auto !important;
+    border-radius: 0 0 3px 3px;
+}
+
+.selectonemenu-right {
+    width: auto !important;
+    height: auto !important;
+    min-width: unset !important;
+    padding-right: 1.7em !important;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    border-left: 0 !important;
+    border-radius: 0 3px 3px 0 !important;
+}
+
+.selectonemenu-right .ui-selectonemenu-label {
+    border-radius: 0 !important;
+    border-left: 1px solid #d2d6de !important;
+}
+
+.selectonemenu-right .ui-inputfield {
+    padding: 6px 7px 7px !important;
+    background-color: #eee !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.selectonemenu-right .ui-selectonemenu-trigger {
+    background: none;
+    background-color: #eee !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items {
+    padding: .2em 0 !important;
+    font-weight: bold;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-selectonemenu-item {
+    border-radius: 0 !important;
+    background: none;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-state-highlight,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-state-highlight {
+    color: #4f4f4f;
+    background: url("#{resource['images/check-solid.svg']}") 35px 0 no-repeat !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-price-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover,
+#mainTabView\:porfolio-form\:portfolio-currency_items.ui-selectonemenu-items .ui-selectonemenu-item:hover {
+    background-color: #0093e4 !important;
+    color: #ffffff;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type .ui-button-text.ui-c,
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-market-price .ui-button-text.ui-c {
+    color: #555;
+    padding: 0 0.5em;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(1) {
+    background: #77b55a !important;
+    border-color: #77b55a !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(2) {
+    background: #e4685d !important;
+    border-color: #e4685d !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:nth-child(2) .ui-button-text.ui-c {
+    padding: 0 0.2em;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-type div:not(.ui-state-active) {
+    opacity: 0.3;
+}
+
+mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount_input {
+    border-right: 0 !important;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount-sell-all .ui-button-text.ui-c {
+    -webkit-appearance: none !important;
+    text-align: right;
+    border-left: 0;
+    margin: 0 !important;
+    padding: 0.3em !important;
+    background: white;
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount-sell-all {
+    border: 1px solid #a8a8a8 !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    color: #555 !important
+}
+
+#mainTabView\:formPortfolioAddItem-transaction\:add-transaction-amount-sell-all .ui-button:hover {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.buy-sell-type {
+    line-height: 1.7;
+    font-weight: 500;
+    border-radius: 3px;
+    padding: 0 0.5em;
+    margin-left: 10px;
+}

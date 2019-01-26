@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel id="archivePanel">
+
+        <!-- The archive items table -->
+        <p:dataTable value="#{portfolioBacking.archivedItems}"
+                     var="itemEntity" styleClass="panelGridCenter"
+                     stickyHeader="true"
+                     id="archiveDataTableWV" widgetVar="archiveDataTableWV"
+                     sortBy="#{itemEntity.id}">
+
+            <ui:include src="/faces/items-list.xhtml"/>
+
+        </p:dataTable>
+
+    </p:outputPanel>
+
+</ui:composition>

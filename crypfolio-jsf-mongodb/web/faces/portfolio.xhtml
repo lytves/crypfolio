@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel id="portfolioPanel">
+
+        <div class="flex-space-between">
+
+            <!--   PORTFOLIO   MAIN   INFORMATION   -->
+            <p:outputPanel id="portfolioMainData" style="line-height: 2.5;">
+
+                <!--   MARKET VALUE   -->
+                <h:outputText class="title"
+                              value="Market value: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.roundingForView(portfolioBacking.countMarketValue(),
+                              portfolioBacking.activeUser.user.portfolio.showedCurrency)}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+
+                <!--   PORTFOLIO   CURRENCIES   -->
+                <h:form id="porfolio-form" style="display: inline-block; height: 32px;">
+
+                    <p:selectOneMenu id="portfolio-currency"
+                                     type="input"
+                                     converter="#{selectOneMenuCurrencyTypeConverter}"
+                                     value="#{portfolioBacking.activeUser.user.portfolio.showedCurrency}"
+                                     effect="none" class="selectonemenu-right noshadow portfolio-currency">
+
+                        <f:selectItems value="#{portfolioBacking.currencies}"/>
+
+                        <p:ajax event="change"
+                                update="mainTabView:portfolioMainData"
+                                listener="#{portfolioBacking.updatePortfolioValues}"/>
+
+                    </p:selectOneMenu>
+
+                </h:form>
+
+                <!--   NET COST   -->
+                <h:outputText class="title"
+                              value="Net cost: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.roundingForView(
+                                        portfolioBacking.activeUser.user.portfolio.getNetCostByCurrentCurrency(),
+                                         portfolioBacking.activeUser.user.portfolio.showedCurrency)}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}"/>
+
+                <!--   PROFIT   -->
+                <h:outputText class="title"
+                              value="Profit: "/>
+                <h:outputText style="font-weight: bold;"
+                              value="#{portfolioBacking.roundingForView(portfolioBacking.countProfit(),
+                              portfolioBacking.activeUser.user.portfolio.showedCurrency)}"
+                              styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}">
+                    <f:convertNumber type="number" pattern="###,###.########"
+                                     locale="en_US"/>
+                </h:outputText>
+                <h:outputText style="font-weight: bold;"
+                              value=" #{portfolioBacking.activeUser.user.portfolio.showedCurrency}
+                                        (#{portfolioBacking.getProfitPercentage()}%)"
+                              styleClass="#{portfolioBacking.countProfit() >= 0.0 ? 'green' : 'red'}"/>
+            </p:outputPanel>
+
+            <!--            =====================              button ADD NEW ITEM -->
+            <h:form class="add-item-coin-form">
+
+                <p:commandButton onclick="PF('dlgPortfolioAddItem').show();"
+                                 class="upp-case"
+                                 value="Add New Item">
+                </p:commandButton>
+
+            </h:form>
+
+        </div>
+
+        <h:outputText styleClass="span-10px-height"/>
+
+        <!--   PORTFOLIO   ITEMS   FORM   &&   TABLE   -->
+        <h:form id="portfolioDataTableForm">
+            <p:dataTable value="#{portfolioBacking.notArchivedItems}"
+                         var="itemEntity" styleClass="panelGridCenter"
+                         stickyHeader="true"
+                         id="portfolioDataTableWV" widgetVar="portfolioDataTableWV"
+                         sortBy="#{itemEntity.id}"
+                         selectionMode="single" selection="#{itemBacking.selectedItem}"
+                         rowKey="#{itemBacking.getRowKey(itemEntity.id)}"
+                         rowIndexVar="selectedRowIndexPortolioItems">
+
+                <p:ajax event="rowSelect" oncomplete="PF('dlgItemDetails').show();"
+                        listener="#{itemBacking.onRowSelect}"
+                        update="mainTabView:formItemDetails mainTabView:formItemTransactions"/>
+
+                <!-- including dataTable with list of items of portfolio -->
+                <ui:include src="/faces/items-list.xhtml"/>
+
+            </p:dataTable>
+        </h:form>
+
+    </p:outputPanel>
+
+    <!-- including modal window of item adding -->
+    <ui:include src="/faces/portfolio-add-item.xhtml"/>
+
+    <!-- including modal window of item details -->
+    <ui:include src="/faces/item.xhtml"/>
+
+</ui:composition>

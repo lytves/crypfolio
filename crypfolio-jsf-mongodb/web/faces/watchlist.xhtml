@@ -1,0 +1,290 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel id="watchlistPanel">
+
+        <div class="right" style="padding-bottom: 0.5em">
+            <!--            =====================              button ADD WATCH COIN -->
+            <h:form class="add-item-coin-form">
+
+                <p:commandButton onclick="PF('dlgWatchAddCoin').show();"
+                                 class="upp-case"
+                                 value="Add New Coin">
+                </p:commandButton>
+
+            </h:form>
+        </div>
+
+        <div class="clear"/>
+
+        <p:dataTable value="#{watchlistBacking.activeUser.user.userWatchCoins}"
+                     var="userWatchCoinEntity" styleClass="panelGridCenter"
+                     stickyHeader="true" rowExpandMode="single"
+                     id="watchlistDataTableWV" widgetVar="watchlistDataTableWV"
+                     sortBy="#{userWatchCoinEntity.coinId.name}">
+
+            <p:column style="width:16px;" styleClass="togglerClass">
+                <p:rowToggler/>
+            </p:column>
+
+            <!--   COIN   -->
+            <p:column headerText="Coin" sortBy="#{userWatchCoinEntity.coinId.name}">
+
+                <p:panelGrid styleClass="panelGridTransparent">
+
+                    <p:row>
+                        <p:column rowspan="2" style="width: 36px;">
+                            <h:graphicImage styleClass="symbol-image-32px"
+                                            value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{userWatchCoinEntity.coinId.id}.png"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{userWatchCoinEntity.coinId.name}"
+                                          style="font-weight:bold;" styleClass="left"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="#{userWatchCoinEntity.coinId.symbol}"
+                                          styleClass="left"/>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:column>
+
+            <!--   MARKET PRICE   -->
+            <p:column headerText="Market Price" class="align-right" priority="2"
+                      sortBy="#{watchlistBacking.getWatchCoinPrice(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
+                      sortFunction="#{watchlistBacking.sortByModel}">
+
+                <!--now is using new type of values showing as number and f:convertNumber used-->
+                <p:outputPanel id="watchCoinPrice">
+                    <h:outputText
+                            value="#{watchlistBacking.roundingForView(watchlistBacking.getWatchCoinPrice(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency), userWatchCoinEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+
+                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
+                </p:outputPanel>
+
+            </p:column>
+
+            <!--   MARKET CAP   -->
+            <p:column headerText="Market Cap" class="align-right td-border-right" priority="3"
+                      sortBy="#{watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
+                      sortFunction="#{watchlistBacking.sortByModel}">
+
+                <!--now is using new type of values showing as number and f:convertNumber used-->
+                <p:outputPanel id="watchCoinMarketCap">
+                    <h:outputText
+                            value="#{watchlistBacking.roundingMarketCapForView(watchlistBacking.getWatchCoinMarketCap(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency), userWatchCoinEntity.showedCurrency)}">
+                        <f:convertNumber type="number" pattern="###,###.########" locale="en_US"/>
+                    </h:outputText>
+
+                    <h:outputText value=" #{userWatchCoinEntity.showedCurrency}"/>
+                </p:outputPanel>
+
+            </p:column>
+
+            <!--   24 HOUR CHANGE   -->
+            <p:column headerText="24hour Change" class="align-right" priority="4"
+                      sortBy="#{watchlistBacking.getWatchCoinChange24H(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
+                      sortFunction="#{watchlistBacking.sortByModel}">
+
+                <h:outputText id="watchCoinChange24H"
+                              value="#{watchlistBacking.getWatchCoinChange24H(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}%"
+                              styleClass="#{watchlistBacking.getWatchCoinChange24H(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
+            </p:column>
+
+            <!--   7 DAYS CHANGE   -->
+            <p:column headerText="7days Change" class="align-right" priority="5"
+                      sortBy="#{watchlistBacking.getWatchCoinChange7D(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}"
+                      sortFunction="#{watchlistBacking.sortByModel}">
+
+                <h:outputText id="watchCoinChange7D"
+                              value="#{watchlistBacking.getWatchCoinChange7D(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency)}%"
+                              styleClass="#{watchlistBacking.getWatchCoinChange7D(
+                    userWatchCoinEntity.coinId.id, userWatchCoinEntity.showedCurrency) >= 0.0 ? 'green' : 'red'}"/>
+            </p:column>
+
+            <!--   PRICE GRAPH   -->
+            <p:column headerText="Price Graph" style="width: 300px;" class="align-right" priority="6">
+
+                <h:graphicImage style="padding: 0 20px;" value="#{resource['images/price-graph.png']}"/>
+
+            </p:column>
+
+            <!--   row Expansion>   -->
+            <p:rowExpansion>
+
+                <h:panelGroup styleClass="row-expansion-currency flex-space-between">
+
+                    <h:form style="padding-left: 30px;">
+                        <h:outputText value="Currency:"/>
+
+                        <!--            =====================               buttons SELECT Currency of the WATCH COIN -->
+                        <p:selectOneButton value="#{userWatchCoinEntity.showedCurrency}"
+                                           unselectable="false" styleClass="select-currency-button">
+                            <f:selectItems value="#{watchlistBacking.currencies}"/>
+
+                            <p:ajax event="change" process="@this"
+                                    update=":mainTabView:watchlistDataTableWV:watchCoinPrice :mainTabView:watchlistDataTableWV:watchCoinChange24H
+                                         :mainTabView:watchlistDataTableWV:watchCoinChange7D :mainTabView:watchlistDataTableWV:watchCoinMarketCap"
+                                    listener="#{watchlistBacking.changeWatchCoinCurrency(userWatchCoinEntity)}"/>
+                        </p:selectOneButton>
+
+                    </h:form>
+
+                    <!--            =====================               button DEL WATCH COIN -->
+                    <h:form style="padding-right: 30px;">
+                        <p:commandButton
+                                actionListener="#{watchlistBacking.doSubmitDeleteWatchCoin(userWatchCoinEntity)}"
+                                update=":mainTabView:watchlistDataTableWV"
+                                class="upp-case"
+                                value="Delete" icon="ui-icon ui-icon-trash">
+                            <p:confirm header="DELETE COIN"
+                                       message="Are you sure you want to delete this coin?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandButton>
+
+                    </h:form>
+
+                </h:panelGroup>
+
+            </p:rowExpansion>
+
+        </p:dataTable>
+
+    </p:outputPanel>
+
+    <!--            =====================               modal window ADD WATCH COIN -->
+    <div id="divWatchAddCoin">
+        <p:dialog header="Add coin to Watchlist" id="dlgWatchAddCoin" widgetVar="dlgWatchAddCoin" modal="true"
+                  resizable="false" draggable="false" position="center top" closeOnEscape="true"
+                  hideEffect="fade" class="modal-window">
+
+            <h:form id="formWatchAddCoin">
+
+                <h:panelGrid style="width: 100%;">
+
+                    <p:outputLabel value="Coin Name" for="watch-add-coin-name"/>
+
+                    <p:outputPanel class="input-group" id="watch-add-coin-input-group"
+                                   rendered="#{watchlistBacking.coinTemp eq null}">
+
+                        <span class="input-group-addon" id="watch-add-coin-img">
+                            <i class="fab fa-btc" aria-hidden="true"></i>
+                        </span>
+
+                        <p:autoComplete id="watch-add-coin-name" value="#{watchlistBacking.coinTemp}"
+                                        completeMethod="#{watchlistBacking.completeCoinTemp}"
+                                        var="coinTemp"
+                                        itemValue="#{coinTemp}"
+                                        converter="#{autocompleteCoinConverter}" forceSelection="true"
+                                        maxResults="10" required="true" cache="true"
+                                        styleClass="form-control noshadow "
+                                        placeholder="Coin Name or Ticker">
+
+                            <p:column style="width:32px; text-align:center;">
+                                <p:graphicImage
+                                        value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{coinTemp.id}.png"
+                                        width="32" height="32"/>
+                            </p:column>
+
+                            <p:column styleClass="flex-space-between" style="margin-top: 5px;">
+                                #{coinTemp.name} <span style="margin: 0 10px;">#{coinTemp.symbol}</span>
+                            </p:column>
+
+                            <p:ajax event="itemSelect" update="formWatchAddCoin"/>
+
+                        </p:autoComplete>
+
+                    </p:outputPanel>
+
+                    <p:outputPanel style="display: flex;"
+                                   rendered="#{watchlistBacking.coinTemp != null}">
+
+                        <h:graphicImage
+                                value="https://s2.coinmarketcap.com/static/img/coins/32x32/#{watchlistBacking.coinTemp.id}.png"
+                                style="height: 32px;"/>
+
+                        <h:outputText
+                                value="#{watchlistBacking.coinTemp.name} (#{watchlistBacking.coinTemp.symbol})"
+                                styleClass="coin-item-name-autocompleted"/>
+
+                    </p:outputPanel>
+
+                    <p:outputLabel value="Currency" for="watch-add-coin-currency"/>
+
+                    <p:selectOneButton id="watch-add-coin-currency" value="#{watchlistBacking.currency}"
+                                       unselectable="false"
+                                       styleClass="select-currency-button flex-space-between"
+                                       style="justify-content: center;"
+                                       required="true"
+                                       disabled="#{watchlistBacking.coinTemp eq null}">
+
+                        <f:selectItems value="#{watchlistBacking.currencies}"/>
+
+                    </p:selectOneButton>
+
+                    <h:outputText styleClass="span-10px-height"/>
+
+                    <p:outputPanel>
+                        <h:panelGrid style="margin: auto;">
+                            <p:outputPanel>
+
+                                <p:commandButton id="watch-add-coin-reset"
+                                                 icon="ui-icon-arrowreturnthick-1-w"
+                                                 value="Reset"
+                                                 disabled="#{watchlistBacking.coinTemp eq null}"
+                                                 resetValues="true"
+                                                 type="reset"
+                                                 process="@this"
+                                                 style="margin-right: 20px;">
+
+                                    <p:resetInput target="@form" />
+                                    <p:ajax listener="#{watchlistBacking.watchCoinAddFormReset}"
+                                            update="formWatchAddCoin"/>
+
+                                </p:commandButton>
+
+                                <p:commandButton id="watch-add-coin-done"
+                                                 actionListener="#{watchlistBacking.doSubmitAddWatchCoin}"
+                                                 value="Done"
+                                                 icon="ui-icon-check"
+                                                 disabled="#{watchlistBacking.coinTemp eq null}"
+                                                 oncomplete="PF('dlgWatchAddCoin').hide();"
+                                                 update=":mainTabView:watchlistPanel growl"
+                                                 resetValues="true">
+                                </p:commandButton>
+
+                            </p:outputPanel>
+                        </h:panelGrid>
+                    </p:outputPanel>
+
+                </h:panelGrid>
+
+            </h:form>
+
+            <p:ajax event="close" listener="#{watchlistBacking.watchCoinAddFormReset}" update="formWatchAddCoin"
+                    resetValues="true"/>
+
+        </p:dialog>
+    </div>
+
+</ui:composition>

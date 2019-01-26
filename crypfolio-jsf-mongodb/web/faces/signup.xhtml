@@ -1,0 +1,125 @@
+<ui:composition template="/WEB-INF/templates/general-layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <f:metadata>
+        <f:viewAction action="#{controller.allowLoadLoginPage}"/>
+    </f:metadata>
+
+    <ui:define name="title">CrypFolio - Sign Up page</ui:define>
+
+    <ui:define name="content">
+
+        <div class="forms-wrapper">
+
+            <p:growl id="growl" showDetail="false" life="15000"/>
+
+            <p:outputPanel id="signUpOutputPanel">
+
+                <p:panel header="Create an account">
+
+                    <h:form id="signupForm" rendered="#{signupBacking.showSignUpForm}">
+
+                        <h:panelGrid styleClass="order-table">
+
+                            <!--   USER'S   EMAIL   -->
+                            <p:outputLabel for="usEmail" value="Email:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                <p:inputText id="usEmail" value="#{signupBacking.user.email}"
+                                             required="true" type="email" size="20" placeholder="Email"
+                                             requiredMessage="Error: enter your email"
+                                             styleClass="form-control noshadow"/>
+
+                            </p:outputPanel>
+
+                            <!--   PORTFOLIO   NAME   -->
+                            <p:outputLabel for="usPortfilioName" value="Portfilio Name:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fas fa-tachometer-alt"></i></span>
+
+                                <p:inputText id="usPortfilioName" value="#{signupBacking.user.portfolio.name}"
+                                             required="true" type="text" size="20" placeholder="Portfolio Name"
+                                             requiredMessage="Error: enter portfolio name"
+                                             styleClass="form-control noshadow"/>
+
+                            </p:outputPanel>
+
+                            <!--   USER'S   PASSWORD   -->
+                            <p:outputLabel for="usPassword" value="Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:password id="usPassword" value="#{signupBacking.password}"
+                                            autocomplete="off"
+                                            required="true" placeholder="Password"
+                                            requiredMessage="Error: enter your password"
+                                            match="usPasswordConfirm" feedback="true"
+                                            styleClass="form-control noshadow">
+
+                                    <f:validateLength minimum="6"/>
+
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <!--   USER'S   PASSWORD   CONFIRM   -->
+                            <p:outputLabel for="usPasswordConfirm" value="Repeat Password:"/>
+
+                            <p:outputPanel class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+
+                                <p:password id="usPasswordConfirm" value="#{signupBacking.password}"
+                                            autocomplete="off"
+                                            required="true" placeholder="Repeat Password"
+                                            requiredMessage="Error: repeat your password"
+                                            styleClass="form-control noshadow">
+
+                                    <f:validateLength minimum="6"/>
+
+                                </p:password>
+
+                            </p:outputPanel>
+
+                            <h:outputText styleClass="span-10px-height"/>
+
+                            <p:commandButton action="#{signupBacking.signup}"
+                                             value="Sign Up"
+                                             styleClass="button-center"
+                                             update="signUpOutputPanel growl">
+
+                                <p:resetInput target="signupForm"/>
+
+                            </p:commandButton>
+
+                        </h:panelGrid>
+
+                    </h:form>
+
+                    <!-- notification message is showed ONLY after user have submitted sign up form-->
+                    <h:outputText rendered="#{!signupBacking.showSignUpForm}"
+                                  value="In order to complete your registration, please click the confirmation link
+                                  in the email that we just have sent to you."/>
+
+                </p:panel>
+
+            </p:outputPanel>
+
+            <!--   LOGIN   LINK   -->
+            <h:panelGrid styleClass="added-links">
+                <h:outputText value="Already have an account?"/>
+                <h:link outcome="login" styleClass="upp-case" value="Login"/>
+            </h:panelGrid>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

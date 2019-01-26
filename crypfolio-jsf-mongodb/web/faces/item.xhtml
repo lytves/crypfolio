@@ -1,0 +1,470 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <!--   ITEM   MODAL   WINDOW   -->
+    <div id="divItemDetails">
+
+        <p:dialog header="Item details" id="dlgItemDetails" widgetVar="dlgItemDetails" modal="true"
+                  resizable="false" draggable="false" position="bottom" closeOnEscape="true"
+                  hideEffect="fade" height="91%" width="100%"
+                  class="modal-window-item-details">
+
+            <div class="ui-g">
+
+                <div class="ui-g-12 ui-md-6 ui-lg-3" style="padding: 0 !important;">
+
+                    <h:form id="formItemDetails">
+
+                        <p:panelGrid styleClass="panelgrid-items-details" id="itemDetails"
+                                     style="border:none; margin:0 auto; width:100%;">
+
+                            <!--   COIN   NAME   -->
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:graphicImage styleClass="symbol-image-32px"
+                                                    value="#{itemBacking.itemImageID}"
+                                                    width="32" height="32"
+                                                    style="display: inline-block; padding-left: 20px;"/>
+
+                                    <h:outputText value="#{itemBacking.selectedItem.coin.name}"
+                                                  style="font-weight:bold; font-size: 1.4em; padding-left: 20px;
+                                                          vertical-align: top; line-height: 1.5; color: #000;"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   @@@@@@@@@@   ITEM   DETAILS   -->
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Position Details"
+                                                  style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   AMOUNT   -->
+                            <p:row>
+                                <p:column style="width: 160px;">
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Amount:"/>
+                                </p:column>
+                                <p:column style="font-weight: bold;">
+                                    <h:outputText value="#{itemBacking.selectedItem.amount}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   AVERAGE   BUY   PRICE  -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Average Buy Price:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText
+                                            value="#{itemBacking.selectedItem.getAverageBoughtPriceByCurrency()}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   NET   COST   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Net Cost:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{itemBacking.selectedItem.getNetCostByCurrentCurrency()}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   MARKET   VALUE   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Market Value:"/>
+                                </p:column>
+                                <p:column style="font-weight: bold;">
+                                    <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getItemMarketValue(itemBacking.selectedItem),
+                                            itemBacking.selectedItem.showedCurrency)}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   PROFIT   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Profit:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getItemProfit(itemBacking.selectedItem), itemBacking.selectedItem.showedCurrency)}"
+                                                  styleClass="#{portfolioBacking.getItemProfit(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}
+                                            (#{portfolioBacking.getItemProfitPercentage(itemBacking.selectedItem)}%)"
+                                                  styleClass="#{portfolioBacking.getItemProfit(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   PORTFOLIO   SHARE  -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Portfolio Share:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText
+                                            value="#{portfolioBacking.getItemSharePercentage(itemBacking.selectedItem)}%"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   @@@@@@@@@@   COIN   DETAILS   -->
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Coin Details"
+                                                  style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   MARKET   PRICE   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Market Price:"/>
+                                </p:column>
+                                <p:column style="font-weight: bold;">
+                                    <h:outputText value="#{portfolioBacking.roundingForView(
+                                            portfolioBacking.getCoinPrice(itemBacking.selectedItem.coin, itemBacking.selectedItem.showedCurrency),
+                                             itemBacking.selectedItem.showedCurrency)}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText value=" #{itemBacking.selectedItem.showedCurrency}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   24   HOUR   CHANGE   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="24h Change:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText
+                                            value="#{portfolioBacking.getCoinChange24H(itemBacking.selectedItem)}%"
+                                            styleClass="#{portfolioBacking.getCoinChange24H(itemBacking.selectedItem) >= 0.0 ? 'green' : 'red'}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   CIRCULATING   SUPPLY   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Circulating Supply:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText
+                                            rendered="#{itemBacking.getCoinCirculatingSupply(itemBacking.selectedItem) gt 0}"
+                                            value="#{itemBacking.getCoinCirculatingSupply(itemBacking.selectedItem)}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText
+                                            rendered="#{itemBacking.getCoinCirculatingSupply(itemBacking.selectedItem) le 0}"
+                                            value="?"/>
+
+                                    <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   TOTAL   SUPPLY   -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="Total Supply:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText
+                                            rendered="#{itemBacking.getCoinTotalSupply(itemBacking.selectedItem) gt 0}"
+                                            value="#{itemBacking.getCoinTotalSupply(itemBacking.selectedItem)}">
+                                        <f:convertNumber type="number" pattern="###,###.########"
+                                                         locale="en_US"/>
+                                    </h:outputText>
+                                    <h:outputText
+                                            rendered="#{itemBacking.getCoinTotalSupply(itemBacking.selectedItem) le 0}"
+                                            value="?"/>
+
+                                    <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   CMC   RANK  -->
+                            <p:row>
+                                <p:column>
+                                    <h:outputText styleClass="item-details-td" style="font-size: 0.9em;"
+                                                  value="CoinMarketCap Rank:"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{itemBacking.getCoinCmcRank(itemBacking.selectedItem)}"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   @@@@@@@@@@   ITEM   CURRENCY   -->
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Item Currency"
+                                                  style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   CURRENCIES   BUTTONS  -->
+                            <p:row>
+                                <p:column colspan="2">
+
+                                    <p:selectOneButton value="#{itemBacking.selectedItem.showedCurrency}"
+                                                       unselectable="false"
+                                                       styleClass="select-currency-button">
+                                        <f:selectItems value="#{itemBacking.currencies}"/>
+
+                                        <p:ajax event="change" process="@this"
+                                                listener="#{itemBacking.changeItemShowedCurrency}"
+                                                update="@form"/>
+
+                                    </p:selectOneButton>
+
+                                </p:column>
+                            </p:row>
+
+                            <!--   @@@@@@@@@@   DELETE   ITEM   -->
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Delete Item"
+                                                  style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+                                </p:column>
+                            </p:row>
+
+                            <!--   DELETE ITEM BUTTON  -->
+                            <p:row>
+                                <p:column colspan="2">
+
+                                    <p:commandButton
+                                            actionListener="#{itemBacking.doSubmitDeleteItem}"
+                                            update="mainTabView:portfolioDataTableForm
+                                                        mainTabView:portfolioMainData
+                                                        mainTabView:formPortfolioAddItem-coin:portfolio-list-currents-items growl"
+                                            oncomplete="PF('dlgItemDetails').hide();"
+                                            style="width: auto !important; margin-left: 10px;"
+                                            styleClass="upp-case"
+                                            value="Delete Item" icon="ui-icon ui-icon-trash">
+
+                                        <p:confirm header="DELETE ITEM"
+                                                   message="Are you sure you want to delete this item?"
+                                                   icon="ui-icon-alert"/>
+
+                                    </p:commandButton>
+
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText styleClass="span-10px-height" style="height: 5px;"/>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-6 ui-lg-9" style="padding: 0 !important;">
+
+                    <h:graphicImage value="#{resource['images/trading-view-widget-example.png']}"
+                                    style="display: block; margin: auto; height: 320px;"/>
+
+                    <!-- TradingView Widget BEGIN -->
+                    <!--                    <div class="tradingview-widget-container">
+                                            <div id="tradingview_94bde"></div>
+                                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                                            <script type="text/javascript">
+                                                var a = #{itemBacking.selectedItem.coin.symbol}
+                                                    new TradingView.widget(
+                                                        {
+                                                            "width": 640,
+                                                            "height": 400,
+                                                            "symbol": "NASDAQ:AAPL",
+                                                            "interval": "D",
+                                                            "timezone": "Etc/UTC",
+                                                            "theme": "Light",
+                                                            "style": "1",
+                                                            "locale": "en",
+                                                            "toolbar_bg": "#f1f3f6",
+                                                            "enable_publishing": false,
+                                                            "allow_symbol_change": true,
+                                                            "container_id": "tradingview_94bde"
+                                                        }
+                                                    );
+                                            </script>
+                                        </div>-->
+                    <!-- TradingView Widget END -->
+
+                    <h:form id="formItemTransactions">
+
+                        <p:panelGrid styleClass="panelgrid-items-details" style="margin:0 auto; width:100%;">
+
+                            <!--   @@@@@@@@@@   TRANSACTIONS   -->
+                            <p:row>
+                                <p:column colspan="2" styleClass="flex-space-between">
+                                    <h:outputText value="TRANSACTIONS"
+                                                  style="padding: 5px 0 0 20px; font-weight: bold; display: block;
+                                                          text-transform: uppercase; color: #000;"/>
+
+                                    <!--   ADD TRANSACTION BUTTON   -->
+                                    <p:commandButton
+                                            actionListener="#{addTransactionOrItemBacking.createEntitiesForAddition}"
+                                            onclick="PF('dlgPortfolioAddItem').show(); changeDlgPortfolioAddItemTitle('addTransaction');"
+                                            update="mainTabView:formPortfolioAddItem-coin
+                                                    mainTabView:formPortfolioAddItem-transaction"
+                                            class="upp-case"
+                                            value="Add Transaction"/>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:dataTable id="itemTransactionsDataTableWV"
+                                                 value="#{itemBacking.selectedItem.transactions}"
+                                                 var="transactionEntity"
+                                                 sortBy="#{transactionEntity.boughtDate}">
+
+                                        <!--  instead rowSelection do rowToggle !!!??? -->
+
+                                        <!--   type   -->
+                                        <p:column headerText="Type" class="align-right" style="width: 100px;"
+                                                  styleClass="flex" priority="1">
+                                            <h:panelGroup rendered="#{'BUY' eq transactionEntity.type}"
+                                                          styleClass="buy-sell-image">
+                                                <i class="fas fa-arrow-circle-down"></i>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup rendered="#{'SELL' eq transactionEntity.type}"
+                                                          styleClass="buy-sell-image"
+                                                          style="color: red;">
+                                                <i class="fas fa-arrow-circle-up"></i>
+                                            </h:panelGroup>
+
+                                            <h:outputText style="padding-left: 5px; font-weight: bold;"
+                                                          value="#{transactionEntity.type}"/>
+                                        </p:column>
+
+                                        <!--   amount   -->
+                                        <p:column headerText="Amount" class="align-right" priority="1">
+                                            <h:outputText value="#{transactionEntity.amount}">
+                                                <f:convertNumber type="number" pattern="###,###.########"
+                                                                 locale="en_US"/>
+                                            </h:outputText>
+                                            <h:outputText value=" #{itemBacking.selectedItem.coin.symbol}"/>
+                                        </p:column>
+
+                                        <!--   price per coin   -->
+                                        <p:column headerText="Price" class="align-right" priority="2">
+                                            <h:outputText
+                                                    value="#{transactionEntity.gePriceByCurrentCurrency()}">
+                                                <f:convertNumber type="number" pattern="###,###.########"
+                                                                 locale="en_US"/>
+                                            </h:outputText>
+                                            <h:outputText value=" #{transactionEntity.boughtCurrency}"/>
+                                        </p:column>
+
+                                        <!--   total   -->
+                                        <p:column headerText="Total" class="align-right" priority="1">
+                                            <h:outputText
+                                                    value="#{transactionEntity.getTotalPriceByCurrency()}">
+                                                <f:convertNumber type="number" pattern="###,###.########"
+                                                                 locale="en_US"/>
+                                            </h:outputText>
+                                            <h:outputText value=" #{transactionEntity.boughtCurrency}"/>
+                                        </p:column>
+
+                                        <!--   date   -->
+                                        <p:column headerText="Date" class="align-right" style="width: 130px;"
+                                                  priority="3">
+                                            <h:outputText
+                                                    value="#{itemBacking.getTransactionBoughtDate(transactionEntity)}"/>
+                                        </p:column>
+
+                                        <!--   EDIT TRANSACTION BUTTON   -->
+                                        <!--   DELETE TRANSACTION BUTTON   -->
+                                        <p:column class="align-right transaction-menu" style="width: 60px;"
+                                                  priority="4">
+                                            <p:menuButton value="···" iconPos="right">
+
+                                                <p:menuitem value="Edit"
+                                                            action="#{addTransactionOrItemBacking.createEntitiesForEdition(transactionEntity)}"
+                                                            onclick="PF('dlgPortfolioAddItem').show(); changeDlgPortfolioAddItemTitle('editTransaction');"
+                                                            update="mainTabView:formPortfolioAddItem-coin
+                                                                    mainTabView:formPortfolioAddItem-transaction growl"/>
+
+                                                <p:menuitem value="Delete"
+                                                            action="#{itemBacking.doSubmitDeleteTransaction(transactionEntity)}"
+                                                            update="@form mainTabView:formItemDetails growl">
+
+                                                    <p:confirm header="DELETE TRANSACTION"
+                                                               message="Are you sure you want to delete this transaction?"
+                                                               icon="ui-icon-alert"/>
+
+                                                </p:menuitem>
+
+                                            </p:menuButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </div>
+
+            </div>
+
+            <!--//reset itemBacking values on close dialog window-->
+            <!--//remove highlight background color of selected row after closed dialog window-->
+            <p:ajax event="close"
+                    listener="#{itemBacking.init}"
+                    oncomplete="portfolioDataTableRowUnselect();" resetValues="true"
+                    update="mainTabView:portfolioMainData mainTabView:portfolioDataTableForm
+                        mainTabView:archiveDataTableWV"/>
+
+        </p:dialog>
+
+    </div>
+
+</ui:composition>
