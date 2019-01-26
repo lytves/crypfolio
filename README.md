@@ -8,9 +8,9 @@ Ingeniería de Servicios y Aplicaciones Web (ISAW) 2018-19*
 ### Project goal:
 to compare project performance using two different mechanisms
 of storage and retrieval of data like Relational database
-(**MySQL**) and Non Relational Database (**MongoDB**)
+(**MySQL/MariaDB**) and Non Relational Database (**MongoDB**)
 and two different realizations of the frontend 
-frameworks of the application, like **Primefaces** and (*Vue.js?*)
+frameworks of the application, like **Primefaces** and **Vue.js**
 
 -----
 
@@ -34,15 +34,15 @@ historical prices of cryptocoins from
 
 -----
 
-**Conceptual Data Model:**
+### Versions:
+* [Primefaces + MariaDB version](crypfolio-jsf-mariadb "Primefaces + MariaDB version")
+* [Primefaces + MongoDB version](crypfolio-jsf-mongodb "Primefaces + MongoDB version")
 
-![Conceptual Data Model](database/CrypFolio-Conceptual_Model_UML.png "Conceptual Data Model")
+### Conceptual Data Model:
 
-**MySQL Logical Data Model:**
+![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.png "Conceptual Data Model")
 
-![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
-
-**Some Working Screenshorts:**
+### Some Working Screenshorts:
 
 ![Login Page](images/login-page.png)
 
@@ -69,3 +69,4 @@ historical prices of cryptocoins from
 ![WatchList coin adding Page](images/watchlist-add-coin-page-2.png)
 
 ![WatchList coin adding Page](images/watchlist-add-coin-page-3.png)
+
