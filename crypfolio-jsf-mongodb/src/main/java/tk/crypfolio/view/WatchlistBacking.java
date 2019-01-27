@@ -181,7 +181,7 @@ public class WatchlistBacking implements Serializable {
 
         if (activeUser.getUser().getUserWatchCoins().contains(userWatchCoin)) {
 
-            userService.updateUserWatchCoinDB(userWatchCoin);
+            userService.updateUserDB(activeUser.getUser());
 
         } else {
 
