@@ -185,7 +185,6 @@ public class PortfolioEntity implements Serializable {
     }
 
     public void removeItem(ItemEntity item) {
-        // FIXME: gotta implement this method
         this.items.remove(item);
         // !!! unsetting also for the item this portfolio-parent
         item.setPortfolio(null);

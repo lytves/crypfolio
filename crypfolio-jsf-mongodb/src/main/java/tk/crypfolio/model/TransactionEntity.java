@@ -1,6 +1,5 @@
 package tk.crypfolio.model;
 
-import org.hibernate.search.annotations.Indexed;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
 import tk.crypfolio.util.LocalDateAttributeMongoDBConverter;
@@ -12,23 +11,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity
-@Indexed
-@Table(name = "transactions")
+@Embeddable
 public class TransactionEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator="transaction")
-    @TableGenerator(
-            name="transaction",
-            table="entities_id_generators",
-            // but pkColumnName won't be used, because MongoDB always stores identifiers using the _id field
-            pkColumnName = "key",
-            valueColumnName = "next_id",
-            pkColumnValue="trans_id",
-            allocationSize=1
-    )
-    private Long id;
+    private String id;
 
     @Column(name = "trans_amount", precision = 8, nullable = false)
     private BigDecimal amount;
@@ -60,14 +46,7 @@ public class TransactionEntity implements Serializable {
     @Column(name = "trans_comment")
     private String comment;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
-    private ItemEntity item;
-
     public TransactionEntity() {
-    }
-
-    public TransactionEntity(ItemEntity item) {
-        this.item = item;
     }
 
     public TransactionEntity(BigDecimal amount, LocalDate boughtDate) {
@@ -81,11 +60,11 @@ public class TransactionEntity implements Serializable {
         this.boughtCurrency = boughtCurrency;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -153,7 +132,7 @@ public class TransactionEntity implements Serializable {
         this.boughtPriceEth = boughtPriceEth;
     }
 
-    public BigDecimal gePriceByCurrentCurrency(){
+    public BigDecimal gePriceByCurrentCurrency() {
 
         BigDecimal priceByBoughtCurrency = BigDecimal.ZERO;
 
@@ -163,15 +142,15 @@ public class TransactionEntity implements Serializable {
                 break;
 
             case "EUR":
-                priceByBoughtCurrency =  getBoughtPriceEur();
+                priceByBoughtCurrency = getBoughtPriceEur();
                 break;
 
             case "BTC":
-                priceByBoughtCurrency =  getBoughtPriceBtc();
+                priceByBoughtCurrency = getBoughtPriceBtc();
                 break;
 
             case "ETH":
-                priceByBoughtCurrency =  getBoughtPriceEth();
+                priceByBoughtCurrency = getBoughtPriceEth();
                 break;
         }
         return MathRounders.roundBigDecimalByCurrency(priceByBoughtCurrency, getBoughtCurrency());
@@ -185,7 +164,7 @@ public class TransactionEntity implements Serializable {
         this.comment = comment;
     }
 
-    public BigDecimal getTotalPriceByCurrency(){
+    public BigDecimal getTotalPriceByCurrency() {
 
         BigDecimal totalPriceByCurrency = BigDecimal.ZERO;
 
@@ -195,26 +174,18 @@ public class TransactionEntity implements Serializable {
                 break;
 
             case "EUR":
-                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceEur());
+                totalPriceByCurrency = getAmount().multiply(getBoughtPriceEur());
                 break;
 
             case "BTC":
-                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceBtc());
+                totalPriceByCurrency = getAmount().multiply(getBoughtPriceBtc());
                 break;
 
             case "ETH":
-                totalPriceByCurrency =  getAmount().multiply(getBoughtPriceEth());
+                totalPriceByCurrency = getAmount().multiply(getBoughtPriceEth());
                 break;
         }
         return MathRounders.roundBigDecimalByCurrency(totalPriceByCurrency, getBoughtCurrency());
-    }
-
-    public ItemEntity getItem() {
-        return item;
-    }
-
-    public void setItem(ItemEntity item) {
-        this.item = item;
     }
 
     @Override
@@ -231,15 +202,14 @@ public class TransactionEntity implements Serializable {
                 Objects.equals(boughtPriceEur, that.boughtPriceEur) &&
                 Objects.equals(boughtPriceBtc, that.boughtPriceBtc) &&
                 Objects.equals(boughtPriceEth, that.boughtPriceEth) &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(item.getId(), that.item.getId());
+                Objects.equals(comment, that.comment);
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(getId(), getAmount(), getBoughtDate(), getBoughtCurrency(), getBoughtPriceUsd(),
-                getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment(), getItem().getId());
+                getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment());
     }
 
     @Override
@@ -255,7 +225,6 @@ public class TransactionEntity implements Serializable {
                 ", boughtPriceBtc=" + boughtPriceBtc + '\'' +
                 ", boughtPriceEth=" + boughtPriceEth + '\'' +
                 ", comment='" + comment +
-                ", item.id=" + item.getId() +
                 '}';
     }
 }

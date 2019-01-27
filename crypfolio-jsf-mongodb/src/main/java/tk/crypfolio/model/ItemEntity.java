@@ -86,7 +86,7 @@ public class ItemEntity implements Serializable {
     @JoinColumn(nullable = false)
     private CoinEntity coin;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
     private List<TransactionEntity> transactions = new ArrayList<>();
 
     public ItemEntity() {
@@ -99,8 +99,6 @@ public class ItemEntity implements Serializable {
     public void addTransaction(TransactionEntity transaction) {
 
         transactions.add(transaction);
-        // setting also for this new transaction this item as a parent
-        transaction.setItem(this);
 
         if (TransactionType.BUY.equals(transaction.getType())) {
 

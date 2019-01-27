@@ -62,7 +62,7 @@ public class UserEntity implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userOwner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
     private List<UserWatchCoinEntity> userWatchCoins = new ArrayList<>();
 
 /*    @ManyToMany
@@ -89,7 +89,6 @@ public class UserEntity implements Serializable {
         UserWatchCoinEntity userWatchCoin = new UserWatchCoinEntity();
 
         userWatchCoin.setCoinId(coin);
-        userWatchCoin.setUserOwner(this);
         userWatchCoin.setShowedCurrency(currencyType);
 
         if (!this.userWatchCoins.contains(userWatchCoin)) {
@@ -99,10 +98,7 @@ public class UserEntity implements Serializable {
 
     public void removeWatchCoin(UserWatchCoinEntity userWatchCoin) {
 
-        if (this.userWatchCoins.contains(userWatchCoin)) {
-            this.userWatchCoins.remove(userWatchCoin);
-            userWatchCoin.setUserOwner(null);
-        }
+        this.userWatchCoins.remove(userWatchCoin);
     }
 
 /*    public void addUserFollowee(UserEntity user) {
