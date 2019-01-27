@@ -46,7 +46,7 @@
 
                             <p:ajax event="itemSelect"
                                     update="formPortfolioAddItem-coin mainTabView:formPortfolioAddItem-transaction"/>
-                            <p:ajax event="itemSelect" listener="#{addTransactionOrItemBacking.createEntitiesForAddition}"/>
+                            <p:ajax event="itemSelect" listener="#{addTransactionOrItemBacking.createEntitiesToStore}"/>
 
                         </p:autoComplete>
 
@@ -73,7 +73,7 @@
                                          rowIndexVar="selectedRowIndexAllItems">
 
                                 <p:ajax event="rowSelect"
-                                        listener="#{addTransactionOrItemBacking.createEntitiesForAddition}"
+                                        listener="#{addTransactionOrItemBacking.createEntitiesToStore}"
                                         update="@form mainTabView:formPortfolioAddItem-transaction"/>
 
                                 <p:column styleClass="flex-space-between">

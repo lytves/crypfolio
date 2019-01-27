@@ -14,6 +14,7 @@ import tk.crypfolio.model.CoinEntity;
 import tk.crypfolio.model.ItemEntity;
 import tk.crypfolio.model.TransactionEntity;
 import tk.crypfolio.parse.ParserAPI;
+import tk.crypfolio.util.CodeGenerator;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -246,8 +247,8 @@ public class AddTransactionOrItemBacking implements Serializable {
         if (transactionTotalTemp != null) setTransactionTotalTemp(null);
     }
 
-    public void createEntitiesForAddition() {
-        LOGGER.info("PortfolioBacking.createEntitiesForAddition");
+    public void createEntitiesToStore() {
+        LOGGER.info("PortfolioBacking.createEntitiesToStore");
 
         // if itemTemp is still == null, it means that user have used autocomplete to choose coin
         // and vice versa itemTemp != null, means user have chosen from the list of existing items,
@@ -286,8 +287,8 @@ public class AddTransactionOrItemBacking implements Serializable {
         setTransactionPriceTemp(portfolioBacking.getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency()));
     }
 
-    public void createEntitiesForEdition(TransactionEntity transactionEntity) {
-        LOGGER.info("PortfolioBacking.createEntitiesForAddition(transactionEntity)");
+    public void createEntitiesToUpdate(TransactionEntity transactionEntity) {
+        LOGGER.info("PortfolioBacking.createEntitiesToStore(transactionEntity)");
 
         setItemTemp(itemBacking.getSelectedItem());
 
@@ -334,6 +335,9 @@ public class AddTransactionOrItemBacking implements Serializable {
                     ""));
 
         } else {
+
+            // create an unique ID for the transaction, it will be useful in some JSF logic cases
+            transactionTemp.setId(CodeGenerator.generateCodeUUID());
 
             // set today date by default
             if (transactionTemp.getBoughtDate() == null) {

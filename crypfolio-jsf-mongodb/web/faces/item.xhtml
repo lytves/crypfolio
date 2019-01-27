@@ -346,7 +346,7 @@
 
                                     <!--   ADD TRANSACTION BUTTON   -->
                                     <p:commandButton
-                                            actionListener="#{addTransactionOrItemBacking.createEntitiesForAddition}"
+                                            actionListener="#{addTransactionOrItemBacking.createEntitiesToStore}"
                                             onclick="PF('dlgPortfolioAddItem').show(); changeDlgPortfolioAddItemTitle('addTransaction');"
                                             update="mainTabView:formPortfolioAddItem-coin
                                                     mainTabView:formPortfolioAddItem-transaction"
@@ -425,7 +425,7 @@
                                             <p:menuButton value="···" iconPos="right">
 
                                                 <p:menuitem value="Edit"
-                                                            action="#{addTransactionOrItemBacking.createEntitiesForEdition(transactionEntity)}"
+                                                            action="#{addTransactionOrItemBacking.createEntitiesToUpdate(transactionEntity)}"
                                                             onclick="PF('dlgPortfolioAddItem').show(); changeDlgPortfolioAddItemTitle('editTransaction');"
                                                             update="mainTabView:formPortfolioAddItem-coin
                                                                     mainTabView:formPortfolioAddItem-transaction growl"/>
