@@ -1,6 +1,6 @@
 **MongoDB Document Structure:**
 
-![Logical Data Model](data model/mongodb-document-structures.png)
+![Logical Data Model](data-model/mongodb-document-structures.png)
 
 ### Some Working Screenshorts:
 
