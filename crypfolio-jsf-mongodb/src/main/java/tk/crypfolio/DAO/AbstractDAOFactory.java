@@ -22,15 +22,11 @@ public abstract class AbstractDAOFactory {
     /*
      * define the getDAO method for all entities here
      * */
-    public abstract ItemDAO getItemDAO();
-
     public abstract PortfolioDAO getPortfolioDAO();
 
     public abstract TransactionDAO getTransactionDAO();
 
     public abstract UserDAO getUserDAO();
-
-    public abstract UserWatchCoinDAO getUserWatchCoinDAO();
 
     public abstract CoinDAO getCoinDAO();
 }

@@ -43,11 +43,6 @@ public class NoSQLDAOFactory extends AbstractDAOFactory {
     }
 
     @Override
-    public ItemDAO getItemDAO() {
-        return new ItemDAOImpl(getEntityManager());
-    }
-
-    @Override
     public PortfolioDAO getPortfolioDAO() {
         return new PortfolioDAOImpl(getEntityManager());
     }
@@ -62,9 +57,4 @@ public class NoSQLDAOFactory extends AbstractDAOFactory {
         return new UserDAOImpl(getEntityManager());
     }
 
-    @Override
-    public UserWatchCoinDAO getUserWatchCoinDAO() {
-        return new UserWatchCoinDAOImpl(getEntityManager()) {
-        };
-    }
 }

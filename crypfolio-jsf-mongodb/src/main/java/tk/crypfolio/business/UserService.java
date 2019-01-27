@@ -218,15 +218,4 @@ public class UserService implements Serializable {
         return userDB;
     }
 
-    /*
-     * update watchCoin of user in DB
-     * */
-    public UserWatchCoinEntity updateUserWatchCoinDB(UserWatchCoinEntity userWatchCoin) {
-
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserWatchCoinDAO uwcDAO = myFactory.getUserWatchCoinDAO();
-        UserWatchCoinEntity userWatchCoinDB = uwcDAO.updateUserWatchCoinEntity(userWatchCoin);
-
-        return userWatchCoinDB;
-    }
 }
