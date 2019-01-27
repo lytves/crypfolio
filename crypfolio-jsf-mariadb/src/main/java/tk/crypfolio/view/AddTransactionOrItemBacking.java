@@ -246,8 +246,8 @@ public class AddTransactionOrItemBacking implements Serializable {
         if (transactionTotalTemp != null) setTransactionTotalTemp(null);
     }
 
-    public void createEntitiesForAddition() {
-        LOGGER.info("PortfolioBacking.createEntitiesForAddition");
+    public void createEntitiesToStore() {
+        LOGGER.info("PortfolioBacking.createEntitiesToStore");
 
         // if itemTemp is still == null, it means that user have used autocomplete to choose coin
         // and vice versa itemTemp != null, means user have chosen from the list of existing items,
@@ -286,8 +286,8 @@ public class AddTransactionOrItemBacking implements Serializable {
         setTransactionPriceTemp(portfolioBacking.getCoinPrice(itemTemp.getCoin(), transactionTemp.getBoughtCurrency()));
     }
 
-    public void createEntitiesForEdition(TransactionEntity transactionEntity) {
-        LOGGER.info("PortfolioBacking.createEntitiesForAddition(transactionEntity)");
+    public void createEntitiesToUpdate(TransactionEntity transactionEntity) {
+        LOGGER.info("PortfolioBacking.createEntitiesToUpdate(transactionEntity)");
 
         setItemTemp(itemBacking.getSelectedItem());
 
