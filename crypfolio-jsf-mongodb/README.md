@@ -1,4 +1,4 @@
-**MongoDB Document Structure:**
+### MongoDB Document Structure:
 
 ![Logical Data Model](data-model/mongodb-document-structures.png)
 

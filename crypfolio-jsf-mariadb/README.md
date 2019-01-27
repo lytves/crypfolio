@@ -1,4 +1,4 @@
-**MySQL Logical Data Model:**
+### MySQL Logical Data Model:
 
 ![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
 
