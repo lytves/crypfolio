@@ -43,6 +43,11 @@ public class NoSQLDAOFactory extends AbstractDAOFactory {
     }
 
     @Override
+    public ItemDAO getItemDAO() {
+        return new ItemDAOImpl(getEntityManager());
+    }
+
+    @Override
     public PortfolioDAO getPortfolioDAO() {
         return new PortfolioDAOImpl(getEntityManager());
     }

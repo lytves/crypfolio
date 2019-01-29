@@ -10,7 +10,7 @@ public abstract class AbstractDAOFactory {
     public static AbstractDAOFactory getDAOFactory(SettingsDB.Type t) {
 
         switch (t) {
-            case JPA:
+            case MySQL:
                 return new JPADAOFactory();
 
             case NoSQL:
@@ -22,6 +22,8 @@ public abstract class AbstractDAOFactory {
     /*
      * define the getDAO method for all entities here
      * */
+    public abstract ItemDAO getItemDAO();
+
     public abstract PortfolioDAO getPortfolioDAO();
 
     public abstract TransactionDAO getTransactionDAO();
