@@ -1,22 +1,22 @@
 package tk.crypfolio.business;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.DAO.AbstractDAOFactory;
 import tk.crypfolio.DAO.UserDAO;
-import tk.crypfolio.DAO.UserWatchCoinDAO;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.SettingsDB;
 import tk.crypfolio.model.UserEntity;
-import tk.crypfolio.model.UserWatchCoinEntity;
 import tk.crypfolio.util.CodeGenerator;
 import tk.crypfolio.util.EmailSender;
 import tk.crypfolio.util.StringEncoder;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.logging.Logger;
 
 @Transactional
 @Stateless
@@ -24,15 +24,22 @@ public class UserService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
+
+    private UserDAO uDAO;
+
+    @PostConstruct
+    private void init() {
+        LOGGER.info("UserService init()");
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        this.uDAO = myFactory.getUserDAO();
+    }
 
     /*
      * user login
      * */
     public UserEntity doLoginDB(UserEntity user, String password) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserByEmail(user.getEmail());
 
         // look that there is a userDB with the same email and its encoded password is correct
@@ -52,8 +59,6 @@ public class UserService implements Serializable {
         user.setEmailVerifCode(CodeGenerator.generateCodeUUID());
         user.setPassword(StringEncoder.encodePassword(user.getEmail(), password));
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         uDAO.createUser(user);
 
         if (user.getId() != null) {
@@ -68,9 +73,6 @@ public class UserService implements Serializable {
      * resend to user new verification email
      * */
     public void sendConfEmailDB(UserEntity user) {
-
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
 
         user.setEmailVerifCode(CodeGenerator.generateCodeUUID());
         user.setEmailVerifCodeRequestDateTime(LocalDateTime.now());
@@ -89,8 +91,6 @@ public class UserService implements Serializable {
      * */
     public UserEntity doConfirmEmailDB(String verificationCode) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserByEmailVerifCode(verificationCode);
 
         if (userDB != null && !userDB.getIsEmailVerified() && (ChronoUnit.SECONDS.between(
@@ -115,8 +115,6 @@ public class UserService implements Serializable {
      * */
     public Boolean setUserResetPasswordCodeDB(UserEntity user) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserByEmail(user.getEmail());
 
         if (userDB != null) {
@@ -142,8 +140,6 @@ public class UserService implements Serializable {
      * */
     public UserEntity searchUserResetPasswordCodeDB(String passwordResetCode) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserByResetPasswordCode(passwordResetCode);
 
         if (userDB != null && ChronoUnit.SECONDS.between(
@@ -159,8 +155,6 @@ public class UserService implements Serializable {
      * */
     public UserEntity setUserNewPasswordDB(UserEntity user, String oldPassword, String newPassword) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserById(user.getId());
 
         if (userDB != null && StringEncoder.encodePassword(user.getEmail(), oldPassword).equals(userDB.getPassword())) {
@@ -182,8 +176,6 @@ public class UserService implements Serializable {
      * */
     public UserEntity setUserNewPasswordDB(String resetPasswordCode, String password) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
         UserEntity userDB = uDAO.getUserByResetPasswordCode(resetPasswordCode);
 
         if (userDB != null && ChronoUnit.SECONDS.between(
@@ -211,11 +203,8 @@ public class UserService implements Serializable {
      * */
     public UserEntity updateUserDB(UserEntity user) {
 
-        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        UserDAO uDAO = myFactory.getUserDAO();
-        UserEntity userDB = uDAO.updateUser(user);
+        return uDAO.updateUser(user);
 
-        return userDB;
     }
 
 }
