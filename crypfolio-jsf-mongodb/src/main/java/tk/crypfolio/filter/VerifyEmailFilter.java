@@ -1,5 +1,7 @@
 package tk.crypfolio.filter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.view.ActiveUser;
 import tk.crypfolio.model.UserEntity;
 import tk.crypfolio.business.UserService;
@@ -10,13 +12,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebFilter(filterName = "VerifyEmailFilter", urlPatterns = {"/verify-email/*"})
 public class VerifyEmailFilter implements Filter {
 
-    private static final Logger logger = Logger.getLogger(VerifyEmailFilter.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(VerifyEmailFilter.class);
 
     private FilterConfig filterConfig;
 
@@ -63,8 +63,7 @@ public class VerifyEmailFilter implements Filter {
                 } else {
 
                     /*
-                     * some error, like the email has been already confirmed, or code is incorrect
-                     * or expired
+                     * some error, like the email has been already confirmed, or code is incorrect or is already expired
                      * */
                     req.setAttribute("errorText", "Email address verification error. " +
                             "The code is invalid or has been already confirmed or the link is expired. " +
@@ -78,9 +77,9 @@ public class VerifyEmailFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
             }
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(ex.getMessage());
         }
     }
 

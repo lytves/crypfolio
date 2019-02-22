@@ -1,5 +1,7 @@
 package tk.crypfolio.filter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.model.UserEntity;
 
@@ -9,13 +11,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebFilter(filterName = "ResetPasswordFilter", urlPatterns = {"/reset-password/*"})
 public class ResetPasswordFilter implements Filter {
 
-    private static final Logger logger = Logger.getLogger(ResetPasswordFilter.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ResetPasswordFilter.class);
 
     private FilterConfig filterConfig;
 
@@ -46,15 +46,14 @@ public class ResetPasswordFilter implements Filter {
                 if (user != null) {
 
                     /*
-                     * case: there is a user in BD and the reset code is alive
+                     * case: there is a user in BD and the reset code is valid
                      * */
                     filterConfig.getServletContext().getRequestDispatcher("/forgot-password").forward(req, resp);
 
                 } else {
 
                     /*
-                     * some error, like the link has been already used, or code is incorrect
-                     * or expired
+                     * some error, like the link has been already used, or code is incorrect or is already expired
                      * */
                     req.setAttribute("errorText", "Reset password error. " +
                             "The code is invalid or has been already used or the link is expired. " +
@@ -71,12 +70,11 @@ public class ResetPasswordFilter implements Filter {
 
         } catch (Exception e) {
 
-            logger.log(Level.WARNING, e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
     }
 
     @Override
     public void destroy() {
-
     }
 }
