@@ -17,6 +17,7 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,16 +39,24 @@ public class ApiParsingSchedulers {
 
         // on the start of application we do the parsing of actual CMC info
         // and set all applicationContainer data
-        parseAllCoinsOnSandboxCMC();
+        parsingSchedulerTask();
     }
 
 //    more about timers: https://stackoverflow.com/questions/14402068/ejb-schedule-wait-until-method-completed
 //    but that type of Timer is managed by the ApplicationServer and not by the application-owner
 
-    //    is used now: https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
-    @Schedule(minute = "*/30", hour = "*", persistent = false)
+    // is used now: https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
+    @Schedule(minute = "*/2", hour = "*", persistent = false)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public void parseAllCoinsOnSandboxCMC() {
+    public void parsingSchedulerTask() {
+
+        // run a method in a new thread: https://stackoverflow.com/a/21570040/6841308
+        // + anonymous new Runnable() can be replaced with lambda:
+        Executors.newSingleThreadExecutor().execute(() -> parseAllCoinsOnSandboxCMC());
+
+    }
+
+    private void parseAllCoinsOnSandboxCMC() {
 
         LOGGER.info("ApiParsingSchedulers.parseAllCoinsOnSandboxCMC is running...");
 
