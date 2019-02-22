@@ -46,7 +46,7 @@ public class ApiParsingSchedulers {
 //    but that type of Timer is managed by the ApplicationServer and not by the application-owner
 
     // is used now: https://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html - Using the Timer Service
-    @Schedule(minute = "*/2", hour = "*", persistent = false)
+    @Schedule(minute = "*/30", hour = "*", persistent = false)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public void parsingSchedulerTask() {
 
