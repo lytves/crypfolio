@@ -123,6 +123,7 @@ Desktop.ini
 .svn
 
 ### Vue UI ###
+backend/web/static/
 .DS_Store
 node
 node_modules

@@ -42,6 +42,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
+                            <!--it was for the Spring Boot project before-->
                             <!--<outputDirectory>src/main/resources/public</outputDirectory>-->
                             <outputDirectory>web</outputDirectory>
                             <overwrite>true</overwrite>
