@@ -25,12 +25,17 @@ public class ApiAuthenticationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
+        LOGGER.info("Enter to ApiAuthenticationFilter with request URI: " + requestContext.getUriInfo().getAbsolutePath());
+
         // Get the Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(AUTHORIZATION);
 
         // Validate the Authorization header
         if (!isTokenBasedAuthentication(authorizationHeader)) {
             abortWithUnauthorized(requestContext);
+
+            // it's important to return statement here!! after requestContext.abortWith(...).build()
+            return;
         }
 
         // Extract the token from the Authorization header
@@ -41,10 +46,12 @@ public class ApiAuthenticationFilter implements ContainerRequestFilter {
         try {
             // Validate the token
             validateToken(token);
+            LOGGER.info("ApiAuthenticationFilter passed successfully!");
 
         } catch (Exception ex) {
             abortWithUnauthorized(requestContext);
             LOGGER.error("Handling by ApiAuthenticationFilter: " + ex.getMessage());
+            return;
         }
     }
 
@@ -59,13 +66,12 @@ public class ApiAuthenticationFilter implements ContainerRequestFilter {
 
     private void abortWithUnauthorized(ContainerRequestContext requestContext) {
 
-        LOGGER.info("ApiAuthenticationFilter passed successfully!");
-
         // Abort the filter chain with a 401 status code response
         // The WWW-Authenticate header is sent along with the response
         requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                 .header(AUTHORIZATION, "Unauthorized")
                 .build());
+        LOGGER.warn("ApiAuthenticationFilter abort With Unauthorized error!");
     }
 
     private void validateToken(String token) throws Exception {
