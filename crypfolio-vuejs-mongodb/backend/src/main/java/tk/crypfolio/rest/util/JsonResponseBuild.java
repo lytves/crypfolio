@@ -37,9 +37,9 @@ public abstract class JsonResponseBuild {
                     .build()
                     .toString();
 
-            String token = "unathourized";
-            if (userId != null) {
+            String token = "";
 
+            if (userId != null) {
                 // here we should always generate new JWT-token for user send to. It's will make longer user authorization
                 token = AuthenticationTokenService.buildAuthentificationJWT(String.valueOf(userId));
             }
