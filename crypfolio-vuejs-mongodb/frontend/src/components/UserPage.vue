@@ -1,52 +1,93 @@
 <template>
 
-    <v-toolbar>
+    <v-layout align-center justify-center column>
 
-        <v-toolbar-title>
+        <!-- Main Toolbar -->
+        <v-toolbar>
 
-            <a href="/">
-                <img class="small-logo" src="../assets/logo_small_vuejs_mongodb.png"
-                     alt="Crypfolio :: a new crypto portfolio"/>
-            </a>
+            <!-- Logo -->
+            <div>
+                <a href="/">
+                    <img class="small-logo" src="../assets/logo_small_vuejs_mongodb.png"
+                         alt="Crypfolio :: a new crypto portfolio"/>
+                </a>
+            </div>
 
-        </v-toolbar-title>
+            <v-spacer></v-spacer>
 
-        <v-spacer></v-spacer>
+            <!-- Tabs choosing -->
+            <v-toolbar-items style="height: unset;">
 
-        <div>
+                <v-tabs fixed-tabs
+                        color="transparent">
+
+                    <!-- Tab title -->
+                    <v-tab
+                            v-for="item in items"
+                            @click.stop="chooseTab(item.slug)">
+
+                        {{item.title}}
+
+                    </v-tab>
+
+                </v-tabs>
+
+            </v-toolbar-items>
+
+            <v-spacer></v-spacer>
+
+            <!-- User Dropdown Menu -->
             <UserMenu></UserMenu>
-        </div>
 
-    </v-toolbar>
+        </v-toolbar>
+
+        <!-- Component changes when currentTabComponent changes -->
+        <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
+        <component
+                :is="currentTabComponent">
+        </component>
+
+    </v-layout>
 
 </template>
 
 <script>
     import UserMenu from '@/components/layout/UserMenu'
     // import {mapGetters, mapState} from 'vuex'
-    import {AUTH_LOGOUT} from '../store/actions/auth'
+    import TabPortFolio from './TabPortFolio'
+    import TabArchive from './TabArchive'
+    import TabWatchList from './TabWatchList'
 
     export default {
         name: 'user',
         components: {
-            UserMenu
+            UserMenu,
+            TabPortFolio,
+            TabArchive,
+            TabWatchList
+        },
+        data() {
+            return {
+                currentTabComponent: 'TabPortFolio',
+                items: [
+                    {title: 'Portfolio', slug: 'TabPortFolio'},
+                    {title: 'Archive', slug: 'TabArchive'},
+                    {title: 'Watchlist', slug: 'TabWatchList'}
+                ],
+            }
         },
         methods: {
-            logout: function () {
-                this.$store.dispatch(AUTH_LOGOUT)
-                    .then(() => {
-                        this.$router.push('/login')
-                    })
-                    .catch(() => {})
-            },
+            chooseTab(tabSlug) {
+                this.currentTabComponent = tabSlug;
+            }
         },
         computed: {
             // will use on the future functionality
             // ...mapGetters(['getUserProfile', 'isAuthenticated', 'isUserProfileLoaded']),
             // ...mapState({
-                // "authLoading" is not using actually
-                // authLoading: state => state.auth.status === 'loading',
-                // userInfo: state => `id: ${state.user.userProfile.id}, email: ${state.user.userProfile.email}`,
+            // "authLoading" is not using actually
+            // authLoading: state => state.auth.status === 'loading',
+            // userInfo: state => `id: ${state.user.userProfile.id}, email: ${state.user.userProfile.email}`,
             // }),
         }
     }
@@ -56,5 +97,6 @@
     .small-logo {
         width: 192px;
         height: 43px;
+        display: flex;
     }
 </style>

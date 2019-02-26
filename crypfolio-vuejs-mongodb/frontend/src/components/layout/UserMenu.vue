@@ -1,46 +1,39 @@
 <template>
 
-    <v-layout
-            align-center
-            justify-space-around
-            wrap>
+    <v-menu bottom offset-y>
 
-        <v-menu bottom offset-y>
+        <v-btn slot="activator">
+            <v-icon left color="blue darken-2">fas fa-user</v-icon>
+            {{userEmail}}
+            <v-icon right color="blue darken-2">expand_more</v-icon>
+        </v-btn>
 
-            <v-btn slot="activator">
-                <v-icon left color="blue darken-2">fas fa-user</v-icon>
-                {{userEmail}}
-                <v-icon right color="blue darken-2">expand_more</v-icon>
-            </v-btn>
+        <v-list>
+            <v-list-tile
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click.stop="chooseMenuAction(item.link)">
 
-            <v-list>
-                <v-list-tile
-                        v-for="(item, index) in items"
-                        :key="index"
-                        @click.stop="chooseMenuAction(item.link)">
+                <v-list-tile-avatar>
+                    <v-icon color="blue darken-2">{{ item.icon }}</v-icon>
+                </v-list-tile-avatar>
 
-                    <v-list-tile-avatar>
-                        <v-icon color="blue darken-2">{{ item.icon }}</v-icon>
-                    </v-list-tile-avatar>
+                <v-list-tile-title>
+                    {{ item.title }}
+                </v-list-tile-title>
 
-                    <v-list-tile-title>
-                        {{ item.title }}
-                    </v-list-tile-title>
+            </v-list-tile>
+        </v-list>
 
-                </v-list-tile>
-            </v-list>
+        <UserSettings v-model="showUserSettings"></UserSettings>
+        <Friends v-model="showFriends"></Friends>
 
-            <UserSettings v-model="showUserSettings"></UserSettings>
-            <Friends v-model="showFriends"></Friends>
-
-        </v-menu>
-
-    </v-layout>
+    </v-menu>
 
 </template>
 
 <script>
-    import {mapGetters, mapState} from 'vuex'
+    import {mapState} from 'vuex'
     import {AUTH_LOGOUT} from "../../store/actions/auth";
     import UserSettings from "@/components/layout/UserSettings"
     import Friends from "@/components/layout/Friends"
@@ -51,15 +44,17 @@
             UserSettings,
             Friends
         },
-        data: () => ({
-            items: [
-                {title: 'Settings', icon: 'far fa-address-card', link: 'settings'},
-                {title: 'Friends', icon: 'fas fa-star', link: 'friends'},
-                {title: 'Logout', icon: 'fas fa-sign-out-alt', link: 'logout'},
-            ],
-            showUserSettings: false,
-            showFriends: false,
-        }),
+        data() {
+            return {
+                items: [
+                    {title: 'Settings', icon: 'far fa-address-card', link: 'settings'},
+                    {title: 'Friends', icon: 'fas fa-star', link: 'friends'},
+                    {title: 'Logout', icon: 'fas fa-sign-out-alt', link: 'logout'},
+                ],
+                showUserSettings: false,
+                showFriends: false,
+            }
+        },
         computed: {
             // ...mapGetters(['getUserProfile', 'isAuthenticated', 'isUserProfileLoaded']),
             ...mapState({
@@ -68,7 +63,7 @@
             }),
         },
         methods: {
-            chooseMenuAction: function (link) {
+            chooseMenuAction(link) {
                 this[link]()
             },
             logout() {
@@ -76,7 +71,8 @@
                     .then(() => {
                         this.$router.push('/login')
                     })
-                    .catch(() => {})
+                    .catch(() => {
+                    })
             },
             settings() {
                 this.showUserSettings = true

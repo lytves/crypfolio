@@ -75,7 +75,7 @@ export default new Router({
             beforeEnter: ifAuthenticated
         },
         {path: '/', redirect: '/login'},
-        // otherwise redirect to home
+        // otherwise redirect to the default error page
         {path: '*', component: NotFoundComponent}
     ]
 });
