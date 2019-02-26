@@ -1,14 +1,15 @@
 <template>
 
-    <v-container fluid fill-height>
+    <v-container>
 
-        <v-layout align-center justify-center column>
+        <v-layout align-center column>
 
-            <Header></Header>
+            <BigLogo></BigLogo>
 
             <v-flex xs12 sm8 md4>
 
                 <v-card class="elevation-12" width="400">
+
                     <v-toolbar dark color="primary">
                         <v-toolbar-title>Email Confirmation</v-toolbar-title>
                     </v-toolbar>
@@ -29,6 +30,7 @@
                 </v-card>
 
             </v-flex>
+
         </v-layout>
 
     </v-container>
@@ -36,13 +38,13 @@
 </template>
 
 <script>
-    import Header from '@/components/layout/Header'
+    import BigLogo from '@/components/layout/BigLogo'
     import {USER_EMAIL_VERIFICATION} from "../store/actions/user";
 
     export default {
         name: 'verify-email-confirm-link',
         components: {
-            Header
+            BigLogo
         },
         data: () => ({
             confirmationEmailInvalid: false,

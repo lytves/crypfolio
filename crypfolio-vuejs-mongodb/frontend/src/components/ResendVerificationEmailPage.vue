@@ -1,14 +1,15 @@
 <template>
 
-    <v-container fluid fill-height>
+    <v-container>
 
-        <v-layout align-center justify-center column>
+        <v-layout align-center column>
 
-            <Header></Header>
+            <BigLogo></BigLogo>
 
             <v-flex xs12 sm8 md4>
 
                 <v-card class="elevation-12" width="400">
+
                     <v-toolbar dark color="primary">
                         <v-toolbar-title>Resend Verification Email</v-toolbar-title>
                     </v-toolbar>
@@ -46,6 +47,7 @@
                 </v-layout>
 
             </v-flex>
+
         </v-layout>
 
     </v-container>
@@ -53,14 +55,14 @@
 </template>
 
 <script>
-    import Header from '@/components/layout/Header'
+    import BigLogo from '@/components/layout/BigLogo'
     import {SNACKBAR_ERROR} from "../store/actions/snackbar";
     import {USER_RESEND_VERIFICATION_EMAIL_REQUEST} from "../store/actions/user";
 
     export default {
         name: 'resend-verif-email',
         components: {
-            Header
+            BigLogo
         },
         data: () => ({
             verifEmailWasSent: false,

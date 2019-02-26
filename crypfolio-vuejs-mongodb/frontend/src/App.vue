@@ -1,24 +1,31 @@
 <template>
 
     <v-app>
-        <v-content>
+        <v-container class="pa-0" fill-height>
+            <v-layout row wrap>
 
-            <div>
-                <router-view/>
-            </div>
+                <v-content>
 
-            <Footer></Footer>
+                    <!-- content -->
+                    <router-view/>
 
-            <v-snackbar
-                    v-model="snackbar"
-                    :color="snackType"
-                    top right
-                    absolute
-                    multi-line>
-                {{ snackMessage }}
-            </v-snackbar>
+                    <!-- footer -->
+                    <Footer></Footer>
 
-        </v-content>
+                    <!-- snackbar -->
+                    <v-snackbar
+                            v-model="snackbar"
+                            :color="snackType"
+                            top right
+                            absolute
+                            multi-line>
+                        {{ snackMessage }}
+                    </v-snackbar>
+
+                </v-content>
+
+            </v-layout>
+        </v-container>
     </v-app>
 
 </template>
@@ -77,5 +84,13 @@
         margin: 0;
         padding: 0;
         list-style-type: none;
+    }
+    #app {
+        min-height: 100vh;
+    }
+    footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 </style>

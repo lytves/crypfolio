@@ -1,10 +1,10 @@
 <template>
 
-    <v-container fluid fill-height>
+    <v-container>
 
-        <v-layout align-center justify-center column>
+        <v-layout align-center column>
 
-            <Header></Header>
+            <BigLogo></BigLogo>
 
             <v-flex xs12 sm8 md4>
 
@@ -66,6 +66,7 @@
                                     @click:append="() => (visible = !visible)"
                                     :type="visible ? 'text' : 'password'">
                             </v-text-field>
+
                         </v-form>
 
                         <v-card-actions class="justify-center">
@@ -91,14 +92,14 @@
 </template>
 
 <script>
-    import Header from '@/components/layout/Header'
+    import BigLogo from '@/components/layout/BigLogo'
     import {SNACKBAR_ERROR} from '../store/actions/snackbar'
     import {USER_SIGNUP_REQUEST} from '../store/actions/user'
 
     export default {
         name: 'login',
         components: {
-            Header
+            BigLogo
         },
         data: () => ({
             signupFormWasSent: false,
@@ -131,7 +132,8 @@
                         .then(() => {
                             this.signupFormWasSent = true;
                         })
-                        .catch(() => {})
+                        .catch(() => {
+                        })
                 } else {
                     this.$store.dispatch(SNACKBAR_ERROR, "Invalid Form Credentials!");
                 }

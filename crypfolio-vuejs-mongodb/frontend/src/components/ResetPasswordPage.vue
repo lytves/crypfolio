@@ -1,14 +1,15 @@
 <template>
 
-    <v-container fluid fill-height>
+    <v-container>
 
-        <v-layout align-center justify-center column>
+        <v-layout align-center column>
 
-            <Header></Header>
+            <BigLogo></BigLogo>
 
             <v-flex xs12 sm8 md4>
 
                 <v-card class="elevation-12" width="400">
+
                     <v-toolbar dark color="primary">
                         <v-toolbar-title>Reset Password</v-toolbar-title>
                     </v-toolbar>
@@ -47,6 +48,7 @@
                 </v-layout>
 
             </v-flex>
+
         </v-layout>
 
     </v-container>
@@ -54,14 +56,14 @@
 </template>
 
 <script>
-    import Header from '@/components/layout/Header'
+    import BigLogo from '@/components/layout/BigLogo'
     import {SNACKBAR_ERROR} from "../store/actions/snackbar";
     import {USER_RESET_PASSWORD_REQUEST} from "../store/actions/user";
 
     export default {
         name: 'reset-password',
         components: {
-            Header
+            BigLogo
         },
         data: () => ({
             resetPasswordFormWasSent: false,
@@ -81,7 +83,8 @@
                         .then(() => {
                             this.resetPasswordFormWasSent = true;
                         })
-                        .catch(() => {})
+                        .catch(() => {
+                        })
                 } else {
                     this.$store.dispatch(SNACKBAR_ERROR, "Invalid Form Credentials!");
                 }

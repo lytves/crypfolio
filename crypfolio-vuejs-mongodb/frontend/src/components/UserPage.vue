@@ -1,53 +1,59 @@
 <template>
 
-    <v-layout align-center justify-center column>
+    <v-container class="pa-0">
 
-        <!-- Main Toolbar -->
-        <v-toolbar>
+        <v-layout align-center column>
 
-            <!-- Logo -->
-            <div>
-                <a href="/">
-                    <img class="small-logo" src="../assets/logo_small_vuejs_mongodb.png"
-                         alt="Crypfolio :: a new crypto portfolio"/>
-                </a>
-            </div>
+            <!-- Main Toolbar -->
+            <v-toolbar>
 
-            <v-spacer></v-spacer>
+                <!-- Logo -->
+                <div>
+                    <a href="/">
+                        <img class="small-logo" src="../assets/logo_small_vuejs_mongodb.png"
+                             alt="Crypfolio :: a new crypto portfolio"/>
+                    </a>
+                </div>
 
-            <!-- Tabs choosing -->
-            <v-toolbar-items style="height: unset;">
+                <v-spacer></v-spacer>
 
-                <v-tabs fixed-tabs
-                        color="transparent">
+                <!-- Tabs choosing -->
+                <v-toolbar-items style="height: unset;">
 
-                    <!-- Tab title -->
-                    <v-tab
-                            v-for="item in items"
-                            @click.stop="chooseTab(item.slug)">
+                    <v-tabs fixed-tabs
+                            color="transparent">
 
-                        {{item.title}}
+                        <!-- Tab title -->
+                        <v-tab
+                                v-for="item in items"
+                                @click.stop="chooseTab(item.slug)">
 
-                    </v-tab>
+                            {{item.title}}
 
-                </v-tabs>
+                        </v-tab>
 
-            </v-toolbar-items>
+                    </v-tabs>
 
-            <v-spacer></v-spacer>
+                </v-toolbar-items>
 
-            <!-- User Dropdown Menu -->
-            <UserMenu></UserMenu>
+                <v-spacer></v-spacer>
 
-        </v-toolbar>
+                <!-- User Dropdown Menu -->
+                <UserMenu></UserMenu>
 
-        <!-- Component changes when currentTabComponent changes -->
-        <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
-        <component
-                :is="currentTabComponent">
-        </component>
+            </v-toolbar>
 
-    </v-layout>
+            <!-- Component changes when currentTabComponent changes -->
+            <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
+            <!-- Component changes when currentTabComponent changes -->
+            <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
+            <component
+                    :is="currentTabComponent">
+            </component>
+
+        </v-layout>
+
+    </v-container>
 
 </template>
 
