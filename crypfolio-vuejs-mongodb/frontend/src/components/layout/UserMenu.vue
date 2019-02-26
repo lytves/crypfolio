@@ -2,10 +2,14 @@
 
     <v-menu bottom offset-y>
 
-        <v-btn slot="activator">
+        <v-btn slot="activator" v-if="isUserProfileLoaded">
+
             <v-icon left color="blue darken-2">fas fa-user</v-icon>
+
             {{userEmail}}
+
             <v-icon right color="blue darken-2">expand_more</v-icon>
+
         </v-btn>
 
         <v-list>
@@ -33,7 +37,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapGetters, mapState} from 'vuex'
     import {AUTH_LOGOUT} from "../../store/actions/auth";
     import UserSettings from "@/components/layout/UserSettings"
     import Friends from "@/components/layout/Friends"
@@ -56,7 +60,7 @@
             }
         },
         computed: {
-            // ...mapGetters(['getUserProfile', 'isAuthenticated', 'isUserProfileLoaded']),
+            ...mapGetters(['isUserProfileLoaded']),
             ...mapState({
                 // authLoading: state => state.auth.status === 'loading',
                 userEmail: state => state.user.userProfile.email

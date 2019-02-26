@@ -13,7 +13,7 @@ const state = {
 
 const getters = {
     // getUserProfile: state => state.userProfile,
-    // isUserProfileLoaded: state => !!state.userProfile,
+    isUserProfileLoaded: state => !!state.userProfile,
 };
 
 const actions = {
@@ -141,6 +141,7 @@ const mutations = {
     [USER_SUCCESS]: (state, user) => {
         // state.status = 'success';
         // Vue.set(state, 'userProfile', resp); //other way to set Vuex states
+        console.log('user', user);
         state.userProfile = user;
     },
     [USER_ERROR]: (state) => {
