@@ -11,7 +11,7 @@ export const userAuthService = {
 };
 
 async function authentication(email, password) {
-    return AXIOS.post('/authentication', {
+    return await AXIOS.post('/authentication', {
         "email": email,
         "password": password
     })
@@ -29,7 +29,7 @@ async function authentication(email, password) {
 }
 
 async function getUser() {
-    return AXIOS.get('/user')
+    return await AXIOS.get('/user')
         .then(
             response => {
                 // returns only JSON object User
@@ -42,7 +42,7 @@ async function getUser() {
 }
 
 async function registration(email, password, portfolio) {
-    return AXIOS.post('/registration', {
+    return await AXIOS.post('/registration', {
         "email": email,
         "password": password,
         "portfolioName": portfolio,
@@ -56,7 +56,7 @@ async function registration(email, password, portfolio) {
 }
 
 async function resetPasswordRequest(email) {
-    return AXIOS.post('/reset-password/request', {
+    return await AXIOS.post('/reset-password/request', {
         "email": email,
     })
         // we don't need to pass any data,
@@ -68,7 +68,7 @@ async function resetPasswordRequest(email) {
 }
 
 async function setNewPassword(code, password) {
-    return AXIOS.post('/reset-password', {
+    return await AXIOS.post('/reset-password', {
         "code": code,
         "password": password
     })
@@ -86,7 +86,7 @@ async function setNewPassword(code, password) {
 }
 
 async function resendVerificationEmailRequest(email) {
-    return AXIOS.post('/verify-email/request', {
+    return await AXIOS.post('/verify-email/request', {
         "email": email,
     })
         // we don't need to pass any data
@@ -98,7 +98,7 @@ async function resendVerificationEmailRequest(email) {
 }
 
 async function emailVerification(code) {
-    return AXIOS.post('/verify-email', {
+    return await AXIOS.post('/verify-email', {
         "code": code,
     })
         .then(

@@ -1,8 +1,8 @@
 <template>
 
-    <v-menu bottom offset-y>
+    <v-menu bottom offset-y v-if="isUserProfileLoaded">
 
-        <v-btn slot="activator" v-if="isUserProfileLoaded">
+        <v-btn slot="activator">
 
             <v-icon left color="blue darken-2">fas fa-user</v-icon>
 

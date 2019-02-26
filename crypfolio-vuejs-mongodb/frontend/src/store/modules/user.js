@@ -1,10 +1,17 @@
-import {USER_REQUEST, USER_ERROR, USER_SUCCESS, USER_SIGNUP_REQUEST,
-    USER_RESET_PASSWORD_REQUEST, USER_SET_NEW_PASSWORD,
-    USER_RESEND_VERIFICATION_EMAIL_REQUEST, USER_EMAIL_VERIFICATION} from '../actions/user'
+import {
+    USER_EMAIL_VERIFICATION,
+    USER_ERROR,
+    USER_REQUEST,
+    USER_RESEND_VERIFICATION_EMAIL_REQUEST,
+    USER_RESET_PASSWORD_REQUEST,
+    USER_SET_NEW_PASSWORD,
+    USER_SIGNUP_REQUEST,
+    USER_SUCCESS
+} from '../actions/user'
 // is it needed to import it here??? import Vue from 'vue'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {userAuthService} from "../../utils"
-import {SNACKBAR_SUCCESS, SNACKBAR_ERROR} from "../actions/snackbar";
+import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
 
 const state = {
     userProfile: {},
@@ -12,8 +19,8 @@ const state = {
 };
 
 const getters = {
+    isUserProfileLoaded: state => !!state.userProfile.id,
     // getUserProfile: state => state.userProfile,
-    isUserProfileLoaded: state => !!state.userProfile,
 };
 
 const actions = {
