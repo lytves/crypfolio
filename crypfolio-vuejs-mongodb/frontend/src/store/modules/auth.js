@@ -1,5 +1,5 @@
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_REQUEST, AUTH_SUCCESS} from '../actions/auth'
-import {USER_REQUEST} from '../actions/user'
+import {USER_ERROR, USER_REQUEST} from '../actions/user'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from '../actions/snackbar'
 import {userAuthService} from '../../utils'
 import router from '../../router';
@@ -41,9 +41,12 @@ const actions = {
         return new Promise((resolve, reject) => {
 
             commit(AUTH_LOGOUT);
+
+            // reset store state.user.userProfile
+            commit(USER_ERROR);
+
             localStorage.removeItem('token');
-            // remove the axios default header
-            // delete AXIOS.defaults.headers.common['Authorization'];
+
             router.push('/login');
 
             resolve();
