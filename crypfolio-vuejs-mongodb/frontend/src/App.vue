@@ -91,9 +91,4 @@
         bottom: 0;
         width: 100%;
     }
-    .table-empty {
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-    }
 </style>
