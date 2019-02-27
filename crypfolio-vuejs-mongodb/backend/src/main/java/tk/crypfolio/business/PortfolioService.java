@@ -18,12 +18,33 @@ public class PortfolioService implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
-    public PortfolioEntity updatePortfolioDB(PortfolioEntity portfolio){
+    private PortfolioDAO getPortfolioDAO() {
 
+        LOGGER.info("PortfolioService getPortfolioDAO()");
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
-        PortfolioDAO pDAO = myFactory.getPortfolioDAO();
-        PortfolioEntity portfolioDB = pDAO.updatePortfolio(portfolio);
 
-        return portfolioDB;
+        return myFactory.getPortfolioDAO();
     }
+
+    public PortfolioEntity updatePortfolioDB(PortfolioEntity portfolio) {
+
+        return getPortfolioDAO().updatePortfolio(portfolio);
+
+    }
+
+    /*
+     * RESTful API methods to using with Vue.js
+     *
+     * */
+    public PortfolioEntity getPortfolioDBById(Long Id) {
+
+        PortfolioEntity portfolioDB = getPortfolioDAO().getPortfolioById(Id);
+
+        if (portfolioDB != null) {
+
+            return portfolioDB;
+        }
+        return null;
+    }
+
 }
