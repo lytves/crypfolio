@@ -70,3 +70,6 @@ historical prices of cryptocoins from
 
 ![WatchList coin adding Page](images/watchlist-add-coin-page-3.png)
 
+![User settings modal window](images/user-settings.png)
+
+![Portfolio settings modal window](images/portfolio-settings.png)
