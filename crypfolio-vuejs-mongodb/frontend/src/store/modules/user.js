@@ -10,8 +10,9 @@ import {
 } from '../actions/user'
 // is it needed to import it here??? import Vue from 'vue'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
-import {userAuthService} from "../../utils"
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
+import {PORTFOLIO_SUCCESS, PORTFOLIO_ERROR} from "../actions/portfolio";
+import {userAuthService} from "../../utils"
 
 const state = {
     userProfile: {},
@@ -34,7 +35,12 @@ const actions = {
                 // parsing of response to have User entity as JSON
                 let user = JSON.parse(resp);
 
-                // store userProfile
+                // save object Portfolio to separated 'store portfolio'
+                dispatch(PORTFOLIO_SUCCESS, user.portfolio);
+
+                // ??? save object userWatchCoins to separated 'store portfolio watchCoins' ???
+                // dispatch(WATCHCOINS_SUCCESS, user.watchCoins);
+
                 commit(USER_SUCCESS, user);
 
                 // and also store new auth token to auth.store.sate
@@ -148,7 +154,15 @@ const mutations = {
     [USER_SUCCESS]: (state, user) => {
         // state.status = 'success';
         // Vue.set(state, 'userProfile', resp); //other way to set Vuex states
-        console.log('user', user);
+
+        // store to userProfile only user Object (without portfolio, userWatchCoins, etc.)
+        console.log('user before', user);
+        ['portfolio', 'password', 'userWatchCoins', 'emailVerifCode', 'emailVerifCodeRequestDateTime',
+            'passwordResetCode', 'passwordResetCodeRequestDateTime'].forEach(function (k) {
+            delete user[k];
+        });
+        console.log('user after', user);
+
         state.userProfile = user;
     },
     [USER_ERROR]: (state) => {
