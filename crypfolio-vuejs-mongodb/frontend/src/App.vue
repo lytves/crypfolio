@@ -35,7 +35,6 @@
     import Footer from '@/components/layout/Footer'
     import {USER_REQUEST} from './store/actions/user'
     import {SNACKBAR_CLEAR} from './store/actions/snackbar'
-    import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
     export default {
         name: 'app',
