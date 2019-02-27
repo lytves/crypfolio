@@ -243,7 +243,7 @@ public class UserEntity implements Serializable {
                 ", emailVerifCodeRequestDateTime=" + emailVerifCodeRequestDateTime +
                 ", passwordResetCode='" + passwordResetCode + '\'' +
                 ", passwordResetCodeRequestDateTime=" + passwordResetCodeRequestDateTime +
-                ", portfolio.id=" + portfolio.getId() +
+                ", portfolio=" + portfolio +
                 ", userWatchCoins=" + userWatchCoins +
 //                ", usersFollowees=" + usersFollowees +
                 '}';

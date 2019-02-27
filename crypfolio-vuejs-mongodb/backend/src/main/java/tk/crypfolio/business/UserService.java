@@ -11,7 +11,6 @@ import tk.crypfolio.util.CodeGenerator;
 import tk.crypfolio.util.EmailSender;
 import tk.crypfolio.util.StringEncoder;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.transaction.Transactional;
 import java.io.Serializable;

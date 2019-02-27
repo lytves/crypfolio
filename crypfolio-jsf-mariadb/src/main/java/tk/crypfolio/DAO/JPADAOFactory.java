@@ -19,6 +19,7 @@ public class JPADAOFactory extends AbstractDAOFactory {
             synchronized (EntityManagerFactory.class) {
                 if (emf == null) {
                     emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnitJPA");
+                    LOGGER.info("createEntityManagerFactory - only one for all Project!");
                 }
             }
         }

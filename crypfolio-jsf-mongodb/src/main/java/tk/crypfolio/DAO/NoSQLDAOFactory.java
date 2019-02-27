@@ -19,6 +19,7 @@ public class NoSQLDAOFactory extends AbstractDAOFactory {
             synchronized (EntityManagerFactory.class) {
                 if (emf == null) {
                     emf = Persistence.createEntityManagerFactory("CrypFolioPersistenceUnitNoSQL");
+                    LOGGER.info("createEntityManagerFactory - only one for all Project!");
                 }
             }
         }
