@@ -2,8 +2,6 @@ import Vue from 'vue'
 
 Vue.filter('portfolioValues', function (value, currency) {
 
-    console.log('currency', currency);
-
     if (typeof value !== "number") {
         return value;
     }

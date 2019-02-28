@@ -156,13 +156,11 @@ const mutations = {
         // Vue.set(state, 'userProfile', resp); //other way to set Vuex states
 
         // store to userProfile only user Object (without portfolio, userWatchCoins, etc.)
-        console.log('user before', user);
         ['portfolio', 'password', 'userWatchCoins', 'emailVerifCode', 'emailVerifCodeRequestDateTime',
             'passwordResetCode', 'passwordResetCodeRequestDateTime'].forEach(function (k) {
             delete user[k];
         });
-        console.log('user after', user);
-
+        console.log('DELETE user.portfolio, password, userWatchCoins, emailVerifCode, ....');
         state.userProfile = user;
     },
     [USER_ERROR]: (state) => {

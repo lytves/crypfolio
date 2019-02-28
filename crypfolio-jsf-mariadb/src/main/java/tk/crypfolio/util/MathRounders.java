@@ -43,7 +43,7 @@ public abstract class MathRounders {
                 }
                 break;
 
-            // same rounding method for USD && EUR
+            // same rounding method for BTC && ETH
             case "BTC":
             case "ETH":
 

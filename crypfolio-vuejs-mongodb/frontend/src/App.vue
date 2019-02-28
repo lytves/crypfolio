@@ -92,6 +92,6 @@
         width: 100%;
     }
     .selectsFlexBasis {
-        flex-basis: 0;
+        flex-basis: 0 !important;
     }
 </style>

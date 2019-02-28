@@ -15,7 +15,7 @@
                             </span>
                         </v-card-text>
 
-                        <v-flex xs12 sm6 d-flex class="selectsFlexBasis">
+                        <v-flex sm6 d-flex class="selectsFlexBasis">
                             <v-select
                                     v-model="portfolioShowedCurrency"
                                     :items="currencies"
@@ -73,9 +73,7 @@
 
         </v-data-table>
 
-
     </v-container>
-
 
 </template>
 
