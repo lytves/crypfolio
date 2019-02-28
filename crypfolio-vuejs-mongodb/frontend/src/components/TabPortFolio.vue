@@ -19,7 +19,6 @@
                             <v-select
                                     v-model="portfolioShowedCurrency"
                                     :items="currencies"
-                                    label="Solo field"
                                     solo hide-details
                                     :disabled="!isUserPortfolioLoaded">
 
