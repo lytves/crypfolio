@@ -31,7 +31,7 @@ const actions = {
 const mutations = {
     [PORTFOLIO_SUCCESS]: (state, portfolio) => {
         state.userPortfolio = portfolio;
-        console.log('portfolio', state.portfolio);
+        console.log('portfolio', state.userPortfolio);
     },
     [PORTFOLIO_UPDATE_CURRENCY]: (state, currency) => {
         state.userPortfolio.showedCurrency = currency;

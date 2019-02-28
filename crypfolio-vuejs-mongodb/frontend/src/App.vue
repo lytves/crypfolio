@@ -91,4 +91,7 @@
         bottom: 0;
         width: 100%;
     }
+    .selectsFlexBasis {
+        flex-basis: 0;
+    }
 </style>

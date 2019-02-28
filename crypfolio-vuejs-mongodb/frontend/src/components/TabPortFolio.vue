@@ -10,10 +10,12 @@
                     <v-layout row>
                         <v-card-text style="width: auto;">
                             <span class="grey--text">Market value:</span>
-                            <span class="pa-3 font-weight-medium">555,333,315,639.6 {{portfolioShowedCurrency}}</span>
+                            <span class="pa-3 font-weight-medium">
+                                {{123456789.123456789 | portfolioValues(portfolioShowedCurrency)}} {{portfolioShowedCurrency}}
+                            </span>
                         </v-card-text>
 
-                        <v-flex xs12 sm6 d-flex selectClass>
+                        <v-flex xs12 sm6 d-flex class="selectsFlexBasis">
                             <v-select
                                     v-model="portfolioShowedCurrency"
                                     :items="currencies"
@@ -27,10 +29,14 @@
                         <v-card-text style="width: auto;">
 
                             <span class="grey--text">Net cost:</span>
-                            <span class="pa-3 font-weight-medium">5,889.77 {{portfolioShowedCurrency}}</span>
+                            <span class="pa-3 font-weight-medium">
+                                {{showPortfolioNetCost | portfolioValues(portfolioShowedCurrency)}} {{portfolioShowedCurrency}}
+                            </span>
 
                             <span class="grey--text">Profit:</span>
-                            <span class="pa-3 font-weight-medium green--text">9,289.83 {{portfolioShowedCurrency}} (169.19%)</span>
+                            <span class="pa-3 font-weight-medium green--text">
+                                {{123456789.123456789 | portfolioValues(portfolioShowedCurrency) }} {{portfolioShowedCurrency}} (169.19%)
+                            </span>
                         </v-card-text>
                     </v-layout>
 
@@ -54,8 +60,9 @@
             </template>
 
             <template slot="items" slot-scope="props">
-                <td>{{ props.item.coin.name }}</td>
-                <td>{{ props.item.amount}} {{props.item.coin.symbol}}</td>
+                <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
+                <td class="font-weight-medium">{{ props.item.coin.name }}</td>
+                <td class="font-weight-medium">{{ props.item.amount}} {{props.item.coin.symbol}}</td>
                 <td>counted</td>
                 <td>counted</td>
                 <td>counted</td>
@@ -82,6 +89,7 @@
         data() {
             return {
                 headers: [
+                    {text: '', value: 'img', sortable: false, width: "1%", class: "pa-0"},
                     {text: 'Coin', value: 'name'},
                     {text: 'Amount', value: 'calories'},
                     {text: 'Market Value', value: 'fat'},
@@ -118,15 +126,33 @@
                 set(mainCurrency) {
                     this.$store.dispatch(PORTFOLIO_UPDATE_CURRENCY, mainCurrency)
                 }
-            }
+            },
+            showPortfolioNetCost() {
+                switch (this.userPortfolio.showedCurrency) {
+                    case 'USD':
+                        return this.userPortfolio.netCostUsd;
+                    case 'EUR':
+                        return this.userPortfolio.netCostEur;
+                    case 'BTC':
+                        return this.userPortfolio.netCostBtc;
+                    case 'ETH':
+                        return this.userPortfolio.netCostEth;
+                    default:
+                        return 0;
+                }
+            },
+
         },
-        mounted() {
+        methods: {
+            showItemCoinImage(id) {
+                if (this.isUserPortfolioLoaded) {
+                    return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
+                }
+                return '@/assets/coin-default.png'
+            }
         }
     }
 </script>
 
 <style scoped>
-    .selectClass {
-        flex-basis: 0;
-    }
 </style>
