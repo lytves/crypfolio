@@ -4,6 +4,7 @@ import user from './modules/user'
 import auth from './modules/auth'
 import snackbar from './modules/snackbar'
 import portfolio from './modules/portfolio'
+import watchlist from './modules/watchlist'
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
         user,
         auth,
         snackbar,
-        portfolio
+        portfolio,
+        watchlist
     },
     strict: debug,
 })

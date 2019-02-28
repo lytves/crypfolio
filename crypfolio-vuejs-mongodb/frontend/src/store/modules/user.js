@@ -11,7 +11,8 @@ import {
 // is it needed to import it here??? import Vue from 'vue'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
-import {PORTFOLIO_SUCCESS, PORTFOLIO_ERROR} from "../actions/portfolio";
+import {PORTFOLIO_SUCCESS} from "../actions/portfolio";
+import {WATCHLIST_SUCCESS} from '../actions/watchlist'
 import {userAuthService} from "../../utils"
 
 const state = {
@@ -38,8 +39,8 @@ const actions = {
                 // save object Portfolio to separated 'store portfolio'
                 dispatch(PORTFOLIO_SUCCESS, user.portfolio);
 
-                // ??? save object userWatchCoins to separated 'store portfolio watchCoins' ???
-                // dispatch(WATCHCOINS_SUCCESS, user.watchCoins);
+                // save array userWatchCoins to separated 'store watchlist'
+                dispatch(WATCHLIST_SUCCESS, user.userWatchCoins);
 
                 commit(USER_SUCCESS, user);
 
