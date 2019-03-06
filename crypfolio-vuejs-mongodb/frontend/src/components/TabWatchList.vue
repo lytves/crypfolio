@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 
     <v-container class="ma-0 pa-0">
 
@@ -8,7 +8,10 @@
                 <v-flex xs10 d-flex>
 
                     <v-card-text style="width: auto;">
-                        <span class="grey--text">Bitcon, Ethereum, (??? something more) actual prices</span>
+                        <span class="grey--text">
+                            Total Market Cap:  $132.653.101.593
+                            24h Vol: $32.172.230.423
+                            BTC Dominance: 51.6%</span>
                     </v-card-text>
 
                 </v-flex>
@@ -18,7 +21,7 @@
                     <v-btn
                             color="primary lighten-2"
                             dark
-                            @click.stop="showAddWatchCoin">
+                            @click.stop="showAddWatchCoinDialog">
                         Add New Coin
                     </v-btn>
 
@@ -27,33 +30,71 @@
             </v-layout>
         </v-card>
 
-        <v-data-table
-                :headers="headers"
-                hide-actions
-                :items="showWatchlistCoins"
-                class="elevation-1">
+        <div>
+            <v-data-table
+                    :headers="headers"
+                    :items="showWatchlistCoins"
+                    :expand="expand"
+                    item-key="coinId.id"
+                    hide-actions
+                    class="elevation-1">
 
-            <template slot="no-data">
+                <template slot="no-data">
 
-                <v-flex align-center class="font-weight-medium text-sm-center blockquote">
-                    Your watchlist is empty. Add any coin to start!
-                </v-flex>
+                    <v-flex align-center class="font-weight-medium text-sm-center blockquote">
+                        Your watchlist is empty. Add any coin to start!
+                    </v-flex>
 
-            </template>
+                </template>
 
-            <template slot="items" slot-scope="props">
-                <td class="pa-2"><img :src="showCoinImage(props.item.coinId.id)"/></td>
-                <td class="font-weight-medium">
-                    {{ props.item.coinId.name }} {{props.item.coinId.symbol}}
-                </td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td><img src="@/assets/price-graph.png"/></td>
-            </template>
+                <template v-slot:items="props">
+                    <tr @click="props.expanded = !props.expanded; expandedRowCoinId = props.item.coinId.id;">
 
-        </v-data-table>
+                        <td class="pa-2 flex"><img :src="showCoinImage(props.item.coinId.id)"/></td>
+
+                        <td class="font-weight-medium align-center">
+                            <span class="font-weight-bold d-block">{{ props.item.coinId.name }}</span>
+                            <span class="d-block">{{ props.item.coinId.symbol }}</span>
+                        </td>
+
+                        <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency)
+                            | generalValues(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                        </td>
+
+                        <td>{{ showCoinMarketCap(props.item.coinId.id, props.item.showedCurrency)
+                            | marketcapValues }} {{ props.item.showedCurrency }}
+                        </td>
+
+                        <td :class="getPercentColor(showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency))">
+                            {{ showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
+                            }}%
+                        </td>
+
+                        <td :class="getPercentColor(showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency))">
+                            {{ showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
+                            }}%
+                        </td>
+
+                        <td><img src="@/assets/price-graph.png"/></td>
+
+                    </tr>
+                </template>
+
+                <template v-slot:expand="props">
+                    <div>
+                        <span class="grey--text pa-3">Currency:</span>
+                        <v-btn :disabled="showShowedCurrency('USD')" @click="changeShowedCurrency('USD')">USD</v-btn>
+                        <v-btn :disabled="showShowedCurrency('EUR')" @click="changeShowedCurrency('EUR')">EUR</v-btn>
+                        <v-btn :disabled="showShowedCurrency('BTC')" @click="changeShowedCurrency('BTC')">BTC</v-btn>
+                        <v-btn :disabled="showShowedCurrency('ETH')" @click="changeShowedCurrency('ETH')">ETH</v-btn>
+                    </div>
+                    <div>
+                        <hr class="ma-2"/>
+                    </div>
+                </template>
+
+            </v-data-table>
+        </div>
 
         <AddWatchCoin v-model="addWatchCoinDialog"></AddWatchCoin>
 
@@ -64,6 +105,7 @@
 <script>
     import {mapGetters, mapState} from 'vuex'
     import AddWatchCoin from './layout/AddWatchCoin'
+    import {WATCHLIST_CHANGE_COIN_CURRENCY} from '../store/actions/watchlist'
 
     export default {
         name: "TabWatchlist",
@@ -73,24 +115,25 @@
         data() {
             return {
                 headers: [
-                    {text: '', value: 'img', sortable: false, width: "1%", class: "pa-0"},
-                    {text: 'Coin', value: 'name'},
-                    {text: 'Market Price', value: 'calories'},
-                    {text: 'Market Cap', value: 'fat'},
-                    {text: '24h Changed', value: 'protein'},
-                    {text: '7d Changed', value: 'iron'},
-                    {text: 'Price Graph', value: 'iron', sortable: false, align: 'center', width: "300",},
-                    // {text: 'example',  align: 'left', sortable: false, value: 'name'},
+                    {text: '', sortable: false, width: "1%", class: "pa-0"},
+                    {text: 'Coin', value: 'coinId.name'},
+                    {text: 'Market Price', value: 'valueToSort'},
+                    {text: 'Market Cap', value: 'valueToSort'},
+                    {text: '24h Changed', value: 'valueToSort'},
+                    {text: '7d Changed', value: 'valueToSort'},
+                    {text: 'Price Graph', sortable: false, align: 'center', width: "300",},
                 ],
-                counted: 'toCount',
+                expand: false,
+                expandedRowCoinId: '',
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addWatchCoinDialog: false,
             }
         },
         computed: {
-            ...mapGetters(['isUserWatchlistLoaded']),
+            ...mapGetters(['isUserWatchlistLoaded', 'isUserCoinsMarketDataLoaded']),
             ...mapState({
-                userWatchlistCoins: state => state.watchlist.userWatchlist
+                userWatchlistCoins: state => state.watchlist.userWatchlist,
+                userCoinsMarketData: state => state.marketdata.userCoinsMarketData
             }),
             showWatchlistCoins() {
                 if (this.isUserWatchlistLoaded) {
@@ -99,19 +142,99 @@
             }
         },
         methods: {
+            showAddWatchCoinDialog() {
+                this.addWatchCoinDialog = true
+            },
             showCoinImage(id) {
                 if (this.isUserWatchlistLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
                 return '@/assets/coin-default.png'
             },
-            showAddWatchCoin() {
-                this.addWatchCoinDialog = true
+            showCoinMarketPrice(coinId, showedCurrency) {
+
+                switch (showedCurrency) {
+                    case 'USD':
+                        return this.userCoinsMarketData[coinId]['USD']['price'];
+                    case 'EUR':
+                        return this.userCoinsMarketData[coinId]['EUR']['price'];
+                    case 'BTC':
+                        return this.userCoinsMarketData[coinId]['BTC']['price'];
+                    case 'ETH':
+                        return this.userCoinsMarketData[coinId]['ETH']['price'];
+                    default:
+                        return 0;
+                }
             },
+            showCoinMarketCap(coinId, showedCurrency) {
+
+                switch (showedCurrency) {
+                    case 'USD':
+                        return this.userCoinsMarketData[coinId]['USD']['market_cap'];
+                    case 'EUR':
+                        return this.userCoinsMarketData[coinId]['EUR']['market_cap'];
+                    case 'BTC':
+                        return this.userCoinsMarketData[coinId]['BTC']['market_cap'];
+                    case 'ETH':
+                        return this.userCoinsMarketData[coinId]['ETH']['market_cap'];
+                    default:
+                        return 0;
+                }
+            },
+            showCoin24hPriceChange(coinId, showedCurrency) {
+
+                switch (showedCurrency) {
+                    case 'USD':
+                        return this.userCoinsMarketData[coinId]['USD']['percent_change_24h'];
+                    case 'EUR':
+                        return this.userCoinsMarketData[coinId]['EUR']['percent_change_24h'];
+                    case 'BTC':
+                        return this.userCoinsMarketData[coinId]['BTC']['percent_change_24h'];
+                    case 'ETH':
+                        return this.userCoinsMarketData[coinId]['ETH']['percent_change_24h'];
+                    default:
+                        return 0;
+                }
+            },
+            showCoin7dPriceChange(coinId, showedCurrency) {
+
+                switch (showedCurrency) {
+                    case 'USD':
+                        return this.userCoinsMarketData[coinId]['USD']['percent_change_7d'];
+                    case 'EUR':
+                        return this.userCoinsMarketData[coinId]['EUR']['percent_change_7d'];
+                    case 'BTC':
+                        return this.userCoinsMarketData[coinId]['BTC']['percent_change_7d'];
+                    case 'ETH':
+                        return this.userCoinsMarketData[coinId]['ETH']['percent_change_7d'];
+                    default:
+                        return 0;
+                }
+            },
+            showShowedCurrency(currency) {
+                let expandCoin = this.userWatchlistCoins.find(coin => {
+                    return coin.coinId.id === this.expandedRowCoinId
+                });
+
+                return expandCoin.showedCurrency === currency;
+            },
+            changeShowedCurrency(currency) {
+                const payload = {'coinId': this.expandedRowCoinId, 'currency': currency};
+                this.$store.dispatch(WATCHLIST_CHANGE_COIN_CURRENCY, payload);
+            },
+            getPercentColor(value) {
+                if (value > 0) {
+                    return 'green--text'
+                } else if (value < 0) {
+                    return 'red--text'
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
-
+    .v-datatable.v-table tr {
+        cursor: pointer;
+    }
 </style>
