@@ -8,11 +8,11 @@ import {
     USER_SIGNUP_REQUEST,
     USER_SUCCESS
 } from '../actions/user'
-// is it needed to import it here??? import Vue from 'vue'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
 import {PORTFOLIO_SUCCESS} from "../actions/portfolio";
 import {WATCHLIST_SUCCESS} from '../actions/watchlist'
+import {MARKETDATA_USERCOINS_SUCCESS} from '../actions/marketdata'
 import {userAuthService} from "../../utils"
 
 const state = {
@@ -27,32 +27,55 @@ const getters = {
 
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
+        return new Promise((resolve, reject) => {
 
-        commit(USER_REQUEST);
+            commit(USER_REQUEST);
 
-        return userAuthService.getUser()
-            .then(resp => {
+            return userAuthService.getUser()
+                .then(resp => {
 
-                // parsing of response to have User entity as JSON
-                let user = JSON.parse(resp);
+                    // parsing of response to have User entity as JSON
+                    let user = JSON.parse(resp);
 
-                // save object Portfolio to separated 'store portfolio'
-                dispatch(PORTFOLIO_SUCCESS, user.portfolio);
+                    // save object Portfolio to separated 'store portfolio'
+                    dispatch(PORTFOLIO_SUCCESS, user.portfolio);
 
-                // save array userWatchCoins to separated 'store watchlist'
-                dispatch(WATCHLIST_SUCCESS, user.userWatchCoins);
+                    // save array userWatchCoins to separated 'store watchlist'
+                    dispatch(WATCHLIST_SUCCESS, user.userWatchCoins);
 
-                commit(USER_SUCCESS, user);
 
-                // and also store new auth token to auth.store.sate
-                commit(AUTH_SUCCESS);
+                    // *************   START:   parse  all user's coins IDs   ************************
+                    // dispatch to request marketdata user's coins actual marketdata,
+                    // but before we have to complete an array with all user's coins Ids,
+                    // also from portfolio && watchlist!!
+                    let userPortfolioCoinsIds = [],
+                        userWatchlistCoinsIds = [],
+                        allUserCoinsIds = [];
 
-            })
-            .catch(err => {
-                commit(USER_ERROR, err);
-                // if resp is unauthorized, logout
-                dispatch(AUTH_LOGOUT)
-            })
+                    userPortfolioCoinsIds = user.portfolio.items.map(function (e) {
+                        return e.coin.id;
+                    });
+                    userWatchlistCoinsIds = user.userWatchCoins.map(function (e) {
+                        return e.coinId.id;
+                    });
+
+                    allUserCoinsIds = JSON.stringify(userPortfolioCoinsIds.concat(userWatchlistCoinsIds));
+
+                    dispatch(MARKETDATA_USERCOINS_SUCCESS, allUserCoinsIds);
+                    // *************   FINISH:  parse all user's coins IDs   ************************
+
+                    commit(USER_SUCCESS, user);
+
+                    // and also store new auth token to auth.store.sate
+                    commit(AUTH_SUCCESS);
+
+                })
+                .catch(err => {
+                    commit(USER_ERROR, err);
+                    // if resp is unauthorized, logout
+                    dispatch(AUTH_LOGOUT);
+                })
+        })
     },
     [USER_SIGNUP_REQUEST]: ({commit, dispatch}, {email, password, portfolio}) => {
         return new Promise((resolve, reject) => {
@@ -65,7 +88,6 @@ const actions = {
 
                 })
                 .catch(err => {
-                    console.log('err', err);
                     commit(USER_ERROR, err);
                     dispatch(SNACKBAR_ERROR, "Invalid User Registration Credentials! Maybe you" +
                         " already have an account");
