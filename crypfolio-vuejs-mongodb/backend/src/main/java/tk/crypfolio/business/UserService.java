@@ -132,42 +132,6 @@ public class UserService implements Serializable {
     }
 
     /*
-     * is used in ResetPasswordFilter, to check reset password code
-     * */
-    public UserEntity searchUserResetPasswordCodeDB(String passwordResetCode) {
-
-        UserEntity userDB = getUserDAO().getUserByResetPasswordCode(passwordResetCode);
-
-        if (userDB != null && ChronoUnit.SECONDS.between(
-                userDB.getPasswordResetCodeRequestDateTime(), LocalDateTime.now()) < Settings.PASSWORD_RESTORE_LINK_TIMELIFE_SECONDS) {
-
-            return userDB;
-        }
-        return null;
-    }
-
-    /*
-     * set new user password, with checking old password
-     * */
-    public UserEntity setUserNewPasswordDB(UserEntity user, String oldPassword, String newPassword) {
-
-        UserEntity userDB = getUserDAO().getUserById(user.getId());
-
-        if (userDB != null && StringEncoder.encodePassword(user.getEmail(), oldPassword).equals(userDB.getPassword())) {
-
-            userDB.setPassword(StringEncoder.encodePassword(userDB.getEmail(), newPassword));
-
-            userDB = getUserDAO().updateUser(userDB);
-
-            if (userDB != null) {
-
-                return userDB;
-            }
-        }
-        return null;
-    }
-
-    /*
      * set new user password after reset password and using email reset password code
      * */
     public UserEntity setUserNewPasswordDB(String resetPasswordCode, String password) {
