@@ -1,4 +1,4 @@
-package tk.crypfolio.rest;
+package tk.crypfolio.rest.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
