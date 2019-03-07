@@ -108,6 +108,7 @@
     import {mapGetters, mapState} from 'vuex'
     import AddWatchCoin from './layout/AddWatchCoin'
     import {WATCHLIST_CHANGE_COIN_CURRENCY} from '../store/actions/watchlist'
+    import {MARKETDATA_ALLCOINSLIST_SUCCESS} from "../store/actions/marketdata";
 
     export default {
         name: "TabWatchlist",
@@ -145,7 +146,8 @@
         },
         methods: {
             showAddWatchCoinDialog() {
-                this.addWatchCoinDialog = true
+                this.addWatchCoinDialog = true;
+                this.$store.dispatch(MARKETDATA_ALLCOINSLIST_SUCCESS)
             },
             showCoinImage(id) {
                 if (this.isUserWatchlistLoaded) {
