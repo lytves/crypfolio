@@ -35,6 +35,8 @@
                     :headers="headers"
                     :items="showWatchlistCoins"
                     :expand="expand"
+                    :custom-sort="customSort"
+                    disable-initial-sort
                     item-key="coinId.id"
                     hide-actions
                     class="elevation-1">
@@ -116,11 +118,11 @@
             return {
                 headers: [
                     {text: '', sortable: false, width: "1%", class: "pa-0"},
-                    {text: 'Coin', value: 'coinId.name'},
-                    {text: 'Market Price', value: 'valueToSort'},
-                    {text: 'Market Cap', value: 'valueToSort'},
-                    {text: '24h Changed', value: 'valueToSort'},
-                    {text: '7d Changed', value: 'valueToSort'},
+                    {text: 'Coin', value: 'coin-name'},
+                    {text: 'Market Price', value: 'market-price'},
+                    {text: 'Market Cap', value: 'market-cap'},
+                    {text: '24h Changed', value: '24h-changed'},
+                    {text: '7d Changed', value: '7d-changed'},
                     {text: 'Price Graph', sortable: false, align: 'center', width: "300",},
                 ],
                 expand: false,
@@ -228,6 +230,53 @@
                 } else if (value < 0) {
                     return 'red--text'
                 }
+            },
+            customSort(items, index, isDesc) {
+
+                items.sort((a, b) => {
+
+                    if (index === 'coin-name') {
+                        if (isDesc) {
+                            return a.coinId.name.toLowerCase() < b.coinId.name.toLowerCase() ? -1 : 1;
+                        } else {
+                            return a.coinId.name.toLowerCase() > b.coinId.name.toLowerCase() ? -1 : 1;
+                        }
+                    } else if (index === 'market-price') {
+                        if (isDesc) {
+                            return this.showCoinMarketPrice(a.coinId.id, a.showedCurrency)
+                            < this.showCoinMarketPrice(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        } else {
+                            return this.showCoinMarketPrice(a.coinId.id, a.showedCurrency)
+                            > this.showCoinMarketPrice(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        }
+                    } else if (index === 'market-cap') {
+                        if (isDesc) {
+                            return this.showCoinMarketCap(a.coinId.id, a.showedCurrency)
+                            < this.showCoinMarketCap(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        } else {
+                            return this.showCoinMarketCap(a.coinId.id, a.showedCurrency)
+                            > this.showCoinMarketCap(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        }
+                    } else if (index === '24h-changed') {
+                        if (isDesc) {
+                            return this.showCoin24hPriceChange(a.coinId.id, a.showedCurrency)
+                            < this.showCoin24hPriceChange(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        } else {
+                            return this.showCoin24hPriceChange(a.coinId.id, a.showedCurrency)
+                            > this.showCoin24hPriceChange(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        }
+                    } else if (index === '7d-changed') {
+                        if (isDesc) {
+                            return this.showCoin7dPriceChange(a.coinId.id, a.showedCurrency)
+                            < this.showCoin7dPriceChange(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        } else {
+                            return this.showCoin7dPriceChange(a.coinId.id, a.showedCurrency)
+                            > this.showCoin7dPriceChange(b.coinId.id, b.showedCurrency) ? -1 : 1;
+                        }
+                    }
+                });
+
+                return items;
             }
         }
     }
