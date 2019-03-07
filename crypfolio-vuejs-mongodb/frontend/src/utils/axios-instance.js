@@ -16,7 +16,7 @@ const AXIOS = axios.create({
 AXIOS.interceptors.request.use(config => {
     // Do something before request is sent:
 
-    console.log('AXIOS.interceptors.request "' + config.baseURL + config.url + '" --- Ok');
+    // console.log('AXIOS.interceptors.request "' + config.baseURL + config.url + '" --- Ok');
 
     // when user does a refresh the page (app) or any also API request,
     // let's check if it has the authorization token in the localStorage and add it to request header
@@ -37,7 +37,7 @@ AXIOS.interceptors.request.use(config => {
 AXIOS.interceptors.response.use(response => {
     // Do something with response data:
 
-    console.log('AXIOS.interceptors.response "' + response.config.url + '" --- Ok');
+    // console.log('AXIOS.interceptors.response "' + response.config.url + '" --- Ok');
 
     // every successful response from server with authorization token in headers,
     // let's save it to the localStorage

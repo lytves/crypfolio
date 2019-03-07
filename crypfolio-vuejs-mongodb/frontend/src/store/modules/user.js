@@ -183,7 +183,7 @@ const mutations = {
             'passwordResetCode', 'passwordResetCodeRequestDateTime'].forEach(function (k) {
             delete user[k];
         });
-        console.log('DELETE user.portfolio, password, userWatchCoins, emailVerifCode, ....');
+        // console.log('DELETE user.portfolio, password, userWatchCoins, emailVerifCode, ....');
         state.userProfile = user;
     },
     [USER_ERROR]: (state) => {
