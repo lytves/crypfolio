@@ -131,4 +131,28 @@ public class MarketDataController extends Application {
             throw new RestApplicationException(ex.getMessage());
         }
     }
+
+    @Authenticator
+    @GET
+    @Path("/all-coins-list-data")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getAllCoinsListData() throws Exception {
+
+        try {
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            LOGGER.info("MarketDataController: Successful '/all-coins-list-data' request");
+
+            // generates response with new authentication token (using portfolio=user ID for Payload)
+            return JsonResponseBuild.generateJsonResponse(applicationContainer.getAllCoinsListing(), Long.valueOf(userId));
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
 }
