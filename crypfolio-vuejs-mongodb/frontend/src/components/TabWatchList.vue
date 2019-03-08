@@ -85,10 +85,10 @@
                 <template v-slot:expand="props">
                     <div>
                         <span class="grey--text pa-3">Currency:</span>
-                        <v-btn :disabled="showShowedCurrency('USD')" @click="changeShowedCurrency('USD')">USD</v-btn>
-                        <v-btn :disabled="showShowedCurrency('EUR')" @click="changeShowedCurrency('EUR')">EUR</v-btn>
-                        <v-btn :disabled="showShowedCurrency('BTC')" @click="changeShowedCurrency('BTC')">BTC</v-btn>
-                        <v-btn :disabled="showShowedCurrency('ETH')" @click="changeShowedCurrency('ETH')">ETH</v-btn>
+                        <v-btn :class="{'disable-events': showShowedCurrency('USD')}" @click="changeShowedCurrency('USD')">USD</v-btn>
+                        <v-btn :class="{'disable-events': showShowedCurrency('EUR')}" @click="changeShowedCurrency('EUR')">EUR</v-btn>
+                        <v-btn :class="{'disable-events': showShowedCurrency('BTC')}" @click="changeShowedCurrency('BTC')">BTC</v-btn>
+                        <v-btn :class="{'disable-events': showShowedCurrency('ETH')}" @click="changeShowedCurrency('ETH')">ETH</v-btn>
                     </div>
                     <div>
                         <hr class="ma-2"/>

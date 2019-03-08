@@ -98,4 +98,9 @@
         top: 70px;
         position: absolute;
     }
+    .disable-events {
+        pointer-events: none;
+        background-color: #82B1FF !important;
+        color: white !important;
+    }
 </style>
