@@ -94,4 +94,8 @@
     .selectsFlexBasis {
         flex-basis: 0 !important;
     }
+    .v-dialog {
+        top: 70px;
+        position: absolute;
+    }
 </style>
