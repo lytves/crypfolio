@@ -16,10 +16,12 @@ public class RestApplicationExceptionHandler implements ExceptionMapper<Exceptio
     @Override
     public Response toResponse(Exception ex) {
 
+        String errorMessage = ex.getMessage() == null ? "" : ex.getMessage();
+
         String jsonStatusContent = Json.createObjectBuilder()
                 .add("timestamp", System.currentTimeMillis())
                 .add("error_code", Response.Status.BAD_REQUEST.getStatusCode())
-                .add("error_message", ex.getMessage())
+                .add("error_message", errorMessage)
                 .build()
                 .toString();
 
