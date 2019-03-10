@@ -83,6 +83,7 @@ const mutations = {
     },
     [MARKETDATA_ADDCOIN_TO_USERCOINS]: (state, coinMarketData) => {
 
+        // add to Object (!!!) userCoinsMarketData new coin
         state.userCoinsMarketData = Object.assign(state.userCoinsMarketData, coinMarketData);
     },
     [MARKETDATA_ALLCOINSLIST_SUCCESS]: (state, allCoinsListData) => {
