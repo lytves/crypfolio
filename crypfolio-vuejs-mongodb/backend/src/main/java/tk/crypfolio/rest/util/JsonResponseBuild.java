@@ -13,6 +13,12 @@ public abstract class JsonResponseBuild {
 
     public static Response generateJsonResponse(Object obj, Long userId) throws RestApplicationException {
 
+        return generateJsonResponse(obj, userId, null, null);
+
+    }
+
+    public static Response generateJsonResponse(Object obj, Long userId, Integer error, String errorMessage) throws RestApplicationException {
+
         ObjectMapper mapper = new ObjectMapper();
 
         try {
@@ -24,10 +30,18 @@ public abstract class JsonResponseBuild {
                 jsonInString = mapper.writeValueAsString(obj);
             }
 
+            if (error == null) {
+                error = 0;
+            }
+
+            if (errorMessage == null) {
+                errorMessage = "";
+            }
+
             String jsonStatusContent = Json.createObjectBuilder()
                     .add("timestamp", System.currentTimeMillis())
-                    .add("error_code", 0)
-                    .add("error_message", "")
+                    .add("error_code", error)
+                    .add("error_message", errorMessage)
                     .build()
                     .toString();
 
