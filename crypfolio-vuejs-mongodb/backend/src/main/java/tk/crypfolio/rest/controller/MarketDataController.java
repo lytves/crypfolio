@@ -12,10 +12,7 @@ import tk.crypfolio.rest.filter.Authenticator;
 import tk.crypfolio.rest.util.JsonResponseBuild;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -123,8 +120,77 @@ public class MarketDataController extends Application {
 
             LOGGER.info("MarketDataController: Successful '/user-coins-data' request");
 
-            // generates response with new authentication token (using portfolio=user ID for Payload)
+            // generates response with new authentication token (using userID for Payload)
             return JsonResponseBuild.generateJsonResponse(allCoinsByIdData, Long.valueOf(userId));
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Returns a JSON string with actual market data for one coin that user for actualize data on the frontend
+     */
+    @Authenticator
+    @GET
+    @Path("/coin-data/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getCoinData(@PathParam("id") String id) throws Exception {
+
+        Long coinId = Long.valueOf(id);
+
+        try {
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            // a result Map with the coin actual market data
+            Map<Long, Map<String, Map<String, Double>>> coinData = new HashMap<>();
+
+            // a temporally map to put all coinData by currencies
+            Map<String, Map<String, Double>> coinDataByCurrencies = new HashMap<>();
+
+            for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerInUsd().entrySet()) {
+
+                if (pair.getKey().equals(coinId)) {
+                    coinDataByCurrencies.put("USD", pair.getValue());
+                    break;
+                }
+            }
+
+            for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerInEur().entrySet()) {
+
+                if (pair.getKey().equals(coinId)) {
+                    coinDataByCurrencies.put("EUR", pair.getValue());
+                    break;
+                }
+            }
+
+            for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerInBtc().entrySet()) {
+
+                if (pair.getKey().equals(coinId)) {
+                    coinDataByCurrencies.put("BTC", pair.getValue());
+                    break;
+                }
+            }
+
+            for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerInEth().entrySet()) {
+
+                if (pair.getKey().equals(coinId)) {
+                    coinDataByCurrencies.put("ETH", pair.getValue());
+                    break;
+                }
+            }
+
+            coinData.put(coinId, coinDataByCurrencies);
+
+            LOGGER.info("MarketDataController: Successful '/coin-data/{id}' request");
+
+            // generates response with new authentication token (using user ID for Payload)
+            return JsonResponseBuild.generateJsonResponse(coinData, Long.valueOf(userId));
 
         } catch (Exception ex) {
 
