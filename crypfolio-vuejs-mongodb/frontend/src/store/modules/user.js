@@ -43,7 +43,6 @@ const actions = {
                     // save array userWatchCoins to separated 'store watchlist'
                     dispatch(WATCHLIST_SUCCESS, user.userWatchCoins);
 
-
                     // *************   START:   parse  all user's coins IDs   ************************
                     // dispatch to request marketdata user's coins actual marketdata,
                     // but before we have to complete an array with all user's coins Ids,

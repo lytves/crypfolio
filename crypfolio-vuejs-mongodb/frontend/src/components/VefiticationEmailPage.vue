@@ -17,7 +17,8 @@
                     <v-card-title primary-title v-if="confirmationEmailInvalid">
                         <div>
                             Email address verification error. The code is invalid or expired,
-                            or your email has been already confirmed. Try to request new email address confirmation link by email again.
+                            or your email has been already confirmed. Try to request new email address confirmation link
+                            by email again.
                         </div>
                     </v-card-title>
 

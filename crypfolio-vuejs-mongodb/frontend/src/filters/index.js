@@ -66,10 +66,10 @@ Vue.filter('percentsValues', function (value) {
 });
 
 
-Vue.filter('marketcapValues', function (num, locale = 'en') {
+Vue.filter('marketcapValues', function (value, locale = 'en') {
 
-    if (typeof num !== "number") {
-        return num;
+    if (typeof value !== "number") {
+        return value;
     }
 
     let formatter = new Intl.NumberFormat('en-US', {
@@ -78,20 +78,20 @@ Vue.filter('marketcapValues', function (num, locale = 'en') {
 
 
     // Nine Zeroes for Billions
-    return Math.abs(Number(num)) >= 1.0e+9
+    return Math.abs(Number(value)) >= 1.0e+9
 
-        ? formatter.format(Math.abs(Number(num)) / 1.0e+9) + "B"
+        ? formatter.format(Math.abs(Number(value)) / 1.0e+9) + "B"
 
         // Six Zeroes for Millions
-        : Math.abs(Number(num)) >= 1.0e+6
+        : Math.abs(Number(value)) >= 1.0e+6
 
-            ? formatter.format(Math.abs(Number(num)) / 1.0e+6) + "M"
+            ? formatter.format(Math.abs(Number(value)) / 1.0e+6) + "M"
 
             // Three Zeroes for Thousands
-            : Math.abs(Number(num)) >= 1.0e+3
+            : Math.abs(Number(value)) >= 1.0e+3
 
-                ? formatter.format(Math.abs(Number(num) / 1.0e+3)) + "k"
+                ? formatter.format(Math.abs(Number(value) / 1.0e+3)) + "k"
 
-                : formatter.format(Math.abs(Number(num)));
+                : formatter.format(Math.abs(Number(value)));
 
 });

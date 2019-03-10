@@ -97,7 +97,8 @@
                         .then(() => {
                             this.$router.push('/user')
                         })
-                        .catch(() => {})
+                        .catch(() => {
+                        })
                 } else {
                     this.$store.dispatch(SNACKBAR_ERROR, "Invalid Form Credentials!");
                 }
