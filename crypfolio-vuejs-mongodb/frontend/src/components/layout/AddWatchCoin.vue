@@ -3,6 +3,7 @@
         <v-dialog
                 lazy
                 v-model="show"
+                @keydown.esc="show = false"
                 width="500">
 
             <v-card>
