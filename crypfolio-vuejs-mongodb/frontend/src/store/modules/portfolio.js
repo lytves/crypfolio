@@ -22,7 +22,6 @@ const actions = {
                 commit(PORTFOLIO_UPDATE_CURRENCY, currency);
             })
             .catch(err => {
-                console.log('err', err);
                 dispatch(SNACKBAR_ERROR, "Invalid portfolio currency change request!");
             });
     },
@@ -31,11 +30,11 @@ const actions = {
 const mutations = {
     [PORTFOLIO_SUCCESS]: (state, portfolio) => {
         state.userPortfolio = portfolio;
-        console.log('portfolio', state.userPortfolio);
+        // console.log('portfolio', state.userPortfolio);
     },
     [PORTFOLIO_UPDATE_CURRENCY]: (state, currency) => {
         state.userPortfolio.showedCurrency = currency;
-        console.log('portfolio', state.userPortfolio);
+        // console.log('portfolio', state.userPortfolio);
     },
     [PORTFOLIO_ERROR]: (state) => {
         state.userPortfolio = {};

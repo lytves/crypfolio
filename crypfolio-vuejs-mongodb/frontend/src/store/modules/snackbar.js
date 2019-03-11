@@ -36,7 +36,6 @@ const mutations = {
         state.snackMessage = message;
     },
     [SNACKBAR_CLEAR]: (state, value) => {
-        console.log("SNACKBAR_CLEAR executed");
         state.snackState = false;
     }
 };

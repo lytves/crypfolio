@@ -6,6 +6,7 @@ import snackbar from './modules/snackbar'
 import portfolio from './modules/portfolio'
 import watchlist from './modules/watchlist'
 import marketdata from './modules/marketdata'
+import createLogger from 'vuex/dist/logger';
 
 Vue.use(Vuex);
 
@@ -21,4 +22,5 @@ export default new Vuex.Store({
         marketdata
     },
     strict: debug,
+    plugins: debug ? [createLogger()] : []
 })

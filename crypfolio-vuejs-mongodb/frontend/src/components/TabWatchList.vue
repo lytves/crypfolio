@@ -303,7 +303,6 @@
                 return items;
             },
             deleteCoin() {
-                console.log('delete', this.expandedRowCoinId);
                 this.$store.dispatch(WATCHLIST_DELETE_COIN, this.expandedRowCoinId);
             }
         }
