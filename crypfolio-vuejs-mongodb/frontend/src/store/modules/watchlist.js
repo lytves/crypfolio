@@ -1,6 +1,7 @@
 import {
     WATCHLIST_ADD_NEW_COIN,
     WATCHLIST_CHANGE_COIN_CURRENCY,
+    WATCHLIST_DELETE_COIN,
     WATCHLIST_ERROR,
     WATCHLIST_SUCCESS
 } from '../actions/watchlist'
@@ -73,7 +74,24 @@ const actions = {
                 })
         })
     },
+    [WATCHLIST_DELETE_COIN]: ({commit, dispatch, rootState}, coinId) => {
+        return new Promise((resolve, reject) => {
 
+            return userWatchlistService.deleteWatchlistCoin(coinId)
+                .then(resp => {
+
+                    commit(WATCHLIST_DELETE_COIN, coinId);
+
+                    dispatch(SNACKBAR_SUCCESS, "The coin has been successfully deleted from your watchlist!");
+                    resolve(resp)
+                })
+                .catch(err => {
+                    dispatch(SNACKBAR_ERROR, "Error on deleting the coin from watchlist!");
+                    reject(err)
+                });
+
+        })
+    },
 };
 
 const mutations = {
@@ -95,6 +113,17 @@ const mutations = {
 
         // add to Vuex store "userWatchlist" a new element with data from allCoinsList and showed currency
         state.userWatchlist.push({coinId: coinIdData, showedCurrency: currency});
+
+    },
+    [WATCHLIST_DELETE_COIN]: (state, coinId) => {
+
+        // remove the coin with passed coinId from Vuex store "userWatchlist"
+        const index = state.userWatchlist.findIndex(obj => obj.coinId.id === coinId);
+
+        state.userWatchlist = [
+            ...state.userWatchlist.slice(0, index),
+            ...state.userWatchlist.slice(index + 1)
+        ];
 
     },
     [WATCHLIST_ERROR]: (state, message) => {
