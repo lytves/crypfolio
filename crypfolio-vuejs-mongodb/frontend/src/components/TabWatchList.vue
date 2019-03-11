@@ -30,95 +30,93 @@
             </v-layout>
         </v-card>
 
-        <div>
-            <v-data-table
-                    :headers="headers"
-                    :items="showWatchlistCoins"
-                    :expand="expand"
-                    :custom-sort="customSort"
-                    disable-initial-sort
-                    item-key="coinId.id"
-                    hide-actions
-                    class="elevation-1">
+        <v-data-table
+                :headers="headers"
+                :items="showWatchlistCoins"
+                :expand="expand"
+                :custom-sort="customSort"
+                disable-initial-sort
+                item-key="coinId.id"
+                hide-actions
+                class="elevation-1">
 
-                <template slot="no-data">
+            <template slot="no-data">
 
-                    <v-flex align-center class="font-weight-medium text-sm-center blockquote">
-                        Your watchlist is empty. Add any coin to start!
+                <v-flex align-center class="font-weight-medium text-sm-center blockquote">
+                    Your watchlist is empty. Add any coin to start!
+                </v-flex>
+
+            </template>
+
+            <template v-slot:items="props">
+                <tr @click="props.expanded = !props.expanded; expandedRowCoinId = props.item.coinId.id;">
+
+                    <td class="pa-2 flex"><img :src="showCoinImage(props.item.coinId.id)"/></td>
+
+                    <td class="font-weight-medium align-center">
+                        <span class="font-weight-bold d-block">{{ props.item.coinId.name }}</span>
+                        <span class="d-block">{{ props.item.coinId.symbol }}</span>
+                    </td>
+
+                    <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency) |
+                        generalValues(props.item.showedCurrency) }}
+                        {{ props.item.showedCurrency }}
+                    </td>
+
+                    <td>{{ showCoinMarketCap(props.item.coinId.id, props.item.showedCurrency) | marketcapValues }}
+                        {{ props.item.showedCurrency }}
+                    </td>
+
+                    <td :class="getPercentColor(showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency))">
+                        {{ showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
+                        }}%
+                    </td>
+
+                    <td :class="getPercentColor(showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency))">
+                        {{ showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
+                        }}%
+                    </td>
+
+                    <td><img src="@/assets/price-graph.png"/></td>
+
+                </tr>
+            </template>
+
+            <template v-slot:expand="props">
+                <v-layout row xs12>
+
+                    <v-flex xs10 d-flex>
+                        <div>
+                            <span class="grey--text pa-3">Currency:</span>
+                            <v-btn :class="{'disable-events': showShowedCurrency('USD')}"
+                                   @click="changeShowedCurrency('USD')">USD
+                            </v-btn>
+                            <v-btn :class="{'disable-events': showShowedCurrency('EUR')}"
+                                   @click="changeShowedCurrency('EUR')">EUR
+                            </v-btn>
+                            <v-btn :class="{'disable-events': showShowedCurrency('BTC')}"
+                                   @click="changeShowedCurrency('BTC')">BTC
+                            </v-btn>
+                            <v-btn :class="{'disable-events': showShowedCurrency('ETH')}"
+                                   @click="changeShowedCurrency('ETH')">ETH
+                            </v-btn>
+                        </div>
                     </v-flex>
 
-                </template>
+                    <v-flex xs2>
+                        <v-btn @click="deleteCoin">
+                            <v-icon color="blue darken-2">fas fa-trash</v-icon>
+                        </v-btn>
+                    </v-flex>
 
-                <template v-slot:items="props">
-                    <tr @click="props.expanded = !props.expanded; expandedRowCoinId = props.item.coinId.id;">
+                </v-layout>
 
-                        <td class="pa-2 flex"><img :src="showCoinImage(props.item.coinId.id)"/></td>
+                <div>
+                    <hr class="ma-2"/>
+                </div>
+            </template>
 
-                        <td class="font-weight-medium align-center">
-                            <span class="font-weight-bold d-block">{{ props.item.coinId.name }}</span>
-                            <span class="d-block">{{ props.item.coinId.symbol }}</span>
-                        </td>
-
-                        <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency) |
-                            generalValues(props.item.showedCurrency) }}
-                            {{ props.item.showedCurrency }}
-                        </td>
-
-                        <td>{{ showCoinMarketCap(props.item.coinId.id, props.item.showedCurrency) | marketcapValues }}
-                            {{ props.item.showedCurrency }}
-                        </td>
-
-                        <td :class="getPercentColor(showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency))">
-                            {{ showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
-                            }}%
-                        </td>
-
-                        <td :class="getPercentColor(showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency))">
-                            {{ showCoin7dPriceChange(props.item.coinId.id, props.item.showedCurrency) | percentsValues
-                            }}%
-                        </td>
-
-                        <td><img src="@/assets/price-graph.png"/></td>
-
-                    </tr>
-                </template>
-
-                <template v-slot:expand="props">
-                    <v-layout row xs12>
-
-                        <v-flex xs10 d-flex>
-                            <div>
-                                <span class="grey--text pa-3">Currency:</span>
-                                <v-btn :class="{'disable-events': showShowedCurrency('USD')}"
-                                       @click="changeShowedCurrency('USD')">USD
-                                </v-btn>
-                                <v-btn :class="{'disable-events': showShowedCurrency('EUR')}"
-                                       @click="changeShowedCurrency('EUR')">EUR
-                                </v-btn>
-                                <v-btn :class="{'disable-events': showShowedCurrency('BTC')}"
-                                       @click="changeShowedCurrency('BTC')">BTC
-                                </v-btn>
-                                <v-btn :class="{'disable-events': showShowedCurrency('ETH')}"
-                                       @click="changeShowedCurrency('ETH')">ETH
-                                </v-btn>
-                            </div>
-                        </v-flex>
-
-                        <v-flex xs2>
-                            <v-btn @click="deleteCoin">
-                                <v-icon color="blue darken-2">fas fa-trash</v-icon>
-                            </v-btn>
-                        </v-flex>
-
-                    </v-layout>
-
-                    <div>
-                        <hr class="ma-2"/>
-                    </div>
-                </template>
-
-            </v-data-table>
-        </div>
+        </v-data-table>
 
         <AddWatchCoin v-model="addWatchCoinDialog"></AddWatchCoin>
 
