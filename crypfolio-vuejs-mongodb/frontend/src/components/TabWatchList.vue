@@ -59,12 +59,13 @@
                             <span class="d-block">{{ props.item.coinId.symbol }}</span>
                         </td>
 
-                        <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency)
-                            | generalValues(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                        <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency) |
+                            generalValues(props.item.showedCurrency) }}
+                            {{ props.item.showedCurrency }}
                         </td>
 
-                        <td>{{ showCoinMarketCap(props.item.coinId.id, props.item.showedCurrency)
-                            | marketcapValues }} {{ props.item.showedCurrency }}
+                        <td>{{ showCoinMarketCap(props.item.coinId.id, props.item.showedCurrency) | marketcapValues }}
+                            {{ props.item.showedCurrency }}
                         </td>
 
                         <td :class="getPercentColor(showCoin24hPriceChange(props.item.coinId.id, props.item.showedCurrency))">
@@ -83,13 +84,34 @@
                 </template>
 
                 <template v-slot:expand="props">
-                    <div>
-                        <span class="grey--text pa-3">Currency:</span>
-                        <v-btn :class="{'disable-events': showShowedCurrency('USD')}" @click="changeShowedCurrency('USD')">USD</v-btn>
-                        <v-btn :class="{'disable-events': showShowedCurrency('EUR')}" @click="changeShowedCurrency('EUR')">EUR</v-btn>
-                        <v-btn :class="{'disable-events': showShowedCurrency('BTC')}" @click="changeShowedCurrency('BTC')">BTC</v-btn>
-                        <v-btn :class="{'disable-events': showShowedCurrency('ETH')}" @click="changeShowedCurrency('ETH')">ETH</v-btn>
-                    </div>
+                    <v-layout row xs12>
+
+                        <v-flex xs10 d-flex>
+                            <div>
+                                <span class="grey--text pa-3">Currency:</span>
+                                <v-btn :class="{'disable-events': showShowedCurrency('USD')}"
+                                       @click="changeShowedCurrency('USD')">USD
+                                </v-btn>
+                                <v-btn :class="{'disable-events': showShowedCurrency('EUR')}"
+                                       @click="changeShowedCurrency('EUR')">EUR
+                                </v-btn>
+                                <v-btn :class="{'disable-events': showShowedCurrency('BTC')}"
+                                       @click="changeShowedCurrency('BTC')">BTC
+                                </v-btn>
+                                <v-btn :class="{'disable-events': showShowedCurrency('ETH')}"
+                                       @click="changeShowedCurrency('ETH')">ETH
+                                </v-btn>
+                            </div>
+                        </v-flex>
+
+                        <v-flex xs2>
+                            <v-btn @click="deleteCoin">
+                                <v-icon color="blue darken-2">fas fa-trash</v-icon>
+                            </v-btn>
+                        </v-flex>
+
+                    </v-layout>
+
                     <div>
                         <hr class="ma-2"/>
                     </div>
@@ -107,7 +129,7 @@
 <script>
     import {mapGetters, mapState} from 'vuex'
     import AddWatchCoin from './layout/AddWatchCoin'
-    import {WATCHLIST_CHANGE_COIN_CURRENCY} from '../store/actions/watchlist'
+    import {WATCHLIST_CHANGE_COIN_CURRENCY, WATCHLIST_DELETE_COIN} from '../store/actions/watchlist'
     import {MARKETDATA_ALLCOINSLIST_SUCCESS} from "../store/actions/marketdata";
 
     export default {
@@ -279,6 +301,10 @@
                 });
 
                 return items;
+            },
+            deleteCoin() {
+                console.log('delete', this.expandedRowCoinId);
+                this.$store.dispatch(WATCHLIST_DELETE_COIN, this.expandedRowCoinId);
             }
         }
     }
