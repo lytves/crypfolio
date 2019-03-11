@@ -111,7 +111,9 @@
             }),
             showPortfolioItems() {
                 if (this.isUserPortfolioLoaded) {
-                    return this.userPortfolioItems
+
+                    // show only "NotArchive" items, that is to say they have amount > 0
+                    return this.userPortfolioItems.filter(item => (item.amount > 0));
                 }
             },
             portfolioShowedCurrency: {
