@@ -22,6 +22,7 @@
                             color="primary lighten-2"
                             dark
                             @click.stop="showAddWatchCoinDialog">
+                        <v-icon left>fas fa-plus</v-icon>
                         Add New Coin
                     </v-btn>
 
