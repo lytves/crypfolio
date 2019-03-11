@@ -6,6 +6,7 @@ import {
 } from '../actions/marketdata'
 import {marketdataService} from "../../utils";
 import {SNACKBAR_ERROR} from "../actions/snackbar";
+import {config} from '../../config'
 
 const state = {
     userCoinsMarketData: {},
@@ -19,9 +20,12 @@ const getters = {
 
 const actions = {
     [MARKETDATA_USERCOINS_SUCCESS]: ({commit, dispatch}, allUserCoinsIds) => {
-        return new Promise((resolve, reject) => {
 
-            return marketdataService.getUserCoinsData(allUserCoinsIds)
+        let timerId = setTimeout(function tick() {
+
+            console.log('%c MARKETDATA_USERCOINS refresh!', 'color: #4caf50');
+
+            marketdataService.getUserCoinsData(allUserCoinsIds)
                 .then(resp => {
 
                     // parsing of response to have a map like a JSON
@@ -32,8 +36,11 @@ const actions = {
                 .catch(err => {
                     dispatch(SNACKBAR_ERROR, "Error on receiving actual market data!");
                     reject(err)
-                })
-        })
+                });
+
+            timerId = setTimeout(tick, config.marketdata_refresh_timeout);
+        }, 0);
+
     },
     [MARKETDATA_ADDCOIN_TO_USERCOINS]: ({commit, dispatch}, coinId) => {
         return new Promise((resolve, reject) => {
@@ -101,45 +108,3 @@ export default {
     actions,
     mutations,
 }
-
-/*    [WATCHLIST_REQUESSSSSSSSSSST]: ({commit}, watchlist) => {
-        commit(WATCHLIST_SUCCESS, watchlist);
-
-        let timerId = setTimeout(function tick() {
-
-            console.log('tick');
-
-            userPortfolioService.getApplicationContainer()
-                .then(resp => {
-
-                    console.log(resp);
-/!*                    // parsing of response to have User entity as JSON
-                    let user = JSON.parse(resp);
-
-                    // save object Portfolio to separated 'store portfolio'
-                    dispatch(PORTFOLIO_SUCCESS, user.portfolio);
-
-                    // save array userWatchCoins to separated 'store watchlist'
-                    dispatch(WATCHLIST_SUCCESS, user.userWatchCoins);
-
-                    commit(USER_SUCCESS, user);
-
-                    // and also store new auth token to auth.store.sate
-                    commit(AUTH_SUCCESS);*!/
-
-                })
-                .catch(err => {
-                    // commit(USER_ERROR, err);
-                    // if resp is unauthorized, logout
-                    // dispatch(AUTH_LOGOUT)
-                });
-
-            timerId = setTimeout(tick, 60000);
-        }, 0);
-
-
-
-        /!*        setInterval(() => {
-            console.log('intervaaaaaaaaaaaaaaaaal');
-        }, 5000)*!/
-    },*/
