@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import tk.crypfolio.business.ApplicationContainer;
 import tk.crypfolio.business.CoinService;
 import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
@@ -157,6 +156,52 @@ public class WatchListRestController extends Application {
             }
 
             throw new BadRequestException("Error on searching user, coin, or passed currency isn't valid");
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    @Authenticator
+    @DELETE
+    @Path("/watchlist-delete-coin/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response deleteWatchlistCoin(@PathParam("id") String id) throws Exception {
+
+        Long coinToDelId = Long.valueOf(id);
+
+        try {
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            UserEntity userDB = userService.getUserDBById(Long.valueOf(userId));
+
+            if (userDB != null) {
+
+                // check if coinId is valid, that is to say that in DB exists a coin with this ID
+                UserWatchCoinEntity userWatchCoinEntity = userDB.getUserWatchCoins().stream()
+                        .filter(coin -> coin.getCoinId().getId().equals(coinToDelId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (userWatchCoinEntity != null) {
+
+                    userDB.removeWatchCoin(userWatchCoinEntity);
+
+                    userService.updateUserDB(userDB);
+
+                    LOGGER.info("WatchListRestController: Successful '/watchlist-delete-coin/{id}' request");
+
+                    // generates response with new authentication token (using user ID for Payload)
+                    return JsonResponseBuild.generateJsonResponse(null, Long.valueOf(userId));
+                }
+            }
+
+            throw new BadRequestException("There is no user or the coin with requested Id isn't in user's watchlist!");
 
         } catch (Exception ex) {
 
