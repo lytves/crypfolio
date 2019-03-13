@@ -8,7 +8,7 @@
 
             <v-card>
                 <v-card-title
-                        class="headline"
+                        class="headline pa-2 ma-2"
                         primary-title>
                     Add New Coin
                 </v-card-title>
@@ -64,7 +64,7 @@
                     </v-autocomplete>
                 </v-card-text>
 
-                <div class="text-xs-center" v-show="model">
+                <div class="text-xs-center" v-if="model">
                     <div class="text-sm-left ma-3">
                         <span class="grey--text">Currency *</span>
                     </div>
