@@ -103,4 +103,17 @@
         background-color: #82B1FF !important;
         color: white !important;
     }
+    .inputNumbersWithoutSpin input[type='number'] {
+        -moz-appearance: textfield;
+    }
+    .inputNumbersWithoutSpin input::-webkit-outer-spin-button,
+    .inputNumbersWithoutSpin input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    .v-text-field__suffix {
+        margin: 0 10px;
+    }
+    input[type='number'] {
+        margin: 0 10px;
+    }
 </style>

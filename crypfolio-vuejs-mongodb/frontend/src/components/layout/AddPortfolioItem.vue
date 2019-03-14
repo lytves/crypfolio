@@ -1,0 +1,310 @@
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+    <v-dialog
+            lazy
+            v-model="show"
+            @keydown.esc="show = false"
+            width="400"
+            class="text-xs-center">
+
+        <v-card>
+            <v-card-title
+                    class="headline pa-2 ma-0"
+                    primary-title>
+                Add New Item
+            </v-card-title>
+
+            <!--// user's chose coin from exist items in the portfolio-->
+            <v-card-text class="pa-2 ma-0"
+                         v-if="hideAutocompleteForm && (typeof selectedCoin.id === 'number')">
+
+                <img class="pa-2" style="vertical-align: middle" :src="showCoinImage(selectedCoin.id)"/>
+                <span v-text="selectedCoin.name"></span>
+                <span class="pa-2 grey--text" v-text="selectedCoin.symbol"></span>
+
+            </v-card-text>
+
+            <!--// autocomplete from to search a coin and then to add an item-->
+            <v-card-text v-if="!hideAutocompleteForm">
+                <v-autocomplete
+                        v-model="selectedCoin"
+                        return-object
+                        dense
+                        :items="items"
+                        :search-input.sync="search"
+                        clearable
+                        hide-details
+                        hide-selected
+                        solo
+                        label="Search a Coin by Name or Ticker..."
+                        :item-text="parseMatchedItem"
+                        item-value="id"
+                        :readonly="isReadonly"
+                        autofocus
+                        single-line
+                        @change="changeSelected"
+                        @click:clear="clearForm">
+
+                    <!--// a message that appear when there is no coins matched to search string-->
+                    <template v-slot:no-data>
+
+                        <v-list-tile>
+                            <v-list-tile-title>
+                                Search a <strong>Cryptocoin</strong> to add
+                            </v-list-tile-title>
+                        </v-list-tile>
+
+                    </template>
+
+                    <!--// selected coin-->
+                    <template v-slot:selection="{ item, selected }">
+
+                        <img class="pa-2" :src="showCoinImage(item.id)"/>
+                        <span v-text="item.name"></span>
+                        <span class="pa-2 grey--text" v-text="item.symbol"></span>
+
+                    </template>
+
+                    <!--// the list of matched coins by search string-->
+                    <template v-slot:item="{ item }">
+
+                        <img class="pa-2" :src="showCoinImage(item.id)"/>
+
+                        <v-list-tile-title v-text="item.name"></v-list-tile-title>
+
+                        <v-list-tile-action>
+                            <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
+                        </v-list-tile-action>
+
+                    </template>
+
+                </v-autocomplete>
+            </v-card-text>
+
+            <!--// user's exist items in the portfolio to choose-->
+            <v-card-text class="pa-0" v-if="isUserPortfolioLoaded && userPortfolioItems.length > 0 && !selectedCoin">
+                <v-list>
+                    <v-list-tile
+                            v-for="item in userPortfolioItems"
+                            :key="item.id"
+                            @click="chooseCoinFromPortfolio(item)">
+
+                        <v-list-tile-action>
+                            <img :src="showCoinImage(item.coin.id)"/>
+                        </v-list-tile-action>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title v-text="item.coin.name"></v-list-tile-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-avatar>
+                            <v-list-tile-sub-title v-text="item.coin.symbol"></v-list-tile-sub-title>
+                        </v-list-tile-avatar>
+
+                    </v-list-tile>
+                </v-list>
+            </v-card-text>
+
+            <!--// a form to add transaction's details-->
+            <v-card-text v-if="selectedCoin" style="padding: 0 16px;">
+
+                <div class="text-xs-center">
+                    <v-layout>
+                        <v-spacer></v-spacer>
+                        <v-btn small color="success" class="btn-type"
+                               :class="{'disable-events active': transBtnType('buy')}"
+                               @click="toggleTransType('buy')">
+                            BUY
+                        </v-btn>
+                        <v-btn small color="error" class="btn-type"
+                               :class="{'disable-events active': transBtnType('sell')}"
+                               @click="toggleTransType('sell')">
+                            SELL
+                        </v-btn>
+                    </v-layout>
+                </div>
+
+                <v-form @submit.prevent="addTransaction" v-model="transFormValid">
+                    <v-text-field
+                            v-model="transAmount"
+                            label="Amount"
+                            placeholder="0"
+                            class="inputNumbersWithoutSpin"
+                            type="number"
+                            :suffix="selectedCoin.symbol"
+                            required>
+                    </v-text-field>
+
+                    <div class="text-xs-center">
+                        <v-layout>
+                            <v-btn
+                                    small color="primary"
+                                    @click="setTransMarketPrice">
+                                Market Price
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                        </v-layout>
+                    </div>
+
+                    <v-layout row>
+                        <v-flex xs12>
+                            <v-text-field
+                                    v-model="transPrice"
+                                    label="Price"
+                                    placeholder="0"
+                                    class="inputNumbersWithoutSpin"
+                                    type="number"
+                                    required>
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm6 d-flex class="selectsFlexBasis">
+                            <v-select
+                                    v-model="transChooseCurrency"
+                                    :items="currencies"
+                                    solo hide-details>
+                            </v-select>
+                        </v-flex>
+
+                    </v-layout>
+
+                    <v-text-field
+                            v-model="transTotal"
+                            label="Total"
+                            placeholder="0"
+                            :suffix="transCurrency"
+                            class="inputNumbersWithoutSpin"
+                            type="number"
+                            required>
+                    </v-text-field>
+
+
+                </v-form>
+            </v-card-text>
+
+            <!--// "RESET" and "ADD" buttons-->
+            <div class="pa-1 ma-0 text-xs-center" v-if="selectedCoin">
+
+                <v-spacer></v-spacer>
+                <v-btn
+                        small
+                        color="primary"
+                        @click="clearForm">
+                    Reset
+                </v-btn>
+                <v-btn
+                        small
+                        :class="{'disable-events': transAmount <= 0}"
+                        color="primary"
+                        @click="addTransaction">
+                    Add
+                </v-btn>
+            </div>
+
+        </v-card>
+    </v-dialog>
+</template>
+
+<script>
+    import {mapGetters, mapState} from 'vuex'
+
+    export default {
+        name: "AddPortfolioItem",
+        props: {
+            value: Boolean,
+        },
+        data: () => ({
+            items: [],
+            search: null,
+            isReadonly: false,
+            selectedCoin: null,
+            hideAutocompleteForm: false,
+            transType: "buy",
+            transAmount: '',
+            transPrice: '',
+            transTotal: '',
+            transCurrency: "USD",
+            currencies: ['USD', 'EUR', 'BTC', 'ETH'],
+            transFormValid: false,
+        }),
+        computed: {
+            show: {
+                get() {
+                    return this.value
+                },
+                set(value) {
+                    this.$emit('input', value)
+                }
+            },
+            ...mapGetters(['isAllCoinsListDataLoaded', 'isUserPortfolioLoaded']),
+            ...mapState({
+                allCoinsListData: state => state.marketdata.allCoinsListData,
+                userPortfolioItems: state => state.portfolio.userPortfolio.items
+            }),
+            transChooseCurrency: {
+                get() {
+                    return this.transCurrency
+                },
+                set(mainCurrency) {
+                    this.transCurrency = mainCurrency;
+                }
+            },
+        },
+        watch: {
+            search(val) {
+                // search coins in allCoinsListData which matched with "search input string"
+                if (val && val.trim() !== '') {
+                    this.items = this.allCoinsListData;
+                }
+            },
+            show(val) {
+                // on close modal window -> run clearForm() to reset all component's variables
+                !val && this.clearForm()
+            },
+        },
+        methods: {
+            clearForm() {
+                // reset all component's variables
+                Object.assign(this.$data, this.$options.data())
+            },
+            // autocomplete and choose coin methods:
+            showCoinImage(id) {
+                if (this.isAllCoinsListDataLoaded) {
+                    return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
+                }
+                return '@/assets/coin-default.png'
+            },
+            changeSelected() {
+                if (this.selectedCoin) {
+                    this.isReadonly = true;
+                }
+            },
+            parseMatchedItem(matchedItem) {
+                // !!! here is defined that item-text need to match on "searching by coin name && coin symbol"
+                return [matchedItem.name, matchedItem.symbol];
+            },
+            chooseCoinFromPortfolio(item) {
+                this.selectedCoin = item.coin;
+                this.hideAutocompleteForm = true;
+            },
+            // transaction's form methods
+            transBtnType(type) {
+                return this.transType === type;
+            },
+            toggleTransType(type) {
+                this.transType = (type === "sell" ? "sell" : "buy");
+            },
+            setTransMarketPrice() {
+                console.log('setTransMarketPrice');
+            },
+            // button "DONE" handler
+            addTransaction() {
+                console.log('addTransaction');
+            },
+        },
+    }
+</script>
+
+<style scoped>
+    .btn-type:not(.active) {
+        opacity: 0.4;
+    }
+</style>
