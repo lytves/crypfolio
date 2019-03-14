@@ -5,7 +5,7 @@
         <v-card>
             <v-layout row xs12>
 
-                <v-flex xs12 d-flex>
+                <v-flex xs10 d-flex>
 
                     <v-layout row>
                         <v-card-text style="width: auto;">
@@ -41,6 +41,18 @@
 
                 </v-flex>
 
+                <v-flex xs2 d-flex>
+
+                    <v-btn
+                            color="primary lighten-2"
+                            dark
+                            @click.stop="showAddPortfolioItemDialog">
+                        <v-icon left>fas fa-plus</v-icon>
+                        Add New Item
+                    </v-btn>
+
+                </v-flex>
+
             </v-layout>
         </v-card>
 
@@ -72,6 +84,8 @@
 
         </v-data-table>
 
+        <AddPortfolioItem v-model="addPortfolioItemDialog"></AddPortfolioItem>
+
     </v-container>
 
 </template>
@@ -79,10 +93,14 @@
 <script>
     import {mapGetters, mapState} from 'vuex'
     import {PORTFOLIO_UPDATE_CURRENCY} from '../store/actions/portfolio'
-
+    import AddPortfolioItem from './layout/AddPortfolioItem'
+    import {MARKETDATA_ALLCOINSLIST_SUCCESS} from "../store/actions/marketdata";
 
     export default {
         name: "TabPortfolio",
+        components: {
+            AddPortfolioItem,
+        },
         data() {
             return {
                 headers: [
@@ -99,6 +117,7 @@
                 ],
                 counted: 'toCount',
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
+                addPortfolioItemDialog: false,
             }
         },
         computed: {
@@ -148,7 +167,11 @@
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
                 return '@/assets/coin-default.png'
-            }
+            },
+            showAddPortfolioItemDialog() {
+                this.addPortfolioItemDialog = true;
+                this.$store.dispatch(MARKETDATA_ALLCOINSLIST_SUCCESS)
+            },
         }
     }
 </script>
