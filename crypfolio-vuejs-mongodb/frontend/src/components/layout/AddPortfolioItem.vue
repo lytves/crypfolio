@@ -7,21 +7,27 @@
             class="text-xs-center">
 
         <v-card>
-            <v-card-title
-                    class="headline pa-2 ma-0"
+            <v-card-title v-if="!hideAutocompleteForm"
+                    class="headline pa-3 ma-0"
                     primary-title>
                 Add New Item
             </v-card-title>
 
             <!--// user's chose coin from exist items in the portfolio-->
-            <v-card-text class="pa-2 ma-0"
+            <v-card-title class="headline pa-2 ma-0"
                          v-if="hideAutocompleteForm && (typeof selectedCoin.id === 'number')">
 
-                <img class="pa-2" style="vertical-align: middle" :src="showCoinImage(selectedCoin.id)"/>
-                <span v-text="selectedCoin.name"></span>
-                <span class="pa-2 grey--text" v-text="selectedCoin.symbol"></span>
+                <v-layout align-center>
 
-            </v-card-text>
+                    <img class="pa-2" :src="showCoinImage(selectedCoin.id)"/>
+                    <span v-text="selectedCoin.name"></span>
+                    <span class="pa-2 grey--text" v-text="selectedCoin.symbol"></span>
+
+                    <v-spacer></v-spacer>
+
+                    </v-layout>
+
+            </v-card-title>
 
             <!--// autocomplete from to search a coin and then to add an item-->
             <v-card-text v-if="!hideAutocompleteForm">
@@ -265,13 +271,14 @@
                 // reset all component's variables
                 Object.assign(this.$data, this.$options.data())
             },
-            // autocomplete and choose coin methods:
+            // *** autocomplete and choose coin methods: ***
             showCoinImage(id) {
                 if (this.isAllCoinsListDataLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
                 return '@/assets/coin-default.png'
             },
+            // when the coin for transaction was chosen by autocomplete searching
             changeSelected() {
                 if (this.selectedCoin) {
                     this.isReadonly = true;
@@ -285,7 +292,7 @@
                 this.selectedCoin = item.coin;
                 this.hideAutocompleteForm = true;
             },
-            // transaction's form methods
+            // *** transaction's form methods: ***
             transBtnType(type) {
                 return this.transType === type;
             },
@@ -294,6 +301,7 @@
             },
             setTransMarketPrice() {
                 console.log('setTransMarketPrice');
+                console.log('selectedCoin', this.selectedCoin);
             },
             // button "DONE" handler
             addTransaction() {
