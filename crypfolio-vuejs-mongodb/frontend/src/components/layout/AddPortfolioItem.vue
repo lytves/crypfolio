@@ -113,6 +113,7 @@
             <!--// a form to add transaction's details-->
             <v-card-text v-if="selectedCoin" style="padding: 0 16px;">
 
+                <!--// TRANSACTION TYPE "BUY/SELL"-->
                 <div class="text-xs-center">
                     <v-layout>
                         <v-spacer></v-spacer>
@@ -129,17 +130,20 @@
                     </v-layout>
                 </div>
 
+                <!--// TRANSACTION AMOUNT-->
                 <v-form @submit.prevent="addTransaction" v-model="transFormValid">
                     <v-text-field
-                            v-model="transAmount"
+                            v-model.number="transAmount"
                             label="Amount"
                             placeholder="0"
                             class="inputNumbersWithoutSpin"
                             type="number"
                             :suffix="selectedCoin.symbol"
+                            :rules="numberRules"
                             required>
                     </v-text-field>
 
+                    <!--// TRANSACTION SET Market Price-->
                     <div class="text-xs-center">
                         <v-layout>
                             <v-btn
@@ -151,17 +155,20 @@
                         </v-layout>
                     </div>
 
+                    <!--// TRANSACTION Price-->
                     <v-layout row>
                         <v-flex xs12>
                             <v-text-field
-                                    v-model="transPrice"
+                                    v-model.number="transPrice"
                                     label="Price"
                                     placeholder="0"
                                     class="inputNumbersWithoutSpin"
                                     type="number"
+                                    :rules="numberPriceRules"
                                     required>
                             </v-text-field>
                         </v-flex>
+                        <!--// TRANSACTION SELECT CURRENCY-->
                         <v-flex sm6 d-flex class="selectsFlexBasis">
                             <v-select
                                     v-model="transChooseCurrency"
@@ -172,13 +179,15 @@
 
                     </v-layout>
 
+                    <!--// TRANSACTION TOTAL-->
                     <v-text-field
-                            v-model="transTotal"
+                            v-model.number="transTotal"
                             label="Total"
                             placeholder="0"
                             :suffix="transCurrency"
                             class="inputNumbersWithoutSpin"
                             type="number"
+                            :rules="numberRules"
                             required>
                     </v-text-field>
 
@@ -197,8 +206,8 @@
                     Reset
                 </v-btn>
                 <v-btn
-                        small
-                        :class="{'disable-events': transAmount <= 0}"
+                        small id="addTransaction"
+                        :class="{'disable-events': !transFormValid}"
                         color="primary"
                         @click="addTransaction">
                     Add
@@ -227,11 +236,26 @@
             selectedCoinMarketData: null,
             hideAutocompleteForm: false,
             transType: "buy",
-            transAmount: '',
-            transPrice: '',
-            transTotal: '',
+            transAmount: Number,
+            transPrice: Number,
+            transTotal: Number,
             transCurrency: "USD",
             currencies: ['USD', 'EUR', 'BTC', 'ETH'],
+            numberRules: [
+                v => !!v || "number is required!",
+                v =>
+                    v < 999999999999.99999999 ||
+                    'number must be less than 999999999999.99999999 numbers',
+                v =>
+                    v > 0 ||
+                    'number must be greater than 0'
+            ],
+            numberPriceRules: [
+                v => (v !== "" && Number(v) >= 0) || "number is required!",
+                v =>
+                    v < 999999999999.99999999 ||
+                    'number must be less than 999999999999.99999999 numbers',
+            ],
             transFormValid: false,
         }),
         computed: {
@@ -358,6 +382,9 @@
 
 <style scoped>
     .btn-type:not(.active) {
+        opacity: 0.4;
+    }
+    #addTransaction.disable-events {
         opacity: 0.4;
     }
 </style>
