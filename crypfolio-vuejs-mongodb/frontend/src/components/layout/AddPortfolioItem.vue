@@ -8,14 +8,14 @@
 
         <v-card>
             <v-card-title v-if="!hideAutocompleteForm"
-                    class="headline pa-3 ma-0"
-                    primary-title>
+                          class="headline pa-3 ma-0"
+                          primary-title>
                 Add New Item
             </v-card-title>
 
-            <!--// user's chose coin from exist items in the portfolio-->
+            <!--// header when user have chose a coin to add new item-->
             <v-card-title class="headline pa-2 ma-0"
-                         v-if="hideAutocompleteForm && (typeof selectedCoin.id === 'number')">
+                          v-if="hideAutocompleteForm && (typeof selectedCoin.id === 'number')">
 
                 <v-layout align-center>
 
@@ -25,7 +25,7 @@
 
                     <v-spacer></v-spacer>
 
-                    </v-layout>
+                </v-layout>
 
             </v-card-title>
 
@@ -211,6 +211,8 @@
 
 <script>
     import {mapGetters, mapState} from 'vuex'
+    import {marketdataService} from "../../utils/marketdata.service";
+    import {SNACKBAR_ERROR} from "../../store/actions/snackbar";
 
     export default {
         name: "AddPortfolioItem",
@@ -222,6 +224,7 @@
             search: null,
             isReadonly: false,
             selectedCoin: null,
+            selectedCoinMarketData: null,
             hideAutocompleteForm: false,
             transType: "buy",
             transAmount: '',
@@ -243,6 +246,7 @@
             ...mapGetters(['isAllCoinsListDataLoaded', 'isUserPortfolioLoaded']),
             ...mapState({
                 allCoinsListData: state => state.marketdata.allCoinsListData,
+                userCoinsMarketData: state => state.marketdata.userCoinsMarketData,
                 userPortfolioItems: state => state.portfolio.userPortfolio.items
             }),
             transChooseCurrency: {
@@ -251,6 +255,7 @@
                 },
                 set(mainCurrency) {
                     this.transCurrency = mainCurrency;
+                    this.setTransMarketPrice();
                 }
             },
         },
@@ -281,7 +286,32 @@
             // when the coin for transaction was chosen by autocomplete searching
             changeSelected() {
                 if (this.selectedCoin) {
+
+                    this.hideAutocompleteForm = true;
                     this.isReadonly = true;
+
+                    // case when chosen coin IS in user's coins list
+                    if (this.selectedCoin.id in this.userCoinsMarketData) {
+
+                        this.selectedCoinMarketData = this.userCoinsMarketData[this.selectedCoin.id];
+
+                        this.setTransMarketPrice();
+
+                        // case when chosen coin isn't in user's coins list
+                    } else {
+                        // API REST call to receive actual coin's market data
+                        marketdataService.getCoinData(this.selectedCoin.id)
+                            .then(resp => {
+                                // parsing of response to have a map like a JSON
+                                let coinMarketData = JSON.parse(resp);
+                                this.selectedCoinMarketData = coinMarketData[this.selectedCoin.id];
+
+                                this.setTransMarketPrice();
+                            })
+                            .catch(err => {
+                                this.$store.dispatch(SNACKBAR_ERROR, "Error on receive actual market data of the coin!");
+                            })
+                    }
                 }
             },
             parseMatchedItem(matchedItem) {
@@ -290,7 +320,8 @@
             },
             chooseCoinFromPortfolio(item) {
                 this.selectedCoin = item.coin;
-                this.hideAutocompleteForm = true;
+                // call "general autocomplete" method
+                this.changeSelected();
             },
             // *** transaction's form methods: ***
             transBtnType(type) {
@@ -300,8 +331,22 @@
                 this.transType = (type === "sell" ? "sell" : "buy");
             },
             setTransMarketPrice() {
-                console.log('setTransMarketPrice');
-                console.log('selectedCoin', this.selectedCoin);
+                let tempTransPrice = 0;
+                switch (this.transCurrency) {
+                    case 'USD':
+                        tempTransPrice = this.selectedCoinMarketData["USD"]["price"];
+                        break;
+                    case 'EUR':
+                        tempTransPrice = this.selectedCoinMarketData["EUR"]["price"];
+                        break;
+                    case 'BTC':
+                        tempTransPrice = this.selectedCoinMarketData["BTC"]["price"];
+                        break;
+                    case 'ETH':
+                        tempTransPrice = this.selectedCoinMarketData["ETH"]["price"];
+                        break;
+                }
+                this.transPrice = this.$options.filters.generalValues(tempTransPrice, this.transCurrency);
             },
             // button "DONE" handler
             addTransaction() {
