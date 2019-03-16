@@ -4,7 +4,8 @@
             v-model="show"
             @keydown.esc="show = false"
             width="400"
-            class="text-xs-center">
+            class="text-xs-center"
+            scrollable>
 
         <v-card>
             <v-card-title v-if="!hideAutocompleteForm"
@@ -212,8 +213,27 @@
                             ></v-text-field>
                         </template>
 
-                        <v-date-picker v-model="transDate" :max="dateToday" @input="datePickerWindow = false"></v-date-picker>
+                        <v-date-picker v-model="transDate" :max="dateToday"
+                                       @input="datePickerWindow = false"></v-date-picker>
                     </v-menu>
+
+                    <!--// TRANSACTION COMMENT-->
+                    <v-expansion-panel focusable>
+                        <v-expansion-panel-content>
+                            <template v-slot:header>
+                                <div>Comment</div>
+                            </template>
+                            <v-card>
+                                <v-card-text class="pa-2">
+                                    <v-textarea class="pa-0 ma-0"
+                                                v-model="transComment"
+                                                :rules="commentRules"
+                                                :counter=true>
+                                    </v-textarea>
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
 
                 </v-form>
             </v-card-text>
@@ -265,6 +285,7 @@
             transTotal: Number,
             transCurrency: "USD",
             transDate: new Date().toISOString().substr(0, 10),
+            transComment: "",
             dateToday: new Date().toISOString().substr(0, 10),
             datePickerWindow: false,
             currencies: ['USD', 'EUR', 'BTC', 'ETH'],
@@ -282,6 +303,9 @@
                 v =>
                     v < 999999999999.99999999 ||
                     'number must be less than 999999999999.99999999 numbers',
+            ],
+            commentRules: [
+                v => v.length <= 200 || 'Comment must be less than 200 characters'
             ],
             transFormValid: false,
         }),
@@ -309,7 +333,7 @@
                     this.setTransMarketPrice();
                 }
             },
-            computedDateFormattedDatefns () {
+            computedDateFormattedDatefns() {
                 return this.transDate ? format(this.transDate, 'dddd, Do MMMM YYYY') : ''
             }
         },
