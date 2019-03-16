@@ -191,6 +191,29 @@
                             required>
                     </v-text-field>
 
+                    <!--// TRANSACTION DATE-->
+                    <v-menu
+                            v-model="datePickerWindow"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px">
+
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                    :value="computedDateFormattedDatefns"
+                                    label="Date"
+                                    prepend-icon="event"
+                                    readonly
+                                    v-on="on"
+                            ></v-text-field>
+                        </template>
+
+                        <v-date-picker v-model="transDate" :max="dateToday" @input="datePickerWindow = false"></v-date-picker>
+                    </v-menu>
 
                 </v-form>
             </v-card-text>
@@ -222,6 +245,7 @@
     import {mapGetters, mapState} from 'vuex'
     import {marketdataService} from "../../utils/marketdata.service";
     import {SNACKBAR_ERROR} from "../../store/actions/snackbar";
+    import format from 'date-fns/format'
 
     export default {
         name: "AddPortfolioItem",
@@ -240,6 +264,9 @@
             transPrice: Number,
             transTotal: Number,
             transCurrency: "USD",
+            transDate: new Date().toISOString().substr(0, 10),
+            dateToday: new Date().toISOString().substr(0, 10),
+            datePickerWindow: false,
             currencies: ['USD', 'EUR', 'BTC', 'ETH'],
             numberRules: [
                 v => !!v || "number is required!",
@@ -282,6 +309,9 @@
                     this.setTransMarketPrice();
                 }
             },
+            computedDateFormattedDatefns () {
+                return this.transDate ? format(this.transDate, 'dddd, Do MMMM YYYY') : ''
+            }
         },
         watch: {
             search(val) {
