@@ -140,7 +140,7 @@
                             class="inputNumbersWithoutSpin"
                             type="number"
                             :suffix="selectedCoin.symbol"
-                            :rules="numberRules"
+                            :rules="numberMoreThanZeroRules"
                             required>
                     </v-text-field>
 
@@ -165,7 +165,7 @@
                                     placeholder="0"
                                     class="inputNumbersWithoutSpin"
                                     type="number"
-                                    :rules="numberPriceRules"
+                                    :rules="numberOrZeroRules"
                                     required>
                             </v-text-field>
                         </v-flex>
@@ -188,7 +188,7 @@
                             :suffix="transCurrency"
                             class="inputNumbersWithoutSpin"
                             type="number"
-                            :rules="numberRules"
+                            :rules="numberOrZeroRules"
                             required>
                     </v-text-field>
 
@@ -289,7 +289,7 @@
             dateToday: new Date().toISOString().substr(0, 10),
             datePickerWindow: false,
             currencies: ['USD', 'EUR', 'BTC', 'ETH'],
-            numberRules: [
+            numberMoreThanZeroRules: [
                 v => !!v || "number is required!",
                 v =>
                     v < 999999999999.99999999 ||
@@ -298,7 +298,7 @@
                     v > 0 ||
                     'number must be greater than 0'
             ],
-            numberPriceRules: [
+            numberOrZeroRules: [
                 v => (v !== "" && Number(v) >= 0) || "number is required!",
                 v =>
                     v < 999999999999.99999999 ||
