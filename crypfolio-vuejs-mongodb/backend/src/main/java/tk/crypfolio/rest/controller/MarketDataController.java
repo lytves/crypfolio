@@ -139,9 +139,8 @@ public class MarketDataController extends Application {
     @Produces("application/json")
     public Response getCoinData(@PathParam("id") String id) throws Exception {
 
-        Long coinId = Long.valueOf(id);
-
         try {
+            Long coinId = Long.valueOf(id);
 
             // userId is the same Id for user's portfolio
             String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
