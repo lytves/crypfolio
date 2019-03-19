@@ -3,7 +3,7 @@ import Vue from 'vue'
 Vue.filter('portfolioValues', function (value, currency) {
 
     if (typeof value !== "number") {
-        return value;
+        value = Number(value);
     }
 
     let maximumFractionDigits = 2;
@@ -23,10 +23,10 @@ Vue.filter('portfolioValues', function (value, currency) {
     return formatter.format(value);
 });
 
-Vue.filter('generalValues', function (value, currency) {
+Vue.filter('generalValuesByCurrency', function (value, currency, useGrouping = false) {
 
     if (typeof value !== "number") {
-        return value;
+        value = Number(value);
     }
 
     let maximumFractionDigits = 2;
@@ -47,6 +47,23 @@ Vue.filter('generalValues', function (value, currency) {
 
     let formatter = new Intl.NumberFormat('en-US', {
         maximumFractionDigits: maximumFractionDigits,
+        // by default useGrouping: true - but it's provoked an error with input form field "number"
+        useGrouping: useGrouping
+    });
+
+    return formatter.format(value);
+});
+
+Vue.filter('generalValuesWithGrouping', function (value) {
+
+    if (typeof value !== "number") {
+        value = Number(value);
+    }
+
+    let formatter = new Intl.NumberFormat('en-US', {
+        maximumFractionDigits: 2,
+        // also by default useGrouping: true
+        useGrouping: true
     });
 
     return formatter.format(value);
@@ -55,7 +72,7 @@ Vue.filter('generalValues', function (value, currency) {
 Vue.filter('percentsValues', function (value) {
 
     if (typeof value !== "number") {
-        return value;
+        value = Number(value);
     }
 
     let formatter = new Intl.NumberFormat('en-US', {
@@ -69,7 +86,7 @@ Vue.filter('percentsValues', function (value) {
 Vue.filter('marketcapValues', function (value, locale = 'en') {
 
     if (typeof value !== "number") {
-        return value;
+        value = Number(value);
     }
 
     let formatter = new Intl.NumberFormat('en-US', {
