@@ -47,7 +47,7 @@ const actions = {
                     let responseStatus = JSON.parse(resp);
 
                     if (responseStatus.error_code === 400) {
-                        dispatch(SNACKBAR_ERROR, "The coin is already in your watchlist!");
+                        dispatch(SNACKBAR_ERROR, responseStatus.error_message);
 
                     } else {
 
