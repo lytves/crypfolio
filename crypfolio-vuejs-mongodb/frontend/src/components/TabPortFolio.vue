@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 
     <v-container class="ma-0 pa-0">
 
@@ -60,6 +60,7 @@
                 :headers="headers"
                 hide-actions
                 :items="showPortfolioItems"
+                item-key="id"
                 class="elevation-1">
 
             <template slot="no-data">
@@ -70,10 +71,10 @@
 
             </template>
 
-            <template slot="items" slot-scope="props">
+            <template v-slot:items="props">
                 <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
                 <td class="font-weight-medium">{{ props.item.coin.name }}</td>
-                <td class="font-weight-medium">{{ props.item.amount}} {{props.item.coin.symbol}}</td>
+                <td class="font-weight-medium">{{ props.item.amount | generalValuesWithGrouping}} {{props.item.coin.symbol}}</td>
                 <td>counted</td>
                 <td>counted</td>
                 <td>counted</td>

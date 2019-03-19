@@ -60,7 +60,7 @@
                     </td>
 
                     <td>{{ showCoinMarketPrice(props.item.coinId.id, props.item.showedCurrency) |
-                        generalValues(props.item.showedCurrency) }}
+                        generalValuesByCurrency(props.item.showedCurrency) }}
                         {{ props.item.showedCurrency }}
                     </td>
 
