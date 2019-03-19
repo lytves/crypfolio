@@ -119,13 +119,13 @@
                     <v-layout>
                         <v-spacer></v-spacer>
                         <v-btn small color="success" class="btn-type"
-                               :class="{'disable-events active': transBtnType('buy')}"
-                               @click="toggleTransType('buy')">
+                               :class="{'disable-events active': transBtnType('BUY')}"
+                               @click="toggleTransType('BUY')">
                             BUY
                         </v-btn>
                         <v-btn small color="error" class="btn-type"
-                               :class="{'disable-events active': transBtnType('sell')}"
-                               @click="toggleTransType('sell')">
+                               :class="{'disable-events active': transBtnType('SELL')}"
+                               @click="toggleTransType('SELL')">
                             SELL
                         </v-btn>
                     </v-layout>
@@ -266,6 +266,7 @@
     import {marketdataService} from "../../utils/marketdata.service";
     import {SNACKBAR_ERROR} from "../../store/actions/snackbar";
     import format from 'date-fns/format'
+    import {PORTFOLIO_ADD_TRANSACTION} from "../../store/actions/portfolio";
 
     export default {
         name: "AddPortfolioItem",
@@ -279,7 +280,7 @@
             selectedCoin: null,
             selectedCoinMarketData: null,
             hideAutocompleteForm: false,
-            transType: "buy",
+            transType: "BUY",
             transAmount: Number,
             transPrice: Number,
             transTotal: Number,
@@ -406,7 +407,7 @@
                 return this.transType === type;
             },
             toggleTransType(type) {
-                this.transType = (type === "sell" ? "sell" : "buy");
+                this.transType = (type === "SELL" ? "SELL" : "BUY");
             },
             setTransMarketPrice() {
                 let tempTransPrice = 0;
@@ -424,11 +425,23 @@
                         tempTransPrice = this.selectedCoinMarketData["ETH"]["price"];
                         break;
                 }
-                this.transPrice = this.$options.filters.generalValues(tempTransPrice, this.transCurrency);
+                this.transPrice = this.$options.filters.generalValuesByCurrency(tempTransPrice, this.transCurrency);
             },
             // button "DONE" handler
             addTransaction() {
-                console.log('addTransaction');
+                const payload = {
+                    'transCoinId': this.selectedCoin.id, 'transCurrency': this.transCurrency,
+                    'transType': this.transType, 'transAmount': this.transAmount, 'transPrice': this.transPrice,
+                    'transDate': this.transDate, 'transComment': this.transComment
+                };
+                this.$store.dispatch(PORTFOLIO_ADD_TRANSACTION, payload)
+                    .then(resp => {
+                        if (resp) {
+                            this.show = false;
+                        }
+                    })
+                    .catch(() => {
+                    })
             },
         },
     }
