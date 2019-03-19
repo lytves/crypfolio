@@ -60,13 +60,17 @@ Vue.filter('generalValuesWithGrouping', function (value) {
         value = Number(value);
     }
 
-    let formatter = new Intl.NumberFormat('en-US', {
-        maximumFractionDigits: 2,
-        // also by default useGrouping: true
-        useGrouping: true
-    });
+    if (value > 1000) {
+        let formatter = new Intl.NumberFormat('en-US', {
+            maximumFractionDigits: 2,
+            // also by default useGrouping: true
+            useGrouping: true
+        });
+        return formatter.format(value);
+    } else {
+        return value;
+    }
 
-    return formatter.format(value);
 });
 
 Vue.filter('percentsValues', function (value) {
