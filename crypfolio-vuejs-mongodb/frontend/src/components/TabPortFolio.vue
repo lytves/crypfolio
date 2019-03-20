@@ -73,14 +73,40 @@
 
             <template v-slot:items="props">
                 <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
-                <td class="font-weight-medium">{{ props.item.coin.name }}</td>
-                <td class="font-weight-medium">{{ props.item.amount | generalValuesWithGrouping}} {{props.item.coin.symbol}}</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
-                <td>counted</td>
+
+                <td class="font-weight-medium">
+                    {{ props.item.coin.name }}
+                </td>
+
+                <td>
+                    {{ props.item.amount | generalValuesWithGrouping}} {{props.item.coin.symbol}}
+                </td>
+
+                <td class="font-weight-medium">
+                    {{ showItemMarketValue(props.item) |
+                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                </td>
+
+                <td>
+                    {{ showCoinMarketPrice(props.item) |
+                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                </td>
+
+                <td :class="getPercentColor(showCoin24hPriceChange(props.item))">
+                    {{ showCoin24hPriceChange(props.item) | percentsValues }}%
+                </td>
+
+                <td :class="getValueColor(showItemProfit(props.item))">
+                    {{ showItemProfit(props.item) |
+                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                </td>
+
+                <td :class="getPercentColor(showItemProfitPercentage(props.item))">
+                    {{ showItemProfitPercentage(props.item) | percentsValues }}%
+                </td>
+                <td>
+                    {{ showItemSharePercentage(props.item) | percentsValues }}%
+                </td>
             </template>
 
         </v-data-table>
@@ -116,20 +142,19 @@
                     {text: 'Share %', value: 'iron'},
                     // {text: 'example',  align: 'left', sortable: false, value: 'name'},
                 ],
-                counted: 'toCount',
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addPortfolioItemDialog: false,
             }
         },
         computed: {
-            // users: () => this.$store.getters.userSet,
-
-            ...mapGetters(['isUserPortfolioLoaded']),
+            ...mapGetters(['isUserPortfolioLoaded', 'isUserCoinsMarketDataLoaded']),
             ...mapState({
                 userPortfolio: state => state.portfolio.userPortfolio,
-                userPortfolioItems: state => state.portfolio.userPortfolio.items
+                userPortfolioItems: state => state.portfolio.userPortfolio.items,
+                userCoinsMarketData: state => state.marketdata.userCoinsMarketData,
             }),
             showPortfolioItems() {
+
                 if (this.isUserPortfolioLoaded) {
 
                     // show only "NotArchive" items, that is to say they have amount > 0
@@ -147,6 +172,7 @@
                 }
             },
             showPortfolioNetCost() {
+
                 switch (this.userPortfolio.showedCurrency) {
                     case 'USD':
                         return this.userPortfolio.netCostUsd;
@@ -164,14 +190,166 @@
         },
         methods: {
             showItemCoinImage(id) {
+
                 if (this.isUserPortfolioLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
                 return '@/assets/coin-default.png'
             },
             showAddPortfolioItemDialog() {
+
                 this.addPortfolioItemDialog = true;
                 this.$store.dispatch(MARKETDATA_ALLCOINSLIST_SUCCESS)
+            },
+            showItemMarketValue(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    return item.amount * this.showCoinMarketPrice(item);
+                }
+            },
+            showItemMarketValueByCurrency(item, currency) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    return item.amount * this.showCoinMarketPriceByCurrency(item, currency);
+                }
+            },
+            showCoinMarketPrice(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (item.showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[item.coin.id]['USD']['price'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[item.coin.id]['EUR']['price'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[item.coin.id]['BTC']['price'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[item.coin.id]['ETH']['price'];
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            showCoinMarketPriceByCurrency(item, currency) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (currency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[item.coin.id]['USD']['price'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[item.coin.id]['EUR']['price'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[item.coin.id]['BTC']['price'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[item.coin.id]['ETH']['price'];
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            showCoin24hPriceChange(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (item.showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[item.coin.id]['USD']['percent_change_24h'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[item.coin.id]['EUR']['percent_change_24h'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[item.coin.id]['BTC']['percent_change_24h'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[item.coin.id]['ETH']['percent_change_24h'];
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            showItemProfit(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    let profit = 0;
+
+                    profit = (item.amount * this.showCoinMarketPrice(item)) - this.getItemNetCostsByCurrency(item);
+
+                    return profit;
+                }
+            },
+            showItemProfitPercentage(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    let profitPercentage = 0;
+
+                    switch (item.showedCurrency) {
+                        case 'USD':
+                            profitPercentage = this.showItemProfit(item) * 100 / item.netCostUsd;
+                            break;
+                        case 'EUR':
+                            profitPercentage = this.showItemProfit(item) * 100 / item.netCostEur;
+                            break;
+                        case 'BTC':
+                            profitPercentage = this.showItemProfit(item) * 100 / item.netCostBtc;
+                            break;
+                        case 'ETH':
+                            profitPercentage = this.showItemProfit(item) * 100 / item.netCostEth;
+                            break;
+                    }
+                    return profitPercentage;
+                }
+            },
+            showItemSharePercentage(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    let sharePercentage = 0;
+
+                    sharePercentage = this.showItemMarketValueByCurrency(item, this.userPortfolio.showedCurrency)
+                        * 100 / this.showPortfolioMarketValue;
+
+                    return sharePercentage;
+                }
+            },
+            getValueColor(value) {
+
+                if (value >= 0) {
+                    return 'green--text'
+                } else if (value < 0) {
+                    return 'red--text'
+                }
+            },
+            getPercentColor(value) {
+
+                value = this.$options.filters.percentsValues(value);
+
+                if (value >= 0) {
+                    return 'green--text'
+                } else if (value < 0) {
+                    return 'red--text'
+                }
+            },
+            getItemNetCostsByCurrency(item) {
+
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (item.showedCurrency) {
+                        case 'USD':
+                            return item.netCostUsd;
+                        case 'EUR':
+                            return item.netCostEur;
+                        case 'BTC':
+                            return item.netCostBtc;
+                        case 'ETH':
+                            return item.netCostEth;
+                        default:
+                            return 0;
+                    }
+                }
             },
         }
     }
