@@ -11,7 +11,7 @@
                         <v-card-text style="width: auto;">
                             <span class="grey--text">Market value:</span>
                             <span class="pa-3 font-weight-medium">
-                                {{123456789.123456789 | portfolioValues(portfolioShowedCurrency)}} {{portfolioShowedCurrency}}
+                                {{ showPortfolioMarketValue | portfolioValues(portfolioShowedCurrency) }} {{ portfolioShowedCurrency }}
                             </span>
                         </v-card-text>
 
@@ -29,12 +29,14 @@
 
                             <span class="grey--text">Net cost:</span>
                             <span class="pa-3 font-weight-medium">
-                                {{showPortfolioNetCost | portfolioValues(portfolioShowedCurrency)}} {{portfolioShowedCurrency}}
+                                {{ showPortfolioNetCost | portfolioValues(portfolioShowedCurrency) }} {{ portfolioShowedCurrency }}
                             </span>
 
                             <span class="grey--text">Profit:</span>
-                            <span class="pa-3 font-weight-medium green--text">
-                                {{123456789.123456789 | portfolioValues(portfolioShowedCurrency) }} {{portfolioShowedCurrency}} (169.19%)
+                            <span class="pa-3 font-weight-medium"
+                                  :class="getValueColor(showPortfolioProfit)">
+                                {{ showPortfolioProfit | portfolioValues(portfolioShowedCurrency) }} {{ portfolioShowedCurrency }}
+                                ({{ showPortfolioProfitPercentage | percentsValues }}%)
                             </span>
                         </v-card-text>
                     </v-layout>
@@ -186,7 +188,34 @@
                         return 0;
                 }
             },
+            showPortfolioMarketValue() {
 
+                if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
+
+                    let marketValue = 0;
+                    this.userPortfolioItems.forEach((item) => {
+                        marketValue += this.showItemMarketValueByCurrency(item, this.userPortfolio.showedCurrency);
+                    });
+                    return marketValue;
+                }
+            },
+            showPortfolioProfit() {
+
+                if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
+                    let profit = 0;
+                    profit = this.showPortfolioMarketValue - this.showPortfolioNetCost;
+                    return profit;
+                }
+            },
+            showPortfolioProfitPercentage() {
+
+                if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
+                    if (this.showPortfolioNetCost) {
+                        return this.showPortfolioProfit * 100 / this.showPortfolioNetCost;
+                    }
+                    return 0;
+                }
+            }
         },
         methods: {
             showItemCoinImage(id) {
