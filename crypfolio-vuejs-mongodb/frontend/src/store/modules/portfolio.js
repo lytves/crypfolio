@@ -9,6 +9,7 @@ import {
 import {userPortfolioService} from "../../utils";
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
 import Vue from 'vue'
+import {MARKETDATA_ADDCOIN_TO_USERCOINS} from "../actions/marketdata";
 
 const state = {
     userPortfolio: {},
@@ -35,10 +36,9 @@ const actions = {
     },
     [PORTFOLIO_ADD_TRANSACTION]: async ({commit, dispatch}, payload) => {
 
-        return await userPortfolioService.addTransaction(payload)
+        return await userPortfolioService.addTransaction(payload.payload)
             .then(resp => {
 
-                console.log('userPortfolioService.addTransaction');
                 // parsing response status to check if the coin was added successfully
                 // or it already is in the watchlist
                 let responseStatus = JSON.parse(resp.status);
@@ -49,7 +49,12 @@ const actions = {
                     dispatch(SNACKBAR_ERROR, responseStatus.error_message);
                 } else {
                     commit(PORTFOLIO_ACTUALIZE_ITEM, JSON.parse(responseData.actualizedItem));
+
+                    // if it's new item, the adds his marketdata to Vuex store userCoinsMarketData
+                    commit(MARKETDATA_ADDCOIN_TO_USERCOINS, payload.selectedCoinMarketData);
+
                     commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+
                     dispatch(SNACKBAR_SUCCESS, "The transaction has been processed successfully.");
 
                     // return TRUE to close modal window
@@ -79,7 +84,7 @@ const mutations = {
         // look up to item's index in the items array to replace
         let itemIndex = state.userPortfolio.items.findIndex(item => item.id === actualizedItem.id);
 
-        // if the is already in the portfolio, then actualizes them WITH DEEP Vue.set(...) method
+        // if the item is already in the portfolio, then actualizes them WITH DEEP Vue.set(...) method
         if (itemIndex >= 0) {
             Vue.set(state.userPortfolio.items, itemIndex, actualizedItem); //other way to set Vuex states
             // inserts new item

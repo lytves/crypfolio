@@ -429,10 +429,17 @@
             },
             // button "DONE" handler
             addTransaction() {
+                // payload - new transaction data to pass to backend,
+                // selectedCoinMarketData - to actualize the Vuex store "userCoinsMarketData" with new coin marketdata
                 const payload = {
-                    'transCoinId': this.selectedCoin.id, 'transCurrency': this.transCurrency,
-                    'transType': this.transType, 'transAmount': this.transAmount, 'transPrice': this.transPrice,
-                    'transDate': this.transDate, 'transComment': this.transComment
+                    'payload': {
+                        'transCoinId': this.selectedCoin.id, 'transCurrency': this.transCurrency,
+                        'transType': this.transType, 'transAmount': this.transAmount, 'transPrice': this.transPrice,
+                        'transDate': this.transDate, 'transComment': this.transComment
+                    },
+                    'selectedCoinMarketData': {
+                        [this.selectedCoin.id]: this.selectedCoinMarketData
+                    }
                 };
                 this.$store.dispatch(PORTFOLIO_ADD_TRANSACTION, payload)
                     .then(resp => {
