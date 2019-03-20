@@ -14,7 +14,7 @@ const state = {
 };
 
 const getters = {
-    isUserWatchlistLoaded: state => !!state.userWatchlist,
+    isUserWatchlistLoaded: state => (Array.isArray(state.userWatchlist) && state.userWatchlist.length > 0),
 };
 
 const actions = {

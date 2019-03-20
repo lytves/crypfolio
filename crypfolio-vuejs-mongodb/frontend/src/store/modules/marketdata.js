@@ -14,7 +14,8 @@ const state = {
 };
 
 const getters = {
-    isUserCoinsMarketDataLoaded: state => !!state.userCoinsMarketData,
+    isUserCoinsMarketDataLoaded: state =>
+        Object.keys(state.userCoinsMarketData).length !== 0 && state.userCoinsMarketData.constructor === Object,
     isAllCoinsListDataLoaded: state => (Array.isArray(state.allCoinsListData) && state.allCoinsListData.length > 0),
 };
 
