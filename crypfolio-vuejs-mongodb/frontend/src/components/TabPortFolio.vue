@@ -63,6 +63,8 @@
                 hide-actions
                 :items="showPortfolioItems"
                 item-key="id"
+                :custom-sort="customSort"
+                disable-initial-sort
                 class="elevation-1">
 
             <template slot="no-data">
@@ -133,16 +135,15 @@
         data() {
             return {
                 headers: [
-                    {text: '', value: 'img', sortable: false, width: "1%", class: "pa-0"},
-                    {text: 'Coin', value: 'name'},
-                    {text: 'Amount', value: 'calories'},
-                    {text: 'Market Value', value: 'fat'},
-                    {text: 'Market Price', value: 'carbs'},
-                    {text: '24h Changed', value: 'protein'},
-                    {text: 'Profit', value: 'iron'},
-                    {text: 'Profit %', value: 'iron'},
-                    {text: 'Share %', value: 'iron'},
-                    // {text: 'example',  align: 'left', sortable: false, value: 'name'},
+                    {text: '', sortable: false, width: "1%", class: "pa-0"},
+                    {text: 'Coin', value: 'coin-name'},
+                    {text: 'Amount', value: 'amount'},
+                    {text: 'Market Value', value: 'market-value'},
+                    {text: 'Market Price', value: 'market-price'},
+                    {text: '24h Changed', value: '24h-changed'},
+                    {text: 'Profit', value: 'profit'},
+                    {text: 'Profit %', value: 'profit-percentage'},
+                    {text: 'Share %', value: 'share-percentage'},
                 ],
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addPortfolioItemDialog: false,
@@ -379,6 +380,75 @@
                             return 0;
                     }
                 }
+            },
+            customSort(items, index, isDesc) {
+
+                items.sort((a, b) => {
+
+                    if (index === 'coin-name') {
+                        if (isDesc) {
+                            return a.coin.name.toLowerCase() < b.coin.name.toLowerCase() ? -1 : 1;
+                        } else {
+                            return a.coin.name.toLowerCase() > b.coin.name.toLowerCase() ? -1 : 1;
+                        }
+                    } else if (index === 'amount') {
+                        if (isDesc) {
+                            return a.amount < b.amount ? -1 : 1;
+                        } else {
+                            return a.amount > b.amount ? -1 : 1;
+                        }
+                    } else if (index === 'market-value') {
+                        if (isDesc) {
+                            return this.showItemMarketValue(a)
+                            < this.showItemMarketValue(b) ? -1 : 1;
+                        } else {
+                            return this.showItemMarketValue(a)
+                            > this.showItemMarketValue(b) ? -1 : 1;
+                        }
+                    } else if (index === 'market-price') {
+                        if (isDesc) {
+                            return this.showCoinMarketPrice(a)
+                            < this.showCoinMarketPrice(b) ? -1 : 1;
+                        } else {
+                            return this.showCoinMarketPrice(a)
+                            > this.showCoinMarketPrice(b) ? -1 : 1;
+                        }
+                    } else if (index === '24h-changed') {
+                        if (isDesc) {
+                            return this.showCoin24hPriceChange(a)
+                            < this.showCoin24hPriceChange(b) ? -1 : 1;
+                        } else {
+                            return this.showCoin24hPriceChange(a)
+                            > this.showCoin24hPriceChange(b) ? -1 : 1;
+                        }
+                    } else if (index === 'profit') {
+                        if (isDesc) {
+                            return this.showItemProfit(a)
+                            < this.showItemProfit(b) ? -1 : 1;
+                        } else {
+                            return this.showItemProfit(a)
+                            > this.showItemProfit(b) ? -1 : 1;
+                        }
+                    } else if (index === 'profit-percentage') {
+                        if (isDesc) {
+                            return this.showItemProfitPercentage(a)
+                            < this.showItemProfitPercentage(b) ? -1 : 1;
+                        } else {
+                            return this.showItemProfitPercentage(a)
+                            > this.showItemProfitPercentage(b) ? -1 : 1;
+                        }
+                    } else if (index === 'share-percentage') {
+                        if (isDesc) {
+                            return this.showItemSharePercentage(a)
+                            < this.showItemSharePercentage(b) ? -1 : 1;
+                        } else {
+                            return this.showItemSharePercentage(a)
+                            > this.showItemSharePercentage(b) ? -1 : 1;
+                        }
+                    }
+                });
+
+                return items;
             },
         }
     }
