@@ -176,29 +176,36 @@ public class PortfolioRestController extends Application {
                     portfolioDB.recountNetCosts();
 
                     // updates whole portfolio entity
-                    portfolioService.updatePortfolioDB(portfolioDB);
+                    PortfolioEntity newPortfolio = portfolioService.updatePortfolioDB(portfolioDB);
 
-                    LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
+                    itemDB = newPortfolio.getItems().stream().filter(
+                            itemEntity -> itemEntity.getCoin().getId().equals(transCoinId)
+                    ).findFirst().orElse(null);
 
-                    ObjectMapper mapper = new ObjectMapper();
+                    if (itemDB != null && itemDB.getCoin().getId() != null) {
 
-                    String portfolioNetCosts = Json.createObjectBuilder()
-                            .add("netCostUsd", portfolioDB.getNetCostUsd())
-                            .add("netCostEur", portfolioDB.getNetCostEur())
-                            .add("netCostBtc", portfolioDB.getNetCostBtc())
-                            .add("netCostEth", portfolioDB.getNetCostEth())
-                            .build()
-                            .toString();
+                        LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
 
-                    // form a JSON object consists of new portfolio NET costs data && actual actualized item
-                    String jsonToSend = Json.createObjectBuilder()
-                            .add("portfolioNetCosts", portfolioNetCosts)
-                            .add("actualizedItem", mapper.writeValueAsString(itemDB))
-                            .build()
-                            .toString();
+                        ObjectMapper mapper = new ObjectMapper();
 
-                    // generates response with new authentication token (using portfolio ID for Payload)
-                    return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                        String portfolioNetCosts = Json.createObjectBuilder()
+                                .add("netCostUsd", portfolioDB.getNetCostUsd())
+                                .add("netCostEur", portfolioDB.getNetCostEur())
+                                .add("netCostBtc", portfolioDB.getNetCostBtc())
+                                .add("netCostEth", portfolioDB.getNetCostEth())
+                                .build()
+                                .toString();
+
+                        // form a JSON object consists of new portfolio NET costs data && actual actualized item
+                        String jsonToSend = Json.createObjectBuilder()
+                                .add("portfolioNetCosts", portfolioNetCosts)
+                                .add("actualizedItem", mapper.writeValueAsString(itemDB))
+                                .build()
+                                .toString();
+
+                        // generates response with new authentication token (using portfolio ID for Payload)
+                        return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                    }
                 }
             }
 
