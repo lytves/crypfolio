@@ -83,7 +83,9 @@ Vue.filter('percentsValues', function (value) {
         maximumFractionDigits: 2,
     });
 
-    return formatter.format(value);
+    let formatedValue = formatter.format(value);
+
+    return Math.abs(Number(formatedValue)) === 0 ? Math.abs(Number(formatedValue)) : formatedValue
 });
 
 
