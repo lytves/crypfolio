@@ -2,6 +2,7 @@ import {
     MARKETDATA_ADDCOIN_TO_USERCOINS,
     MARKETDATA_ALLCOINSLIST_SUCCESS,
     MARKETDATA_ERROR,
+    MARKETDATA_GLOBAL_MARKET_DATA,
     MARKETDATA_USERCOINS_SUCCESS
 } from '../actions/marketdata'
 import {marketdataService} from "../../utils";
@@ -11,12 +12,15 @@ import {config} from '../../config'
 const state = {
     userCoinsMarketData: {},
     allCoinsListData: [],
+    globalMarketData: {},
 };
 
 const getters = {
     isUserCoinsMarketDataLoaded: state =>
         Object.keys(state.userCoinsMarketData).length !== 0 && state.userCoinsMarketData.constructor === Object,
     isAllCoinsListDataLoaded: state => (Array.isArray(state.allCoinsListData) && state.allCoinsListData.length > 0),
+    isGlobalMarketDataLoaded: state =>
+        Object.keys(state.globalMarketData).length !== 0 && state.globalMarketData.constructor === Object,
 };
 
 const actions = {
@@ -81,6 +85,13 @@ const actions = {
             }
         })
     },
+    [MARKETDATA_GLOBAL_MARKET_DATA]: async ({commit}) => {
+
+        return await marketdataService.getGlobalMarketData()
+            .then(resp => {
+                commit(MARKETDATA_GLOBAL_MARKET_DATA, JSON.parse(resp))
+            })
+    }
 };
 
 const mutations = {
@@ -97,6 +108,10 @@ const mutations = {
     [MARKETDATA_ALLCOINSLIST_SUCCESS]: (state, allCoinsListData) => {
 
         state.allCoinsListData = allCoinsListData;
+    },
+    [MARKETDATA_GLOBAL_MARKET_DATA]: (state, globalMarketData) => {
+
+        state.globalMarketData = globalMarketData;
     },
     [MARKETDATA_ERROR]: (state) => {
         // state.userWatchlist = {};
