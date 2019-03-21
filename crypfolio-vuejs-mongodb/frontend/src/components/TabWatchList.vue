@@ -178,62 +178,74 @@
             },
             showCoinMarketPrice(coinId, showedCurrency) {
 
-                switch (showedCurrency) {
-                    case 'USD':
-                        return this.userCoinsMarketData[coinId]['USD']['price'];
-                    case 'EUR':
-                        return this.userCoinsMarketData[coinId]['EUR']['price'];
-                    case 'BTC':
-                        return this.userCoinsMarketData[coinId]['BTC']['price'];
-                    case 'ETH':
-                        return this.userCoinsMarketData[coinId]['ETH']['price'];
-                    default:
-                        return 0;
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[coinId]['USD']['price'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[coinId]['EUR']['price'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[coinId]['BTC']['price'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[coinId]['ETH']['price'];
+                        default:
+                            return 0;
+                    }
                 }
             },
             showCoinMarketCap(coinId, showedCurrency) {
 
-                switch (showedCurrency) {
-                    case 'USD':
-                        return this.userCoinsMarketData[coinId]['USD']['market_cap'];
-                    case 'EUR':
-                        return this.userCoinsMarketData[coinId]['EUR']['market_cap'];
-                    case 'BTC':
-                        return this.userCoinsMarketData[coinId]['BTC']['market_cap'];
-                    case 'ETH':
-                        return this.userCoinsMarketData[coinId]['ETH']['market_cap'];
-                    default:
-                        return 0;
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[coinId]['USD']['market_cap'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[coinId]['EUR']['market_cap'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[coinId]['BTC']['market_cap'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[coinId]['ETH']['market_cap'];
+                        default:
+                            return 0;
+                    }
                 }
             },
             showCoin24hPriceChange(coinId, showedCurrency) {
 
-                switch (showedCurrency) {
-                    case 'USD':
-                        return this.userCoinsMarketData[coinId]['USD']['percent_change_24h'];
-                    case 'EUR':
-                        return this.userCoinsMarketData[coinId]['EUR']['percent_change_24h'];
-                    case 'BTC':
-                        return this.userCoinsMarketData[coinId]['BTC']['percent_change_24h'];
-                    case 'ETH':
-                        return this.userCoinsMarketData[coinId]['ETH']['percent_change_24h'];
-                    default:
-                        return 0;
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[coinId]['USD']['percent_change_24h'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[coinId]['EUR']['percent_change_24h'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[coinId]['BTC']['percent_change_24h'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[coinId]['ETH']['percent_change_24h'];
+                        default:
+                            return 0;
+                    }
                 }
             },
             showCoin7dPriceChange(coinId, showedCurrency) {
 
-                switch (showedCurrency) {
-                    case 'USD':
-                        return this.userCoinsMarketData[coinId]['USD']['percent_change_7d'];
-                    case 'EUR':
-                        return this.userCoinsMarketData[coinId]['EUR']['percent_change_7d'];
-                    case 'BTC':
-                        return this.userCoinsMarketData[coinId]['BTC']['percent_change_7d'];
-                    case 'ETH':
-                        return this.userCoinsMarketData[coinId]['ETH']['percent_change_7d'];
-                    default:
-                        return 0;
+                if (this.isUserCoinsMarketDataLoaded) {
+
+                    switch (showedCurrency) {
+                        case 'USD':
+                            return this.userCoinsMarketData[coinId]['USD']['percent_change_7d'];
+                        case 'EUR':
+                            return this.userCoinsMarketData[coinId]['EUR']['percent_change_7d'];
+                        case 'BTC':
+                            return this.userCoinsMarketData[coinId]['BTC']['percent_change_7d'];
+                        case 'ETH':
+                            return this.userCoinsMarketData[coinId]['ETH']['percent_change_7d'];
+                        default:
+                            return 0;
+                    }
                 }
             },
             showShowedCurrency(currency) {
