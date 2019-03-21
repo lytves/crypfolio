@@ -116,6 +116,14 @@ public class MarketDataRestController extends Application {
                         break;
                     }
                 }
+
+                for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerAdditionalData().entrySet()) {
+
+                    if (pair.getKey().equals(coinId)) {
+                        allCoinsByIdData.get(coinId).put("additionalData", pair.getValue());
+                        break;
+                    }
+                }
             }
 
             LOGGER.info("MarketDataRestController: Successful '/user-coins-data' request");
@@ -180,6 +188,14 @@ public class MarketDataRestController extends Application {
 
                 if (pair.getKey().equals(coinId)) {
                     coinDataByCurrencies.put("ETH", pair.getValue());
+                    break;
+                }
+            }
+
+            for (Map.Entry<Long, Map<String, Double>> pair : applicationContainer.getAllCoinsByTickerAdditionalData().entrySet()) {
+
+                if (pair.getKey().equals(coinId)) {
+                    coinDataByCurrencies.put("additionalData", pair.getValue());
                     break;
                 }
             }
