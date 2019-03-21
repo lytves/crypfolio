@@ -227,6 +227,10 @@
             }
         },
         methods: {
+            // it calls from ItemDetails child's method for clear selectedItem on close ItemDetailsSheet
+            clearSelectedItem() {
+                this.selectedItem = null;
+            },
             showItemCoinImage(id) {
 
                 if (this.isUserPortfolioLoaded) {
