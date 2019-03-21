@@ -12,7 +12,7 @@ import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
 import {PORTFOLIO_SUCCESS} from "../actions/portfolio";
 import {WATCHLIST_SUCCESS} from '../actions/watchlist'
-import {MARKETDATA_USERCOINS_SUCCESS} from '../actions/marketdata'
+import {MARKETDATA_GLOBAL_MARKET_DATA, MARKETDATA_USERCOINS_SUCCESS} from '../actions/marketdata'
 import {userAuthService} from "../../utils"
 
 const state = {
@@ -62,6 +62,9 @@ const actions = {
 
                     dispatch(MARKETDATA_USERCOINS_SUCCESS, allUserCoinsIds);
                     // *************   FINISH:  parse all user's coins IDs   ************************
+
+                    // get global market data to show on watchlist tab
+                    dispatch(MARKETDATA_GLOBAL_MARKET_DATA);
 
                     commit(USER_SUCCESS, user);
 
