@@ -3,7 +3,8 @@ import AXIOS from './axios-instance';
 export const marketdataService = {
     getUserCoinsData,
     getCoinData,
-    getAllCoinsListData
+    getAllCoinsListData,
+    getGlobalMarketData
 };
 
 async function getUserCoinsData(allUserCoinsIds) {
@@ -35,6 +36,18 @@ async function getAllCoinsListData() {
         .then(
             response => {
                 // returns only JSON object with coins actual market data grouped by coin's IDs
+                return response.data.data;
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+
+function getGlobalMarketData() {
+    return AXIOS.get('/global-market-data')
+        .then(
+            response => {
+                // returns only JSON object with global actual market data
                 return response.data.data;
             })
         .catch(error => {
