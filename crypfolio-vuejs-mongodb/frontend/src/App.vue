@@ -116,4 +116,10 @@
     input[type='number'] {
         margin: 0 10px;
     }
+    .cursorPointer {
+        cursor: pointer;
+    }
+    .v-dialog.v-bottom-sheet {
+        height: 90% !important;
+    }
 </style>

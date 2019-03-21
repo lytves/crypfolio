@@ -62,7 +62,6 @@
         computed: {
             ...mapGetters(['isUserProfileLoaded']),
             ...mapState({
-                // authLoading: state => state.auth.status === 'loading',
                 userEmail: state => state.user.userProfile.email
             }),
         },
@@ -89,5 +88,4 @@
 </script>
 
 <style scoped>
-
 </style>

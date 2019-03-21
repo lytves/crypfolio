@@ -76,47 +76,50 @@
             </template>
 
             <template v-slot:items="props">
-                <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
+                <tr class="cursorPointer" @click="selectItem(props.item)">
+                    <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
 
-                <td class="font-weight-medium">
-                    {{ props.item.coin.name }}
-                </td>
+                    <td class="font-weight-medium">
+                        {{ props.item.coin.name }}
+                    </td>
 
-                <td>
-                    {{ props.item.amount | generalValuesWithGrouping}} {{props.item.coin.symbol}}
-                </td>
+                    <td>
+                        {{ props.item.amount | generalValuesWithGrouping}} {{props.item.coin.symbol}}
+                    </td>
 
-                <td class="font-weight-medium">
-                    {{ showItemMarketValue(props.item) |
-                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
-                </td>
+                    <td class="font-weight-medium">
+                        {{ showItemMarketValue(props.item) |
+                        generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                    </td>
 
-                <td>
-                    {{ showCoinMarketPrice(props.item) |
-                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
-                </td>
+                    <td>
+                        {{ showCoinMarketPrice(props.item) |
+                        generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                    </td>
 
-                <td :class="getPercentColor(showCoin24hPriceChange(props.item))">
-                    {{ showCoin24hPriceChange(props.item) | percentsValues }}%
-                </td>
+                    <td :class="getPercentColor(showCoin24hPriceChange(props.item))">
+                        {{ showCoin24hPriceChange(props.item) | percentsValues }}%
+                    </td>
 
-                <td :class="getValueColor(showItemProfit(props.item))">
-                    {{ showItemProfit(props.item) |
-                    generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
-                </td>
+                    <td :class="getValueColor(showItemProfit(props.item))">
+                        {{ showItemProfit(props.item) |
+                        generalValuesByCurrency(props.item.showedCurrency) }} {{ props.item.showedCurrency }}
+                    </td>
 
-                <td :class="getPercentColor(showItemProfitPercentage(props.item))">
-                    {{ showItemProfitPercentage(props.item) | percentsValues }}%
-                </td>
+                    <td :class="getPercentColor(showItemProfitPercentage(props.item))">
+                        {{ showItemProfitPercentage(props.item) | percentsValues }}%
+                    </td>
 
-                <td>
-                    {{ showItemSharePercentage(props.item) | percentsValues }}%
-                </td>
+                    <td>
+                        {{ showItemSharePercentage(props.item) | percentsValues }}%
+                    </td>
+                </tr>
             </template>
 
         </v-data-table>
 
         <AddPortfolioItem v-model="addPortfolioItemDialog"></AddPortfolioItem>
+        <ItemDetails :selectedItem="selectedItem" v-model="itemDetailsSheet"></ItemDetails>
 
     </v-container>
 
@@ -127,11 +130,13 @@
     import {PORTFOLIO_UPDATE_CURRENCY} from '../store/actions/portfolio'
     import AddPortfolioItem from './layout/AddPortfolioItem'
     import {MARKETDATA_ALLCOINSLIST_SUCCESS} from "../store/actions/marketdata";
+    import ItemDetails from "./layout/ItemDetails";
 
     export default {
         name: "TabPortfolio",
         components: {
             AddPortfolioItem,
+            ItemDetails
         },
         data() {
             return {
@@ -148,6 +153,8 @@
                 ],
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addPortfolioItemDialog: false,
+                itemDetailsSheet: false,
+                selectedItem: null,
             }
         },
         computed: {
@@ -450,6 +457,10 @@
                 });
 
                 return items;
+            },
+            selectItem(item) {
+                this.selectedItem = item;
+                this.itemDetailsSheet = true;
             },
         }
     }
