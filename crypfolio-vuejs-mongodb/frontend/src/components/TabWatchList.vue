@@ -9,9 +9,23 @@
 
                     <v-card-text style="width: auto;">
                         <span class="grey--text">
-                            Total Market Cap:  $132.653.101.593
-                            24h Vol: $32.172.230.423
-                            BTC Dominance: 51.6%</span>
+                            Total Market Cap:
+                        </span>
+                        <span class="pa-3 font-weight-medium">
+                            ${{ showTotalMarketCap | marketcapValues }}
+                        </span>
+                        <span class="grey--text">
+                            24h Vol:
+                        </span>
+                        <span class="pa-3 font-weight-medium">
+                            ${{ showTotal24hVolume | marketcapValues }}
+                        </span>
+                        <span class="grey--text">
+                            BTC Dominance:
+                        </span>
+                        <span class="pa-3 font-weight-medium">
+                            {{ showBitcoinPercentageOfMarketCap | percentsValues }}%
+                        </span>
                     </v-card-text>
 
                 </v-flex>
@@ -154,16 +168,35 @@
             }
         },
         computed: {
-            ...mapGetters(['isUserWatchlistLoaded', 'isUserCoinsMarketDataLoaded']),
+            ...mapGetters(['isUserWatchlistLoaded', 'isUserCoinsMarketDataLoaded', 'isGlobalMarketDataLoaded']),
             ...mapState({
                 userWatchlistCoins: state => state.watchlist.userWatchlist,
-                userCoinsMarketData: state => state.marketdata.userCoinsMarketData
+                userCoinsMarketData: state => state.marketdata.userCoinsMarketData,
+                globalMarketData: state => state.marketdata.globalMarketData,
             }),
             showWatchlistCoins() {
                 if (this.isUserWatchlistLoaded) {
                     return this.userWatchlistCoins
                 }
-            }
+            },
+            showTotalMarketCap() {
+
+                if (this.isGlobalMarketDataLoaded) {
+                    return this.globalMarketData["total_market_cap_usd"];
+                }
+            },
+            showTotal24hVolume() {
+
+                if (this.isGlobalMarketDataLoaded) {
+                    return this.globalMarketData["total_24h_volume_usd"];
+                }
+            },
+            showBitcoinPercentageOfMarketCap() {
+
+                if (this.isGlobalMarketDataLoaded) {
+                    return this.globalMarketData["bitcoin_percentage_of_market_cap"];
+                }
+            },
         },
         methods: {
             showAddWatchCoinDialog() {
@@ -171,6 +204,7 @@
                 this.$store.dispatch(MARKETDATA_ALLCOINSLIST_SUCCESS)
             },
             showCoinImage(id) {
+
                 if (this.isUserWatchlistLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
