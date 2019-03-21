@@ -108,6 +108,7 @@
                 <td :class="getPercentColor(showItemProfitPercentage(props.item))">
                     {{ showItemProfitPercentage(props.item) | percentsValues }}%
                 </td>
+
                 <td>
                     {{ showItemSharePercentage(props.item) | percentsValues }}%
                 </td>
