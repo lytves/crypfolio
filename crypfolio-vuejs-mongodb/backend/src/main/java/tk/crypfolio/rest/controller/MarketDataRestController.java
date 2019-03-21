@@ -28,9 +28,9 @@ import static tk.crypfolio.rest.util.AuthenticationTokenService.getUserIdFromJWT
 
 // "/api" root-path is defined in RestApplication
 @Path("/")
-public class MarketDataController extends Application {
+public class MarketDataRestController extends Application {
 
-    private static final Logger LOGGER = LogManager.getLogger(MarketDataController.class);
+    private static final Logger LOGGER = LogManager.getLogger(MarketDataRestController.class);
 
     // application scoped
     @Inject
@@ -118,7 +118,7 @@ public class MarketDataController extends Application {
                 }
             }
 
-            LOGGER.info("MarketDataController: Successful '/user-coins-data' request");
+            LOGGER.info("MarketDataRestController: Successful '/user-coins-data' request");
 
             // generates response with new authentication token (using userID for Payload)
             return JsonResponseBuild.generateJsonResponse(allCoinsByIdData, Long.valueOf(userId));
@@ -186,7 +186,7 @@ public class MarketDataController extends Application {
 
             coinData.put(coinId, coinDataByCurrencies);
 
-            LOGGER.info("MarketDataController: Successful '/coin-data/{id}' request");
+            LOGGER.info("MarketDataRestController: Successful '/coin-data/{id}' request");
 
             // generates response with new authentication token (using user ID for Payload)
             return JsonResponseBuild.generateJsonResponse(coinData, Long.valueOf(userId));
@@ -210,10 +210,34 @@ public class MarketDataController extends Application {
             String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
                     .substring(TOKEN_BEARER_PREFIX.length()).trim());
 
-            LOGGER.info("MarketDataController: Successful '/all-coins-list-data' request");
+            LOGGER.info("MarketDataRestController: Successful '/all-coins-list-data' request");
 
             // generates response with new authentication token (using portfolio=user ID for Payload)
             return JsonResponseBuild.generateJsonResponse(applicationContainer.getAllCoinsListing(), Long.valueOf(userId));
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    @Authenticator
+    @GET
+    @Path("/global-market-data")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getGlobalMarketData() throws Exception {
+
+        try {
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            LOGGER.info("MarketDataRestController: Successful '/global-market-data' request");
+
+            // generates response with new authentication token (using portfolio=user ID for Payload)
+            return JsonResponseBuild.generateJsonResponse(applicationContainer.getGlobalMarketData(), Long.valueOf(userId));
 
         } catch (Exception ex) {
 
