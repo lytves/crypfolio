@@ -181,7 +181,7 @@ public abstract class ParserAPI {
                 // if value is more than .now() is showed today actual price value
                 .append(localDate.atTime(23, 59, 59).atZone(ZoneId.of("Europe/Oslo")).toEpochSecond());
 
-        LOGGER.info( "parseBitcoiHistoricalPrice urlRequest " + urlRequest);
+        LOGGER.info("parseBitcoiHistoricalPrice urlRequest " + urlRequest);
 
         String inlineString = parseAPIByURL(urlRequest.toString(), "GET");
 
@@ -215,7 +215,7 @@ public abstract class ParserAPI {
                 }
             } catch (ClassCastException | ParseException ex) {
 
-                LOGGER.error( "Exception in parseCoinByCoinsTickerId" + ex);
+                LOGGER.error("Exception in parseCoinByCoinsTickerId" + ex);
             }
         }
         return bitcoinHistoricalPrice;
@@ -272,8 +272,56 @@ public abstract class ParserAPI {
             }
 
         } catch (Exception ex) {
-            LOGGER.error( "Error in parseAllCoinsAdditonalDataByCoinTicker - " + ex.toString());
+            LOGGER.error("Error in parseAllCoinsAdditonalDataByCoinTicker - " + ex.toString());
         }
         return coinsMap;
+    }
+
+    public static Map<String, Double> parseGlobalMarketDataCMC(String inlineString) {
+
+        Map<String, Double> globalMarketData = new HashMap<>();
+
+        //JSONParser reads the data from string object and break each data into key-value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+
+            JSONObject jsonDataObj = (JSONObject) parserJSON.parse(inlineString);
+
+            if (jsonDataObj != null) {
+
+                Double totalMarketCapUsd, total24hVolumeUsd, bitcoinPercentageOfMarketCap;
+
+                if (jsonDataObj.get("total_market_cap_usd") != null) {
+                    totalMarketCapUsd = ((Number) jsonDataObj.get("total_market_cap_usd")).doubleValue();
+                } else {
+                    totalMarketCapUsd = Double.valueOf("0.0");
+                }
+
+                if (jsonDataObj.get("total_24h_volume_usd") != null) {
+                    total24hVolumeUsd = ((Number) jsonDataObj.get("total_24h_volume_usd")).doubleValue();
+                } else {
+                    total24hVolumeUsd = Double.valueOf("0.0");
+                }
+
+                if (jsonDataObj.get("bitcoin_percentage_of_market_cap") != null) {
+                    bitcoinPercentageOfMarketCap = ((Number) jsonDataObj.get("bitcoin_percentage_of_market_cap")).doubleValue();
+                } else {
+                    bitcoinPercentageOfMarketCap = Double.valueOf("0.0");
+                }
+
+                globalMarketData.put("total_market_cap_usd", totalMarketCapUsd);
+                globalMarketData.put("total_24h_volume_usd", total24hVolumeUsd);
+                globalMarketData.put("bitcoin_percentage_of_market_cap", bitcoinPercentageOfMarketCap);
+
+                System.out.println(globalMarketData);
+            }
+
+        } catch (
+                Exception ex) {
+            LOGGER.error("Error in parseGlobalMarketDataCMC - " + ex.toString());
+        }
+
+        return globalMarketData;
     }
 }

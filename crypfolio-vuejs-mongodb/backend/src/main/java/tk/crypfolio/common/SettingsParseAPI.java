@@ -10,6 +10,8 @@ public abstract class SettingsParseAPI {
     // https://api.coinmarketcap.com/v2/ticker/?start=1&limit=100&convert=EUR
     public static final String CMC_COIN_BY_TICKER_ID = "https://api.coinmarketcap.com/v2/ticker/";
 
+    public static final String CMC_GLOBAL_DATA = "https://api.coinmarketcap.com/v1/global/";
+
     /* CryptoCompare API Free */
     // https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD,EUR,ETH&ts=1529020800
     public static final String CC_COIN_HISTORICAL_DATA = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=";

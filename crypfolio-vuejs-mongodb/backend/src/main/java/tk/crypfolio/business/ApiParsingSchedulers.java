@@ -53,6 +53,7 @@ public class ApiParsingSchedulers {
         // run a method in a new thread: https://stackoverflow.com/a/21570040/6841308
         // + anonymous new Runnable() can be replaced with lambda:
         Executors.newSingleThreadExecutor().execute(() -> parseAllCoinsOnSandboxCMC());
+        Executors.newSingleThreadExecutor().execute(() -> parseGlobalMarketDataCMC());
 
     }
 
@@ -174,5 +175,28 @@ public class ApiParsingSchedulers {
         CoinDAO cDAO = myFactory.getCoinDAO();
 
         applicationContainer.setAllCoinsListing(cDAO.getAllCoins());
+    }
+
+    private void parseGlobalMarketDataCMC() {
+
+        LOGGER.info("ApiParsingSchedulers.parseGlobalDataCMC is running...");
+
+        try {
+
+            String urlRequest = SettingsParseAPI.CMC_GLOBAL_DATA;
+
+            LOGGER.info("parseGlobalDataCMC.urlRequest: " + urlRequest);
+
+            String inlineString = ParserAPI.parseAPIByURL(urlRequest.toString(), "GET");
+
+            if (!(inlineString.trim()).isEmpty()) {
+                applicationContainer.setGlobalMarketData(ParserAPI.parseGlobalMarketDataCMC(inlineString));
+            }
+
+        } catch (Exception ex) {
+
+            LOGGER.error("ApiParsingSchedulers.parseGlobalDataCMC exception - " + ex.toString());
+            ex.printStackTrace();
+        }
     }
 }

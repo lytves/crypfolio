@@ -33,6 +33,8 @@ public class ApplicationContainer {
 
     private Map<Long, Map<String, Double>> allCoinsByTickerAdditionalData = new HashMap<>();
 
+    private Map<String, Double> globalMarketData = new HashMap<>();
+
     @PostConstruct
     private void init() { LOGGER.info("ApplicationContainer init!");}
 
@@ -82,5 +84,13 @@ public class ApplicationContainer {
 
     public void setAllCoinsByTickerAdditionalData(Map<Long, Map<String, Double>> allCoinsByTickerAdditionalData) {
         this.allCoinsByTickerAdditionalData = allCoinsByTickerAdditionalData;
+    }
+
+    public Map<String, Double> getGlobalMarketData() {
+        return globalMarketData;
+    }
+
+    public void setGlobalMarketData(Map<String, Double> globalMarketData) {
+        this.globalMarketData = globalMarketData;
     }
 }
