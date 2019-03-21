@@ -60,7 +60,7 @@ Vue.filter('generalValuesWithGrouping', function (value) {
         value = Number(value);
     }
 
-    if (value > 1000) {
+    if (value >= 1000) {
         let formatter = new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,
             // also by default useGrouping: true
