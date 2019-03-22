@@ -13,10 +13,7 @@ import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.TransactionType;
-import tk.crypfolio.model.CoinEntity;
-import tk.crypfolio.model.ItemEntity;
-import tk.crypfolio.model.PortfolioEntity;
-import tk.crypfolio.model.TransactionEntity;
+import tk.crypfolio.model.*;
 import tk.crypfolio.parse.ParserAPI;
 import tk.crypfolio.rest.exception.RestApplicationException;
 import tk.crypfolio.rest.filter.Authenticator;
@@ -94,6 +91,62 @@ public class PortfolioRestController extends Application {
             }
 
             throw new BadRequestException("There is no portfolio with requested ID or passed currency isn't valid");
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    @Authenticator
+    @PUT
+    @Path("/item-currency")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response setItemShowedCurrency(String jsonString) throws Exception {
+
+        //JSONParser reads the data from string object and break each data into their key value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+            JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
+
+            Long coinId = ((Number) jsonObject.get("coinId")).longValue();
+            String currency = (String) jsonObject.get("currency");
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
+
+            // check if coinId is valid, that is to say that in DB exists a coin with this ID
+            CoinEntity coinDB = coinService.getAllCoinsDB().stream().filter(coin -> coinId.equals(coin.getId()))
+                    .findFirst().orElse(null);
+
+            if (portfolioDB != null && coinDB != null) {
+
+                // look up an item with passed coinId
+                ItemEntity itemDB = portfolioDB.getItems().stream()
+                        .filter(itemEntity -> coinId.equals(itemEntity.getCoin().getId()))
+                        .findFirst()
+                        .orElse(null);
+
+                // check if there is a coin in user's watchlist and currency value is valid CurrencyType
+                if (itemDB != null && EnumUtils.isValidEnum(CurrencyType.class, currency)) {
+
+                    itemDB.setShowedCurrency(CurrencyType.valueOf(currency));
+
+                    portfolioService.updatePortfolioDB(portfolioDB);
+
+                    LOGGER.info("WatchListRestController: Successful '/item-currency' request");
+
+                    // generates response with new authentication token (using user ID for Payload)
+                    return JsonResponseBuild.generateJsonResponse(null, portfolioDB.getId());
+                }
+            }
+
+            throw new BadRequestException("There is no item in user's portfolio with requested coin ID or passed currency isn't valid");
 
         } catch (Exception ex) {
 
