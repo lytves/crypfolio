@@ -3,7 +3,8 @@ import AXIOS from './axios-instance';
 export const userPortfolioService = {
     setPortfolioShowedCurrency,
     addTransaction,
-    setItemShowedCurrency
+    setItemShowedCurrency,
+    deleteItem
 };
 
 async function setPortfolioShowedCurrency(currency) {
@@ -52,6 +53,17 @@ function setItemShowedCurrency(coinId, currency) {
                 // we don't need to pass any data,
                 // coz it's a request only for set new item's currency
                 // if response was success, so set Item ShowedCurrency has been done successfully
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+function deleteItem(itemId) {
+    return AXIOS.delete(`/portfolio-delete-item/` + itemId)
+        .then(
+            response => {
+                // return data for check the response status and update portfolio data
+                return response.data;
             })
         .catch(error => {
             return Promise.reject(error.response);
