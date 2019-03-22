@@ -74,7 +74,7 @@ const actions = {
                 })
         })
     },
-    [WATCHLIST_DELETE_COIN]: ({commit, dispatch, rootState}, coinId) => {
+    [WATCHLIST_DELETE_COIN]: ({commit, dispatch}, coinId) => {
         return new Promise((resolve, reject) => {
 
             return userWatchlistService.deleteWatchlistCoin(coinId)

@@ -1,6 +1,7 @@
 import {
     MARKETDATA_ADDCOIN_TO_USERCOINS,
     MARKETDATA_ALLCOINSLIST_SUCCESS,
+    MARKETDATA_DELETECOIN_FROM_USERCOINS,
     MARKETDATA_ERROR,
     MARKETDATA_GLOBAL_MARKET_DATA,
     MARKETDATA_USERCOINS_SUCCESS
@@ -65,6 +66,10 @@ const actions = {
                 })
         })
     },
+    [MARKETDATA_DELETECOIN_FROM_USERCOINS]: ({commit}) => {
+
+        commit(MARKETDATA_DELETECOIN_FROM_USERCOINS);
+    },
     [MARKETDATA_ALLCOINSLIST_SUCCESS]: ({commit, dispatch}) => {
         return new Promise((resolve, reject) => {
 
@@ -104,6 +109,9 @@ const mutations = {
 
         // add to Object (!!!) userCoinsMarketData new coin
         state.userCoinsMarketData = Object.assign(state.userCoinsMarketData, coinMarketData);
+    },
+    [MARKETDATA_DELETECOIN_FROM_USERCOINS]: (state, coinId) => {
+        delete state.userCoinsMarketData[coinId];
     },
     [MARKETDATA_ALLCOINSLIST_SUCCESS]: (state, allCoinsListData) => {
 
