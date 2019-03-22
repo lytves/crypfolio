@@ -13,7 +13,10 @@ import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.TransactionType;
-import tk.crypfolio.model.*;
+import tk.crypfolio.model.CoinEntity;
+import tk.crypfolio.model.ItemEntity;
+import tk.crypfolio.model.PortfolioEntity;
+import tk.crypfolio.model.TransactionEntity;
 import tk.crypfolio.parse.ParserAPI;
 import tk.crypfolio.rest.exception.RestApplicationException;
 import tk.crypfolio.rest.filter.Authenticator;
@@ -139,7 +142,7 @@ public class PortfolioRestController extends Application {
 
                     portfolioService.updatePortfolioDB(portfolioDB);
 
-                    LOGGER.info("WatchListRestController: Successful '/item-currency' request");
+                    LOGGER.info("PortfolioRestController: Successful '/portfolio-item-currency' request");
 
                     // generates response with new authentication token (using user ID for Payload)
                     return JsonResponseBuild.generateJsonResponse(null, portfolioDB.getId());
@@ -229,9 +232,9 @@ public class PortfolioRestController extends Application {
                     portfolioDB.recountNetCosts();
 
                     // updates whole portfolio entity
-                    PortfolioEntity newPortfolio = portfolioService.updatePortfolioDB(portfolioDB);
+                    portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
 
-                    itemDB = newPortfolio.getItems().stream().filter(
+                    itemDB = portfolioDB.getItems().stream().filter(
                             itemEntity -> itemEntity.getCoin().getId().equals(transCoinId)
                     ).findFirst().orElse(null);
 
