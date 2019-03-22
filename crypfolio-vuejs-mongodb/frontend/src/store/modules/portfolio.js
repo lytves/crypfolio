@@ -4,7 +4,8 @@ import {
     PORTFOLIO_ADD_TRANSACTION,
     PORTFOLIO_ERROR,
     PORTFOLIO_SUCCESS,
-    PORTFOLIO_UPDATE_CURRENCY
+    PORTFOLIO_UPDATE_CURRENCY,
+    PORTFOLIO_UPDATE_ITEM_CURRENCY
 } from "../actions/portfolio";
 import {userPortfolioService} from "../../utils";
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
@@ -65,6 +66,18 @@ const actions = {
                 dispatch(SNACKBAR_ERROR, "Error on adding the transaction to portfolio!");
             });
     },
+    [PORTFOLIO_UPDATE_ITEM_CURRENCY]: async ({commit, dispatch}, {coinId, currency}) => {
+
+        return await userPortfolioService.setItemShowedCurrency(coinId, currency)
+            .then(resp => {
+
+                commit(PORTFOLIO_UPDATE_ITEM_CURRENCY, {coinId, currency});
+
+            })
+            .catch(err => {
+                dispatch(SNACKBAR_ERROR, "Error on changing item's currency!");
+            })
+    },
 };
 
 const mutations = {
@@ -97,6 +110,10 @@ const mutations = {
         state.userPortfolio.netCostEur = netcosts.netCostEur;
         state.userPortfolio.netCostBtc = netcosts.netCostBtc;
         state.userPortfolio.netCostEth = netcosts.netCostEth;
+    },
+    [PORTFOLIO_UPDATE_ITEM_CURRENCY]: (state, {coinId, currency}) => {
+        // set new currency to the item in store after receive a successfully response from backend
+        state.userPortfolio.items.find(i => i.coin.id === coinId).showedCurrency = currency;
     }
 };
 
