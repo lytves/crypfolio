@@ -34,7 +34,7 @@ Vue.filter('generalValuesByCurrency', function (value, currency, useGrouping = f
     switch (currency) {
         case 'USD':
         case 'EUR':
-            if (value < 1) {
+            if (Math.abs(value) < 1) {
                 maximumFractionDigits = 4;
             }
             break;
@@ -60,7 +60,7 @@ Vue.filter('generalValuesWithGrouping', function (value) {
         value = Number(value);
     }
 
-    if (value >= 1000) {
+    if (Math.abs(value) >= 1000) {
         let formatter = new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,
             // also by default useGrouping: true
@@ -98,7 +98,6 @@ Vue.filter('marketcapValues', function (value, locale = 'en') {
     let formatter = new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 2,
     });
-
 
     // Nine Zeroes for Billions
     return Math.abs(Number(value)) >= 1.0e+9
