@@ -104,8 +104,27 @@
                 </v-flex>
 
                 <!-- right big column: TradingView widget, add transaction, transactions list -->
-                <v-flex xs8 d-flex style="background-color:blue;">
-                    ddfdf
+                <v-flex xs8>
+
+                    <v-card-text class="text-sm-center pa-0">
+                        <img alt="Crypfolio logo" src="@/assets/trading-view-widget-example.png"
+                             style="display: block; margin: auto; height: 320px;">
+                    </v-card-text>
+
+                    <v-layout d-flex row xs12 class="align-center text-uppercase font-weight-medium pa-2 background-grey">
+                        Transactions:
+                        <v-spacer></v-spacer>
+                        <v-btn
+                                class="pa-0 ma-0"
+                                style="max-width: 200px;"
+                                color="primary lighten-2"
+                                dark small
+                                @click.stop="showAddTransactionDialog">
+                            <v-icon left>fas fa-plus</v-icon>
+                            Add Transaction
+                        </v-btn>
+                    </v-layout>
+
                 </v-flex>
 
             </v-layout>
@@ -315,6 +334,9 @@
                     .catch(() => {
                     })
             },
+            showAddTransactionDialog(){
+                alert("showAddTransactionDialog");
+            }
         }
     }
 </script>
