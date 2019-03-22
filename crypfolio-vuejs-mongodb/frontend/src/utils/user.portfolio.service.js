@@ -2,7 +2,8 @@ import AXIOS from './axios-instance';
 
 export const userPortfolioService = {
     setPortfolioShowedCurrency,
-    addTransaction
+    addTransaction,
+    setItemShowedCurrency
 };
 
 async function setPortfolioShowedCurrency(currency) {
@@ -21,9 +22,8 @@ async function setPortfolioShowedCurrency(currency) {
             return Promise.reject(error.response);
         });
 }
-
-async function addTransaction(payload) {
-    return await AXIOS.post('/portfolio-add-transaction', {
+function addTransaction(payload) {
+    return AXIOS.post('/portfolio-add-transaction', {
         "transCoinId": payload.transCoinId,
         "transCurrency": payload.transCurrency,
         "transType": payload.transType,
@@ -37,6 +37,21 @@ async function addTransaction(payload) {
             response => {
 
                 return response.data;
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+function setItemShowedCurrency(coinId, currency) {
+    return AXIOS.put('/item-currency', {
+        "coinId": coinId,
+        "currency": currency,
+    })
+        .then(
+            response => {
+                // we don't need to pass any data,
+                // coz it's a request only for set new item's currency
+                // if response was success, so set Item ShowedCurrency has been done successfully
             })
         .catch(error => {
             return Promise.reject(error.response);
