@@ -2,6 +2,7 @@ import {
     PORTFOLIO_ACTUALIZE_ITEM,
     PORTFOLIO_ACTUALIZE_NETCOSTS,
     PORTFOLIO_ADD_TRANSACTION,
+    PORTFOLIO_DELETE_ITEM,
     PORTFOLIO_ERROR,
     PORTFOLIO_SUCCESS,
     PORTFOLIO_UPDATE_CURRENCY,
@@ -46,7 +47,7 @@ const actions = {
                 // should parse twice, coz in the backend do twice JSON mapping
                 let responseData = JSON.parse(JSON.parse(resp.data));
 
-                if (responseStatus.error_code === 400) {
+                if (responseStatus.error_code !== 0) {
                     dispatch(SNACKBAR_ERROR, responseStatus.error_message);
                 } else {
                     commit(PORTFOLIO_ACTUALIZE_ITEM, JSON.parse(responseData.actualizedItem));
@@ -76,6 +77,34 @@ const actions = {
             })
             .catch(err => {
                 dispatch(SNACKBAR_ERROR, "Error on changing item's currency!");
+            })
+    },
+    [PORTFOLIO_DELETE_ITEM]: async ({commit, dispatch}, {coinId, itemId}) => {
+
+        return await userPortfolioService.deleteItem(itemId)
+            .then(resp => {
+
+                // parsing response status to check if the coin was added successfully
+                // or it already is in the watchlist
+                let responseStatus = JSON.parse(resp.status);
+                // should parse twice, coz in the backend do twice JSON mapping
+                let responseData = JSON.parse(JSON.parse(resp.data));
+
+                if (responseStatus.error_code !== 0) {
+                    dispatch(SNACKBAR_ERROR, responseStatus.error_message);
+                } else {
+                    commit(PORTFOLIO_DELETE_ITEM, itemId);
+
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+
+                    dispatch(SNACKBAR_SUCCESS, "The item has been deleted successfully!");
+
+                    // return TRUE to close sheet window
+                    return true;
+                }
+            })
+            .catch(err => {
+                dispatch(SNACKBAR_ERROR, "Error on deleting the item!");
             })
     },
 };
@@ -114,6 +143,15 @@ const mutations = {
     [PORTFOLIO_UPDATE_ITEM_CURRENCY]: (state, {coinId, currency}) => {
         // set new currency to the item in store after receive a successfully response from backend
         state.userPortfolio.items.find(i => i.coin.id === coinId).showedCurrency = currency;
+    },
+    [PORTFOLIO_DELETE_ITEM]: (state, itemId) => {
+        // remove the coin with passed coinId from Vuex store "userWatchlist"
+        const index = state.userPortfolio.items.findIndex(obj => obj.id === itemId);
+
+        state.userPortfolio.items = [
+            ...state.userPortfolio.items.slice(0, index),
+            ...state.userPortfolio.items.slice(index + 1)
+        ];
     }
 };
 
