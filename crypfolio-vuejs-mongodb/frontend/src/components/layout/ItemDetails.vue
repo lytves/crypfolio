@@ -6,12 +6,12 @@
             full-width
             lazy>
 
-        <v-card full-width class="fill-height pa-2" v-if="selectedItem">
+        <v-card full-width class="fill-height pa-2 scroll-y" v-if="selectedItem">
 
             <v-layout row xs12>
 
                 <!-- left column: position & coin details, item currency choose, delete item -->
-                <v-flex xs4 style="background-color:#e8e8e8">
+                <v-flex xs4 style="background-color:#e8e8e8; min-width: 350px;">
 
                     <v-card-text class="text-sm-center pa-2">
                         <img style="vertical-align: text-bottom;" :src="showItemCoinImage(selectedItem.coin.id)"/>
@@ -68,6 +68,26 @@
                         Item Currency:
                     </v-layout>
 
+                    <v-layout row xs12 style="background-color: white">
+                        <v-flex d-flex style="padding: 0 10px !important;">
+                            <v-list class="pa-0 ma-0">
+                                <span
+                                        class="pa-0 ma-0"
+                                        v-for="(currency, index) in currencies"
+                                        :key="index">
+                                    <v-btn
+                                            style="min-width: unset;"
+                                            :class="{'disable-events': showShowedCurrency(currency.name)}"
+                                            class="ma-2"
+                                            @click="changeItemShowedCurrency(currency.name)">
+                                        <v-icon style="margin-right: 6px;" color="blue darken-2">{{currency.icon}}</v-icon>
+                                        {{ currency.name }}
+                                    </v-btn>
+                                </span>
+                            </v-list>
+                        </v-flex>
+                    </v-layout>
+
                     <v-layout row xs12 class="text-uppercase font-weight-medium pa-2">
                         Delete Item:
                     </v-layout>
@@ -75,7 +95,7 @@
                 </v-flex>
 
                 <!-- right big column: TradingView widget, add transaction, transactions list -->
-                <v-flex xs8 d-flex style="background-color:blue">
+                <v-flex xs8 d-flex style="background-color:blue;">
                     ddfdf
                 </v-flex>
 
@@ -89,6 +109,7 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
+    import {PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
 
     export default {
         name: "ItemDetails",
@@ -111,7 +132,13 @@
                 {title: 'Circulating Supply', property: 'circulating_supply'},
                 {title: 'Total Supply', property: 'total_supply'},
                 {title: 'CoinMarketCap Rank', property: 'cmc_rank'},
-            ]
+            ],
+            currencies: [
+                {name: 'USD', icon: 'fas fa-dollar-sign'},
+                {name: 'EUR', icon: 'fas fa-euro-sign'},
+                {name: 'BTC', icon: 'fab fa-btc'},
+                {name: 'ETH', icon: 'fab fa-ethereum'},
+            ],
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
@@ -261,7 +288,14 @@
                             return 0;
                     }
                 }
-            }
+            },
+            showShowedCurrency(currency) {
+                return this.selectedItem.showedCurrency === currency;
+            },
+            changeItemShowedCurrency(currency) {
+                const payload = {'coinId': this.selectedItem.coin.id, 'currency': currency};
+                this.$store.dispatch(PORTFOLIO_UPDATE_ITEM_CURRENCY, payload);
+            },
         }
     }
 </script>
