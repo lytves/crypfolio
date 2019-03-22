@@ -103,24 +103,23 @@
                     <v-flex xs10 d-flex>
                         <div>
                             <span class="grey--text pa-3">Currency:</span>
-                            <v-btn :class="{'disable-events': showShowedCurrency('USD')}"
-                                   @click="changeShowedCurrency('USD')">USD
-                            </v-btn>
-                            <v-btn :class="{'disable-events': showShowedCurrency('EUR')}"
-                                   @click="changeShowedCurrency('EUR')">EUR
-                            </v-btn>
-                            <v-btn :class="{'disable-events': showShowedCurrency('BTC')}"
-                                   @click="changeShowedCurrency('BTC')">BTC
-                            </v-btn>
-                            <v-btn :class="{'disable-events': showShowedCurrency('ETH')}"
-                                   @click="changeShowedCurrency('ETH')">ETH
-                            </v-btn>
+                            <span
+                                    v-for="(currency, index) in currencies"
+                                    :key="index">
+                                    <v-btn
+                                            :class="{'disable-events': showShowedCurrency(currency.name)}"
+                                            @click="changeShowedCurrency(currency.name)">
+                                        <v-icon color="blue darken-2" left>{{currency.icon}}</v-icon>
+                                        {{ currency.name }}
+                                    </v-btn>
+                            </span>
                         </div>
                     </v-flex>
 
                     <v-flex xs2>
                         <v-btn @click="deleteCoin">
-                            <v-icon color="blue darken-2">fas fa-trash</v-icon>
+                            <v-icon color="blue darken-2" left>fas fa-trash</v-icon>
+                            Delete Coin
                         </v-btn>
                     </v-flex>
 
@@ -163,8 +162,13 @@
                 ],
                 expand: false,
                 expandedRowCoinId: '',
-                currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addWatchCoinDialog: false,
+                currencies: [
+                    {name: 'USD', icon: 'fas fa-dollar-sign'},
+                    {name: 'EUR', icon: 'fas fa-euro-sign'},
+                    {name: 'BTC', icon: 'fab fa-btc'},
+                    {name: 'ETH', icon: 'fab fa-ethereum'},
+                ],
             }
         },
         computed: {
