@@ -122,4 +122,7 @@
     .v-dialog.v-bottom-sheet {
         height: 90% !important;
     }
+    .background-grey {
+        background-color: #e8e8e8;
+    }
 </style>

@@ -11,7 +11,7 @@
             <v-layout row xs12>
 
                 <!-- left column: position & coin details, item currency choose, delete item -->
-                <v-flex xs4 style="background-color:#e8e8e8; min-width: 350px;">
+                <v-flex xs4 style="min-width: 350px;">
 
                     <v-card-text class="text-sm-center pa-2">
                         <img style="vertical-align: text-bottom;" :src="showItemCoinImage(selectedItem.coin.id)"/>
@@ -20,7 +20,7 @@
                         </span>
                     </v-card-text>
 
-                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2">
+                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2 background-grey">
                         Position Details:
                     </v-layout>
 
@@ -42,7 +42,7 @@
                         </span>
                     </v-list>
 
-                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2">
+                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2 background-grey">
                         Coin Details:
                     </v-layout>
 
@@ -64,7 +64,7 @@
                         </span>
                     </v-list>
 
-                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2">
+                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2 background-grey">
                         Item Currency:
                     </v-layout>
 
@@ -88,7 +88,7 @@
                         </v-flex>
                     </v-layout>
 
-                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2">
+                    <v-layout row xs12 class="text-uppercase font-weight-medium pa-2 background-grey">
                         Delete Item:
                     </v-layout>
 
