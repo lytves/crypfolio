@@ -100,7 +100,7 @@ public class PortfolioRestController extends Application {
 
     @Authenticator
     @PUT
-    @Path("/item-currency")
+    @Path("/portfolio-item-currency")
     @Consumes("application/json")
     @Produces("application/json")
     public Response setItemShowedCurrency(String jsonString) throws Exception {

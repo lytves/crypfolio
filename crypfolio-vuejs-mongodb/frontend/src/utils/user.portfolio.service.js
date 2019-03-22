@@ -43,7 +43,7 @@ function addTransaction(payload) {
         });
 }
 function setItemShowedCurrency(coinId, currency) {
-    return AXIOS.put('/item-currency', {
+    return AXIOS.put('/portfolio-item-currency', {
         "coinId": coinId,
         "currency": currency,
     })
