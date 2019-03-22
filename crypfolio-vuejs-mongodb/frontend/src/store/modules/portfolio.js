@@ -79,7 +79,7 @@ const actions = {
                 dispatch(SNACKBAR_ERROR, "Error on changing item's currency!");
             })
     },
-    [PORTFOLIO_DELETE_ITEM]: async ({commit, dispatch}, {coinId, itemId}) => {
+    [PORTFOLIO_DELETE_ITEM]: async ({commit, dispatch}, itemId) => {
 
         return await userPortfolioService.deleteItem(itemId)
             .then(resp => {

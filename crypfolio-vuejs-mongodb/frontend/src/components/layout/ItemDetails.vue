@@ -92,6 +92,15 @@
                         Delete Item:
                     </v-layout>
 
+                    <v-layout row xs12 style="background-color: white">
+                        <v-flex d-flex style="padding: 0 10px !important; max-width: 200px;">
+                            <v-btn @click="deleteItem">
+                                <v-icon color="blue darken-2" left>fas fa-trash</v-icon>
+                                Delete Item
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+
                 </v-flex>
 
                 <!-- right big column: TradingView widget, add transaction, transactions list -->
@@ -109,7 +118,7 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
-    import {PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
+    import {PORTFOLIO_DELETE_ITEM, PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
 
     export default {
         name: "ItemDetails",
@@ -295,6 +304,16 @@
             changeItemShowedCurrency(currency) {
                 const payload = {'coinId': this.selectedItem.coin.id, 'currency': currency};
                 this.$store.dispatch(PORTFOLIO_UPDATE_ITEM_CURRENCY, payload);
+            },
+            deleteItem() {
+                this.$store.dispatch(PORTFOLIO_DELETE_ITEM, this.selectedItem.id)
+                    .then(resp => {
+                        if (resp) {
+                            this.closeItemDetailsSheet();
+                        }
+                    })
+                    .catch(() => {
+                    })
             },
         }
     }
