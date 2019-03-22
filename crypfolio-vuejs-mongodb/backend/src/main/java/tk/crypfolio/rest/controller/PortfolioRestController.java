@@ -275,6 +275,63 @@ public class PortfolioRestController extends Application {
 
     }
 
+    @Authenticator
+    @DELETE
+    @Path("/portfolio-delete-item/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response deleteItem(@PathParam("id") String id) throws Exception {
+
+        Long itemToDelId = Long.valueOf(id);
+
+        try {
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
+
+            ItemEntity itemDB = portfolioDB.getItems().stream().filter(i -> i.getId().equals(itemToDelId))
+                    .findFirst().orElse(null);
+
+            // search if the item with passed Id is in the user's portfolio
+            if (portfolioDB != null && itemDB != null) {
+
+                portfolioDB.removeItem(itemDB);
+
+                portfolioDB.recountNetCosts();
+
+                // updates whole portfolio entity
+                portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
+
+                String portfolioNetCosts = Json.createObjectBuilder()
+                        .add("netCostUsd", portfolioDB.getNetCostUsd())
+                        .add("netCostEur", portfolioDB.getNetCostEur())
+                        .add("netCostBtc", portfolioDB.getNetCostBtc())
+                        .add("netCostEth", portfolioDB.getNetCostEth())
+                        .build()
+                        .toString();
+
+                // form a JSON object consists of new portfolio NET costs data && actual actualized item
+                String jsonToSend = Json.createObjectBuilder()
+                        .add("portfolioNetCosts", portfolioNetCosts)
+                        .build()
+                        .toString();
+
+                LOGGER.info("PortfolioRestController: Successful '/portfolio-delete-item/{id}' request");
+
+                // generates response with new authentication token (using user ID for Payload)
+                return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+            }
+
+            throw new BadRequestException("There is no user or the item with requested Id isn't in user's portfolio!");
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
 
     // utility methods
     // check if BigDecimal value corresponds to settings max value
