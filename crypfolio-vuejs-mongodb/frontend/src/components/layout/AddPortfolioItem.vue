@@ -239,23 +239,25 @@
             </v-card-text>
 
             <!--// "RESET" and "ADD" buttons-->
-            <div class="pa-1 ma-0 text-xs-center" v-if="selectedCoin">
+            <v-card-actions class="justify-center" v-if="selectedCoin">
+                <div class="pa-1 ma-0 text-xs-center">
 
-                <v-spacer></v-spacer>
-                <v-btn
-                        small
-                        color="primary"
-                        @click="clearForm">
-                    Reset
-                </v-btn>
-                <v-btn
-                        small id="addTransaction"
-                        :class="{'disable-events': !transFormValid}"
-                        color="primary"
-                        @click="addTransaction">
-                    Add
-                </v-btn>
-            </div>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            small
+                            color="primary"
+                            @click="clearForm">
+                        Reset
+                    </v-btn>
+                    <v-btn
+                            small id="addTransaction"
+                            :class="{'disable-events': !transFormValid}"
+                            color="primary"
+                            @click="addTransaction">
+                        Add
+                    </v-btn>
+                </div>
+            </v-card-actions>
 
         </v-card>
     </v-dialog>
