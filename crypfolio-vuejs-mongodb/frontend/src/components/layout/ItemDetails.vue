@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 
     <v-bottom-sheet
             v-model="show"
@@ -80,7 +80,9 @@
                                             :class="{'disable-events': showShowedCurrency(currency.name)}"
                                             class="ma-2"
                                             @click="changeItemShowedCurrency(currency.name)">
-                                        <v-icon style="margin-right: 6px;" color="blue darken-2">{{currency.icon}}</v-icon>
+                                        <v-icon
+                                                style="margin-right: 6px;"
+                                                color="blue darken-2">{{currency.icon}}</v-icon>
                                         {{ currency.name }}
                                     </v-btn>
                                 </span>
@@ -111,7 +113,8 @@
                              style="display: block; margin: auto; height: 320px;">
                     </v-card-text>
 
-                    <v-layout d-flex row xs12 class="align-center text-uppercase font-weight-medium pa-2 background-grey">
+                    <v-layout d-flex row xs12
+                              class="align-center text-uppercase font-weight-medium pa-2 background-grey">
                         Transactions:
                         <v-spacer></v-spacer>
                         <v-btn
@@ -124,6 +127,41 @@
                             Add Transaction
                         </v-btn>
                     </v-layout>
+
+                    <v-data-table
+                            :headers="headers"
+                            hide-actions
+                            :items="showItemTransactions"
+                            item-key="id"
+                            class="elevation-1 table-transactions">
+
+                        <template v-slot:items="props">
+                            <tr>
+                                <td class="pa-2">
+                                    {{ props.item.type }}
+                                </td>
+
+                                <td>
+                                    {{ props.item.amount }}
+                                </td>
+
+                                <td>
+                                    {{ props.item.type }}
+                                </td>
+
+                                <td class="font-weight-medium">
+                                    {{ props.item.type }}
+                                </td>
+                                <!-- the table will be sorting by the "boughtDate" -->
+                                <td>
+                                    {{ showTransDate(props.item.boughtDate) }}
+                                </td>
+
+                            </tr>
+                        </template>
+
+                    </v-data-table>
+
 
                 </v-flex>
 
@@ -138,6 +176,8 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import {PORTFOLIO_DELETE_ITEM, PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
+    import compareAsc from 'date-fns/compare_asc'
+    import format from 'date-fns/format'
 
     export default {
         name: "ItemDetails",
@@ -167,6 +207,14 @@
                 {name: 'BTC', icon: 'fab fa-btc'},
                 {name: 'ETH', icon: 'fab fa-ethereum'},
             ],
+            headers: [
+                {text: 'Type', sortable: false},
+                {text: 'Amount', sortable: false,},
+                {text: 'Price', sortable: false,},
+                {text: 'Total', sortable: false,},
+                {text: 'Date', sortable: false,},
+                {text: '', sortable: false,},
+            ],
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
@@ -179,6 +227,20 @@
                 },
                 set(value) {
                     this.$emit('input', value)
+                }
+            },
+            showItemTransactions() {
+
+                if (this.selectedItem) {
+                    // for sorting should be used only copy of the array,
+                    // because .sort change the source array, but we can't modify Vuex data here
+                    const transactionsClonedArray = [...this.selectedItem.transactions];
+                    return transactionsClonedArray.sort((a, b) => {
+                        return compareAsc(
+                            this.dateConverter(a.boughtDate),
+                            this.dateConverter(b.boughtDate)
+                        );
+                    });
                 }
             },
         },
@@ -318,7 +380,9 @@
                 }
             },
             showShowedCurrency(currency) {
-                return this.selectedItem.showedCurrency === currency;
+                if (this.selectedItem) {
+                    return this.selectedItem.showedCurrency === currency;
+                }
             },
             changeItemShowedCurrency(currency) {
                 const payload = {'coinId': this.selectedItem.coin.id, 'currency': currency};
@@ -334,9 +398,16 @@
                     .catch(() => {
                     })
             },
-            showAddTransactionDialog(){
+            showAddTransactionDialog() {
                 alert("showAddTransactionDialog");
-            }
+            },
+            dateConverter(date) {
+                // compose a normal Date format from Object
+                return new Date(date.year + "-" + date.monthValue + "-" + date.dayOfMonth);
+            },
+            showTransDate(date) {
+                return format(this.dateConverter(date), 'DD MMM, YYYY')
+            },
         }
     }
 </script>

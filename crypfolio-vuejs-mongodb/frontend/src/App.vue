@@ -125,4 +125,7 @@
     .background-grey {
         background-color: #e8e8e8;
     }
+    .table-transactions table.v-table thead tr {
+        height: 30px;
+    }
 </style>
