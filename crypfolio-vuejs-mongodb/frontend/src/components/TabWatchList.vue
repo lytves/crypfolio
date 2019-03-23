@@ -64,7 +64,7 @@
             </template>
 
             <template v-slot:items="props">
-                <tr @click="props.expanded = !props.expanded; expandedRowCoinId = props.item.coinId.id;">
+                <tr class="cursorPointer" @click="props.expanded = !props.expanded; expandedRowCoinId = props.item.coinId.id;">
 
                     <td class="pa-2 flex"><img :src="showCoinImage(props.item.coinId.id)"/></td>
 
