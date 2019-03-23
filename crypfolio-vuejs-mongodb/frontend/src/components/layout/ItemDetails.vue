@@ -137,7 +137,7 @@
 
                         <template v-slot:items="props">
                             <tr>
-                                <td class="pa-2">
+                                <td class="pa-2 font-weight-medium">
                                     <v-icon
                                             style="vertical-align: middle; display: inline-flex; padding-right: 6px;"
                                             :color="transTypeIconColor(props.item.type)">
@@ -151,11 +151,11 @@
                                 </td>
 
                                 <td class="pa-2">
-                                    {{ props.item.type }}
+                                    {{ showTransPriceByCurrency(props.item) }} {{ props.item.boughtCurrency }}
                                 </td>
 
-                                <td class="pa-2 font-weight-medium">
-                                    {{ props.item.type }}
+                                <td class="pa-2">
+                                    {{ showTransTotalByCurrency(props.item) }} {{ props.item.boughtCurrency }}
                                 </td>
                                 <!-- the table will be sorting by the "boughtDate" -->
                                 <td class="pa-2">
@@ -424,6 +424,7 @@
                 }
             },
             transTypeIconColor(type){
+
                 if (this.selectedItem) {
                     if (type.toUpperCase() === "BUY") {
                         return "green"
@@ -431,7 +432,43 @@
                         return "red"
                     }
                 }
-            }
+            },
+            showTransPriceByCurrency(trans) {
+
+                if (this.selectedItem) {
+
+                    switch (trans.boughtCurrency) {
+                        case 'USD':
+                            return trans.boughtPriceUsd;
+                        case 'EUR':
+                            return trans.boughtPriceEur;
+                        case 'BTC':
+                            return trans.boughtPriceBtc;
+                        case 'ETH':
+                            return trans.boughtPriceEth;
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            showTransTotalByCurrency(trans) {
+
+                if (this.selectedItem) {
+
+                    switch (trans.boughtCurrency) {
+                        case 'USD':
+                            return trans.amount * trans.boughtPriceUsd;
+                        case 'EUR':
+                            return trans.amount * trans.boughtPriceEur;
+                        case 'BTC':
+                            return trans.amount * trans.boughtPriceBtc;
+                        case 'ETH':
+                            return trans.amount * trans.boughtPriceEth;
+                        default:
+                            return 0;
+                    }
+                }
+            },
         }
     }
 </script>
