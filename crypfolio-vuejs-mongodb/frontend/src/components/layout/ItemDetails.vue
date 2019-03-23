@@ -131,12 +131,13 @@
                     <v-data-table
                             :headers="headers"
                             hide-actions
+                            :expand="expand"
                             :items="showItemTransactions"
                             item-key="id"
                             class="elevation-1 table-transactions">
 
                         <template v-slot:items="props">
-                            <tr>
+                            <tr class="cursorPointer" @click="props.expanded = !props.expanded">
                                 <td class="pa-2 font-weight-medium">
                                     <v-icon
                                             style="vertical-align: middle; display: inline-flex; padding-right: 6px;"
@@ -163,6 +164,12 @@
                                 </td>
 
                             </tr>
+                        </template>
+
+                        <template v-slot:expand="props">
+                            <v-card flat>
+                                <v-card-text>{{ props.item.comment }}</v-card-text>
+                            </v-card>
                         </template>
 
                     </v-data-table>
@@ -220,6 +227,7 @@
                 {text: 'Date', sortable: false,},
                 {text: '', sortable: false,},
             ],
+            expand: true,
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
