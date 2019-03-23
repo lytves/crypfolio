@@ -68,18 +68,18 @@
                     <div class="text-sm-left ma-3">
                         <span class="grey--text">Currency *</span>
                     </div>
-                    <v-btn :class="{'disable-events': showShowedCurrency('USD')}" @click="changeShowedCurrency('USD')">
-                        USD
-                    </v-btn>
-                    <v-btn :class="{'disable-events': showShowedCurrency('EUR')}" @click="changeShowedCurrency('EUR')">
-                        EUR
-                    </v-btn>
-                    <v-btn :class="{'disable-events': showShowedCurrency('BTC')}" @click="changeShowedCurrency('BTC')">
-                        BTC
-                    </v-btn>
-                    <v-btn :class="{'disable-events': showShowedCurrency('ETH')}" @click="changeShowedCurrency('ETH')">
-                        ETH
-                    </v-btn>
+                    <span
+                            class="pa-0 ma-0"
+                            v-for="(currency, index) in currencies"
+                            :key="index">
+                                    <v-btn
+                                            :class="{'disable-events': showShowedCurrency(currency.name)}"
+                                            @click="changeShowedCurrency(currency.name)">
+                                        <v-icon
+                                                color="blue darken-2" left>{{currency.icon}}</v-icon>
+                                        {{ currency.name }}
+                                    </v-btn>
+                                </span>
 
                     <v-divider class="ma-3"></v-divider>
 
@@ -116,6 +116,12 @@
             isReadonly: false,
             model: null,
             currency: 'USD',
+            currencies: [
+                {name: 'USD', icon: 'fas fa-dollar-sign'},
+                {name: 'EUR', icon: 'fas fa-euro-sign'},
+                {name: 'BTC', icon: 'fab fa-btc'},
+                {name: 'ETH', icon: 'fab fa-ethereum'},
+            ],
         }),
         computed: {
             show: {
@@ -193,7 +199,8 @@
                     .then(() => {
                         this.show = false;
                     })
-                    .catch(() => {})
+                    .catch(() => {
+                    })
             }
         }
     }
