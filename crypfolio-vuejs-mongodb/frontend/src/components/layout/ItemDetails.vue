@@ -239,6 +239,7 @@
                     return this.value
                 },
                 set(value) {
+                    this.$parent.clearSelectedItem();
                     this.$emit('input', value)
                 }
             },
