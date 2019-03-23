@@ -10,10 +10,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class TransactionEntity implements Serializable {
 
+    @Column(name = "trans_id")
     private String id;
 
     @Column(name = "trans_amount", precision = 8, nullable = false)
@@ -47,17 +49,20 @@ public class TransactionEntity implements Serializable {
     private String comment;
 
     public TransactionEntity() {
+         this.id = UUID.randomUUID().toString();
     }
 
     public TransactionEntity(BigDecimal amount, LocalDate boughtDate) {
         this.amount = amount;
         this.boughtDate = boughtDate;
+        this.id = UUID.randomUUID().toString();
     }
 
     public TransactionEntity(BigDecimal amount, LocalDate boughtDate, CurrencyType boughtCurrency) {
         this.amount = amount;
         this.boughtDate = boughtDate;
         this.boughtCurrency = boughtCurrency;
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
