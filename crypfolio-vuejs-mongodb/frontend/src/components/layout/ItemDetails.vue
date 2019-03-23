@@ -138,22 +138,27 @@
                         <template v-slot:items="props">
                             <tr>
                                 <td class="pa-2">
+                                    <v-icon
+                                            style="vertical-align: middle; display: inline-flex; padding-right: 6px;"
+                                            :color="transTypeIconColor(props.item.type)">
+                                        {{ showTransTypeIcon(props.item.type) }}
+                                    </v-icon>
                                     {{ props.item.type }}
                                 </td>
 
-                                <td>
+                                <td class="pa-2">
                                     {{ props.item.amount }}
                                 </td>
 
-                                <td>
+                                <td class="pa-2">
                                     {{ props.item.type }}
                                 </td>
 
-                                <td class="font-weight-medium">
+                                <td class="pa-2 font-weight-medium">
                                     {{ props.item.type }}
                                 </td>
                                 <!-- the table will be sorting by the "boughtDate" -->
-                                <td>
+                                <td class="pa-2">
                                     {{ showTransDate(props.item.boughtDate) }}
                                 </td>
 
@@ -408,6 +413,25 @@
             showTransDate(date) {
                 return format(this.dateConverter(date), 'DD MMM, YYYY')
             },
+            showTransTypeIcon(type) {
+
+                if (this.selectedItem) {
+                    if (type.toUpperCase() === "BUY") {
+                        return "fas fa-arrow-circle-down"
+                    } else if (type.toUpperCase() === "SELL") {
+                        return "fas fa-arrow-circle-up"
+                    }
+                }
+            },
+            transTypeIconColor(type){
+                if (this.selectedItem) {
+                    if (type.toUpperCase() === "BUY") {
+                        return "green"
+                    } else if (type.toUpperCase() === "SELL") {
+                        return "red"
+                    }
+                }
+            }
         }
     }
 </script>
