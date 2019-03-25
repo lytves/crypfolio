@@ -162,7 +162,29 @@
                                 <td class="pa-2">
                                     {{ showTransDate(props.item.boughtDate) }}
                                 </td>
+                                <!-- Transaction Dropdown Menu -->
+                                <td class="pa-2" @click.stop>
+                                    <v-menu bottom offset-y>
 
+                                        <v-btn slot="activator" small class="pa-0 ma-0">
+                                            <v-icon color="blue darken-2">fas fa-ellipsis-h</v-icon>
+                                        </v-btn>
+
+                                        <v-list class="pa-0 ma-0">
+                                            <v-list-tile class="trans-menu"
+                                                         v-for="(item, index) in transMenu"
+                                                         :key="index"
+                                                         @click.stop="chooseMenuAction(item.link, props.item.id)">
+
+                                                <v-list-tile-title>
+                                                    {{ item.title }}
+                                                </v-list-tile-title>
+
+                                            </v-list-tile>
+                                        </v-list>
+
+                                    </v-menu>
+                                </td>
                             </tr>
                         </template>
 
@@ -235,6 +257,10 @@
             ],
             expand: true,
             addItemDetailsTransactionDialog: false,
+            transMenu: [
+                {title: 'Edit', link: 'edit'},
+                {title: 'Delete', link: 'delete'},
+            ],
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
@@ -486,6 +512,16 @@
                     }
                 }
             },
+            chooseMenuAction(link, transId) {
+                console.log('transId',transId);
+                this[link](transId)
+            },
+            edit(transId) {
+                alert('edit ' + transId)
+            },
+            delete(transId) {
+                alert('delete ' + transId)
+            }
         }
     }
 </script>

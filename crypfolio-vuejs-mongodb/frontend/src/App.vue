@@ -128,4 +128,7 @@
     .table-transactions table.v-table thead tr {
         height: 30px;
     }
+    .trans-menu a.v-list__tile {
+        height: 30px !important;
+    }
 </style>
