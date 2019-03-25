@@ -122,7 +122,7 @@
                                 style="max-width: 200px;"
                                 color="primary lighten-2"
                                 dark small
-                                @click.stop="showAddTransactionDialog">
+                                @click.stop="addItemDetailsTransactionDialog = true">
                             <v-icon left>fas fa-plus</v-icon>
                             Add Transaction
                         </v-btn>
@@ -174,12 +174,14 @@
 
                     </v-data-table>
 
-
                 </v-flex>
 
             </v-layout>
 
         </v-card>
+
+        <AddItemDetailsTransaction :selectedItem="this.selectedItem"
+                                   v-model="addItemDetailsTransactionDialog"></AddItemDetailsTransaction>
 
     </v-bottom-sheet>
 
@@ -190,9 +192,13 @@
     import {PORTFOLIO_DELETE_ITEM, PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
     import compareAsc from 'date-fns/compare_asc'
     import format from 'date-fns/format'
+    import AddItemDetailsTransaction from "./AddItemDetailsTransaction";
 
     export default {
         name: "ItemDetails",
+        components: {
+            AddItemDetailsTransaction,
+        },
         props: {
             value: Boolean,
             selectedItem: null,
@@ -228,11 +234,13 @@
                 {text: '', sortable: false,},
             ],
             expand: true,
+            addItemDetailsTransactionDialog: false,
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
             ...mapState({
                 userCoinsMarketData: state => state.marketdata.userCoinsMarketData,
+                userPortfolioItems: state => state.portfolio.userPortfolio.items,
             }),
             show: {
                 get() {
@@ -432,7 +440,7 @@
                     }
                 }
             },
-            transTypeIconColor(type){
+            transTypeIconColor(type) {
 
                 if (this.selectedItem) {
                     if (type.toUpperCase() === "BUY") {
