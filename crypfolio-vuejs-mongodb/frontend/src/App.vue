@@ -122,7 +122,7 @@
     .v-dialog.v-bottom-sheet {
         height: 90% !important;
     }
-    .background-grey {
+    .background-grey, .v-expansion-panel__header {
         background-color: #e8e8e8;
     }
     .table-transactions table.v-table thead tr {

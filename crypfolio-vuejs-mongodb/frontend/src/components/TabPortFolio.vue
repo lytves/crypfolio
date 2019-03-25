@@ -76,7 +76,7 @@
             </template>
 
             <template v-slot:items="props">
-                <tr class="cursorPointer" @click="selectItem(props.item)">
+                <tr class="cursorPointer" @click="selectItem = props.item.id">
                     <td class="pa-2"><img :src="showItemCoinImage(props.item.coin.id)"/></td>
 
                     <td class="font-weight-medium">
@@ -119,7 +119,7 @@
         </v-data-table>
 
         <AddPortfolioItem v-model="addPortfolioItemDialog"></AddPortfolioItem>
-        <ItemDetails :selectedItem="selectedItem" v-model="itemDetailsSheet"></ItemDetails>
+        <ItemDetails :selectedItem="selectItem" v-model="itemDetailsSheet"></ItemDetails>
 
     </v-container>
 
@@ -154,7 +154,7 @@
                 currencies: ['USD', 'EUR', 'BTC', 'ETH'],
                 addPortfolioItemDialog: false,
                 itemDetailsSheet: false,
-                selectedItem: null,
+                selectItemId: null,
             }
         },
         computed: {
@@ -224,12 +224,24 @@
                     }
                     return 0;
                 }
-            }
+            },
+            selectItem: {
+                get() {
+                    if (this.isUserPortfolioLoaded) {
+                        return this.userPortfolioItems.find(item => (item.id === this.selectItemId));
+                    }
+                },
+                set(id) {
+                    this.itemDetailsSheet = true;
+                    this.selectItemId = id;
+                }
+            },
         },
         methods: {
             // it calls from ItemDetails child's method for clear selectedItem on close ItemDetailsSheet
             clearSelectedItem() {
-                this.selectedItem = null;
+                this.selectItemId = null;
+                this.selectItem = null;
             },
             showItemCoinImage(id) {
 
@@ -461,10 +473,6 @@
                 });
 
                 return items;
-            },
-            selectItem(item) {
-                this.selectedItem = item;
-                this.itemDetailsSheet = true;
             },
         }
     }
