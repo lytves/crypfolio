@@ -265,7 +265,7 @@ public class PortfolioRestController extends Application {
                 }
             }
 
-            throw new BadRequestException("There is no user with requested ID or passed transaction parameters  aren't valid");
+            throw new BadRequestException("There is no user with requested ID or passed transaction parameters aren't valid");
 
         } catch (
                 Exception ex) {
@@ -273,6 +273,84 @@ public class PortfolioRestController extends Application {
             throw new RestApplicationException(ex.getMessage());
         }
 
+    }
+
+    @Authenticator
+    @DELETE
+    @Path("/portfolio-delete-transaction")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response deleteTransaction(String jsonString) throws Exception {
+
+        //JSONParser reads the data from string object and break each data into their key value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+            JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
+
+            Long itemId = ((Number) jsonObject.get("itemId")).longValue();
+            String transId = (String) jsonObject.get("transId");
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
+
+            if (portfolioDB != null) {
+
+                ItemEntity itemDB = portfolioDB.getItems().stream().filter(item -> item.getId().equals(itemId))
+                        .findFirst().orElse(null);
+
+                if (itemDB != null) {
+
+                    TransactionEntity transactionEntity = itemDB.getTransactions().stream()
+                            .filter(trans -> trans.getId().equals(transId)).findFirst().orElse(null);
+
+                    if (transactionEntity != null) {
+
+                        Boolean isTransactionValid = itemDB.removeTransaction(transactionEntity);
+
+                        if (isTransactionValid) {
+
+                            // recount values (netcost) of portfolio
+                            portfolioDB.recountNetCosts();
+
+                            // updates whole portfolio entity
+                            portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
+
+                            LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
+
+                            ObjectMapper mapper = new ObjectMapper();
+
+                            String portfolioNetCosts = Json.createObjectBuilder()
+                                    .add("netCostUsd", portfolioDB.getNetCostUsd())
+                                    .add("netCostEur", portfolioDB.getNetCostEur())
+                                    .add("netCostBtc", portfolioDB.getNetCostBtc())
+                                    .add("netCostEth", portfolioDB.getNetCostEth())
+                                    .build()
+                                    .toString();
+
+                            // form a JSON object consists of new portfolio NET costs data && actual actualized item
+                            String jsonToSend = Json.createObjectBuilder()
+                                    .add("portfolioNetCosts", portfolioNetCosts)
+                                    .add("actualizedItem", mapper.writeValueAsString(itemDB))
+                                    .build()
+                                    .toString();
+                            // generates response with new authentication token (using portfolio ID for Payload)
+                            return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                        }
+                    }
+                }
+            }
+
+            throw new BadRequestException("There is no user with requested ID or passed transaction parameters aren't valid");
+
+        } catch (
+                Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
     }
 
     @Authenticator
