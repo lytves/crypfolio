@@ -336,9 +336,9 @@
             },
             showItemProfitPercentage(item) {
 
-                if (this.isUserCoinsMarketDataLoaded) {
+                let profitPercentage = 0;
 
-                    let profitPercentage = 0;
+                if (this.isUserCoinsMarketDataLoaded && item.amount > 0) {
 
                     switch (item.showedCurrency) {
                         case 'USD':
@@ -354,20 +354,19 @@
                             profitPercentage = this.showItemProfit(item) * 100 / item.netCostEth;
                             break;
                     }
-                    return profitPercentage;
                 }
+                return profitPercentage;
             },
             showItemSharePercentage(item) {
 
-                if (this.isUserCoinsMarketDataLoaded) {
+                let sharePercentage = 0;
 
-                    let sharePercentage = 0;
+                if (this.isUserCoinsMarketDataLoaded && item.amount > 0) {
 
                     sharePercentage = this.showItemMarketValueByCurrency(item, this.userPortfolio.showedCurrency)
                         * 100 / this.showPortfolioMarketValue;
-
-                    return sharePercentage;
                 }
+                return sharePercentage;
             },
             getValueColor(value) {
 
