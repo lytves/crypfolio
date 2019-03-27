@@ -119,7 +119,9 @@
         </v-data-table>
 
         <AddPortfolioItem v-model="addPortfolioItemDialog"></AddPortfolioItem>
-        <ItemDetails :selectedItem="selectItem" v-model="itemDetailsSheet"></ItemDetails>
+        <ItemDetails v-model="itemDetailsSheet"
+                     :selectedItem="selectItem"
+                     @clear-selected-item="clearSelectedItem"></ItemDetails>
 
     </v-container>
 
@@ -241,7 +243,7 @@
             // it calls from ItemDetails child's method for clear selectedItem on close ItemDetailsSheet
             clearSelectedItem() {
                 this.selectItemId = null;
-                this.selectItem = null;
+                // this.selectItem = null;
             },
             showItemCoinImage(id) {
 

@@ -277,7 +277,8 @@
                     return this.value
                 },
                 set(value) {
-                    this.$parent.clearSelectedItem();
+                    // this.$parent.clearSelectedItem();
+                    this.$emit('clear-selected-item');
                     this.$emit('input', value)
                 }
             },
@@ -299,7 +300,8 @@
         methods: {
             closeItemDetailsSheet() {
                 // call TabPortfolio method to clear selectedItem
-                this.$parent.clearSelectedItem();
+                // this.$parent.clearSelectedItem();
+                this.$emit('clear-selected-item');
                 this.show = false;
             },
             showItemCoinImage(id) {
