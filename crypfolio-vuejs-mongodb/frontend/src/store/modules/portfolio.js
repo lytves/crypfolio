@@ -2,7 +2,7 @@ import {
     PORTFOLIO_ACTUALIZE_ITEM,
     PORTFOLIO_ACTUALIZE_NETCOSTS,
     PORTFOLIO_ADD_TRANSACTION,
-    PORTFOLIO_DELETE_ITEM,
+    PORTFOLIO_DELETE_ITEM, PORTFOLIO_DELETE_TRANSACTION,
     PORTFOLIO_ERROR,
     PORTFOLIO_SUCCESS,
     PORTFOLIO_UPDATE_CURRENCY,
@@ -41,8 +41,7 @@ const actions = {
         return await userPortfolioService.addTransaction(payload.payload)
             .then(resp => {
 
-                // parsing response status to check if the coin was added successfully
-                // or it already is in the watchlist
+                // parsing response status to check if the transaction was added successfully
                 let responseStatus = JSON.parse(resp.status);
                 // should parse twice, coz in the backend do twice JSON mapping
                 let responseData = JSON.parse(JSON.parse(resp.data));
@@ -65,6 +64,33 @@ const actions = {
             })
             .catch(err => {
                 dispatch(SNACKBAR_ERROR, "Error on adding the transaction to portfolio!");
+            });
+    },
+    [PORTFOLIO_DELETE_TRANSACTION]: async ({commit, dispatch}, {itemId, transId}) => {
+
+        return await userPortfolioService.deleteTransaction(itemId, transId)
+            .then(resp => {
+
+                // parsing response status to check if the transaction was deleted successfully
+                let responseStatus = JSON.parse(resp.status);
+                // should parse twice, coz in the backend do twice JSON mapping
+                let responseData = JSON.parse(JSON.parse(resp.data));
+
+                console.log('responseStatus',responseStatus);
+                console.log('responseData',responseData);
+
+                if (responseStatus.error_code !== 0) {
+                    dispatch(SNACKBAR_ERROR, responseStatus.error_message);
+                } else {
+                    commit(PORTFOLIO_ACTUALIZE_ITEM, JSON.parse(responseData.actualizedItem));
+
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+
+                    dispatch(SNACKBAR_SUCCESS, "The transaction has been deleting successfully.");
+                }
+            })
+            .catch(err => {
+                dispatch(SNACKBAR_ERROR, "Error on deleting the transaction!");
             });
     },
     [PORTFOLIO_UPDATE_ITEM_CURRENCY]: async ({commit, dispatch}, {coinId, currency}) => {
