@@ -211,7 +211,11 @@
 
 <script>
     import {mapGetters, mapState} from "vuex";
-    import {PORTFOLIO_DELETE_ITEM, PORTFOLIO_UPDATE_ITEM_CURRENCY} from "../../store/actions/portfolio";
+    import {
+        PORTFOLIO_DELETE_ITEM,
+        PORTFOLIO_DELETE_TRANSACTION,
+        PORTFOLIO_UPDATE_ITEM_CURRENCY
+    } from "../../store/actions/portfolio";
     import compareAsc from 'date-fns/compare_asc'
     import format from 'date-fns/format'
     import AddItemDetailsTransaction from "./AddItemDetailsTransaction";
@@ -258,8 +262,8 @@
             expand: true,
             addItemDetailsTransactionDialog: false,
             transMenu: [
-                {title: 'Edit', link: 'edit'},
-                {title: 'Delete', link: 'delete'},
+                {title: 'Edit', link: 'editTransaction'},
+                {title: 'Delete', link: 'deleteTransaction'},
             ],
         }),
         computed: {
@@ -446,9 +450,6 @@
                     .catch(() => {
                     })
             },
-            showAddTransactionDialog() {
-                alert("showAddTransactionDialog");
-            },
             dateConverter(date) {
                 // compose a normal Date format from Object
                 return new Date(date.year + "-" + date.monthValue + "-" + date.dayOfMonth);
@@ -513,14 +514,14 @@
                 }
             },
             chooseMenuAction(link, transId) {
-                console.log('transId',transId);
                 this[link](transId)
             },
-            edit(transId) {
+            editTransaction(transId) {
                 alert('edit ' + transId)
             },
-            delete(transId) {
-                alert('delete ' + transId)
+            deleteTransaction(transId) {
+                const payload = {'itemId': this.selectedItem.id, 'transId': transId};
+                this.$store.dispatch(PORTFOLIO_DELETE_TRANSACTION, payload);
             }
         }
     }
