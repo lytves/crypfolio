@@ -278,6 +278,127 @@ public class PortfolioRestController extends Application {
     }
 
     @Authenticator
+    @POST
+    @Path("/portfolio-edit-transaction")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response editTransaction(String jsonString) throws Exception {
+
+        //JSONParser reads the data from string object and break each data into their key value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+            JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
+
+            String transId = (String) jsonObject.get("transId");
+            CurrencyType transCurrency = CurrencyType.valueOf(((String) jsonObject.get("transCurrency")).toUpperCase());
+            TransactionType transType = TransactionType.valueOf(((String) jsonObject.get("transType")).toUpperCase());
+            BigDecimal transAmount = new BigDecimal((String) jsonObject.get("transAmount"));
+            BigDecimal transTempPrice = new BigDecimal((String) jsonObject.get("transPrice"));
+            LocalDate transDate = LocalDate.parse((String) jsonObject.get("transDate"));
+            String transComment = (String) jsonObject.get("transComment");
+            Long itemId = ((Number) jsonObject.get("itemId")).longValue();
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
+
+            if (portfolioDB != null) {
+
+                ItemEntity itemDB = portfolioDB.getItems().stream().filter(item -> item.getId().equals(itemId))
+                        .findFirst().orElse(null);
+
+                if (itemDB != null) {
+
+                    TransactionEntity transactionEditedOld = itemDB.getTransactions().stream().filter(
+                            trans -> trans.getId().equals(transId)).findFirst().orElse(null);
+
+                    if (transactionEditedOld != null) {
+
+                        // checking if all received transaction values are valid
+                        if (transAmount.compareTo(BigDecimal.ZERO) == 0
+                                || !transactionEditedOld.getType().equals(transType)
+                                || isBigDecimalVaildForDB(transAmount)
+                                || isBigDecimalVaildForDB(transTempPrice)
+                                || isBigDecimalVaildForDB(transAmount.multiply(transTempPrice))) {
+
+                            return JsonResponseBuild.generateJsonResponse(null, portfolioDB.getId(),
+                                    400, "Error on processing your transaction! Some of entered values are not valid!");
+
+                        } else if (("SELL").equals(transType.getType())
+                                && transAmount.compareTo(itemDB.getAmount().add(transactionEditedOld.getAmount())) >= 1) {
+
+                            // generates response with new authentication token (using portfolio ID for Payload)
+                            return JsonResponseBuild.generateJsonResponse(null, portfolioDB.getId(),
+                                    400, "Error on processing your transaction! You can't sell more coins than you have!");
+                        } else {
+
+                            TransactionEntity newTransaction = new TransactionEntity(transAmount, transDate, transCurrency);
+                            newTransaction.setComment(transComment);
+                            newTransaction.setType(transType);
+                            newTransaction.setId(transactionEditedOld.getId());
+
+//                            transactionEditedOld.setAmount(transAmount);
+//                            transactionEditedOld.setBoughtCurrency(transCurrency);
+//                            transactionEditedOld.setBoughtDate(transDate);
+//                            transactionEditedOld.setComment(transComment);
+
+                            // recount prices in all currencies by request historical prices by API
+                            recountTransactionPricesByHistoricalPricesAPI(newTransaction, transTempPrice);
+
+                            // also recount values (net costs, average prices) of item
+                            itemDB.editTransaction(transactionEditedOld, newTransaction);
+
+                            // recount values (netcost) of portfolio
+                            portfolioDB.recountNetCosts();
+
+                            // updates whole portfolio entity
+                            portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
+
+                            itemDB = portfolioDB.getItems().stream().filter(item -> item.getId().equals(itemId))
+                                    .findFirst().orElse(null);
+
+                            if (itemDB != null) {
+
+                                LOGGER.info("PortfolioRestController: Successful '/portfolio-edit-transaction' request");
+
+                                JsonObject portfolioNetCosts = new JsonObject();
+
+                                portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
+                                portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
+                                portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
+                                portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
+
+                                JsonObject jsonToSend = new JsonObject();
+
+                                jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
+
+                                // Convert object to JSON element
+                                Gson gsonBuilder = new GsonBuilder()
+                                        .excludeFieldsWithoutExposeAnnotation()
+                                        .disableHtmlEscaping()
+                                        .create();
+                                jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
+
+                                // generates response with new authentication token (using portfolio ID for Payload)
+                                return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                            }
+                        }
+                    }
+                }
+            }
+
+            throw new BadRequestException("There is no user with requested ID or passed transaction parameters aren't valid");
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    @Authenticator
     @DELETE
     @Path("/portfolio-delete-transaction")
     @Consumes("application/json")
