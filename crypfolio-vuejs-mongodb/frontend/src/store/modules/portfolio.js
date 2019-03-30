@@ -2,7 +2,9 @@ import {
     PORTFOLIO_ACTUALIZE_ITEM,
     PORTFOLIO_ACTUALIZE_NETCOSTS,
     PORTFOLIO_ADD_TRANSACTION,
-    PORTFOLIO_DELETE_ITEM, PORTFOLIO_DELETE_TRANSACTION,
+    PORTFOLIO_DELETE_ITEM,
+    PORTFOLIO_DELETE_TRANSACTION,
+    PORTFOLIO_EDIT_TRANSACTION,
     PORTFOLIO_ERROR,
     PORTFOLIO_SUCCESS,
     PORTFOLIO_UPDATE_CURRENCY,
@@ -68,6 +70,33 @@ const actions = {
             .catch(err => {
                 dispatch(SNACKBAR_ERROR, "Error on adding the transaction to portfolio!");
             });
+    },
+    [PORTFOLIO_EDIT_TRANSACTION]: async ({commit, dispatch}, payload) => {
+
+        return await userPortfolioService.editTransaction(payload.payload)
+            .then(resp => {
+                // check response.status to check if the transaction was added successfully
+                let responseStatus = resp.status;
+                // parse resp.data and if request was successfully
+                let responseData = "";
+                try {
+                    responseData = resp.data;
+                } catch (e) {
+                }
+
+                if (responseStatus.error_code !== 0) {
+                    dispatch(SNACKBAR_ERROR, responseStatus.error_message);
+                } else {
+                    commit(PORTFOLIO_ACTUALIZE_ITEM, responseData.actualizedItem);
+
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, responseData.portfolioNetCosts);
+
+                    dispatch(SNACKBAR_SUCCESS, "The transaction has been processed successfully.");
+
+                    // return TRUE to close modal window
+                    return true;
+                }
+            })
     },
     [PORTFOLIO_DELETE_TRANSACTION]: async ({commit, dispatch}, {itemId, transId}) => {
 

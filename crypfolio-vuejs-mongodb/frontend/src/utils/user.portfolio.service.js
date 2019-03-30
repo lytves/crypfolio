@@ -3,6 +3,7 @@ import AXIOS from './axios-instance';
 export const userPortfolioService = {
     setPortfolioShowedCurrency,
     addTransaction,
+    editTransaction,
     deleteTransaction,
     setItemShowedCurrency,
     deleteItem
@@ -33,6 +34,28 @@ function addTransaction(payload) {
         "transPrice": String(payload.transPrice),
         "transDate": payload.transDate,
         "transComment": payload.transComment,
+    })
+        .then(
+            response => {
+                // return data for check the response status and then update item & portfolio data
+                return response.data;
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+
+function editTransaction(payload) {
+    return AXIOS.post('/portfolio-edit-transaction', {
+        "transId": payload.transId,
+        "transCurrency": payload.transCurrency,
+        "transType": payload.transType,
+        // always to convert numbers to strings
+        "transAmount": String(payload.transAmount),
+        "transPrice": String(payload.transPrice),
+        "transDate": payload.transDate,
+        "transComment": payload.transComment,
+        "itemId": Number(payload.itemId)
     })
         .then(
             response => {
