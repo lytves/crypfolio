@@ -22,7 +22,6 @@ const state = {
 
 const getters = {
     isUserProfileLoaded: state => !!state.userProfile.id,
-    // getUserProfile: state => state.userProfile,
 };
 
 const actions = {
@@ -34,8 +33,7 @@ const actions = {
             return userAuthService.getUser()
                 .then(resp => {
 
-                    // parsing of response to have User entity as JSON
-                    let user = JSON.parse(resp);
+                    let user = resp;
 
                     // save object Portfolio to separated 'store portfolio'
                     dispatch(PORTFOLIO_SUCCESS, user.portfolio);

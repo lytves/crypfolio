@@ -33,10 +33,7 @@ const actions = {
             marketdataService.getUserCoinsData(allUserCoinsIds)
                 .then(resp => {
 
-                    // parsing of response to have a map like a JSON
-                    let userCoinsMarketData = JSON.parse(resp);
-
-                    commit(MARKETDATA_USERCOINS_SUCCESS, userCoinsMarketData)
+                    commit(MARKETDATA_USERCOINS_SUCCESS, resp)
                 })
                 .catch(err => {
                     dispatch(SNACKBAR_ERROR, "Error on receiving actual market data!");
@@ -53,10 +50,7 @@ const actions = {
             return marketdataService.getCoinData(coinId)
                 .then(resp => {
 
-                    // parsing of response to have a map like a JSON
-                    let coinMarketData = JSON.parse(resp);
-
-                    commit(MARKETDATA_ADDCOIN_TO_USERCOINS, coinMarketData);
+                    commit(MARKETDATA_ADDCOIN_TO_USERCOINS, resp);
                     resolve(resp)
                 })
                 .catch(err => {
@@ -73,10 +67,7 @@ const actions = {
                 return marketdataService.getAllCoinsListData()
                     .then(resp => {
 
-                        // parsing of response to have a map like a JSON
-                        let allCoinsListData = JSON.parse(resp);
-
-                        commit(MARKETDATA_ALLCOINSLIST_SUCCESS, allCoinsListData)
+                        commit(MARKETDATA_ALLCOINSLIST_SUCCESS, resp)
                     })
                     .catch(err => {
                         dispatch(SNACKBAR_ERROR, "Error on receiving actual all coins data!");
@@ -89,7 +80,7 @@ const actions = {
 
         return await marketdataService.getGlobalMarketData()
             .then(resp => {
-                commit(MARKETDATA_GLOBAL_MARKET_DATA, JSON.parse(resp))
+                commit(MARKETDATA_GLOBAL_MARKET_DATA, resp)
             })
     }
 };

@@ -383,10 +383,7 @@
                         // API REST call to receive actual coin's market data
                         marketdataService.getCoinData(this.selectedCoin.id)
                             .then(resp => {
-                                // parsing of response to have a map like a JSON
-                                let coinMarketData = JSON.parse(resp);
-                                this.selectedCoinMarketData = coinMarketData[this.selectedCoin.id];
-
+                                this.selectedCoinMarketData = resp[this.selectedCoin.id];
                                 this.setTransMarketPrice();
                             })
                             .catch(err => {

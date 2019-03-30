@@ -42,11 +42,8 @@ const actions = {
             return userWatchlistService.addNewWatchlistCoin(coinId, currency)
                 .then(resp => {
 
-                    // parsing response status to check if the coin was added successfully
-                    // or it is already in the watchlist
-                    let responseStatus = JSON.parse(resp);
-
-                    if (responseStatus.error_code === 400) {
+                    // check response status if the coin was added successfully
+                    if (resp.error_code === 400) {
                         dispatch(SNACKBAR_ERROR, responseStatus.error_message);
 
                     } else {

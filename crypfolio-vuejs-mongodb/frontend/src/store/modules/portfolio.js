@@ -40,21 +40,24 @@ const actions = {
 
         return await userPortfolioService.addTransaction(payload.payload)
             .then(resp => {
-
-                // parsing response status to check if the transaction was added successfully
-                let responseStatus = JSON.parse(resp.status);
-                // should parse twice, coz in the backend do twice JSON mapping
-                let responseData = JSON.parse(JSON.parse(resp.data));
+                // check response.status to check if the transaction was added successfully
+                let responseStatus = resp.status;
+                // parse resp.data and if request was successfully
+                let responseData = "";
+                try {
+                    responseData = resp.data;
+                } catch (e) {
+                }
 
                 if (responseStatus.error_code !== 0) {
                     dispatch(SNACKBAR_ERROR, responseStatus.error_message);
                 } else {
-                    commit(PORTFOLIO_ACTUALIZE_ITEM, JSON.parse(responseData.actualizedItem));
+                    commit(PORTFOLIO_ACTUALIZE_ITEM, responseData.actualizedItem);
 
                     // if it's new item, the adds his marketdata to Vuex store userCoinsMarketData
                     commit(MARKETDATA_ADDCOIN_TO_USERCOINS, payload.selectedCoinMarketData);
 
-                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, responseData.portfolioNetCosts);
 
                     dispatch(SNACKBAR_SUCCESS, "The transaction has been processed successfully.");
 
@@ -71,20 +74,21 @@ const actions = {
         return await userPortfolioService.deleteTransaction(itemId, transId)
             .then(resp => {
 
-                // parsing response status to check if the transaction was deleted successfully
-                let responseStatus = JSON.parse(resp.status);
-                // should parse twice, coz in the backend do twice JSON mapping
-                let responseData = JSON.parse(JSON.parse(resp.data));
-
-                console.log('responseStatus',responseStatus);
-                console.log('responseData',responseData);
+                // check response.status to check if the transaction was added successfully
+                let responseStatus = resp.status;
+                // parse resp.data and if request was successfully
+                let responseData = "";
+                try {
+                    responseData = resp.data;
+                } catch (e) {
+                }
 
                 if (responseStatus.error_code !== 0) {
                     dispatch(SNACKBAR_ERROR, responseStatus.error_message);
                 } else {
-                    commit(PORTFOLIO_ACTUALIZE_ITEM, JSON.parse(responseData.actualizedItem));
+                    commit(PORTFOLIO_ACTUALIZE_ITEM, responseData.actualizedItem);
 
-                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, responseData.portfolioNetCosts);
 
                     dispatch(SNACKBAR_SUCCESS, "The transaction has been deleting successfully.");
                 }
@@ -110,18 +114,21 @@ const actions = {
         return await userPortfolioService.deleteItem(itemId)
             .then(resp => {
 
-                // parsing response status to check if the coin was added successfully
-                // or it already is in the watchlist
-                let responseStatus = JSON.parse(resp.status);
-                // should parse twice, coz in the backend do twice JSON mapping
-                let responseData = JSON.parse(JSON.parse(resp.data));
+                // check response.status to check if the transaction was added successfully
+                let responseStatus = resp.status;
+                // parse resp.data and if request was successfully
+                let responseData = "";
+                try {
+                    responseData = resp.data;
+                } catch (e) {
+                }
 
                 if (responseStatus.error_code !== 0) {
                     dispatch(SNACKBAR_ERROR, responseStatus.error_message);
                 } else {
                     commit(PORTFOLIO_DELETE_ITEM, itemId);
 
-                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, JSON.parse(responseData.portfolioNetCosts));
+                    commit(PORTFOLIO_ACTUALIZE_NETCOSTS, responseData.portfolioNetCosts);
 
                     dispatch(SNACKBAR_SUCCESS, "The item has been deleted successfully!");
 
