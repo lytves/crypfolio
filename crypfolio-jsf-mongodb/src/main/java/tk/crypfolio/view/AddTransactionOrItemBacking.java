@@ -408,7 +408,7 @@ public class AddTransactionOrItemBacking implements Serializable {
                     ""));
 
         } else if (("SELL").equals(transactionTemp.getType().getType())
-                && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1) {
+                && transactionTemp.getAmount().compareTo(itemTemp.getAmount().add(transactionEditedOld.getAmount())) >= 1) {
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! You can't sell more coins than you have!",

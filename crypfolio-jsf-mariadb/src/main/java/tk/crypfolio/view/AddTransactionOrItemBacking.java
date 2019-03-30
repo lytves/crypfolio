@@ -404,7 +404,8 @@ public class AddTransactionOrItemBacking implements Serializable {
                     ""));
 
         } else if (("SELL").equals(transactionTemp.getType().getType())
-                && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1) {
+                && transactionTemp.getAmount().compareTo(itemTemp.getAmount().add(transactionEditedOld.getAmount())) >= 1) {
+
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! You can't sell more coins than you have!",
@@ -470,9 +471,9 @@ public class AddTransactionOrItemBacking implements Serializable {
     }
 
     /*
-    * universal method to recount transaction prices in all currencies depends of the bought currency and
-    * with respect to the historical prices of USD/EUR/BTC/ETH
-    * */
+     * universal method to recount transaction prices in all currencies depends of the bought currency and
+     * with respect to the historical prices of USD/EUR/BTC/ETH
+     * */
     private void recountTransactionPricesByHistoricalPricesAPI(TransactionEntity transaction, BigDecimal typedPrice) {
 
         // makes API request to obtain history USD/EUR/BTC/ETH prices
