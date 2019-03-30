@@ -1,6 +1,8 @@
 package tk.crypfolio.rest.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +25,6 @@ import tk.crypfolio.rest.filter.Authenticator;
 import tk.crypfolio.rest.util.JsonResponseBuild;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
@@ -198,7 +199,8 @@ public class PortfolioRestController extends Application {
                 }
 
                 // checking if all received transaction values are valid
-                if (transAmount.compareTo(BigDecimal.ZERO) == 0 || isBigDecimalVaildForDB(transAmount)
+                if (transAmount.compareTo(BigDecimal.ZERO) == 0
+                        || isBigDecimalVaildForDB(transAmount)
                         || isBigDecimalVaildForDB(transTempPrice)
                         || isBigDecimalVaildForDB(transAmount.multiply(transTempPrice))) {
 
@@ -242,22 +244,23 @@ public class PortfolioRestController extends Application {
 
                         LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
 
-                        ObjectMapper mapper = new ObjectMapper();
+                        JsonObject portfolioNetCosts = new JsonObject();
 
-                        String portfolioNetCosts = Json.createObjectBuilder()
-                                .add("netCostUsd", portfolioDB.getNetCostUsd())
-                                .add("netCostEur", portfolioDB.getNetCostEur())
-                                .add("netCostBtc", portfolioDB.getNetCostBtc())
-                                .add("netCostEth", portfolioDB.getNetCostEth())
-                                .build()
-                                .toString();
+                        portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
+                        portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
+                        portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
+                        portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
 
-                        // form a JSON object consists of new portfolio NET costs data && actual actualized item
-                        String jsonToSend = Json.createObjectBuilder()
-                                .add("portfolioNetCosts", portfolioNetCosts)
-                                .add("actualizedItem", mapper.writeValueAsString(itemDB))
-                                .build()
-                                .toString();
+                        JsonObject jsonToSend = new JsonObject();
+
+                        jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
+
+                        // Convert object to JSON element
+                        Gson gsonBuilder = new GsonBuilder()
+                                .excludeFieldsWithoutExposeAnnotation()
+                                .disableHtmlEscaping()
+                                .create();
+                        jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
 
                         // generates response with new authentication token (using portfolio ID for Payload)
                         return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
@@ -267,8 +270,7 @@ public class PortfolioRestController extends Application {
 
             throw new BadRequestException("There is no user with requested ID or passed transaction parameters aren't valid");
 
-        } catch (
-                Exception ex) {
+        } catch (Exception ex) {
 
             throw new RestApplicationException(ex.getMessage());
         }
@@ -321,22 +323,24 @@ public class PortfolioRestController extends Application {
 
                             LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
 
-                            ObjectMapper mapper = new ObjectMapper();
+                            JsonObject portfolioNetCosts = new JsonObject();
 
-                            String portfolioNetCosts = Json.createObjectBuilder()
-                                    .add("netCostUsd", portfolioDB.getNetCostUsd())
-                                    .add("netCostEur", portfolioDB.getNetCostEur())
-                                    .add("netCostBtc", portfolioDB.getNetCostBtc())
-                                    .add("netCostEth", portfolioDB.getNetCostEth())
-                                    .build()
-                                    .toString();
+                            portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
+                            portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
+                            portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
+                            portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
 
-                            // form a JSON object consists of new portfolio NET costs data && actual actualized item
-                            String jsonToSend = Json.createObjectBuilder()
-                                    .add("portfolioNetCosts", portfolioNetCosts)
-                                    .add("actualizedItem", mapper.writeValueAsString(itemDB))
-                                    .build()
-                                    .toString();
+                            JsonObject jsonToSend = new JsonObject();
+
+                            jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
+
+                            // Convert object to JSON element
+                            Gson gsonBuilder = new GsonBuilder()
+                                    .excludeFieldsWithoutExposeAnnotation()
+                                    .disableHtmlEscaping()
+                                    .create();
+                            jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
+
                             // generates response with new authentication token (using portfolio ID for Payload)
                             return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
                         }
@@ -346,8 +350,7 @@ public class PortfolioRestController extends Application {
 
             throw new BadRequestException("There is no user with requested ID or passed transaction parameters aren't valid");
 
-        } catch (
-                Exception ex) {
+        } catch (Exception ex) {
 
             throw new RestApplicationException(ex.getMessage());
         }
@@ -370,11 +373,16 @@ public class PortfolioRestController extends Application {
 
             PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
 
-            ItemEntity itemDB = portfolioDB.getItems().stream().filter(i -> i.getId().equals(itemToDelId))
-                    .findFirst().orElse(null);
+            ItemEntity itemDB = null;
+
+            if (portfolioDB != null) {
+
+                itemDB = portfolioDB.getItems().stream().filter(i -> i.getId().equals(itemToDelId))
+                        .findFirst().orElse(null);
+            }
 
             // search if the item with passed Id is in the user's portfolio
-            if (portfolioDB != null && itemDB != null) {
+            if (itemDB != null) {
 
                 portfolioDB.removeItem(itemDB);
 
@@ -383,19 +391,16 @@ public class PortfolioRestController extends Application {
                 // updates whole portfolio entity
                 portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
 
-                String portfolioNetCosts = Json.createObjectBuilder()
-                        .add("netCostUsd", portfolioDB.getNetCostUsd())
-                        .add("netCostEur", portfolioDB.getNetCostEur())
-                        .add("netCostBtc", portfolioDB.getNetCostBtc())
-                        .add("netCostEth", portfolioDB.getNetCostEth())
-                        .build()
-                        .toString();
+                JsonObject portfolioNetCosts = new JsonObject();
 
-                // form a JSON object consists of new portfolio NET costs data && actual actualized item
-                String jsonToSend = Json.createObjectBuilder()
-                        .add("portfolioNetCosts", portfolioNetCosts)
-                        .build()
-                        .toString();
+                portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
+                portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
+                portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
+                portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
+
+                JsonObject jsonToSend = new JsonObject();
+
+                jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
 
                 LOGGER.info("PortfolioRestController: Successful '/portfolio-delete-item/{id}' request");
 
