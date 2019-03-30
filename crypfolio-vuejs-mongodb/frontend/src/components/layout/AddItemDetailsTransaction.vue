@@ -158,11 +158,21 @@
                     <v-spacer></v-spacer>
 
                     <v-btn
+                            v-if="!editableTrans"
                             small id="addTransaction"
                             :class="{'disable-events': !transFormValid}"
                             color="primary"
                             @click="addTransaction">
-                        Add
+                        Add Transaction
+                    </v-btn>
+
+                    <v-btn
+                            v-if="editableTrans"
+                            small id="editTransaction"
+                            :class="{'disable-events': !transFormValid}"
+                            color="primary"
+                            @click="editTransaction">
+                        Edit Transaction
                     </v-btn>
                 </div>
             </v-card-actions>
@@ -175,15 +185,17 @@
 <script>
     import {mapGetters, mapState} from "vuex";
     import format from 'date-fns/format'
-    import {PORTFOLIO_ADD_TRANSACTION} from "../../store/actions/portfolio";
+    import {PORTFOLIO_ADD_TRANSACTION, PORTFOLIO_EDIT_TRANSACTION} from "../../store/actions/portfolio";
 
     export default {
         name: "AddItemDetailsTransaction",
         props: {
             value: Boolean,
             selectedItem: null,
+            editableTrans: null,
         },
         data: () => ({
+            transId: null,
             transType: "BUY",
             transAmount: Number,
             transPrice: Number,
@@ -242,17 +254,35 @@
         },
         watch: {
             show(val) {
-                // on close modal window -> run clearForm() to reset all component's variables
-                !val && this.clearForm();
-                // on open modal window -> set initial transPrice
-                val && this.setTransMarketPrice();
+
+                if (val) {
+                    // if it's editing of the existing transaction
+                    if (this.editableTrans) {
+                        this.transId = this.editableTrans.id;
+                        this.transType = this.editableTrans.type;
+                        this.transAmount = this.editableTrans.amount;
+                        this.transPrice = this.showTransPriceByCurrency();
+                        this.transTotal = this.showTransTotalByCurrency();
+                        this.transCurrency = this.editableTrans.boughtCurrency;
+                        // https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+                        // const tempDate = this.editableTrans.boughtDate;
+                        // const dateToFormat = new Date(tempDate.year + " " + tempDate.monthValue + " " + tempDate.dayOfMonth);
+                        // const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+                        // this.transDate = (new Date(dateToFormat - tzoffset)).toISOString().substr(0, 10);
+                        this.transComment = this.editableTrans.comment;
+                    } else {
+                        // on open modal window -> set initial transPrice
+                        this.setTransMarketPrice();
+                    }
+                } else {
+                    // on close modal window -> run clearForm() to reset all component's variables
+                    // reset all component's variables
+                    Object.assign(this.$data, this.$options.data());
+                    this.$emit('clear-editable-trans', null);
+                }
             },
         },
         methods: {
-            clearForm() {
-                // reset all component's variables
-                Object.assign(this.$data, this.$options.data())
-            },
             // *** autocomplete and choose coin methods: ***
             showCoinImage(id) {
 
@@ -290,9 +320,45 @@
                     this.transPrice = this.$options.filters.generalValuesByCurrency(tempTransPrice, this.transCurrency);
                 }
             },
-            // button "DONE" handler
+            showTransPriceByCurrency() {
+
+                if (this.editableTrans) {
+
+                    switch (this.editableTrans.boughtCurrency) {
+                        case 'USD':
+                            return this.editableTrans.boughtPriceUsd;
+                        case 'EUR':
+                            return this.editableTrans.boughtPriceEur;
+                        case 'BTC':
+                            return this.editableTrans.boughtPriceBtc;
+                        case 'ETH':
+                            return this.editableTrans.boughtPriceEth;
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            showTransTotalByCurrency() {
+
+                if (this.editableTrans) {
+
+                    switch (this.editableTrans.boughtCurrency) {
+                        case 'USD':
+                            return this.editableTrans.amount * this.editableTrans.boughtPriceUsd;
+                        case 'EUR':
+                            return this.editableTrans.amount * this.editableTrans.boughtPriceEur;
+                        case 'BTC':
+                            return this.editableTrans.amount * this.editableTrans.boughtPriceBtc;
+                        case 'ETH':
+                            return this.editableTrans.amount * this.editableTrans.boughtPriceEth;
+                        default:
+                            return 0;
+                    }
+                }
+            },
+            // button "ADD" handler
             addTransaction() {
-                // payload - new transaction data to pass to backend,
+                // payload - new transaction data to pass to backend
                 const payload = {
                     'payload': {
                         'transCoinId': this.selectedItem.coin.id, 'transCurrency': this.transCurrency,
@@ -309,6 +375,27 @@
                     .catch(() => {
                     })
             },
+            // button "EDIT" handler
+            editTransaction() {
+                // payload - edited transaction data to pass to backend
+                const payload = {
+                    'payload': {
+                        'transId': this.transId, 'transCurrency': this.transCurrency,
+                        'transType': this.transType, 'transAmount': this.transAmount, 'transPrice': this.transPrice,
+                        'transDate': this.transDate, 'transComment': this.transComment, 'itemId': this.selectedItem.id
+                    },
+                };
+                console.log('payload', payload);
+
+                this.$store.dispatch(PORTFOLIO_EDIT_TRANSACTION, payload)
+                    .then(resp => {
+                        if (resp) {
+                            this.show = false;
+                        }
+                    })
+                    .catch(() => {
+                    })
+            }
         }
     }
 </script>
@@ -318,7 +405,7 @@
         opacity: 0.4;
     }
 
-    #addTransaction.disable-events {
+    #addTransaction.disable-events, #editTransaction.disable-events {
         opacity: 0.4;
     }
 </style>

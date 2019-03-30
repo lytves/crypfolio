@@ -202,7 +202,8 @@
 
         </v-card>
 
-        <AddItemDetailsTransaction :selectedItem="this.selectedItem"
+        <AddItemDetailsTransaction :selectedItem="this.selectedItem" :editableTrans="this.editableTrans"
+                                   @clear-editable-trans="resetEditableTrans"
                                    v-model="addItemDetailsTransactionDialog"></AddItemDetailsTransaction>
 
     </v-bottom-sheet>
@@ -265,6 +266,7 @@
                 {title: 'Edit', link: 'editTransaction'},
                 {title: 'Delete', link: 'deleteTransaction'},
             ],
+            editableTrans: null,
         }),
         computed: {
             ...mapGetters(['isUserCoinsMarketDataLoaded']),
@@ -303,6 +305,9 @@
                 // this.$parent.clearSelectedItem();
                 this.$emit('clear-selected-item');
                 this.show = false;
+            },
+            resetEditableTrans() {
+                this.editableTrans = null;
             },
             showItemCoinImage(id) {
 
@@ -519,7 +524,9 @@
                 this[link](transId)
             },
             editTransaction(transId) {
-                alert('edit ' + transId)
+                this.editableTrans = this.selectedItem.transactions.find(trans => trans.id === transId);
+                this.addItemDetailsTransactionDialog = true;
+                // then request to edit transaction will be made from AddItemDetailsTransaction component
             },
             deleteTransaction(transId) {
                 const payload = {'itemId': this.selectedItem.id, 'transId': transId};
