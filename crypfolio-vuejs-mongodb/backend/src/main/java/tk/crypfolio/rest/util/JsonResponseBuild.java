@@ -1,10 +1,10 @@
 package tk.crypfolio.rest.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import tk.crypfolio.rest.exception.RestApplicationException;
 
-import javax.json.Json;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
@@ -19,37 +19,36 @@ public abstract class JsonResponseBuild {
 
     public static Response generateJsonResponse(Object obj, Long userId, Integer error, String errorMessage) throws RestApplicationException {
 
-        ObjectMapper mapper = new ObjectMapper();
+        // Create new JSON Object
+        JsonObject jsonResponseStatus = new JsonObject();
+        JsonObject jsonResponse = new JsonObject();
+
+        if (error == null) {
+            error = 0;
+        }
+
+        if (errorMessage == null) {
+            errorMessage = "";
+        }
+
+        jsonResponseStatus.addProperty("timestamp", System.currentTimeMillis());
+        jsonResponseStatus.addProperty("error_code", error);
+        jsonResponseStatus.addProperty("error_message", errorMessage);
+
+        jsonResponse.add("status", jsonResponseStatus);
 
         try {
-
             String jsonInString = "success";
 
             if (obj != null) {
-                // Convert object to JSON string
-                jsonInString = mapper.writeValueAsString(obj);
+                Gson gsonBuilder = new GsonBuilder()
+                        .excludeFieldsWithoutExposeAnnotation()
+                        .disableHtmlEscaping()
+                        .create();
+                jsonResponse.add("data", gsonBuilder.toJsonTree(obj));
+            } else {
+                jsonResponse.addProperty("data", jsonInString);
             }
-
-            if (error == null) {
-                error = 0;
-            }
-
-            if (errorMessage == null) {
-                errorMessage = "";
-            }
-
-            String jsonStatusContent = Json.createObjectBuilder()
-                    .add("timestamp", System.currentTimeMillis())
-                    .add("error_code", error)
-                    .add("error_message", errorMessage)
-                    .build()
-                    .toString();
-
-            String jsonResponseObject = Json.createObjectBuilder()
-                    .add("status", jsonStatusContent)
-                    .add("data", jsonInString)
-                    .build()
-                    .toString();
 
             String token = "";
 
@@ -59,9 +58,9 @@ public abstract class JsonResponseBuild {
             }
 
             return Response.status(Response.Status.OK).header(AUTHORIZATION, token)
-                    .type("application/json").entity(jsonResponseObject).build();
+                    .type("application/json").entity(jsonResponse.toString()).build();
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RestApplicationException("Error parsing object!");
         }
