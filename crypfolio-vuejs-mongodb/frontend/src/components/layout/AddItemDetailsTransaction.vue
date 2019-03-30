@@ -45,7 +45,7 @@
                 </div>
 
                 <!--// TRANSACTION AMOUNT-->
-                <v-form @submit.prevent="addTransaction" v-model="transFormValid">
+                <v-form @submit.prevent="addTransaction" v-model="transFormValid" ref="form">
                     <v-text-field
                             v-model.number="transAmount"
                             label="Amount"
@@ -131,7 +131,7 @@
                     </v-menu>
 
                     <!--// TRANSACTION COMMENT-->
-                    <v-expansion-panel focusable>
+                    <v-expansion-panel v-model="expandComment">
                         <v-expansion-panel-content>
                             <template v-slot:header>
                                 <div>Comment</div>
@@ -225,6 +225,7 @@
                 v => v.length <= 200 || 'Comment must be less than 200 characters'
             ],
             transFormValid: false,
+            expandComment: null,
         }),
         computed: {
             show: {
@@ -278,6 +279,7 @@
                     // on close modal window -> run clearForm() to reset all component's variables
                     // reset all component's variables
                     Object.assign(this.$data, this.$options.data());
+                    this.$refs.form.resetValidation();
                     this.$emit('clear-editable-trans', null);
                 }
             },
