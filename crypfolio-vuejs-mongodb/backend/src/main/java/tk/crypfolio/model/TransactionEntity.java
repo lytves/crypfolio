@@ -1,5 +1,6 @@
 package tk.crypfolio.model;
 
+import com.google.gson.annotations.Expose;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
 import tk.crypfolio.util.LocalDateAttributeMongoDBConverter;
@@ -15,36 +16,46 @@ import java.util.UUID;
 @Embeddable
 public class TransactionEntity implements Serializable {
 
+    @Expose
     @Column(name = "trans_id")
     private String id;
 
+    @Expose
     @Column(name = "trans_amount", precision = 8, nullable = false)
     private BigDecimal amount;
 
+    @Expose
     @Column(name = "trans_bought_date", nullable = false)
     @Convert(converter = LocalDateAttributeMongoDBConverter.class)
     private LocalDate boughtDate;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     @Column(name = "trans_type", nullable = false)
     private TransactionType type = TransactionType.BUY;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     @Column(name = "trans_bought_currency", nullable = false)
     private CurrencyType boughtCurrency = CurrencyType.USD;
 
+    @Expose
     @Column(name = "trans_bought_price_usd", precision = 8, nullable = false)
     private BigDecimal boughtPriceUsd = BigDecimal.ZERO;
 
+    @Expose
     @Column(name = "trans_bought_price_eur", precision = 8, nullable = false)
     private BigDecimal boughtPriceEur = BigDecimal.ZERO;
 
+    @Expose
     @Column(name = "trans_bought_price_btc", precision = 8, nullable = false)
     private BigDecimal boughtPriceBtc = BigDecimal.ZERO;
 
+    @Expose
     @Column(name = "trans_bought_price_eth", precision = 8, nullable = false)
     private BigDecimal boughtPriceEth = BigDecimal.ZERO;
 
+    @Expose
     @Column(name = "trans_comment")
     private String comment;
 
@@ -137,7 +148,7 @@ public class TransactionEntity implements Serializable {
         this.boughtPriceEth = boughtPriceEth;
     }
 
-    public BigDecimal gePriceByCurrentCurrency() {
+    public BigDecimal getPriceByCurrentCurrency() {
 
         BigDecimal priceByBoughtCurrency = BigDecimal.ZERO;
 

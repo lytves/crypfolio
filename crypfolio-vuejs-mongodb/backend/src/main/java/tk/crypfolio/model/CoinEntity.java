@@ -1,5 +1,6 @@
 package tk.crypfolio.model;
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -11,16 +12,20 @@ import java.util.Objects;
 @Table(name = "coins")
 public class CoinEntity implements Serializable {
 
+    @Expose
     @Id
     @Column(nullable = false)
     private Long id;
 
+    @Expose
     @Column(name = "coin_name", nullable = false, length = 255)
     private String name;
 
+    @Expose
     @Column(name = "coin_symbol", nullable = false, length = 127)
     private String symbol;
 
+    @Expose
     @Column(name = "coin_slug", nullable = false, length = 255, unique = true)
     private String slug;
 

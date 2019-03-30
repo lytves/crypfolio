@@ -1,5 +1,6 @@
 package tk.crypfolio.model;
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.search.annotations.Indexed;
 import tk.crypfolio.common.CurrencyType;
 
@@ -10,10 +11,12 @@ import java.util.Objects;
 @Embeddable
 public class UserWatchCoinEntity implements Serializable {
 
+    @Expose
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private CoinEntity coinId;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     @Column(name = "us_watchcoin_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;

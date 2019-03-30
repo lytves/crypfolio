@@ -1,5 +1,6 @@
 package tk.crypfolio.model;
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.search.annotations.Indexed;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.LocalDateTimeAttributeMongoDBConverter;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Table(name = "users")
 public class UserEntity implements Serializable {
 
+    @Expose
     @Id
     /*  Identifier generation strategies:
     https://docs.jboss.org/hibernate/stable/ogm/reference/en-US/html_single/#_identifier_generation_strategies
@@ -32,36 +34,47 @@ public class UserEntity implements Serializable {
     )
     private Long id;
 
+    @Expose
     @Column(name = "us_email", nullable = false, length = 255, unique = true)
     private String email;
 
+    @Expose
     @Column(name = "us_password", nullable = false, length = 64)
     private String password;
 
+    @Expose
     @Column(name = "us_signup_datetime", nullable = false)
     @Convert(converter = LocalDateTimeAttributeMongoDBConverter.class)
     private LocalDateTime signupDateTime = LocalDateTime.now();
 
+    @Expose
     @Column(name = "us_is_email_verified", nullable = false)
     private Boolean isEmailVerified = false;
 
+    @Expose
     @Column(name = "us_email_verif_code", length = 36)
     private String emailVerifCode;
 
+    @Expose
     @Column(name = "us_email_verif_code_request_datetime")
     @Convert(converter = LocalDateTimeAttributeMongoDBConverter.class)
     private LocalDateTime emailVerifCodeRequestDateTime = LocalDateTime.now();
 
+    @Expose
     @Column(name = "us_password_reset_code", length = 36)
     private String passwordResetCode;
 
+    @Expose
     @Column(name = "us_password_reset_code_datetime")
     @Convert(converter = LocalDateTimeAttributeMongoDBConverter.class)
     private LocalDateTime passwordResetCodeRequestDateTime;
 
+
+    @Expose
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
+    @Expose
     @ElementCollection
     private List<UserWatchCoinEntity> userWatchCoins = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package tk.crypfolio.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import org.hibernate.search.annotations.Indexed;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.MathRounders;
@@ -19,37 +20,47 @@ import java.util.Objects;
 @Table(name = "portfolios")
 public class PortfolioEntity implements Serializable {
 
+    @Expose
     @Id
     private Long id;
 
+    @Expose
     @Column(name = "port_name", nullable = false, length = 128)
     private String name;
 
+    @Expose
     @Column(name = "port_is_share", nullable = false)
     private Boolean isShare = false;
 
+    @Expose
     @Column(name = "port_share_link", length = 8, nullable = false)
     private String shareLink;
 
+    @Expose
     @Column(name = "port_is_showed_amounts", nullable = false)
     private Boolean isShowAmounts = false;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     @Column(name = "port_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "port_net_cost_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "port_net_cost_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEur = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "port_net_cost_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostBtc = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "port_net_cost_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEth = BigDecimal.ZERO;
@@ -60,6 +71,7 @@ public class PortfolioEntity implements Serializable {
     @JsonIgnore
     private UserEntity user;
 
+    @Expose
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemEntity> items = new ArrayList<>();
 

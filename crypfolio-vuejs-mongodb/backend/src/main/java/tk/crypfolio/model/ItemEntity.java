@@ -1,6 +1,7 @@
 package tk.crypfolio.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.search.annotations.Indexed;
@@ -23,6 +24,7 @@ public class ItemEntity implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(ItemEntity.class);
 
+    @Expose
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator="item")
     @TableGenerator(
@@ -36,45 +38,56 @@ public class ItemEntity implements Serializable {
     )
     private Long id;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_amount", precision = 20, scale = 8, nullable = false)
     private BigDecimal amount = BigDecimal.ZERO;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     @Column(name = "item_showed_currency", nullable = false)
     private CurrencyType showedCurrency = CurrencyType.USD;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_net_cost_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostUsd = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_net_cost_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEur = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_net_cost_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostBtc = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_net_cost_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal netCostEth = BigDecimal.ZERO;
 
+    @Expose
     @Column(name = "item_is_archived", nullable = false)
     private Boolean isArchived = false;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_average_bought_price_usd", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceUsd = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_average_bought_price_eur", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceEur = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_average_bought_price_btc", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceBtc = BigDecimal.ZERO;
 
+    @Expose
     @DecimalMax("999999999999.99999999")
     @Column(name = "item_average_bought_price_eth", precision = 20, scale = 8, nullable = false)
     private BigDecimal averageBoughtPriceEth = BigDecimal.ZERO;
@@ -84,10 +97,12 @@ public class ItemEntity implements Serializable {
     @JsonIgnore
     private PortfolioEntity portfolio;
 
+    @Expose
     @ManyToOne
     @JoinColumn(nullable = false)
     private CoinEntity coin;
 
+    @Expose
     @ElementCollection
     private List<TransactionEntity> transactions = new ArrayList<>();
 
