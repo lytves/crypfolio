@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import tk.crypfolio.rest.exception.RestApplicationException;
+import tk.crypfolio.util.LocalDateAdapter;
+import tk.crypfolio.util.LocalDateTimeAdapter;
 
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
@@ -44,6 +48,8 @@ public abstract class JsonResponseBuild {
                 Gson gsonBuilder = new GsonBuilder()
                         .excludeFieldsWithoutExposeAnnotation()
                         .disableHtmlEscaping()
+                        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                         .create();
                 jsonResponse.add("data", gsonBuilder.toJsonTree(obj));
             } else {

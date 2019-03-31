@@ -23,6 +23,8 @@ import tk.crypfolio.parse.ParserAPI;
 import tk.crypfolio.rest.exception.RestApplicationException;
 import tk.crypfolio.rest.filter.Authenticator;
 import tk.crypfolio.rest.util.JsonResponseBuild;
+import tk.crypfolio.util.LocalDateAdapter;
+import tk.crypfolio.util.LocalDateTimeAdapter;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -32,6 +34,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
@@ -259,6 +262,8 @@ public class PortfolioRestController extends Application {
                         Gson gsonBuilder = new GsonBuilder()
                                 .excludeFieldsWithoutExposeAnnotation()
                                 .disableHtmlEscaping()
+                                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                                 .create();
                         jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
 
@@ -379,6 +384,8 @@ public class PortfolioRestController extends Application {
                                 Gson gsonBuilder = new GsonBuilder()
                                         .excludeFieldsWithoutExposeAnnotation()
                                         .disableHtmlEscaping()
+                                        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                                         .create();
                                 jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
 
@@ -459,6 +466,8 @@ public class PortfolioRestController extends Application {
                             Gson gsonBuilder = new GsonBuilder()
                                     .excludeFieldsWithoutExposeAnnotation()
                                     .disableHtmlEscaping()
+                                    .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                                     .create();
                             jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
 
