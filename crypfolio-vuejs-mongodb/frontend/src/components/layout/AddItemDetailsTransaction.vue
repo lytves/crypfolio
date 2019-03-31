@@ -265,11 +265,13 @@
                         this.transPrice = this.showTransPriceByCurrency();
                         this.transTotal = this.showTransTotalByCurrency();
                         this.transCurrency = this.editableTrans.boughtCurrency;
+                        // old version was used before GSON and backend LocalDateAdapter
                         // https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                         // const tempDate = this.editableTrans.boughtDate;
                         // const dateToFormat = new Date(tempDate.year + " " + tempDate.monthValue + " " + tempDate.dayOfMonth);
                         // const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
                         // this.transDate = (new Date(dateToFormat - tzoffset)).toISOString().substr(0, 10);
+                        this.transDate = this.editableTrans.boughtDate;
                         this.transComment = this.editableTrans.comment;
                     } else {
                         // on open modal window -> set initial transPrice
@@ -406,7 +408,6 @@
     .btn-type:not(.active) {
         opacity: 0.4;
     }
-
     #addTransaction.disable-events, #editTransaction.disable-events {
         opacity: 0.4;
     }

@@ -45,8 +45,6 @@
 
             <!-- Component changes when currentTabComponent changes -->
             <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
-            <!-- Component changes when currentTabComponent changes -->
-            <!-- https://vuejs.org/v2/guide/components.html#Dynamic-Components -->
             <component
                     :is="currentTabComponent">
             </component>
@@ -87,15 +85,6 @@
                 this.currentTabComponent = tabSlug;
             }
         },
-        computed: {
-            // will use on the future functionality
-            // ...mapGetters(['getUserProfile', 'isAuthenticated', 'isUserProfileLoaded']),
-            // ...mapState({
-            // "authLoading" is not using actually
-            // authLoading: state => state.auth.status === 'loading',
-            // userInfo: state => `id: ${state.user.userProfile.id}, email: ${state.user.userProfile.email}`,
-            // }),
-        }
     }
 </script>
 

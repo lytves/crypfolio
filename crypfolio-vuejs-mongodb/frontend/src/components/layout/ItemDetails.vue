@@ -459,7 +459,9 @@
             },
             dateConverter(date) {
                 // compose a normal Date format from Object
-                return new Date(date.year + "-" + date.monthValue + "-" + date.dayOfMonth);
+                // old version was used before GSON and backend LocalDateAdapter
+                // return new Date(date.year + "-" + date.monthValue + "-" + date.dayOfMonth);
+                return date;
             },
             showTransDate(date) {
                 return format(this.dateConverter(date), 'DD MMM, YYYY')
