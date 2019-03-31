@@ -134,6 +134,7 @@
                 <!--// TRANSACTION AMOUNT-->
                 <v-form @submit.prevent="addTransaction" v-model="transFormValid">
                     <v-text-field
+                            @focus="previousFocusableElement = 'amount'"
                             v-model.number="transAmount"
                             label="Amount"
                             placeholder="0"
@@ -160,6 +161,7 @@
                     <v-layout row>
                         <v-flex xs12>
                             <v-text-field
+                                    @focus="previousFocusableElement = 'price'"
                                     v-model.number="transPrice"
                                     label="Price"
                                     placeholder="0"
@@ -182,7 +184,7 @@
 
                     <!--// TRANSACTION TOTAL-->
                     <v-text-field
-                            v-model.number="transTotal"
+                            v-model.number="computedTransTotal"
                             label="Total"
                             placeholder="0"
                             :suffix="transCurrency"
@@ -285,7 +287,6 @@
             transType: "BUY",
             transAmount: Number,
             transPrice: Number,
-            transTotal: Number,
             transCurrency: "USD",
             transDate: new Date().toISOString().substr(0, 10),
             transComment: "",
@@ -311,6 +312,7 @@
                 v => v.length <= 200 || 'Comment must be less than 200 characters'
             ],
             transFormValid: false,
+            previousFocusableElement: "",
         }),
         computed: {
             show: {
@@ -338,7 +340,21 @@
             },
             computedDateFormattedDatefns() {
                 return this.transDate ? format(this.transDate, 'dddd, Do MMMM YYYY') : ''
-            }
+            },
+            computedTransTotal: {
+                get() {
+                    return this.$options.filters.generalValuesByCurrency(
+                        this.transAmount * this.transPrice, this.transCurrency);
+                },
+                set(value) {
+                    if (this.previousFocusableElement === 'amount' && this.transAmount > 0) {
+                        this.transPrice = value / this.transAmount;
+
+                    } else if (this.previousFocusableElement === 'price') {
+                        this.transAmount = value / this.transPrice;
+                    }
+                }
+            },
         },
         watch: {
             search(val) {
