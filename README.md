@@ -49,11 +49,11 @@ historical prices of crypto coins from
 * more screenshots are here: [Primefaces frontend](/crypfolio-jsf-mariadb/README.md#some-working-screenshots)
  and [Vue.js frontend](/crypfolio-vuejs-mongodb/README.md#some-working-screenshots)
 
-![](images/login-page.png)
+![](images/jsf-mariadb/login-page.png)
 
-![](images/portfolio.png)
+![](images/jsf-mariadb/portfolio.png)
 
-![](images/item-detail.png)
+![](images/jsf-mariadb/item-detail.png)
 
 ![](images/vuejs-mongodb/vue-mongodb-add-item-1.png)
 
