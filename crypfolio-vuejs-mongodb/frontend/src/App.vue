@@ -65,6 +65,7 @@
             if (this.$store.getters.isAuthenticated) {
                 this.$store.dispatch(USER_REQUEST)
             }
+            document.title = "Crypfolio";
         }
     }
 </script>
