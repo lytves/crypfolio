@@ -30,6 +30,12 @@
                 <!--// TRANSACTION TYPE "BUY/SELL"-->
                 <div class="text-xs-center">
                     <v-layout>
+                        <v-btn
+                                v-if="transType === 'SELL' && selectedItem.amount > 0"
+                                small color="primary"
+                                @click="setAllAmountToSale">
+                            Sell All
+                        </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn small color="success" class="btn-type"
                                :class="{'disable-events active': transBtnType('BUY')}"
@@ -44,8 +50,8 @@
                     </v-layout>
                 </div>
 
-                <!--// TRANSACTION AMOUNT-->
                 <v-form @submit.prevent="addTransaction" v-model="transFormValid" ref="form">
+                    <!--// TRANSACTION AMOUNT-->
                     <v-text-field
                             @focus="previousFocusableElement = 'amount'"
                             v-model.number="transAmount"
@@ -375,6 +381,10 @@
                     }
                 }
             },
+            setAllAmountToSale() {
+                if (this.selectedItem && this.selectedItem.amount > 0)
+                    this.transAmount = this.selectedItem.amount;
+            },
             // button "ADD" handler
             addTransaction() {
                 // payload - new transaction data to pass to backend
@@ -423,6 +433,7 @@
     .btn-type:not(.active) {
         opacity: 0.4;
     }
+
     #addTransaction.disable-events, #editTransaction.disable-events {
         opacity: 0.4;
     }

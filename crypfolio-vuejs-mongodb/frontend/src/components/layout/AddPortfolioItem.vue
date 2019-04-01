@@ -121,6 +121,12 @@
                 <!--// TRANSACTION TYPE "BUY/SELL"-->
                 <div class="text-xs-center">
                     <v-layout>
+                        <v-btn
+                                v-if="transType === 'SELL' && selectedItem.amount > 0"
+                                small color="primary"
+                                @click="setAllAmountToSale">
+                            Sell All
+                        </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn small color="success" class="btn-type"
                                :class="{'disable-events active': transBtnType('BUY')}"
@@ -135,8 +141,8 @@
                     </v-layout>
                 </div>
 
-                <!--// TRANSACTION AMOUNT-->
                 <v-form @submit.prevent="addTransaction" v-model="transFormValid">
+                    <!--// TRANSACTION AMOUNT-->
                     <v-text-field
                             @focus="previousFocusableElement = 'amount'"
                             v-model.number="transAmount"
@@ -317,6 +323,7 @@
             ],
             transFormValid: false,
             previousFocusableElement: "",
+            selectedItem: null,
         }),
         computed: {
             show: {
@@ -418,6 +425,7 @@
             },
             chooseCoinFromPortfolio(item) {
                 this.selectedCoin = item.coin;
+                this.selectedItem = item;
                 // call "general autocomplete" method
                 this.changeSelected();
             },
@@ -445,6 +453,10 @@
                         break;
                 }
                 this.transPrice = this.$options.filters.generalValuesByCurrency(tempTransPrice, this.transCurrency);
+            },
+            setAllAmountToSale() {
+                if (this.selectedItem && this.selectedItem.amount > 0)
+                this.transAmount = this.selectedItem.amount;
             },
             // button "DONE" handler
             addTransaction() {
