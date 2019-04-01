@@ -31,6 +31,49 @@ to the java application server
 
 ![Logical Data Model](data-model/mongodb-document-structures.png)
 
-### Some Working Screenshorts:
+### Vue.js used Libraries:
+* Vue-router the official router for Vue.js
+* Vuex state management library
+* Vuetify UI framework for Vue
 
-![Login Page](../images/login-page-vuejs-mongodb.png)
+### Some Working Screenshots:
+
+![](../images/vuejs-mongodb/vue-mongodb-login-3.png)
+![](../images/vuejs-mongodb/vue-mongodb-login-2.png)
+![](../images/vuejs-mongodb/vue-mongodb-login-1.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-signup-2.png)
+![](../images/vuejs-mongodb/vue-mongodb-signup-1.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-reset-password.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-portfolio-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-portfolio-2.png)
+![](../images/vuejs-mongodb/vue-mongodb-portfolio-3.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-add-item-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-item-3.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-item-4.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-item-5.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-item-7.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-item-details-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-item-details-2.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-add-transaction-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-transaction-2.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-transaction-3.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-transaction-4.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-archive-1.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-watchlist-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-watchlist-2.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-add-watchcoin-1.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-watchcoin-2.png)
+![](../images/vuejs-mongodb/vue-mongodb-add-watchcoin-3.png)
+
+![](../images/vuejs-mongodb/vue-mongodb-user-menu-1.png)
+
+
