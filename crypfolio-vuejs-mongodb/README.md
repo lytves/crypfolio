@@ -1,4 +1,6 @@
-### Application Version: Java EE + Vue.js + MongoDB 
+### Application Version: Java EE + Vue.js + MongoDB
+In this application version is used Non Relational Database [MongoDB](https://github.com/mongodb) and [Vue.js](https://github.com/vuejs) - is the Progressive JavaScript Framework
+ 
 As it is a Maven Project,  it was decided to separate the architecture for two separate parts (Maven modules) with 
 main pom.xml in the project root:
 + frontend part with it's own pom.xml to build the frontend module via nodejs
