@@ -90,7 +90,7 @@
             <!--// user's exist items in the portfolio to choose-->
             <v-card-text class="pa-0" v-if="isUserPortfolioLoaded && userPortfolioItems.length > 0 && !selectedCoin">
                 <v-card-actions style="padding: 0 10px;">
-                    Coins in yours Portfolio / Watchlist:
+                    Coins in your Portfolio:
                 </v-card-actions>
 
                 <v-list>
