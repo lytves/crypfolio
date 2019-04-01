@@ -4,10 +4,10 @@
         <v-container class="pa-0" fill-height>
             <v-layout row wrap>
 
-                <v-content>
+                <v-content class="content-container">
 
                     <!-- content -->
-                    <router-view/>
+                    <router-view  class="main-content"/>
 
                     <!-- footer -->
                     <Footer></Footer>
@@ -83,13 +83,13 @@
         padding: 0;
         list-style-type: none;
     }
-    #app {
+    .content-container .v-content__wrap {
+        display: flex;
         min-height: 100vh;
+        flex-direction: column;
     }
-    footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
+    .main-content {
+        flex: 1;
     }
     .selectsFlexBasis {
         flex-basis: 0 !important;

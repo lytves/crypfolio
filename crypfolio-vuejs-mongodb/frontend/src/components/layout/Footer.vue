@@ -1,6 +1,6 @@
 <template>
 
-    <v-footer app
+    <v-footer
             height="auto"
             color="primary lighten-1">
         <v-layout
