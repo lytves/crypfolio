@@ -6,7 +6,7 @@ In this application version is used Relational database [MariaDB](https://github
 
 ![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
 
-### <a name="primefaces-screenshots">Some Working Screenshots:</a>
+### Some Working Screenshots:
 
 ![](../images/login-page-mariadb.png)
 
