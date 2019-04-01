@@ -1,6 +1,6 @@
 ### Application Version: Java EE + Primefaces + MariaDB 
-In this application version is used Relational database [MariaDB](https://github.com/MariaDB) and [Primefaces](https://github.com/primefaces) - is an open source
- UI framework for JSF
+In this application version is used Relational database [MariaDB](https://github.com/MariaDB) and 
+[Primefaces](https://github.com/primefaces) - is an open source UI framework for JSF
 
 ### MySQL Logical Data Model:
 
@@ -8,32 +8,32 @@ In this application version is used Relational database [MariaDB](https://github
 
 ### Some Working Screenshots:
 
-![](../images/login-page-mariadb.png)
+![](../images/jsf-mariadb/login-page-mariadb.png)
 
-![](../images/signup.png)
+![](../images/jsf-mariadb/signup.png)
 
-![](../images/password-reset-page.png)
+![](../images/jsf-mariadb/password-reset-page.png)
 
-![](../images/portfolio.png)
+![](../images/jsf-mariadb/portfolio.png)
 
-![](../images/item-detail.png)
+![](../images/jsf-mariadb/item-detail.png)
 
-![](../images/item-detail-page2.png)
+![](../images/jsf-mariadb/item-detail-page2.png)
 
-![](../images/add-transaction.png)
+![](../images/jsf-mariadb/add-transaction.png)
 
-![](../images/add-transaction-2.png)
+![](../images/jsf-mariadb/add-transaction-2.png)
 
-![](../images/watchlist-page.png)
+![](../images/jsf-mariadb/watchlist-page.png)
 
-![](../images/watchlist-2-page.png)
+![](../images/jsf-mariadb/watchlist-2-page.png)
 
-![](../images/watchlist-add-coin-page.png)
+![](../images/jsf-mariadb/watchlist-add-coin-page.png)
 
-![](../images/watchlist-add-coin-page-2.png)
+![](../images/jsf-mariadb/watchlist-add-coin-page-2.png)
 
-![](../images/watchlist-add-coin-page-3.png)
+![](../images/jsf-mariadb/watchlist-add-coin-page-3.png)
 
-![](../images/user-settings.png)
+![](../images/jsf-mariadb/user-settings.png)
 
-![](../images/portfolio-settings.png)
+![](../images/jsf-mariadb/portfolio-settings.png)

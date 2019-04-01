@@ -1,4 +1,4 @@
-### Application Version: Java EE + Primefaces + MariaDB 
+### Application Version: Java EE + Primefaces + MongoDB 
 In this version of the application was used Non Relational Database [MongoDB](https://github.com/mongodb) and [Primefaces](https://github.com/primefaces) - is an open source
  UI framework for JSF
 

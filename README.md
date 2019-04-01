@@ -38,6 +38,7 @@ historical prices of crypto coins from
 * [Primefaces + MariaDB version](crypfolio-jsf-mariadb)
 * [Primefaces + MongoDB version](crypfolio-jsf-mongodb)
 * [Vue.js + MongoDB version](crypfolio-vuejs-mongodb)
+* [Vue.js + MariaDB version](crypfolio-vuejs-mariadb)
 
 ### Conceptual Data Model:
 
