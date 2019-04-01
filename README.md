@@ -27,49 +27,34 @@ You can also stay informed about your favorite crypto coins by add them into
 your separate watchlist.
 
 Is used data from officials APIs of the 
-[CoinMarketCap](https://coinmarketcap.com/api/ "CoinMarketCap") and 
-historical prices of cryptocoins from 
-[CryptoCompare.com](https://min-api.cryptocompare.com/ "CryptoCompare.com")
+[CoinMarketCap](https://coinmarketcap.com/api/) and 
+historical prices of crypto coins from 
+[CryptoCompare.com](https://min-api.cryptocompare.com/)
 
 
 -----
 
 ### Versions:
-* [Primefaces + MariaDB version](crypfolio-jsf-mariadb "Primefaces + MariaDB version")
-* [Primefaces + MongoDB version](crypfolio-jsf-mongodb "Primefaces + MongoDB version")
+* [Primefaces + MariaDB version](crypfolio-jsf-mariadb)
+* [Primefaces + MongoDB version](crypfolio-jsf-mongodb)
+* [Vue.js + MongoDB version](crypfolio-vuejs-mongodb)
 
 ### Conceptual Data Model:
 
-![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.png "Conceptual Data Model")
+![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.png)
 
-### Some Working Screenshorts:
+### Some Working Screenshots:
 
-![Login Page](images/login-page.png)
+* more screenshots are here: [Primefaces frontend](/crypfolio-jsf-mariadb/README.md#some-working-screenshots)
+ and [Vue.js frontend](/crypfolio-vuejs-mongodb/README.md#some-working-screenshots)
 
-![Sign up Page](images/signup.png)
+![](images/login-page.png)
 
-![Reset Password Page](images/password-reset-page.png)
+![](images/portfolio.png)
 
-![Portfolio Page](images/portfolio.png)
+![](images/item-detail.png)
 
-![Item detail](images/item-detail.png)
+![](images/vuejs-mongodb/vue-mongodb-add-item-1.png)
 
-![Item detail-2](images/item-detail-page2.png)
+![](images/vuejs-mongodb/vue-mongodb-watchlist-2.png)
 
-![Portfolio Page, add transaction](images/add-transaction.png)
-
-![Portfolio Page, add transaction](images/add-transaction-2.png)
-
-![WatchList Page](images/watchlist-page.png)
-
-![WatchList Page-2](images/watchlist-2-page.png)
-
-![WatchList coin adding Page](images/watchlist-add-coin-page.png)
-
-![WatchList coin adding Page](images/watchlist-add-coin-page-2.png)
-
-![WatchList coin adding Page](images/watchlist-add-coin-page-3.png)
-
-![User settings modal window](images/user-settings.png)
-
-![Portfolio settings modal window](images/portfolio-settings.png)
