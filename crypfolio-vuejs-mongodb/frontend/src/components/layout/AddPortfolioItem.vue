@@ -389,7 +389,7 @@
                 if (this.isAllCoinsListDataLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
-                return '@/assets/coin-default.png'
+                return '/img/coin-default.png'
             },
             // when the coin for transaction was chosen by autocomplete searching
             changeSelected() {

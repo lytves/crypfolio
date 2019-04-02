@@ -59,6 +59,7 @@
                                 <resource>
                                     <directory>${project.parent.basedir}/frontend/target/dist</directory>
                                     <includes>
+                                        <include>img/</include>
                                         <include>static/</include>
                                         <include>index.html</include>
                                     </includes>

@@ -93,7 +93,7 @@
                 if (this.isUserPortfolioLoaded) {
                     return 'https://s2.coinmarketcap.com/static/img/coins/32x32/' + id + '.png'
                 }
-                return '@/assets/coin-default.png'
+                return '/img/coin-default.png'
             },
             showCoinMarketPrice(item) {
 
