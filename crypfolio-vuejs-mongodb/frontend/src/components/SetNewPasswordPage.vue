@@ -26,6 +26,7 @@
                                     :counter=true
                                     name="password"
                                     label="Password"
+                                    browser-autocomplete="off"
                                     :append-icon="visible ? 'visibility_off' : 'visibility'"
                                     @click:append="() => (visible = !visible)"
                                     :type="visible ? 'text' : 'password'">
