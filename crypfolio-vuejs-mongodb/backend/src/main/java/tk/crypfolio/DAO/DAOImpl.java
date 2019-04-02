@@ -151,6 +151,9 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
     @Override
     public T findByUniqueStringColumn(String column, String value) {
 
+        /*          1. OGM-23 - Criteria queries are not supported yet!*/
+
+        /*          2. JPQL (HQL) doesn't worked */
         T t = null;
 
         try {

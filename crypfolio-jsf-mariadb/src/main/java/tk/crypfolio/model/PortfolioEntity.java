@@ -184,7 +184,6 @@ public class PortfolioEntity implements Serializable {
     }
 
     public void removeItem(ItemEntity item) {
-        // FIXME: gotta implement this method
         this.items.remove(item);
         //!!! unsetting also for new item this portfolio-parent
         item.setPortfolio(null);
@@ -250,16 +249,14 @@ public class PortfolioEntity implements Serializable {
                 Objects.equals(getNetCostUsd(), that.getNetCostUsd()) &&
                 Objects.equals(getNetCostEur(), that.getNetCostEur()) &&
                 Objects.equals(getNetCostBtc(), that.getNetCostBtc()) &&
-                Objects.equals(getNetCostEth(), that.getNetCostEth()) &&
-//                Objects.equals(getUser(), that.getUser()) &&
-                Objects.equals(getItems(), that.getItems());
+                Objects.equals(getNetCostEth(), that.getNetCostEth());
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(getId(), getName(), getIsShare(), getShareLink(), getIsShowAmounts(), getShowedCurrency(),
-                getNetCostUsd(), getNetCostEur(), getNetCostBtc(), getNetCostEth(), getItems());
+                getNetCostUsd(), getNetCostEur(), getNetCostBtc(), getNetCostEth());
     }
 
     @Override

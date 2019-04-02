@@ -225,15 +225,14 @@ public class TransactionEntity implements Serializable {
                 Objects.equals(boughtPriceEur, that.boughtPriceEur) &&
                 Objects.equals(boughtPriceBtc, that.boughtPriceBtc) &&
                 Objects.equals(boughtPriceEth, that.boughtPriceEth) &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(item, that.item);
+                Objects.equals(comment, that.comment);
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(getId(), getAmount(), getBoughtDate(), getBoughtCurrency(), getBoughtPriceUsd(),
-                getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment(), getItem());
+                getBoughtPriceEur(), getBoughtPriceBtc(), getBoughtPriceEth(), getComment());
     }
 
     @Override
@@ -249,7 +248,6 @@ public class TransactionEntity implements Serializable {
                 ", boughtPriceBtc=" + boughtPriceBtc + '\'' +
                 ", boughtPriceEth=" + boughtPriceEth + '\'' +
                 ", comment='" + comment +
-//                ", item.id=" + item.getId() +
                 '}';
     }
 }
