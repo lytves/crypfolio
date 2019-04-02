@@ -127,7 +127,6 @@
             signup() {
 
                 if (this.formValid) {
-                    console.log('Only if Login Form was completed correctly, do API request', this.formValid);
 
                     const {email, password, portfolio} = this;
                     this.$store.dispatch(USER_SIGNUP_REQUEST, {email, password, portfolio})

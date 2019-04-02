@@ -76,7 +76,6 @@
         methods: {
             resendEmail() {
                 if (this.formValid) {
-                    console.log('Only if Login Form was completed correctly, do API request', this.formValid);
 
                     this.$store.dispatch(USER_RESEND_VERIFICATION_EMAIL_REQUEST, this.email)
                         .then(() => {

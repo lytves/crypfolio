@@ -96,7 +96,6 @@
             login() {
 
                 if (this.formValid) {
-                    console.log('Only if Login Form was completed correctly, do API request', this.formValid);
 
                     const {email, password} = this;
                     this.$store.dispatch(AUTH_REQUEST, {email, password})

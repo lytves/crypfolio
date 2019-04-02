@@ -77,7 +77,6 @@
         methods: {
             resetPassword() {
                 if (this.formValid) {
-                    console.log('Only if Login Form was completed correctly, do API request', this.formValid);
 
                     this.$store.dispatch(USER_RESET_PASSWORD_REQUEST, this.email)
                         .then(() => {
