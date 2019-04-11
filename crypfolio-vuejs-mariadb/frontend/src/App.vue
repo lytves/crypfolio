@@ -91,6 +91,7 @@
     }
     .main-content {
         flex: 1;
+        max-width: 1300px;
     }
     .selectsFlexBasis {
         flex-basis: 0 !important;
