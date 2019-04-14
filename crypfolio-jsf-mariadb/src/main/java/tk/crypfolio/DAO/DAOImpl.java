@@ -26,7 +26,9 @@ public abstract class DAOImpl<K, T> implements DAO<K, T> {
 
         this.em = em;
         this.entityClass = entityClass;
-        this.em.getTransaction().begin();
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
     }
 
     @Override

@@ -5,7 +5,7 @@
              version="2.2">
 
     <!--   @@@   HIBERNATE   ORM   JPA   PERSISTENCE   UNIT   @@@   -->
-    <persistence-unit name="CrypFolioPersistenceUnitJPA">
+    <persistence-unit name="CrypFolioPersistenceUnitJPA" transaction-type="JTA">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -23,9 +23,9 @@
             <!-- ========================================== or org.mariadb.jdbc.Driver -->
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <!-- ========================================== put your userName here -->
-            <property name="hibernate.connection.username" value="userName"/>
+            <property name="hibernate.connection.username" value="userDB"/>
             <!-- ========================================== put your userPassword here -->
-            <property name="hibernate.connection.password" value="userPassword"/>
+            <property name="hibernate.connection.password" value="SSDuserDB09"/>
             <!--<property name="hibernate.archive.autodetection" value="class"/>-->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
