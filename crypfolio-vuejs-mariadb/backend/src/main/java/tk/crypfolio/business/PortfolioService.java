@@ -1,22 +1,19 @@
 package tk.crypfolio.business;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tk.crypfolio.DAO.AbstractDAOFactory;
 import tk.crypfolio.DAO.PortfolioDAO;
 import tk.crypfolio.common.SettingsDB;
 import tk.crypfolio.model.PortfolioEntity;
 
-import javax.ejb.Stateless;
-import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
-@Transactional
-@Stateless
 public class PortfolioService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(PortfolioService.class);
 
     private PortfolioDAO getPortfolioDAO() {
 

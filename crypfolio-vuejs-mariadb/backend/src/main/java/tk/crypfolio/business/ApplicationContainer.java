@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import tk.crypfolio.model.CoinEntity;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 //https://developer.jboss.org/thread/180134 CDI how to startup bean?
 @ApplicationScoped
-@Singleton
+//@Singleton
 //@Startup
 public class ApplicationContainer {
 
@@ -36,7 +35,9 @@ public class ApplicationContainer {
     private Map<String, Double> globalMarketData = new HashMap<>();
 
     @PostConstruct
-    private void init() { LOGGER.info("ApplicationContainer init!");}
+    private void init() {
+        LOGGER.info("ApplicationContainer init!");
+    }
 
     public List<CoinEntity> getAllCoinsListing() {
         return allCoinsListing;
