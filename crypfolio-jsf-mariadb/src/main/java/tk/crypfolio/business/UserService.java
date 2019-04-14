@@ -1,32 +1,25 @@
 package tk.crypfolio.business;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import tk.crypfolio.DAO.AbstractDAOFactory;
 import tk.crypfolio.DAO.UserDAO;
+import tk.crypfolio.DAO.UserWatchCoinDAO;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.SettingsDB;
 import tk.crypfolio.model.UserEntity;
+import tk.crypfolio.model.UserWatchCoinEntity;
 import tk.crypfolio.util.CodeGenerator;
 import tk.crypfolio.util.EmailSender;
 import tk.crypfolio.util.StringEncoder;
 
-import javax.ejb.Stateless;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Transactional
-@Stateless
 public class UserService implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
-
     private UserDAO getUserDAO() {
-        LOGGER.info("UserService getUserDAO()");
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
         return myFactory.getUserDAO();
     }
@@ -201,5 +194,16 @@ public class UserService implements Serializable {
 
         return getUserDAO().updateUser(user);
 
+    }
+
+    /*
+     * update watchCoin of user in DB
+     * */
+    public UserWatchCoinEntity updateUserWatchCoinDB(UserWatchCoinEntity userWatchCoin) {
+
+        AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
+        UserWatchCoinDAO uwcDAO = myFactory.getUserWatchCoinDAO();
+
+        return uwcDAO.updateUserWatchCoinEntity(userWatchCoin);
     }
 }
