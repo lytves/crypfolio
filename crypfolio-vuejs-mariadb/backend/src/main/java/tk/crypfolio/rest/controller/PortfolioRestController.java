@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.crypfolio.business.CoinService;
 import tk.crypfolio.business.PortfolioService;
-import tk.crypfolio.business.UserService;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.Settings;
 import tk.crypfolio.common.TransactionType;
@@ -26,6 +26,7 @@ import tk.crypfolio.rest.util.JsonResponseBuild;
 import tk.crypfolio.util.LocalDateAdapter;
 import tk.crypfolio.util.LocalDateTimeAdapter;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
@@ -43,6 +44,7 @@ import static tk.crypfolio.rest.util.AuthenticationTokenService.getUserIdFromJWT
 
 // "/api" root-path is defined in RestApplication
 @Path("/")
+@RequestScoped
 public class PortfolioRestController extends Application {
 
     private static final Logger LOGGER = LogManager.getLogger(PortfolioRestController.class);
@@ -51,17 +53,11 @@ public class PortfolioRestController extends Application {
     @Context
     private HttpHeaders httpHeaders;
 
-    // stateless business
     @Inject
-    protected UserService userService;
+    private PortfolioService portfolioService;
 
-    // stateless business
     @Inject
-    protected PortfolioService portfolioService;
-
-    // stateless business
-    @Inject
-    protected CoinService coinService;
+    private CoinService coinService;
 
     @Authenticator
     @PUT
@@ -279,7 +275,6 @@ public class PortfolioRestController extends Application {
 
             throw new RestApplicationException(ex.getMessage());
         }
-
     }
 
     @Authenticator
@@ -295,7 +290,7 @@ public class PortfolioRestController extends Application {
         try {
             JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
 
-            String transId = (String) jsonObject.get("transId");
+            Long transId = ((Number) jsonObject.get("transId")).longValue();
             CurrencyType transCurrency = CurrencyType.valueOf(((String) jsonObject.get("transCurrency")).toUpperCase());
             TransactionType transType = TransactionType.valueOf(((String) jsonObject.get("transType")).toUpperCase());
             BigDecimal transAmount = new BigDecimal((String) jsonObject.get("transAmount"));
@@ -340,57 +335,58 @@ public class PortfolioRestController extends Application {
                                     400, "Error on processing your transaction! You can't sell more coins than you have!");
                         } else {
 
-                            TransactionEntity newTransaction = new TransactionEntity(transAmount, transDate, transCurrency);
-                            newTransaction.setComment(transComment);
-                            newTransaction.setType(transType);
-                            newTransaction.setId(transactionEditedOld.getId());
+                            // to clone exists edited transaction!!! important to have all foreign keys equals
+                            TransactionEntity newTransaction = SerializationUtils.clone(transactionEditedOld);
 
-//                            transactionEditedOld.setAmount(transAmount);
-//                            transactionEditedOld.setBoughtCurrency(transCurrency);
-//                            transactionEditedOld.setBoughtDate(transDate);
-//                            transactionEditedOld.setComment(transComment);
+                            newTransaction.setAmount(transAmount);
+                            newTransaction.setBoughtDate(transDate);
+                            newTransaction.setBoughtCurrency(transCurrency);
+                            newTransaction.setComment(transComment);
 
                             // recount prices in all currencies by request historical prices by API
                             recountTransactionPricesByHistoricalPricesAPI(newTransaction, transTempPrice);
 
                             // also recount values (net costs, average prices) of item
-                            itemDB.editTransaction(transactionEditedOld, newTransaction);
+                            Boolean isTransactionValid = itemDB.editTransaction(transactionEditedOld, newTransaction);
 
-                            // recount values (netcost) of portfolio
-                            portfolioDB.recountNetCosts();
+                            if (isTransactionValid) {
 
-                            // updates whole portfolio entity
-                            portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
+                                // recount values (netcost) of portfolio
+                                portfolioDB.recountNetCosts();
 
-                            itemDB = portfolioDB.getItems().stream().filter(item -> item.getId().equals(itemId))
-                                    .findFirst().orElse(null);
+                                // updates whole portfolio entity
+                                portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
 
-                            if (itemDB != null) {
+                                itemDB = portfolioDB.getItems().stream().filter(item -> item.getId().equals(itemId))
+                                        .findFirst().orElse(null);
 
-                                LOGGER.info("PortfolioRestController: Successful '/portfolio-edit-transaction' request");
+                                if (itemDB != null) {
 
-                                JsonObject portfolioNetCosts = new JsonObject();
+                                    LOGGER.info("PortfolioRestController: Successful '/portfolio-edit-transaction' request");
 
-                                portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
-                                portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
-                                portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
-                                portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
+                                    JsonObject portfolioNetCosts = new JsonObject();
 
-                                JsonObject jsonToSend = new JsonObject();
+                                    portfolioNetCosts.addProperty("netCostUsd", portfolioDB.getNetCostUsd());
+                                    portfolioNetCosts.addProperty("netCostEur", portfolioDB.getNetCostEur());
+                                    portfolioNetCosts.addProperty("netCostBtc", portfolioDB.getNetCostBtc());
+                                    portfolioNetCosts.addProperty("netCostEth", portfolioDB.getNetCostEth());
 
-                                jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
+                                    JsonObject jsonToSend = new JsonObject();
 
-                                // Convert object to JSON element
-                                Gson gsonBuilder = new GsonBuilder()
-                                        .excludeFieldsWithoutExposeAnnotation()
-                                        .disableHtmlEscaping()
-                                        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                                        .create();
-                                jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
+                                    jsonToSend.add("portfolioNetCosts", portfolioNetCosts);
 
-                                // generates response with new authentication token (using portfolio ID for Payload)
-                                return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                                    // Convert object to JSON element
+                                    Gson gsonBuilder = new GsonBuilder()
+                                            .excludeFieldsWithoutExposeAnnotation()
+                                            .disableHtmlEscaping()
+                                            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                                            .create();
+                                    jsonToSend.add("actualizedItem", gsonBuilder.toJsonTree(itemDB));
+
+                                    // generates response with new authentication token (using portfolio ID for Payload)
+                                    return JsonResponseBuild.generateJsonResponse(jsonToSend, portfolioDB.getId());
+                                }
                             }
                         }
                     }
@@ -419,7 +415,7 @@ public class PortfolioRestController extends Application {
             JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
 
             Long itemId = ((Number) jsonObject.get("itemId")).longValue();
-            String transId = (String) jsonObject.get("transId");
+            Long transId = ((Number) jsonObject.get("transId")).longValue();
 
             // userId is the same Id for user's portfolio
             String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
@@ -449,7 +445,7 @@ public class PortfolioRestController extends Application {
                             // updates whole portfolio entity
                             portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
 
-                            LOGGER.info("PortfolioRestController: Successful '/portfolio-add-transaction' request");
+                            LOGGER.info("PortfolioRestController: Successful '/portfolio-delete-transaction' request");
 
                             JsonObject portfolioNetCosts = new JsonObject();
 

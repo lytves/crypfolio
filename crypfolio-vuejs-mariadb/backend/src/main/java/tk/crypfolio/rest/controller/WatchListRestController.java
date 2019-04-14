@@ -15,6 +15,7 @@ import tk.crypfolio.rest.exception.RestApplicationException;
 import tk.crypfolio.rest.filter.Authenticator;
 import tk.crypfolio.rest.util.JsonResponseBuild;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
@@ -29,6 +30,7 @@ import static tk.crypfolio.rest.util.AuthenticationTokenService.getUserIdFromJWT
 
 // "/api" root-path is defined in RestApplication
 @Path("/")
+@RequestScoped
 public class WatchListRestController extends Application {
 
     private static final Logger LOGGER = LogManager.getLogger(WatchListRestController.class);
@@ -37,11 +39,9 @@ public class WatchListRestController extends Application {
     @Context
     private HttpHeaders httpHeaders;
 
-    // stateless business
     @Inject
     protected UserService userService;
 
-    // stateless business
     @Inject
     protected CoinService coinService;
 

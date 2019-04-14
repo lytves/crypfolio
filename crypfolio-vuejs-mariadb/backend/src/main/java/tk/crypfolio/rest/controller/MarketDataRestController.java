@@ -11,6 +11,7 @@ import tk.crypfolio.rest.exception.RestApplicationException;
 import tk.crypfolio.rest.filter.Authenticator;
 import tk.crypfolio.rest.util.JsonResponseBuild;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
@@ -28,6 +29,7 @@ import static tk.crypfolio.rest.util.AuthenticationTokenService.getUserIdFromJWT
 
 // "/api" root-path is defined in RestApplication
 @Path("/")
+@RequestScoped
 public class MarketDataRestController extends Application {
 
     private static final Logger LOGGER = LogManager.getLogger(MarketDataRestController.class);
@@ -40,7 +42,6 @@ public class MarketDataRestController extends Application {
     @Context
     private HttpHeaders httpHeaders;
 
-    // stateless business
     @Inject
     protected UserService userService;
 
