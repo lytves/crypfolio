@@ -15,8 +15,6 @@ public class ItemService implements Serializable {
 
         AbstractDAOFactory myFactory = AbstractDAOFactory.getDAOFactory(SettingsDB.APP_DB_TYPE);
         ItemDAO iDAO = myFactory.getItemDAO();
-        ItemEntity itemDB = iDAO.updateItem(itemEntity);
-
-        return itemDB;
+        return iDAO.updateItem(itemEntity);
     }
 }
