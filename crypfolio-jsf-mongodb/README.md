@@ -10,4 +10,4 @@ In this version of the application was used Non Relational Database [MongoDB](ht
 
 * more screenshots are here: [Primefaces frontend](/crypfolio-jsf-mariadb/README.md#some-working-screenshots)
 
-![Login Page](../images/login-page-mongodb.png)
+![Login Page](../images/login-page-jsf-mongodb.png)

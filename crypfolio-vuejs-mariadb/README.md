@@ -43,3 +43,4 @@ to the java application server
 
 * more screenshots are here: [Vue.js frontend](/crypfolio-vuejs-mongodb/README.md#some-working-screenshots)
 
+![Login Page](../images/login-page-vuejs-mariadb.png)
