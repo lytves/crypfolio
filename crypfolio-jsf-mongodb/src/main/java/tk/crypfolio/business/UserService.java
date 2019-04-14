@@ -11,14 +11,10 @@ import tk.crypfolio.util.CodeGenerator;
 import tk.crypfolio.util.EmailSender;
 import tk.crypfolio.util.StringEncoder;
 
-import javax.ejb.Stateless;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Transactional
-@Stateless
 public class UserService implements Serializable {
 
     private static final long serialVersionUID = 1L;
