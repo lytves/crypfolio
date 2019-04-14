@@ -5,7 +5,7 @@
              version="2.2">
 
     <!--   @@@   HIBERNATE   ORM   JPA   PERSISTENCE   UNIT   @@@   -->
-    <persistence-unit name="CrypFolioPersistenceUnitJPA">
+    <persistence-unit name="CrypFolioPersistenceUnitJPA" transaction-type="JTA">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -30,6 +30,8 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+
+            <property name="hibernate.connection.release_mode" value="after_statement"/>
 
         </properties>
 
