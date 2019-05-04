@@ -32,6 +32,9 @@ public class ItemBacking implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(PortfolioBacking.class);
 
+    @Inject
+    FacesContext facesContext;
+
     // application scoped
     @Inject
     private ApplicationContainer applicationContainer;
@@ -149,12 +152,12 @@ public class ItemBacking implements Serializable {
             // do it strictly only after updatePortfolioDB !!!
             portfolioBacking.init();
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "The item has been deleted from your portfolio successfully.",
                     ""));
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on deleting the item from portfolio!",
                     ""));
             LOGGER.warn("Error on deleting an item from user's portfolio!");
@@ -251,16 +254,16 @@ public class ItemBacking implements Serializable {
                 // almost reSetting portfolio's datatables-tabViews in case some items was archived or desarchived
                 portfolioBacking.init();
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "The transaction has been deleted successfully.",
                         ""));
                 // exit from the method, thereby don't need to do a few "else"
-                // to return FacesContext.getCurrentInstance().addMessage... depends of situation
+                // to return facesContext.addMessage... depends of situation
                 return;
             }
         }
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Error on deleting the transaction!",
                 ""));
         LOGGER.warn("Error on deleting a transaction!");

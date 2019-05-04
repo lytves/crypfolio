@@ -36,6 +36,9 @@ public class AddTransactionOrItemBacking implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(AddTransactionOrItemBacking.class);
 
+    @Inject
+    FacesContext facesContext;
+
     // application scoped
     @Inject
     private ApplicationContainer applicationContainer;
@@ -322,14 +325,14 @@ public class AddTransactionOrItemBacking implements Serializable {
                 || isBigDecimalVaildForDB(transactionPriceTemp)
                 || isBigDecimalVaildForDB(transactionTemp.getAmount().multiply(transactionPriceTemp))) {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! Some of entered values are not valid!",
                     ""));
 
         } else if (("SELL").equals(transactionTemp.getType().getType())
                 && transactionTemp.getAmount().compareTo(itemTemp.getAmount()) >= 1) {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! You can't sell more coins than you have!",
                     ""));
 
@@ -377,7 +380,7 @@ public class AddTransactionOrItemBacking implements Serializable {
                 }
             }
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "The transaction has been processed successfully.",
                     ""));
         }
@@ -399,7 +402,7 @@ public class AddTransactionOrItemBacking implements Serializable {
                 || isBigDecimalVaildForDB(transactionTemp.getAmount().multiply(transactionPriceTemp))
                 || (!transactionEditedOld.getType().equals(transactionTemp.getType()))) {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! Some of entered values are not valid!",
                     ""));
 
@@ -407,7 +410,7 @@ public class AddTransactionOrItemBacking implements Serializable {
                 && transactionTemp.getAmount().compareTo(itemTemp.getAmount().add(transactionEditedOld.getAmount())) >= 1) {
 
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error on processing your transaction! You can't sell more coins than you have!",
                     ""));
 
@@ -454,15 +457,15 @@ public class AddTransactionOrItemBacking implements Serializable {
                     // almost reSetting portfolio's datatables-tabViews in case some items was archived or desarchived
                     portfolioBacking.init();
 
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                             "The transaction has been edited successfully.",
                             ""));
                     // exit from the method, thereby don't need to do a few "else"
-                    // to return FacesContext.getCurrentInstance().addMessage... depends of situation
+                    // to return facesContext.addMessage... depends of situation
                     return;
                 }
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Error on editing the transaction!",
                         ""));
                 LOGGER.warn("Error on editing a transaction!");

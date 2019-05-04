@@ -21,6 +21,9 @@ public class UserBacking implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(UserBacking.class);
 
+    @Inject
+    FacesContext facesContext;
+
     // session scoped
     @Inject
     private ActiveUser activeUser;
@@ -90,17 +93,17 @@ public class UserBacking implements Serializable {
 
                 activeUser.setUser(user);
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "New password has been saved successfully!",
                         ""));
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Error on change password! Make sure you entered correct old password",
                         ""));
             }
             return;
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Can't save new password!",
                 ""));
     }
@@ -123,13 +126,13 @@ public class UserBacking implements Serializable {
     }
 
     public void clipboardListener() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Portfolio sharing link has been copied to clipboard!",
                 ""));
     }
 
     public String getPortfolioSharingLink() {
-        ExternalContext ectx = FacesContext.getCurrentInstance().getExternalContext();
+        ExternalContext ectx = facesContext.getExternalContext();
 
         return ectx.getRequestScheme()
                 + "://" + ectx.getRequestServerName()

@@ -17,6 +17,9 @@ public abstract class AuthBacking {
 
     private static final Logger LOGGER = LogManager.getLogger(UserBacking.class);
 
+    @Inject
+    FacesContext facesContext;
+
     // stateless business
     @Inject
     protected UserService userService;
@@ -57,7 +60,7 @@ public abstract class AuthBacking {
 
             } else {
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Your email address hasn't been confirmed yet.",
                         ""));
                 setShowEmailResendLink(true);
@@ -66,7 +69,7 @@ public abstract class AuthBacking {
 
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Invalid login credentials! Please Try Again.",
                     ""));
         }
@@ -82,13 +85,13 @@ public abstract class AuthBacking {
 
             activeUser.setUser(user);
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "In order to complete your registration, please click the confirmation link" +
                             " in the email that we just have sent to you.",
                     ""));
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Invalid operation! May be you are already registered",
                     ""));
         }
@@ -107,7 +110,7 @@ public abstract class AuthBacking {
 
             setShowEmailResendLink(false);
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Please check your email and click the confirmation link.",
                     ""));
         }
@@ -119,12 +122,12 @@ public abstract class AuthBacking {
 
         if (wasSentResetPasswordEmail) {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Please check the email we have just sent to you and follow the link to reset your password.",
                     ""));
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Cannot reset password! Maybe you are not registered yet.",
                     ""));
         }
@@ -143,7 +146,7 @@ public abstract class AuthBacking {
                 return "user?faces-redirect=true";
             }
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Cannot save new password!",
                 ""));
 

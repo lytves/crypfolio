@@ -31,6 +31,9 @@ public class WatchlistBacking implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(WatchlistBacking.class.getName());
 
+    @Inject
+    FacesContext facesContext;
+
     // application scoped
     @Inject
     private ApplicationContainer applicationContainer;
@@ -135,20 +138,20 @@ public class WatchlistBacking implements Serializable {
 
                 activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "The coin has been successfully added to your watchlist.",
                         ""));
 
             } else {
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "The coin is already in your watchlist.",
                         ""));
             }
 
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error adding the coin to watchlist!",
                     ""));
             LOGGER.log(Level.WARNING, "Error adding the coin to watchlist!");
@@ -164,12 +167,12 @@ public class WatchlistBacking implements Serializable {
 
             activeUser.setUser(userService.updateUserDB(activeUser.getUser()));
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "The coin has been deleted from your watchlist successfully.",
                     ""));
         } else {
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error deleting coin from watchlist",
                     ""));
             LOGGER.log(Level.WARNING, "Error deleting coin from watchlist!");
