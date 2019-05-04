@@ -2,6 +2,8 @@ package tk.crypfolio.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.common.TransactionType;
 import tk.crypfolio.util.MathRounders;
@@ -77,8 +79,8 @@ public class ItemEntity implements Serializable {
     @JoinColumn(name = "coins_coin_id", referencedColumnName = "coin_id", nullable = false)
     private CoinEntity coin;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<TransactionEntity> transactions = new ArrayList<>();
 
     public ItemEntity() {
