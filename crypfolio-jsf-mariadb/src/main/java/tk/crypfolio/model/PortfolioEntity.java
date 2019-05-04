@@ -1,5 +1,7 @@
 package tk.crypfolio.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.MathRounders;
 import tk.crypfolio.util.StringGenerator;
@@ -57,6 +59,7 @@ public class PortfolioEntity implements Serializable {
     private UserEntity user;
 
     @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
 //    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemEntity> items = new ArrayList<>();
 

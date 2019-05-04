@@ -1,5 +1,7 @@
 package tk.crypfolio.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import tk.crypfolio.common.CurrencyType;
 import tk.crypfolio.util.LocalDateTimeAttributeConverter;
 
@@ -49,7 +51,9 @@ public class UserEntity implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PortfolioEntity portfolio;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserWatchCoinEntity> userWatchCoins = new ArrayList<>();
 
     @ManyToMany
