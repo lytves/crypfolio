@@ -2,9 +2,9 @@
 In this application version is used Relational database [MariaDB](https://github.com/MariaDB) and 
 [Primefaces](https://github.com/primefaces) - is an open source UI framework for JSF
 
-### MySQL Logical Data Model:
+### MySQL Fisical Data Model:
 
-![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
+![Logical Data Model](database/CrypFolio-Fisical_model_ERR_diagram.png)
 
 ### Some Working Screenshots:
 
