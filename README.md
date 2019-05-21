@@ -42,7 +42,7 @@ historical prices of crypto coins from
 
 ### Conceptual Data Model:
 
-![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.png)
+![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.jpg)
 
 ### Some Working Screenshots:
 
