@@ -30,9 +30,9 @@ mvn clean install
 and then deploy the web application artifact (WAR file or exploded directory)
 to the java application server
 
-### MySQL Logical Data Model:
+### MySQL Fisical Data Model:
 
-![Logical Data Model](database/CrypFolio-Logical_model_ERR_diagram.png)
+![Logical Data Model](database/CrypFolio-Fisical_model_ERR_diagram.png)
 
 ### Vue.js used Libraries:
 * Vue-router the official router for Vue.js
