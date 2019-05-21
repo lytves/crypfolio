@@ -40,9 +40,9 @@ historical prices of crypto coins from
 * [Vue.js + MariaDB version](crypfolio-vuejs-mariadb)
 * [Vue.js + MongoDB version](crypfolio-vuejs-mongodb)
 
-### Conceptual Data Model:
+### Logical Data Model:
 
-![Conceptual Data Model](images/CrypFolio-Conceptual_Model_UML.jpg)
+![Logical Data Model](images/CrypFolio-Logical_Model_UML.jpg)
 
 ### Some Working Screenshots:
 
