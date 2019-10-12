@@ -32,9 +32,9 @@ public abstract class EmailSender {
 
                 "<p>Follow the link to verify your email:</p>" +
 
-                "<p><a href=\"https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "\">" +
+                "<p><a href=\"http://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "\">" +
 
-                "https://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>" +
+                "http://crypfolio.tk/verify-email/confirm-link?code=" + verificationCode + "</a></p>" +
 
                 "<p></p><p>-----------------</p>" +
 
@@ -59,9 +59,9 @@ public abstract class EmailSender {
 
         String text = "<p>Follow this link and set your new CrypFolio account password:</p>" +
 
-                "<p><a href=\"https://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "\">" +
+                "<p><a href=\"http://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "\">" +
 
-                "https://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "</a></p>" +
+                "http://crypfolio.tk/reset-password/reset-link?code=" + resetCode + "</a></p>" +
 
                 "<p></p><p>-----------------</p>" +
 
