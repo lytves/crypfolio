@@ -114,7 +114,7 @@ const mutations = {
     },
     [WATCHLIST_DELETE_COIN]: (state, coinId) => {
 
-        // remove the coin with passed coinId from Vuex store "userWatchlist"
+        // remove the coin with received coinId from Vuex store "userWatchlist"
         const index = state.userWatchlist.findIndex(obj => obj.coinId.id === coinId);
 
         state.userWatchlist = [
