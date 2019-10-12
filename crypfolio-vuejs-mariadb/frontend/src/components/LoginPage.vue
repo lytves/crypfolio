@@ -8,6 +8,16 @@
 
             <v-flex xs12 sm8 md4>
 
+                <v-card class="elevation-12" width="400" color="orange darken-1">
+                    <v-card-text>Demo account credentials:<br>
+                        E-mail: demo@crypfolio.tk<br>
+                        Password: demo123
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm8 md4>
+
                 <v-card class="elevation-12" width="400">
 
                     <v-toolbar dark color="primary">
