@@ -56,7 +56,7 @@ const actions = {
                 } else {
                     commit(PORTFOLIO_ACTUALIZE_ITEM, responseData.actualizedItem);
 
-                    // if it's new item, the adds his marketdata to Vuex store userCoinsMarketData
+                    // if it's new item, then adds its marketdata to Vuex store userCoinsMarketData
                     commit(MARKETDATA_ADDCOIN_TO_USERCOINS, payload.selectedCoinMarketData);
 
                     commit(PORTFOLIO_ACTUALIZE_NETCOSTS, responseData.portfolioNetCosts);

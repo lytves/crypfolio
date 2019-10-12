@@ -94,7 +94,10 @@ const mutations = {
     [MARKETDATA_ADDCOIN_TO_USERCOINS]: (state, coinMarketData) => {
 
         // add to Object (!!!) userCoinsMarketData new coin
-        state.userCoinsMarketData = Object.assign(state.userCoinsMarketData, coinMarketData);
+        // to keep the reactivity should replace old Object with a new one
+        // https://vuex.vuejs.org/guide/mutations.html#mutations-follow-vue-s-reactivity-rules
+        state.userCoinsMarketData = Object.assign({}, state.userCoinsMarketData, coinMarketData);
+
     },
     [MARKETDATA_ALLCOINSLIST_SUCCESS]: (state, allCoinsListData) => {
 
