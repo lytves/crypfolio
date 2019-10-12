@@ -201,22 +201,26 @@
             },
             showPortfolioMarketValue() {
 
+                let marketValue = 0;
+
                 if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
 
-                    let marketValue = 0;
+
                     this.userPortfolioItems.forEach((item) => {
                         marketValue += this.showItemMarketValueByCurrency(item, this.userPortfolio.showedCurrency);
                     });
-                    return marketValue;
                 }
+                return marketValue;
             },
             showPortfolioProfit() {
 
+                let profit = 0;
+
                 if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
-                    let profit = 0;
+
                     profit = this.showPortfolioMarketValue - this.showPortfolioNetCost;
-                    return profit;
                 }
+                return profit;
             },
             showPortfolioProfitPercentage() {
 
@@ -224,8 +228,8 @@
                     if (this.showPortfolioNetCost) {
                         return this.showPortfolioProfit * 100 / this.showPortfolioNetCost;
                     }
-                    return 0;
                 }
+                return 0;
             },
             selectItem: {
                 get() {
