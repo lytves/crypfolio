@@ -2,6 +2,7 @@
 
     <v-container class="ma-0 pa-0">
 
+        <!--        General Portfolio Information Data (market value, net cost, profit) -->
         <v-card>
             <v-layout row xs12>
 
@@ -58,6 +59,7 @@
             </v-layout>
         </v-card>
 
+        <!--    Table with portfolio items    -->
         <v-data-table
                 :headers="headers"
                 hide-actions
@@ -201,22 +203,24 @@
             },
             showPortfolioMarketValue() {
 
-                if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
+                let marketValue = 0;
 
-                    let marketValue = 0;
+                if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
                     this.userPortfolioItems.forEach((item) => {
                         marketValue += this.showItemMarketValueByCurrency(item, this.userPortfolio.showedCurrency);
                     });
-                    return marketValue;
                 }
+                return marketValue;
             },
             showPortfolioProfit() {
 
+                let profit = 0;
+
                 if (this.isUserPortfolioLoaded && this.isUserCoinsMarketDataLoaded) {
-                    let profit = 0;
+
                     profit = this.showPortfolioMarketValue - this.showPortfolioNetCost;
-                    return profit;
                 }
+                return profit;
             },
             showPortfolioProfitPercentage() {
 
@@ -224,8 +228,8 @@
                     if (this.showPortfolioNetCost) {
                         return this.showPortfolioProfit * 100 / this.showPortfolioNetCost;
                     }
-                    return 0;
                 }
+                return 0;
             },
             selectItem: {
                 get() {
