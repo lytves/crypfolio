@@ -57,7 +57,6 @@
 
 <script>
     import UserMenu from '@/components/layout/UserMenu'
-    // import {mapGetters, mapState} from 'vuex'
     import TabPortFolio from './TabPortFolio'
     import TabArchive from './TabArchive'
     import TabWatchList from './TabWatchList'
