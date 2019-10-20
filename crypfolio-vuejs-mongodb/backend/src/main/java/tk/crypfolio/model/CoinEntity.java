@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Indexed
 @Table(name = "coins")
 public class CoinEntity implements Serializable {
 

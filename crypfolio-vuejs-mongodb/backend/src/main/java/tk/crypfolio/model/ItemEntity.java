@@ -19,7 +19,6 @@ import java.util.Objects;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
-@Indexed
 @Table(name = "items")
 public class ItemEntity implements Serializable {
 

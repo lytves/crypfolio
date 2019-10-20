@@ -14,7 +14,6 @@ import java.util.Objects;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
-@Indexed
 @Table(name = "users")
 public class UserEntity implements Serializable {
 
