@@ -414,8 +414,6 @@
                         'transDate': this.transDate, 'transComment': this.transComment, 'itemId': this.selectedItem.id
                     },
                 };
-                console.log('payload', payload);
-
                 this.$store.dispatch(PORTFOLIO_EDIT_TRANSACTION, payload)
                     .then(resp => {
                         if (resp) {

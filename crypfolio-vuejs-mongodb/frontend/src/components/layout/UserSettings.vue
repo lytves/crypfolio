@@ -16,7 +16,8 @@
                 <v-toolbar-items style="height: unset;">
 
                     <v-tabs
-                            fixed-tabs>
+                            fixed-tabs
+                            v-model="active_tab">
 
                         <!-- Tab title -->
                         <v-tab
@@ -60,6 +61,7 @@
         data() {
             return {
                 currentTabComponent: 'TabUserSettings',
+                active_tab: 0,
                 items: [
                     {title: 'User', slug: 'TabUserSettings'},
                     {title: 'Portfolio', slug: 'TabPortfolioSettings'},

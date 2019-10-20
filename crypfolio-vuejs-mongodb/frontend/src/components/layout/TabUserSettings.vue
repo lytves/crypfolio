@@ -99,7 +99,7 @@
                     const {oldPassword, password} = this;
                     this.$store.dispatch(USER_UPDATE_PASSWORD, {oldPassword, password})
                         .then(() => {
-                            // provoked console errors
+                            // provokes console errors
                             // this.$refs.form.reset();
                             // or
                             Object.assign(this.$data, this.$options.data());
