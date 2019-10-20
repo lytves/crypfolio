@@ -6,7 +6,8 @@ export const userPortfolioService = {
     editTransaction,
     deleteTransaction,
     setItemShowedCurrency,
-    deleteItem
+    deleteItem,
+    updatePortfolio
 };
 
 async function setPortfolioShowedCurrency(currency) {
@@ -50,7 +51,7 @@ function editTransaction(payload) {
         "transId": payload.transId,
         "transCurrency": payload.transCurrency,
         "transType": payload.transType,
-        // always to convert numbers to strings
+        // always converts numbers to strings
         "transAmount": String(payload.transAmount),
         "transPrice": String(payload.transPrice),
         "transDate": payload.transDate,
@@ -106,6 +107,22 @@ function deleteItem(itemId) {
             response => {
                 // return data for check the response status and update portfolio data
                 return response.data;
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+
+function updatePortfolio(isShare, isShowAmounts, portfolioName) {
+    return AXIOS.post('/portfolio-update/', {
+        "isShare": isShare,
+        "isShowAmounts": isShowAmounts,
+        "portfolioName": portfolioName
+    })
+        .then(
+            response => {
+                // return data for update portfolio data
+                return response.data.data;
             })
         .catch(error => {
             return Promise.reject(error.response);

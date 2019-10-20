@@ -8,7 +8,7 @@ import {
     PORTFOLIO_ERROR,
     PORTFOLIO_SUCCESS,
     PORTFOLIO_UPDATE_CURRENCY,
-    PORTFOLIO_UPDATE_ITEM_CURRENCY
+    PORTFOLIO_UPDATE_ITEM_CURRENCY, PORTFOLIO_UPDATE_VALUES
 } from "../actions/portfolio";
 import {userPortfolioService} from "../../utils";
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
@@ -167,6 +167,21 @@ const actions = {
             })
             .catch(err => {
                 dispatch(SNACKBAR_ERROR, "Error on deleting the item!");
+            })
+    },
+    [PORTFOLIO_UPDATE_VALUES]: async ({commit, dispatch}, {isShare, isShowAmounts, portfolioName}) => {
+
+        return await userPortfolioService.updatePortfolio(isShare, isShowAmounts, portfolioName)
+            .then(resp => {
+
+                const portfolio = resp;
+
+                commit(PORTFOLIO_SUCCESS, portfolio);
+                dispatch(SNACKBAR_SUCCESS, "Updated successfully!");
+
+            })
+            .catch(err => {
+                dispatch(SNACKBAR_ERROR, "Error on updating!");
             })
     },
 };
