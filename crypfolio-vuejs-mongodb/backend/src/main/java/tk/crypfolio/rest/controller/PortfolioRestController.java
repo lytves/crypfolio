@@ -106,6 +106,52 @@ public class PortfolioRestController extends Application {
     }
 
     @Authenticator
+    @POST
+    @Path("/portfolio-update")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response updatePortfolio(String jsonString) throws Exception {
+
+        //JSONParser reads the data from string object and break each data into their key value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+            JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
+
+            Boolean isShare = (Boolean) jsonObject.get("isShare");
+            Boolean isShowAmounts = (Boolean) jsonObject.get("isShowAmounts");
+            String portfolioName = (String) jsonObject.get("portfolioName");
+
+            // userId is the same Id for user's portfolio
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION)
+                    .substring(TOKEN_BEARER_PREFIX.length()).trim());
+
+            PortfolioEntity portfolioDB = portfolioService.getPortfolioDBById(Long.valueOf(userId));
+
+            // check if there is a portfolio and currency value is valid CurrencyType
+            if (portfolioDB != null) {
+
+                portfolioDB.setIsShare(isShare);
+                portfolioDB.setIsShowAmounts(isShowAmounts);
+                portfolioDB.setName(portfolioName);
+
+                portfolioDB = portfolioService.updatePortfolioDB(portfolioDB);
+
+                LOGGER.info("PortfolioRestController: Successful '/portfolio-update' request");
+
+                // generates response with new authentication token (using portfolio ID for Payload)
+                return JsonResponseBuild.generateJsonResponse(portfolioDB, portfolioDB.getId());
+            }
+
+            throw new BadRequestException("There is no portfolio with requested ID or passed parameters aren't valid");
+
+        } catch (Exception ex) {
+
+            throw new RestApplicationException(ex.getMessage());
+        }
+    }
+
+    @Authenticator
     @PUT
     @Path("/portfolio-item-currency")
     @Consumes("application/json")
