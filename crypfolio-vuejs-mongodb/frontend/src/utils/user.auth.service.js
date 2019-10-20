@@ -116,9 +116,9 @@ async function updatePassword(oldPassword, newPassword) {
     })
         .then(
             response => {
-                // we don't need to pass any data,
-                // coz it's a request for set new password and for receive auth token
+                // returns only JSON object User
                 // and set response.headers['authorization'] to interceptors
+                return response.data.data;
             })
         .catch(error => {
             return Promise.reject(error.response);

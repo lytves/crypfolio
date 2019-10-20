@@ -6,7 +6,8 @@ import {
     USER_RESET_PASSWORD_REQUEST,
     USER_SET_NEW_PASSWORD,
     USER_SIGNUP_REQUEST,
-    USER_SUCCESS, USER_UPDATE_PASSWORD
+    USER_SUCCESS,
+    USER_UPDATE_PASSWORD
 } from '../actions/user'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
@@ -173,6 +174,9 @@ const actions = {
             return await userAuthService.updatePassword(oldPassword, password)
                 .then(resp => {
 
+                    const user = resp;
+
+                    commit(USER_SUCCESS, user);
                     dispatch(SNACKBAR_SUCCESS, "Success update password!");
                     return true;
 
