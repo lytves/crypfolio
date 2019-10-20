@@ -30,7 +30,7 @@ const actions = {
                 })
                 .catch(err => {
                     commit(AUTH_ERROR);
-                    dispatch(SNACKBAR_ERROR, "This user doesn't exist or maybe you" +
+                    dispatch(SNACKBAR_ERROR, "Invalid login credentials or maybe you" +
                         " didn't confirm your email yet!");
                     localStorage.removeItem('token');
                     reject(err)

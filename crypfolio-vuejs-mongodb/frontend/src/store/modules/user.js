@@ -6,7 +6,7 @@ import {
     USER_RESET_PASSWORD_REQUEST,
     USER_SET_NEW_PASSWORD,
     USER_SIGNUP_REQUEST,
-    USER_SUCCESS
+    USER_SUCCESS, USER_UPDATE_PASSWORD
 } from '../actions/user'
 import {AUTH_LOGOUT, AUTH_SUCCESS} from '../actions/auth'
 import {SNACKBAR_ERROR, SNACKBAR_SUCCESS} from "../actions/snackbar";
@@ -167,6 +167,19 @@ const actions = {
                     reject(err)
                 })
         })
+    },
+    [USER_UPDATE_PASSWORD]: async ({commit, dispatch}, {oldPassword, password}) => {
+
+            return await userAuthService.updatePassword(oldPassword, password)
+                .then(resp => {
+
+                    dispatch(SNACKBAR_SUCCESS, "Success update password!");
+                    return true;
+
+                })
+                .catch(err => {
+                    dispatch(SNACKBAR_ERROR, "Cannot update password! Maybe you typed the incorrect current password!");
+                })
     },
 };
 

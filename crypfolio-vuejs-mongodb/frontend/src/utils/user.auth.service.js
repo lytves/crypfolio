@@ -7,7 +7,8 @@ export const userAuthService = {
     resetPasswordRequest,
     setNewPassword,
     resendVerificationEmailRequest,
-    emailVerification
+    emailVerification,
+    updatePassword
 };
 
 async function authentication(email, password) {
@@ -17,8 +18,6 @@ async function authentication(email, password) {
     })
         .then(
             response => {
-                // console.log(email, password);
-
                 // we don't need to pass any data,
                 // coz it's a request only for check login credentials and for receive auth token
                 // and set response.headers['authorization'] to interceptors
@@ -74,8 +73,6 @@ async function setNewPassword(code, password) {
     })
         .then(
             response => {
-                // console.log(code, password);
-
                 // we don't need to pass any data,
                 // coz it's a request for pass new password and for receive auth token
                 // and set response.headers['authorization'] to interceptors
@@ -103,10 +100,24 @@ async function emailVerification(code) {
     })
         .then(
             response => {
-                // console.log(code);
-
                 // we don't need to pass any data,
                 // coz it's a request for check emailVerification code and for receive auth token
+                // and set response.headers['authorization'] to interceptors
+            })
+        .catch(error => {
+            return Promise.reject(error.response);
+        });
+}
+
+async function updatePassword(oldPassword, newPassword) {
+    return await AXIOS.post('/update-password', {
+        "oldPassword": oldPassword,
+        "newPassword": newPassword
+    })
+        .then(
+            response => {
+                // we don't need to pass any data,
+                // coz it's a request for set new password and for receive auth token
                 // and set response.headers['authorization'] to interceptors
             })
         .catch(error => {
