@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Indexed
@@ -75,7 +76,7 @@ public class UserEntity implements Serializable {
     private PortfolioEntity portfolio;
 
     @Expose
-    @ElementCollection
+    @ElementCollection(fetch = EAGER)
     private List<UserWatchCoinEntity> userWatchCoins = new ArrayList<>();
 
 /*    @ManyToMany

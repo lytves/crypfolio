@@ -188,7 +188,7 @@ public class UserRestController extends Application {
 
             if (userDB != null) {
 
-                LOGGER.info("UserRestController: Successful '/set-new-pass-request' request");
+                LOGGER.info("UserRestController: Successful '/reset-password' request");
 
                 // generates only response with 1st authentication token (using user ID for Payload)
                 return JsonResponseBuild.generateJsonResponse(null, userDB.getId());
@@ -198,7 +198,41 @@ public class UserRestController extends Application {
 
         } catch (NullPointerException ex) {
 
-            throw new RestApplicationException("Invalid code/password to setting new password request!");
+            throw new RestApplicationException("Invalid code/password for new password setting request!");
+        }
+    }
+
+    @POST
+    @Path("/update-password")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response updatePassword(String jsonString) throws Exception {
+
+        //JSONParser reads the data from string object and break each data into their key value pairs
+        JSONParser parserJSON = new JSONParser();
+
+        try {
+            JSONObject jsonObject = (JSONObject) parserJSON.parse(jsonString);
+
+            String userId = getUserIdFromJWT(httpHeaders.getHeaderString(AUTHORIZATION).substring(TOKEN_BEARER_PREFIX.length()).trim());
+            String oldPassword = (String) jsonObject.get("oldPassword");
+            String newPassword = (String) jsonObject.get("newPassword");
+
+            UserEntity userDB = userService.updatePasswordDB(Long.valueOf(userId), oldPassword, newPassword);
+
+            if (userDB != null) {
+
+                LOGGER.info("UserRestController: Successful '/update-password' request");
+
+                // generates response with new authentication token (using user ID for Payload)
+                return JsonResponseBuild.generateJsonResponse(userDB, userDB.getId());
+            }
+
+            throw new RestApplicationException("Invalid new password setting request!");
+
+        } catch (NullPointerException ex) {
+
+            throw new RestApplicationException("Invalid old/new password for password updating request!");
         }
     }
 

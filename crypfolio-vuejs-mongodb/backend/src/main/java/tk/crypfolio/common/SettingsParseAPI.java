@@ -18,9 +18,9 @@ public abstract class SettingsParseAPI {
 
     /* CoinMarketCap testing sandbox API
     *  is worked after 4-12-2018
-    *  INFO: latest data endpoints will always return data from 2018-08-17
+    *  INFO: latest data endpoints will always return OLDER market data
     * */
-    public static final String CMC_SANDBOX_API_KEY = "XXXXXX-YYY-ZZZZZ-AAAA-BBBBBB";
+    public static final String CMC_SANDBOX_API_KEY = "53f31550-3f48-4127-b20b-688b8348cc3a";
 
     public static final String CMC_SANDBOX_ALL_COINS_FOUR_CURRENCIES = "" +
             "https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest" +

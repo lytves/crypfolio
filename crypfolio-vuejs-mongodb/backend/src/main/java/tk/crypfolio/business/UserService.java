@@ -98,10 +98,7 @@ public class UserService implements Serializable {
 
             userDB = getUserDAO().updateUser(userDB);
 
-            if (userDB != null) {
-
-                return userDB;
-            }
+            return userDB;
         }
         return null;
     }
@@ -150,10 +147,7 @@ public class UserService implements Serializable {
 
             userDB = getUserDAO().updateUser(userDB);
 
-            if (userDB != null) {
-
-                return userDB;
-            }
+            return userDB;
         }
         return null;
     }
@@ -175,22 +169,32 @@ public class UserService implements Serializable {
 
         UserEntity userDB = getUserDAO().getUserById(Id);
 
-        if (userDB != null) {
-
-            return userDB;
-        }
-        return null;
+        return userDB;
     }
 
     public UserEntity getUserDBByEmail(String email) {
 
         UserEntity userDB = getUserDAO().getUserByEmail(email);
 
-        if (userDB != null) {
+        return userDB;
+    }
+
+    /*
+     * update user password from menu user settings
+     * */
+    public UserEntity updatePasswordDB(Long userId, String oldPassword, String newPassword) {
+
+        UserEntity userDB = getUserDAO().getUserById(userId);
+
+        // look that there is a userDB with the same id and its encoded old password is correct
+        if (userDB != null && StringEncoder.encodePassword(userDB.getEmail(), oldPassword).equals(userDB.getPassword())) {
+
+            userDB.setPassword(StringEncoder.encodePassword(userDB.getEmail(), newPassword));
+
+            userDB = getUserDAO().updateUser(userDB);
 
             return userDB;
         }
         return null;
     }
-
 }

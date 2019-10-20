@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Indexed
@@ -103,7 +104,7 @@ public class ItemEntity implements Serializable {
     private CoinEntity coin;
 
     @Expose
-    @ElementCollection
+    @ElementCollection(fetch = EAGER)
     private List<TransactionEntity> transactions = new ArrayList<>();
 
     public ItemEntity() {
